@@ -8,25 +8,27 @@
 
 import Foundation
 import CoreData
-import MagicalRecord
 import UIKit
 
 class EditBookViewController: UIViewController {
-    var book = Book(title: "", author: "")
+    var book: Book!
     var bookListDelegate: BookTableViewControllerDelegate!
+    var creatingNewBook = false
     
     @IBOutlet weak var titleField: UITextField!
     @IBOutlet weak var authorField: UITextField!
     
     override func viewDidLoad() {
-        print("Edit book view loaded")
-        titleField.text = book.title
-        authorField.text = book.author
+        // Load the values of the fields from the Book
+        titleField.text = book.title ?? ""
+        authorField.text = book.author ?? ""
     }
     
     @IBAction func donePressed(sender: UIBarButtonItem) {
+        // Set the values of the Book from the values of the fields
         book.title = titleField.text
         book.author = authorField.text
+
         bookListDelegate.editViewDidSave(self)
         navigationController?.popViewControllerAnimated(true)
     }

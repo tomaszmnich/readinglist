@@ -85,9 +85,7 @@ strip_invalid_archs() {
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "Pods-books/DZNEmptyDataSet.framework"
-  install_framework "Pods-books/MagicalRecord.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "Pods-books/DZNEmptyDataSet.framework"
-  install_framework "Pods-books/MagicalRecord.framework"
 fi

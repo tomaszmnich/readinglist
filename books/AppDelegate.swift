@@ -8,14 +8,20 @@
 
 import UIKit
 
+func appDelegate() -> AppDelegate {
+    return UIApplication.sharedApplication().delegate as! AppDelegate
+}
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
-
+    lazy var coreDataStack = CoreDataStack()
+    
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+        coreDataStack.loadDefaultDataIfFirstLaunch()
+        
         return true
     }
 

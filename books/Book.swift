@@ -9,13 +9,7 @@
 import Foundation
 import CoreData
 
-class Book: NSObject {
+@objc(Book)
+class Book: NSManagedObject {
 
-    var title: String!
-    var author: String!
-    
-    init(title: String, author: String){
-        self.title = title
-        self.author = author
-    }
 }

@@ -5,7 +5,6 @@ use_frameworks!
 
 target 'books' do
   pod 'DZNEmptyDataSet', '1.7.2'
-  pod 'MagicalRecord', '2.3.0'
 end
 
 target 'booksTests' do
