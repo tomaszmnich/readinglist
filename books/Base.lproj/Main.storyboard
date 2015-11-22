@@ -70,10 +70,9 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Books" id="eBb-GO-saU">
-                        <barButtonItem key="leftBarButtonItem" systemItem="edit" id="0Mt-gO-rKw"/>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="ZKd-hN-VCh">
                             <connections>
-                                <segue destination="KX6-RT-Bgh" kind="push" identifier="addSegue" id="BUz-ws-RQj"/>
+                                <segue destination="RLM-Yq-lvb" kind="push" id="4mW-AF-QN5"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -85,7 +84,7 @@
         <!--Add New Book-->
         <scene sceneID="6SY-tW-5aC">
             <objects>
-                <viewController id="KX6-RT-Bgh" customClass="EditBookViewController" customModule="books" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="KX6-RT-Bgh" customClass="AddBookViewController" customModule="books" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="osr-fB-EFU">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -127,7 +126,23 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tYd-rs-rKU" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="846" y="-671"/>
+            <point key="canvasLocation" x="528" y="-847"/>
+        </scene>
+        <!--Scanner View Controller-->
+        <scene sceneID="0aL-A1-3Fw">
+            <objects>
+                <viewController id="RLM-Yq-lvb" customClass="ScannerViewController" customModule="books" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="87c-JQ-BID">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <animations/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="yDi-Z7-Ie2"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="7MC-gC-qUv" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1198" y="-768"/>
         </scene>
         <!--Information-->
         <scene sceneID="dhn-Z4-2RQ">

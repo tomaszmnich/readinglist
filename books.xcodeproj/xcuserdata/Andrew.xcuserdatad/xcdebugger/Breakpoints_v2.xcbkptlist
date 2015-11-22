@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "books/BookTableViewController.swift"
-            timestampString = "469303482.87047"
+            timestampString = "469901224.244607"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "150"
-            endingLineNumber = "150">
+            startingLineNumber = "100"
+            endingLineNumber = "100">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -24,11 +24,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "books/BookTableViewController.swift"
-            timestampString = "469232506.44761"
+            timestampString = "469316638.154239"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "21"
-            endingLineNumber = "21"
+            startingLineNumber = "15"
+            endingLineNumber = "15"
             landmarkName = "BookTableViewController"
             landmarkType = "3">
             <Locations>
@@ -133,27 +133,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "books/BookTableViewController.swift"
-            timestampString = "469303482.87047"
+            timestampString = "469901224.244607"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "141"
-            endingLineNumber = "141"
-            landmarkName = "BookTableViewController"
-            landmarkType = "3">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "books/BookTableViewController.swift"
-            timestampString = "469303482.87047"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "151"
-            endingLineNumber = "151"
+            startingLineNumber = "101"
+            endingLineNumber = "101"
             landmarkName = "BookTableViewController"
             landmarkType = "3">
          </BreakpointContent>

@@ -11,28 +11,18 @@ import UIKit
 import DZNEmptyDataSet
 import CoreData
 
-@objc protocol BookTableViewControllerDelegate {
-    func editViewDidCancel(editController: EditBookViewController)
-    func editViewDidSave(editController: EditBookViewController)
-}
-
 class BookTableViewController: UITableViewController {
     
-    var reloadData = true
-    var userReorderingCells = false
-    
-    // The controller for fetching all books
+    let coreDataStack = appDelegate().coreDataStack
     lazy var fetchedResultsController: NSFetchedResultsController = {
         let fetchRequest = NSFetchRequest(entityName: "Book")
         fetchRequest.sortDescriptors = [
             NSSortDescriptor(key: "sortOrder", ascending: true)
         ]
-        let moc = appDelegate().coreDataStack.managedObjectContext
         let controller = NSFetchedResultsController(fetchRequest: fetchRequest,
-            managedObjectContext: moc,
+            managedObjectContext: self.coreDataStack.managedObjectContext,
             sectionNameKeyPath: nil,
             cacheName: nil)
-        controller.delegate = self
         return controller
     }()
 
@@ -40,8 +30,15 @@ class BookTableViewController: UITableViewController {
         super.viewWillAppear(animated)
         
         // Reload the data
-        if presentedViewController != nil{
-            tableView.reloadData()
+        tryPerformFetch()
+        tableView.reloadData()
+    }
+    
+    func tryPerformFetch(){
+        do {
+            try fetchedResultsController.performFetch()
+        } catch {
+            print("Error fetching: \(error)")
         }
     }
     
@@ -50,15 +47,7 @@ class BookTableViewController: UITableViewController {
         tableView.emptyDataSetSource = self
         tableView.tableFooterView = UIView()
         
-        //navigationItem.leftBarButtonItem = editButtonItem()
         super.viewDidLoad()
-        
-        // Fetch the relevant data
-        do {
-            try fetchedResultsController.performFetch()
-        } catch {
-            print("Error fetching: \(error)")
-        }
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -76,38 +65,6 @@ class BookTableViewController: UITableViewController {
         return cell
     }
     
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
-            let book = bookFromIndexPath(indexPath)
-            appDelegate().coreDataStack.managedObjectContext.deleteObject(book)
-        }
-    }
-    
-    override func tableView(tableView: UITableView,
-        moveRowAtIndexPath sourceIndexPath: NSIndexPath,
-        toIndexPath destinationIndexPath: NSIndexPath) {
-            
-            userReorderingCells = true
-            
-            // Grab the books array
-            var books = fetchedResultsController.sections?[0].objects ?? []
-            
-            // Rearrange the order to match the user's actions
-            // Note: this doesn't move anything in Core Data,
-            // just our objectsInSection array
-            books.moveFrom(sourceIndexPath.row, toDestination: destinationIndexPath.row)
-            
-            // The models are now in the correct order.
-            // Update their displayOrder to match the new order.
-            for i in 0..<books.count {
-                let book = books[i] as? Book
-                book?.sortOrder = Int32(i)
-            }
-            
-            userReorderingCells = false
-            appDelegate().coreDataStack.save()
-    }
-    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         // "detailsSegue" is for viewing a specific book
         if segue.identifier == "detailsSegue" {
@@ -122,19 +79,12 @@ class BookTableViewController: UITableViewController {
                 bookDetailsController.book = clickedBook
             }
         }
-        // "addSegue" is for adding a new book
-        else if segue.identifier == "addSegue" {
-            // Get the EditBook controller
-            let editBookController = segue.destinationViewController as! EditBookViewController
+        else if segue.identifier == "addSegue"{
+            // Get the controller for adding a book
+            let addBookController = segue.destinationViewController as! AddBookViewController
             
-            // Make a new book in the managed object context, and add it to the controller
-            let moc = appDelegate().coreDataStack.managedObjectContext
-            let newBook = NSEntityDescription.insertNewObjectForEntityForName("Book", inManagedObjectContext: moc) as! Book
-            editBookController.book = newBook
-            editBookController.creatingNewBook = true
-            
-            // Set the delegate for callbacks
-            editBookController.bookListDelegate = self
+            // Set the newBookIndex to be one more than the greatest current value
+            addBookController.newBookIndex = Int32((fetchedResultsController.sections?[0].objects!.count)!)
         }
     }
     
@@ -162,71 +112,3 @@ extension BookTableViewController : DZNEmptyDataSetSource{
         return NSAttributedString(string: str, attributes: attrs)
     }
 }
-
-
-/*
-    Callbacks from the edit view. TODO: do these even need to be callbacks?
-*/
-extension BookTableViewController: BookTableViewControllerDelegate {
-    
-    func editViewDidCancel(editController: EditBookViewController) {
-        // On cancel, if we have made a new book, delete it. Otherwise, don't save changes.
-        if editController.creatingNewBook {
-            appDelegate().coreDataStack.managedObjectContext.deleteObject(editController.book)
-        }
-    }
-    
-    func editViewDidSave(editController: EditBookViewController) {
-        // On save, save the managed object context.
-        let _ = try? appDelegate().coreDataStack.managedObjectContext.save()
-    }
-}
-
-
-
-extension BookTableViewController: NSFetchedResultsControllerDelegate {
-    func controllerWillChangeContent(controller: NSFetchedResultsController) {
-        tableView.beginUpdates()
-    }
-    
-    func controllerDidChangeContent(controller: NSFetchedResultsController) {
-        tableView.endUpdates()
-    }
-    
-    func controller(controller: NSFetchedResultsController,
-        didChangeObject anObject: AnyObject,
-        atIndexPath indexPath: NSIndexPath?,
-        forChangeType type: NSFetchedResultsChangeType,
-        newIndexPath: NSIndexPath?) {
-            
-        guard userReorderingCells == false else { return }
-            switch type {
-            case .Insert:
-                tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Automatic)
-            case .Delete:
-                tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
-            case .Move:
-                tableView.moveRowAtIndexPath(indexPath!, toIndexPath: newIndexPath!)
-            case .Update:
-                tableView.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
-            }
-    }
-    
-    func controller(controller: NSFetchedResultsController,
-        didChangeSection sectionInfo: NSFetchedResultsSectionInfo,
-        atIndex sectionIndex: Int,
-        forChangeType type: NSFetchedResultsChangeType) {
-            
-            guard userReorderingCells == false else { return }
-        switch type {
-            case .Insert:
-                tableView.insertSections(NSIndexSet(index: sectionIndex), withRowAnimation: .Automatic)
-            case .Delete:
-                tableView.deleteSections(NSIndexSet(index: sectionIndex), withRowAnimation: .Automatic)
-            default:
-                break
-            }
-    }
-}
-
-

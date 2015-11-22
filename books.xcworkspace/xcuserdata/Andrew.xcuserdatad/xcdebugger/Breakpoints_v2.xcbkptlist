@@ -9,13 +9,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "books/BookTableViewController.swift"
-            timestampString = "469303198.176193"
+            filePath = "books/AppDelegate.swift"
+            timestampString = "469310549.332984"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "50"
-            endingLineNumber = "50"
-            landmarkName = "viewDidLoad()"
+            startingLineNumber = "24"
+            endingLineNumber = "24"
+            landmarkName = "application(_:didFinishLaunchingWithOptions:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -25,91 +25,14 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "books/BookTableViewController.swift"
-            timestampString = "469232506.44761"
+            filePath = "books/AppDelegate.swift"
+            timestampString = "469310585.454996"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "21"
-            endingLineNumber = "21"
-            landmarkName = "BookTableViewController"
-            landmarkType = "3">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "books.BookTableViewController.reloadData.setter : Swift.Bool"
-                  moduleName = "books"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/Andrew/Documents/Dev/books/books/books/BookTableViewController.swift"
-                  timestampString = "469231224.023588"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "0"
-                  endingLineNumber = "0"
-                  offsetFromSymbolStart = "29">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "books.BookTableViewController.reloadData.materializeForSet : Swift.Bool"
-                  moduleName = "books"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/Andrew/Documents/Dev/books/books/books/BookTableViewController.swift"
-                  timestampString = "469231224.023872"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "0"
-                  endingLineNumber = "0"
-                  offsetFromSymbolStart = "28">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "books.BookTableViewController.init (books.BookTableViewController.Type)(style : __C.UITableViewStyle) -&gt; books.BookTableViewController"
-                  moduleName = "books"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/Andrew/Documents/Dev/books/books/books/BookTableViewController.swift"
-                  timestampString = "469231224.024136"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "20"
-                  endingLineNumber = "20"
-                  offsetFromSymbolStart = "30">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "books.BookTableViewController.init (books.BookTableViewController.Type)(nibName : Swift.Optional&lt;Swift.String&gt;, bundle : Swift.Optional&lt;__ObjC.NSBundle&gt;) -&gt; books.BookTableViewController"
-                  moduleName = "books"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/Andrew/Documents/Dev/books/books/books/BookTableViewController.swift"
-                  timestampString = "469231224.024399"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "20"
-                  endingLineNumber = "20"
-                  offsetFromSymbolStart = "70">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "books.BookTableViewController.init (books.BookTableViewController.Type)(coder : __ObjC.NSCoder) -&gt; Swift.Optional&lt;books.BookTableViewController&gt;"
-                  moduleName = "books"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/Andrew/Documents/Dev/books/books/books/BookTableViewController.swift"
-                  timestampString = "469231224.024657"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "20"
-                  endingLineNumber = "20"
-                  offsetFromSymbolStart = "30">
-               </Location>
-            </Locations>
+            startingLineNumber = "26"
+            endingLineNumber = "26"
+            landmarkName = "application(_:didFinishLaunchingWithOptions:)"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -118,14 +41,30 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "books/BookTableViewController.swift"
-            timestampString = "469303198.176193"
+            filePath = "ScanViewController.swift"
+            timestampString = "469907660.769381"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "30"
-            endingLineNumber = "30"
-            landmarkName = "fetchedResultsController"
-            landmarkType = "19">
+            startingLineNumber = "58"
+            endingLineNumber = "58"
+            landmarkName = "captureOutput(_:didOutputMetadataObjects:fromConnection:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ScanViewController.swift"
+            timestampString = "469907665.333241"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "12"
+            endingLineNumber = "12"
+            landmarkName = "viewDidLoad()"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

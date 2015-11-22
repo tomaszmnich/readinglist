@@ -10,31 +10,38 @@ import Foundation
 import CoreData
 import UIKit
 
-class EditBookViewController: UIViewController {
-    var book: Book!
-    var bookListDelegate: BookTableViewControllerDelegate!
-    var creatingNewBook = false
+class AddBookViewController: UIViewController {
+
+    let moc = appDelegate().coreDataStack.managedObjectContext
+    var newBookIndex: Int32!
+    var newBook: Book!
     
     @IBOutlet weak var titleField: UITextField!
     @IBOutlet weak var authorField: UITextField!
     
     override func viewDidLoad() {
-        // Load the values of the fields from the Book
-        titleField.text = book.title ?? ""
-        authorField.text = book.author ?? ""
+        // Construct a new managed Book object
+        newBook = NSEntityDescription.insertNewObjectForEntityForName("Book", inManagedObjectContext: moc) as! Book
+        newBook.sortOrder = newBookIndex
     }
     
     @IBAction func donePressed(sender: UIBarButtonItem) {
         // Set the values of the Book from the values of the fields
-        book.title = titleField.text
-        book.author = authorField.text
+        newBook.title = titleField.text
+        newBook.author = authorField.text
+        
+        // Try to save
+        let _ = try? moc.save()
 
-        bookListDelegate.editViewDidSave(self)
+        // Return
         navigationController?.popViewControllerAnimated(true)
     }
     
     @IBAction func cancelWasPressed(sender: UIBarButtonItem) {
-        bookListDelegate.editViewDidCancel(self)
+        // Rollback the creation of this book
+        moc.rollback()
+        
+        // Return
         navigationController?.popViewControllerAnimated(true)
     }
 }
