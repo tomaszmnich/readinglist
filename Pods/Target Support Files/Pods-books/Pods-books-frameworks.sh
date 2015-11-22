@@ -84,8 +84,12 @@ strip_invalid_archs() {
 
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
+  install_framework "Pods-books/Alamofire.framework"
   install_framework "Pods-books/DZNEmptyDataSet.framework"
+  install_framework "Pods-books/SwiftyJSON.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
+  install_framework "Pods-books/Alamofire.framework"
   install_framework "Pods-books/DZNEmptyDataSet.framework"
+  install_framework "Pods-books/SwiftyJSON.framework"
 fi

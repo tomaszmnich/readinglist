@@ -1,5 +1,8 @@
 import UIKit
 import AVFoundation
+import Alamofire
+import SwiftyJSON
+import CoreData
 
 
 class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
@@ -7,6 +10,7 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
     let session         : AVCaptureSession = AVCaptureSession()
     var previewLayer    : AVCaptureVideoPreviewLayer!
     var highlightView   : UIView = UIView()
+    lazy var coreData = CoreDataStack()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -80,10 +84,30 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
                 }
         }
         
-        navigationController?.popViewControllerAnimated(true)
+        //navigationController?.popViewControllerAnimated(true)
         print(detectionString)
         self.highlightView.frame = highlightViewRect
         self.view.bringSubviewToFront(self.highlightView)
+        
+        
+        Alamofire.request(.GET, "https://www.googleapis.com/books/v1/volumes?q=isbn:" + detectionString)
+            .responseJSON { response in
+                let jResponse = JSON(response.result.value!)
+                if let title = jResponse["items"][0]["volumeInfo"]["title"].string{
+                    print(title)
+                    if let author = jResponse["items"][0]["volumeInfo"]["authors"][0].string{
+                        print(author)
+                        
+                        let newBook = NSEntityDescription.insertNewObjectForEntityForName("Book", inManagedObjectContext: self.coreData.managedObjectContext) as! Book
+                        newBook.title = title
+                        newBook.author = author
+                        let _ = try? self.coreData.managedObjectContext.save()
+                        
+                    }
+                }
+                self.navigationController?.popViewControllerAnimated(true)
+        }
+        
         
     }
     
