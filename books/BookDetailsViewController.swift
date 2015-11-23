@@ -13,7 +13,6 @@ import CoreData
 class BookDetailsViewController: UIViewController{
     
     var book: Book!
-    var context: NSManagedObjectContext!
     
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var authorLabel: UILabel!
@@ -25,7 +24,8 @@ class BookDetailsViewController: UIViewController{
     
     @IBAction func deleteIsPressed(sender: AnyObject) {
         // Delete the book and go back a page
-        context.deleteObject(book)
+        appDelegate().coreDataStack.managedObjectContext.deleteObject(book)
+        let _ = try? appDelegate().coreDataStack.managedObjectContext.save()
         navigationController?.popViewControllerAnimated(true)
     }
 }

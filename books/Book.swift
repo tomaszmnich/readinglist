@@ -11,5 +11,7 @@ import CoreData
 
 @objc(Book)
 class Book: NSManagedObject {
-
+    @NSManaged var title: String?
+    @NSManaged var author: String?
+    @NSManaged var isbn13: String?
 }

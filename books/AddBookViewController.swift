@@ -13,7 +13,6 @@ import UIKit
 class AddBookViewController: UIViewController {
 
     let moc = appDelegate().coreDataStack.managedObjectContext
-    var newBookIndex: Int32!
     var newBook: Book!
     
     @IBOutlet weak var titleField: UITextField!
@@ -22,7 +21,6 @@ class AddBookViewController: UIViewController {
     override func viewDidLoad() {
         // Construct a new managed Book object
         newBook = NSEntityDescription.insertNewObjectForEntityForName("Book", inManagedObjectContext: moc) as! Book
-        newBook.sortOrder = newBookIndex
     }
     
     @IBAction func donePressed(sender: UIBarButtonItem) {

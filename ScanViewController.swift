@@ -10,7 +10,7 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
     let session = AVCaptureSession()
     var previewLayer: AVCaptureVideoPreviewLayer!
     var highlightView = UIView()
-    lazy var coreData = CoreDataStack()
+    lazy var coreDataStack = appDelegate().coreDataStack
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,10 +59,9 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
     func captureOutput(captureOutput: AVCaptureOutput!, didOutputMetadataObjects metadataObjects: [AnyObject]!, fromConnection connection: AVCaptureConnection!) {
         
         var highlightViewRect = CGRectZero
-        
-        var barCodeObject : AVMetadataObject!
-        
-        var detectionString : String!
+
+        var barCodeObject: AVMetadataObject!
+        var detectionString: String!
         
         
         // The scanner is capable of capturing multiple 2-dimensional barcodes in one scan.
@@ -93,17 +92,18 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
                 print(response.result.value!)
                 
                 let jResponse = JSON(response.result.value!)
-                if let title = jResponse["items"][0]["volumeInfo"]["title"].string{
+                let volumeInfo = jResponse["items"][0]["volumeInfo"]
+                if let title = volumeInfo["title"].string {
                     print("Title found: " + title)
-                    if let author = jResponse["items"][0]["volumeInfo"]["authors"][0].string{
+                    if let author = volumeInfo["authors"][0].string{
                         print("Author found: " + author)
                         
-                        let newBook = NSEntityDescription.insertNewObjectForEntityForName("Book", inManagedObjectContext: self.coreData.managedObjectContext) as! Book
+                        let newBook = NSEntityDescription.insertNewObjectForEntityForName("Book", inManagedObjectContext: self.coreDataStack.managedObjectContext) as! Book
                         newBook.title = title
                         newBook.author = author
-                        let _ = try? self.coreData.managedObjectContext.save()
+                        newBook.isbn13 = detectionString
+                        let _ = try? self.coreDataStack.managedObjectContext.save()
                         print("New book created and saved.")
-                        
                     }
                 }
                 self.navigationController?.popViewControllerAnimated(true)

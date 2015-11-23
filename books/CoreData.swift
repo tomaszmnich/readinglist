@@ -52,42 +52,6 @@ class CoreDataStack {
     }
     
     /*
-    Loads the default set of teas and coffees if and only if this is
-    the first time the application has been launched.
-    */
-    func loadDefaultDataIfFirstLaunch() {
-        
-        // Check whether the application has been launched on this device before
-        let key = "hasLaunchedBefore"
-        let launchedBefore = NSUserDefaults.standardUserDefaults().boolForKey(key)
-        
-        // Save at the end of loading data
-        defer {
-            save()
-        }
-        
-        // If not, load the data!
-        if launchedBefore == false {
-        NSUserDefaults.standardUserDefaults().setBool(true, forKey: key)
-        for i in 0..<3 {
-            let book = NSEntityDescription.insertNewObjectForEntityForName("Book", inManagedObjectContext: managedObjectContext) as! Book
-            switch i {
-            case 0:
-                book.author = "Jonathan Franzen"
-                book.title = "Purity"
-            case 1:
-                book.author = "Franz Kafka"
-                book.title = "The Trial"
-            default: // case 2:
-                book.title = "Catch-22"
-                book.author = "Joseph Heller"
-            }
-            book.sortOrder = Int32(i)
-        }
-        }
-    }
-    
-    /*
     
     */
     private func applicationDocumentsDirectory() -> NSURL {

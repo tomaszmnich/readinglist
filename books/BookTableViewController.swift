@@ -78,16 +78,8 @@ class BookTableViewController: UITableViewController {
                 let clickedBook = bookFromIndexPath(tableView.indexPathForCell(clickedCell)!)
 
                 // Set the book on the controller from the book corresponding to the clicked cell
-                bookDetailsController.context = coreDataStack.managedObjectContext
                 bookDetailsController.book = clickedBook
             }
-        }
-        else if segue.identifier == "addSegue"{
-            // Get the controller for adding a book
-            let addBookController = segue.destinationViewController as! AddBookViewController
-            
-            // Set the newBookIndex to be one more than the greatest current value
-            addBookController.newBookIndex = Int32((fetchedResultsController.sections?[0].objects!.count)!)
         }
     }
     
