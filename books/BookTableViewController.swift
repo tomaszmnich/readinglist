@@ -45,6 +45,8 @@ class BookTableViewController: UITableViewController {
     override func viewDidLoad() {
         // Set the DZN data set source
         tableView.emptyDataSetSource = self
+        
+        // This removed the cell separators
         tableView.tableFooterView = UIView()
         
         super.viewDidLoad()
@@ -76,6 +78,7 @@ class BookTableViewController: UITableViewController {
                 let clickedBook = bookFromIndexPath(tableView.indexPathForCell(clickedCell)!)
 
                 // Set the book on the controller from the book corresponding to the clicked cell
+                bookDetailsController.context = coreDataStack.managedObjectContext
                 bookDetailsController.book = clickedBook
             }
         }
@@ -100,6 +103,10 @@ class BookTableViewController: UITableViewController {
     Functions controlling the DZNEmptyDataSet.
 */
 extension BookTableViewController : DZNEmptyDataSetSource{
+    func imageForEmptyDataSet(scrollView: UIScrollView!) -> UIImage! {
+        return UIImage(named: "book_stack")
+    }
+    
     func titleForEmptyDataSet(scrollView: UIScrollView!) -> NSAttributedString! {
         let str = "Welcome"
         let attrs = [NSFontAttributeName: UIFont.preferredFontForTextStyle(UIFontTextStyleHeadline)]
