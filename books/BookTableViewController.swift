@@ -17,7 +17,7 @@ class BookTableViewController: UITableViewController {
     lazy var fetchedResultsController: NSFetchedResultsController = {
         let fetchRequest = NSFetchRequest(entityName: "Book")
         fetchRequest.sortDescriptors = [
-            NSSortDescriptor(key: "sortOrder", ascending: true)
+            NSSortDescriptor(key: "author", ascending: true)
         ]
         let controller = NSFetchedResultsController(fetchRequest: fetchRequest,
             managedObjectContext: self.coreDataStack.managedObjectContext,
@@ -27,11 +27,11 @@ class BookTableViewController: UITableViewController {
     }()
 
     override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        
         // Reload the data
         tryPerformFetch()
         tableView.reloadData()
+        
+        super.viewWillAppear(animated)
     }
     
     func tryPerformFetch(){

@@ -67,9 +67,9 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
         // The scanner is capable of capturing multiple 2-dimensional barcodes in one scan.
         for metadata in metadataObjects {
             
-                if metadata.type == AVMetadataObjectTypeEAN13Code {
+            if metadata.type == AVMetadataObjectTypeEAN13Code {
 
-                    let avMetadata = metadata as! AVMetadataMachineReadableCodeObject
+                    if let avMetadata = metadata as? AVMetadataMachineReadableCodeObject{
                     
                     barCodeObject = self.previewLayer.transformedMetadataObjectForMetadataObject(avMetadata)
                     highlightViewRect = barCodeObject.bounds
@@ -78,39 +78,38 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
                     self.session.stopRunning()
                     break
                 }
+            }
         }
         
         print("Barcode decoded: " + detectionString)
         self.highlightView.frame = highlightViewRect
         self.view.bringSubviewToFront(self.highlightView)
-        
+        let newBook = NSEntityDescription.insertNewObjectForEntityForName("Book", inManagedObjectContext: self.coreDataStack.managedObjectContext) as! Book
+        newBook.isbn13 = detectionString
         
         Alamofire.request(.GET, "https://www.googleapis.com/books/v1/volumes?q=" + detectionString)
             .responseJSON { response in
                 
-                print("Request response.")
-                print(response.result.value!)
-                
                 let jResponse = JSON(response.result.value!)
                 let volumeInfo = jResponse["items"][0]["volumeInfo"]
-                if let title = volumeInfo["title"].string {
-                    print("Title found: " + title)
-                    if let author = volumeInfo["authors"][0].string{
-                        print("Author found: " + author)
-                        
-                        let newBook = NSEntityDescription.insertNewObjectForEntityForName("Book", inManagedObjectContext: self.coreDataStack.managedObjectContext) as! Book
-                        newBook.title = title
-                        newBook.author = author
-                        newBook.isbn13 = detectionString
-                        let _ = try? self.coreDataStack.managedObjectContext.save()
-                        print("New book created and saved.")
+                if let title = volumeInfo["title"].string{
+                    newBook.title = title
+                }
+                if let author = volumeInfo["authors"][0].string{
+                    newBook.author = author
+                }
+                if let imageLink = volumeInfo["imageLinks"]["thumbnail"].string{
+                    Alamofire.request(.GET, imageLink.stringByReplacingOccurrencesOfString("http://", withString: "https://"))
+                        .responseJSON { response in
+                            newBook.coverImage = response.data
                     }
                 }
+                
+                // Save the book!
+                let _ = try? self.coreDataStack.managedObjectContext.save()
                 self.navigationController?.popViewControllerAnimated(true)
         }
-        
-        
     }
-    
-    
+        
+        
 }

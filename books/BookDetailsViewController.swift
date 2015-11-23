@@ -16,10 +16,14 @@ class BookDetailsViewController: UIViewController{
     
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var authorLabel: UILabel!
+    @IBOutlet weak var imageView: UIImageView!
     
     override func viewDidLoad() {
         titleLabel.text = book.title
         authorLabel.text = book.author
+        if let coverImg = book.coverImage {
+            imageView.image = UIImage(data: coverImg)
+        }
     }
     
     @IBAction func deleteIsPressed(sender: AnyObject) {
