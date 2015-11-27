@@ -8,10 +8,13 @@
 
 import SwiftyJSON
 
+/// Deals with parsing the JSON returned by GoogleBook's API into object representations.
 class GoogleBooksParser {
-    static func parseJsonResponse(jResponse: JSON) -> ParsedBookResult {
+    
+    /// Parses a JSON GoogleBooks response and returns the corresponding ParsedBookResult.
+    static func parseJsonResponse(jResponse: JSON) -> BookMetadata {
         // Prepare the result
-        let result = ParsedBookResult()
+        let result = BookMetadata()
         
         // The information we seek is in the volumneInfo element. FOr ow
         let volumeInfo = jResponse["items"][0]["volumeInfo"]
@@ -26,16 +29,21 @@ class GoogleBooksParser {
         }
         
         // Add a link at which a front cover image can be found
-        result.imageURL = volumeInfo["imageLinks"]["thumbnail"].string?.stringByReplacingOccurrencesOfString("http://", withString: "https://")
+        result.imageURL = volumeInfo["imageLinks"]["thumbnail"].string//?.stringByReplacingOccurrencesOfString("http://", withString: "https://")
         
         return result
     }
 }
 
-class ParsedBookResult {
+/// Holds metadata about a book. Merely a holding bay.
+class BookMetadata : CustomStringConvertible {
     var title: String?
     var authors = [String]()
     var imageURL: String?
     var imageData: NSData?
     var isbn13: String?
+    
+    var description: String {
+        return "Title: \(title); Authors: \(authors); ImageURL: \(imageURL); ISBN-13: \(isbn13)"
+    }
 }

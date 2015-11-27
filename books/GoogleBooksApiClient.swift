@@ -9,14 +9,16 @@
 import Alamofire
 import SwiftyJSON
 
-// Interacts with the GoogleBooks API
+/// Interacts with the GoogleBooks API
 class GoogleBooksApiClient {
     
-    // Executes a search on the Google Books API for a given ISBN, and returns
-    // the parsed result obtained, if there was one.
-    static func SearchByIsbn(isbn: String!, callback: (parsedResult: ParsedBookResult?) -> Void) {
+    /**
+     Executes a search on the Google Books API for a given ISBN, and returns
+     the parsed result obtained, if there was one.
+    */
+    static func SearchByIsbn(isbn: String!, callback: (parsedResult: BookMetadata?) -> Void) {
         
-        var parsedResult: ParsedBookResult?
+        var parsedResult: BookMetadata?
         
         // Request the metadata first
         let searchRequestUrl = GoogleBooksRequest.Search(isbn).url
@@ -41,10 +43,12 @@ class GoogleBooksApiClient {
         }
     }
     
-    // Responds to a successful response after a search for an ISBN.
-    // Constructs a ParsedBookResult to represent the metadata obtained.
-    private static func HandleSuccessfulIsbnResponse(response: Response<AnyObject, NSError>) -> ParsedBookResult? {
-        var parsedResult: ParsedBookResult?
+    /**
+     Responds to a successful response after a search for an ISBN.
+     Constructs a ParsedBookResult to represent the metadata obtained.
+    */
+    private static func HandleSuccessfulIsbnResponse(response: Response<AnyObject, NSError>) -> BookMetadata? {
+        var parsedResult: BookMetadata?
         
         print("Success response received")
         if let responseData = response.result.value {
@@ -54,9 +58,11 @@ class GoogleBooksApiClient {
         return parsedResult
     }
     
-    // Takes a ParsedBookResult and, if there is a URL for a cover image, 
-    // attempts to download the image an attach the data to the ParsedBookResult.
-    private static func SupplementWithImage(parsedBook: ParsedBookResult?){
+    /**
+     Takes a ParsedBookResult and, if there is a URL for a cover image,
+     attempts to download the image an attach the data to the ParsedBookResult.
+    */
+    private static func SupplementWithImage(parsedBook: BookMetadata?){
 
         // Only proceed if there is a parsedBook with a image URL
         if let imageUrl = parsedBook?.imageURL{
@@ -78,14 +84,14 @@ class GoogleBooksApiClient {
         }
     }
     
-    // Logs an error from a response
+    /// Logs an error from a response
     private static func LogError(response: Response<AnyObject, NSError>){
         print("Error response received")
         print(response.result.error)
     }
 }
 
-// Builds a request to perform an operation on the GoogleBooks API.
+/// Builds a request to perform an operation on the GoogleBooks API.
 enum GoogleBooksRequest {
 
     case Search(String)
