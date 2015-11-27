@@ -61,8 +61,7 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
         var highlightViewRect = CGRectZero
 
         var barCodeObject: AVMetadataObject!
-        var detectionString: String!
-        
+        var detectedIsbn13: String?
         
         // The scanner is capable of capturing multiple 2-dimensional barcodes in one scan.
         for metadata in metadataObjects {
@@ -73,7 +72,8 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
                     
                     barCodeObject = self.previewLayer.transformedMetadataObjectForMetadataObject(avMetadata)
                     highlightViewRect = barCodeObject.bounds
-                    detectionString = avMetadata.stringValue
+                    detectedIsbn13 = avMetadata.stringValue
+                    print("Barcode decoded: " + detectedIsbn13!)
                     
                     self.session.stopRunning()
                     break
@@ -81,35 +81,34 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
             }
         }
         
-        print("Barcode decoded: " + detectionString)
-        self.highlightView.frame = highlightViewRect
-        self.view.bringSubviewToFront(self.highlightView)
-        let newBook = NSEntityDescription.insertNewObjectForEntityForName("Book", inManagedObjectContext: self.coreDataStack.managedObjectContext) as! Book
-        newBook.isbn13 = detectionString
-        
-        Alamofire.request(.GET, "https://www.googleapis.com/books/v1/volumes?q=" + detectionString)
-            .responseJSON { response in
-                
-                let jResponse = JSON(response.result.value!)
-                let volumeInfo = jResponse["items"][0]["volumeInfo"]
-                if let title = volumeInfo["title"].string{
-                    newBook.title = title
-                }
-                if let author = volumeInfo["authors"][0].string{
-                    newBook.author = author
-                }
-                if let imageLink = volumeInfo["imageLinks"]["thumbnail"].string{
-                    Alamofire.request(.GET, imageLink.stringByReplacingOccurrencesOfString("http://", withString: "https://"))
-                        .responseJSON { response in
-                            newBook.coverImage = response.data
-                    }
-                }
-                
-                // Save the book!
-                let _ = try? self.coreDataStack.managedObjectContext.save()
-                self.navigationController?.popViewControllerAnimated(true)
+        // If we found an ISBN 13, let's search for it online and, if we
+        // find anything useful, use it to build a Book object.
+        if (detectedIsbn13 != nil) {
+
+            // Draw a rectangle on the barcode
+            self.highlightView.frame = highlightViewRect
+            self.view.bringSubviewToFront(self.highlightView)
+            
+            // Search on GoogleBooks
+            GoogleBooksApiClient.SearchByIsbn(detectedIsbn13, callback: ProcessSearchResult)
         }
+ 
     }
-        
-        
+    
+    // Responds to a search result completion
+    func ProcessSearchResult(result: ParsedBookResult?){
+        if(result != nil){
+            // Construct a new book
+            let newBook = NSEntityDescription.insertNewObjectForEntityForName("Book", inManagedObjectContext: self.coreDataStack.managedObjectContext) as! Book
+            
+            // Populate the book metadata
+            newBook.PopulateFromParsedResult(result!)
+            
+            // Save the book!
+            let _ = try? self.coreDataStack.managedObjectContext.save()
+        }
+        self.navigationController?.popViewControllerAnimated(true)
+    }
+    
+    
 }

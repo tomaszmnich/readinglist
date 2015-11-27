@@ -15,4 +15,11 @@ class Book: NSManagedObject {
     @NSManaged var author: String?
     @NSManaged var isbn13: String?
     @NSManaged var coverImage: NSData?
+    
+    func PopulateFromParsedResult(parsedResult: ParsedBookResult){
+        title = parsedResult.title
+        author = parsedResult.authors.first //for now
+        coverImage = parsedResult.imageData
+        isbn13 = parsedResult.isbn13
+    }
 }
