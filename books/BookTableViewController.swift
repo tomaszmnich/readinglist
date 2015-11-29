@@ -13,12 +13,61 @@ import CoreData
 
 class BookTableViewController: UITableViewController {
     
+    /// The mode in which this BookTableViewController is operating.
+    var mode: BookTableViewMode!
+    
+    /// The possible modes in which the BookTableViewController can be used.
+    enum BookTableViewMode: Int{
+
+        case Reading
+        case ToRead
+        case Finished
+        
+        /// A heading and description to use when the book list is empty
+        var emptyListTitleAndDescription: (String!, String!){
+            switch self{
+            case Reading:
+                return ("You aren't reading any books", "Add a new book, or start reading one of your to-read books.")
+            case ToRead:
+                return ("You don't have any books on your to-read list", "Why not search for some books to read? Just click Search.")
+            case Finished:
+                return ("You haven't finished any books", "Or, at least, you haven't added any to this list. Want to get started?")
+            }
+        }
+        
+        /// The string to use as the title of the page when it is in this mode.
+        var title: String!{
+            switch self{
+            case Reading:
+                return "Currently Reading"
+            case ToRead:
+                return "To Read"
+            case Finished:
+                return "Finished"
+            }
+        }
+        
+        /// The core data book read state corresponding to this mode
+        var equivalentBookReadState: Int32{
+            switch self{
+            case .Reading:
+                return BookReadState.Reading.rawValue
+            case .ToRead:
+                return BookReadState.ToRead.rawValue
+            case .Finished:
+                return BookReadState.Finished.rawValue
+            }
+        }
+    }
+    
     let coreDataStack = appDelegate().coreDataStack
+    
     lazy var fetchedResultsController: NSFetchedResultsController = {
         let fetchRequest = NSFetchRequest(entityName: "Book")
         fetchRequest.sortDescriptors = [
-            NSSortDescriptor(key: "author", ascending: true)
+            NSSortDescriptor(key: "title", ascending: true)
         ]
+        fetchRequest.predicate = NSPredicate(format: "readState == \(self.mode.equivalentBookReadState)")
         let controller = NSFetchedResultsController(fetchRequest: fetchRequest,
             managedObjectContext: self.coreDataStack.managedObjectContext,
             sectionNameKeyPath: nil,
@@ -26,7 +75,9 @@ class BookTableViewController: UITableViewController {
         return controller
     }()
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(animated: Bool){
+        print("BookTableViewController in \"\(mode.title)\" mode will appear.")
+        
         // Reload the data
         tryPerformFetch()
         tableView.reloadData()
@@ -34,7 +85,7 @@ class BookTableViewController: UITableViewController {
         super.viewWillAppear(animated)
     }
     
-    func tryPerformFetch(){
+    private func tryPerformFetch(){
         do {
             try fetchedResultsController.performFetch()
         } catch {
@@ -43,13 +94,34 @@ class BookTableViewController: UITableViewController {
     }
     
     override func viewDidLoad() {
+        // Set the mode variable
+        setMode()
+        
+        // Set the title accordinly
+        self.navigationItem.title = mode.title
+        
         // Set the DZN data set source
         tableView.emptyDataSetSource = self
         
-        // This removed the cell separators
+        // This removes the cell separators
         tableView.tableFooterView = UIView()
         
         super.viewDidLoad()
+    }
+    
+    /// Sets the mode variable based on the currently selected tab.
+    private func setMode() {
+        print("Current tab: \(self.tabBarController!.selectedIndex)")
+        switch self.tabBarController!.selectedIndex{
+        case ToReadTabIndex:
+            mode = BookTableViewMode.ToRead
+        case ReadingTabIndex:
+            mode = BookTableViewMode.Reading
+        case FinishedTabIndex:
+            mode = BookTableViewMode.Finished
+        default:
+            print("Unrecognised tab index: \(self.tabBarController!.selectedIndex)")
+        }
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -63,7 +135,7 @@ class BookTableViewController: UITableViewController {
         // Configure the cell from the corresponding book
         let book: Book = bookFromIndexPath(indexPath)
         cell.textLabel?.text = book.title
-        cell.detailTextLabel?.text = book.author
+        cell.detailTextLabel?.text = book.authorListString
         return cell
     }
     
@@ -100,14 +172,12 @@ extension BookTableViewController : DZNEmptyDataSetSource{
     }
     
     func titleForEmptyDataSet(scrollView: UIScrollView!) -> NSAttributedString! {
-        let str = "Welcome"
         let attrs = [NSFontAttributeName: UIFont.preferredFontForTextStyle(UIFontTextStyleHeadline)]
-        return NSAttributedString(string: str, attributes: attrs)
+        return NSAttributedString(string: mode.emptyListTitleAndDescription.0, attributes: attrs)
     }
     
     func descriptionForEmptyDataSet(scrollView: UIScrollView!) -> NSAttributedString! {
-        let str = "Tap the button above to add your first book."
         let attrs = [NSFontAttributeName: UIFont.preferredFontForTextStyle(UIFontTextStyleBody)]
-        return NSAttributedString(string: str, attributes: attrs)
+        return NSAttributedString(string: mode.emptyListTitleAndDescription.1, attributes: attrs)
     }
 }

@@ -25,7 +25,9 @@ class GoogleBooksParser {
         // Add all the authors
         let authors = volumeInfo["authors"]
         for author in authors{
-            result.authors.append(author.0)
+            if let authorName = author.1.rawString(){
+                result.authors.append(authorName)
+            }
         }
         
         // Add a link at which a front cover image can be found

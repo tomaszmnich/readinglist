@@ -20,7 +20,7 @@ class BookDetailsViewController: UIViewController{
     
     override func viewDidLoad() {
         titleLabel.text = book.title
-        authorLabel.text = book.author
+        authorLabel.text = book.authorListString
         if let coverImg = book.coverImage {
             imageView.image = UIImage(data: coverImg)
         }

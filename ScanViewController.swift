@@ -12,6 +12,10 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
     var highlightView = UIView()
     lazy var coreDataStack = appDelegate().coreDataStack
     
+    @IBAction func CancelWasPressed(sender: UIBarButtonItem) {
+        presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -89,6 +93,12 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
             
             // Populate the book metadata
             newBook.PopulateFromParsedResult(result!)
+            
+            for authorString in result!.authors{
+                let newAuthor = NSEntityDescription.insertNewObjectForEntityForName("Author", inManagedObjectContext: self.coreDataStack.managedObjectContext) as! Author
+                newAuthor.name = authorString
+                newAuthor.authorOf = newBook
+            }
             
             // Save the book!
             let _ = try? self.coreDataStack.managedObjectContext.save()

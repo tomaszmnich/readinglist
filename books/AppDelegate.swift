@@ -12,6 +12,10 @@ func appDelegate() -> AppDelegate {
     return UIApplication.sharedApplication().delegate as! AppDelegate
 }
 
+var ToReadTabIndex = 0
+var ReadingTabIndex = 1
+var FinishedTabIndex = 2
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
