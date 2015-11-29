@@ -12,10 +12,17 @@ import CoreData
 class BooksStore {
     
     /// The core data stack which will be doing the actual work.
-    private lazy var coreDataStack = CoreDataStack()
+    private lazy var coreDataStack = CoreDataStack(sqliteFileName: "books", momdFileName: "books")
     
-    func fetchedBooksController(bookStateToRetrieve: BookReadState, doFetch: Bool, delegate: NSFetchedResultsControllerDelegate) -> NSFetchedResultsController{
-        let fetchRequest = NSFetchRequest(entityName: "Book")
+    // Store the entity names here.
+    private let bookEntityName = "Book"
+    private let authorEntityName = "Author"
+    
+    /**
+     Creates a NSFetchedResultsController to retrieve books in the given state.
+    */
+    func fetchedBooksController(bookStateToRetrieve: BookReadState) -> NSFetchedResultsController{
+        let fetchRequest = NSFetchRequest(entityName: self.bookEntityName)
         fetchRequest.sortDescriptors = [
             NSSortDescriptor(key: "title", ascending: true)
         ]
@@ -24,22 +31,18 @@ class BooksStore {
             managedObjectContext: self.coreDataStack.managedObjectContext,
             sectionNameKeyPath: nil,
             cacheName: nil)
-        controller.delegate = delegate
-        if doFetch {
-           let _ = try? controller.performFetch()
-        }
         return controller
     }
         
     func newBook() -> Book {
-        return coreDataStack.createNewItem("Book")
+        return coreDataStack.createNewItem(bookEntityName)
     }
     
     func newAuthor() -> Author {
-        return coreDataStack.createNewItem("Author")
+        return coreDataStack.createNewItem(authorEntityName)
     }
     
-    func deleteBook(bookToDelete: Book){
+    func deleteBook(bookToDelete: Book) {
         coreDataStack.managedObjectContext.deleteObject(bookToDelete)
     }
     
@@ -50,5 +53,4 @@ class BooksStore {
             print("Error saving context: \(error)")
         }
     }
-    
 }

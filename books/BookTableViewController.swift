@@ -32,8 +32,11 @@ class BookTableViewController: UITableViewController {
             print("Unrecognised tab index: \(self.tabBarController!.selectedIndex)")
         }
         
-        // Setup the fetched results controller
-        booksResultsController = appDelegate().booksStore.fetchedBooksController(mode.equivalentBookReadState, doFetch: true, delegate: self)
+        // Setup the fetched results controller, attaching this TableViewController
+        // as a delegate on it, and perform the initial fetch.
+        booksResultsController = appDelegate().booksStore.fetchedBooksController(mode.equivalentBookReadState)
+        booksResultsController.delegate = self
+        let _ = try? booksResultsController.performFetch()
         
         // Set the title accordinly
         self.navigationItem.title = mode.title
@@ -115,11 +118,11 @@ extension BookTableViewController : NSFetchedResultsControllerDelegate {
             }
     }
 
-}
 
-extension BookTableViewController{
-    /// The possible modes in which the BookTableViewController can be used.
-    enum BookTableViewMode: Int{
+    /**
+     The possible modes in which the BookTableViewController can be used.
+    */
+    enum BookTableViewMode: Int {
         
         case Reading
         case ToRead
