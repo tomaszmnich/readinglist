@@ -11,22 +11,22 @@ import UIKit
 
 class AddBookManuallyViewController: UIViewController{
     
-    lazy var coreDataAccess = appDelegate().coreDataAccess
+    lazy var booksStore = appDelegate().booksStore
     
     @IBOutlet weak var titleField: UITextField!
     @IBOutlet weak var authorField: UITextField!
     
     
     @IBAction func doneWasPressed(sender: UIBarButtonItem) {
-        let book = coreDataAccess.newBook()
+        let book = booksStore.newBook()
         book.title = titleField.text
         
-        let author = coreDataAccess.newAuthor()
+        let author = booksStore.newAuthor()
         author.name = authorField.text
         
         book.authoredBy = NSOrderedSet(array: [author])
         
-        coreDataAccess.save()
+        booksStore.save()
         self.navigationController!.popToRootViewControllerAnimated(true)
     }
     

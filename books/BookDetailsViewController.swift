@@ -13,7 +13,7 @@ import CoreData
 class BookDetailsViewController: UIViewController{
     
     var book: Book!
-    lazy var coreDataAccess = appDelegate().coreDataAccess
+    lazy var booksStore = appDelegate().booksStore
     
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var authorLabel: UILabel!
@@ -29,8 +29,8 @@ class BookDetailsViewController: UIViewController{
     
     @IBAction func deleteIsPressed(sender: AnyObject) {
         // Delete the book and go back a page
-        coreDataAccess.deleteItem(book)
-        coreDataAccess.save()
+        booksStore.deleteBook(book)
+        booksStore.save()
         
         navigationController?.popViewControllerAnimated(true)
     }

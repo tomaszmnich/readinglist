@@ -18,7 +18,7 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
     let session = AVCaptureSession()
     var previewLayer: AVCaptureVideoPreviewLayer!
     var highlightView = UIView()
-    lazy var coreDataAccess = appDelegate().coreDataAccess
+    lazy var booksStore = appDelegate().booksStore
     
     @IBAction func CancelWasPressed(sender: UIBarButtonItem) {
         presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
@@ -97,19 +97,19 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
     func ProcessSearchResult(result: BookMetadata?){
         if(result != nil){
             // Construct a new book
-            let newBook = coreDataAccess.newBook()
+            let newBook = booksStore.newBook()
             
             // Populate the book metadata
             newBook.PopulateFromParsedResult(result!)
             
             for authorString in result!.authors{
-                let newAuthor = coreDataAccess.newAuthor()
+                let newAuthor = booksStore.newAuthor()
                 newAuthor.name = authorString
                 newAuthor.authorOf = newBook
             }
             
             // Save the book!
-            self.coreDataAccess.save()
+            self.booksStore.save()
         }
         
         // TODO: Do something other than just going back at this point

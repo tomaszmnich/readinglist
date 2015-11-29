@@ -17,22 +17,7 @@ class BookTableViewController: UITableViewController {
     var mode: BookTableViewMode!
     
     /// The books which this page displays
-    var books: [Book]!
-    
-    /// Reloads the books variable from the core data store
-    private func reloadBooks(){
-        books = appDelegate().coreDataAccess.getBooks(mode.equivalentBookReadState)
-    }
-    
-    override func viewWillAppear(animated: Bool){
-        print("BookTableViewController in \"\(mode.title)\" mode will appear.")
-        
-        // Reload the data and table
-        reloadBooks()
-        tableView.reloadData()
-        
-        super.viewWillAppear(animated)
-    }
+    var booksResultsController: NSFetchedResultsController!
     
     override func viewDidLoad() {
         // Set the mode variable
@@ -47,8 +32,8 @@ class BookTableViewController: UITableViewController {
             print("Unrecognised tab index: \(self.tabBarController!.selectedIndex)")
         }
         
-        // Load the books
-        reloadBooks()
+        // Setup the fetched results controller
+        booksResultsController = appDelegate().booksStore.fetchedBooksController(mode.equivalentBookReadState, doFetch: true, delegate: self)
         
         // Set the title accordinly
         self.navigationItem.title = mode.title
@@ -63,7 +48,7 @@ class BookTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return books.count
+        return self.booksResultsController.sections![section].numberOfObjects
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -71,9 +56,7 @@ class BookTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath)
         
         // Configure the cell from the corresponding book
-        let book = bookFromIndexPath(indexPath)
-        cell.textLabel?.text = book.title
-        cell.detailTextLabel?.text = book.authorListString
+        self.configureCell(cell, atIndexPath: indexPath)
         return cell
     }
     
@@ -85,16 +68,54 @@ class BookTableViewController: UITableViewController {
                 let bookDetailsController = segue.destinationViewController as! BookDetailsViewController
 
                 // Set the book on the controller from the book corresponding to the clicked cell
-                bookDetailsController.book = bookFromIndexPath(tableView.indexPathForCell(clickedCell)!)
+                bookDetailsController.book = bookAtIndexPath(tableView.indexPathForCell(clickedCell)!)
             }
         }
     }
     
-    func bookFromIndexPath(indexPath: NSIndexPath) -> Book{
-        return books[indexPath.item]
+    /// Gets the specified object from the results controller, casted to a Book
+    private func bookAtIndexPath(indexPath: NSIndexPath) -> Book? {
+        return booksResultsController.objectAtIndexPath(indexPath) as? Book
+    }
+    
+    /// Configures the text labels on the UICell according to the book at the specified index path
+    private func configureCell(cell: UITableViewCell, atIndexPath indexPath: NSIndexPath) {
+        let book = self.booksResultsController.objectAtIndexPath(indexPath) as! Book
+        cell.textLabel!.text = book.title
+        cell.detailTextLabel!.text = book.authorListString
     }
 }
 
+
+// Standard fetched results controller delegate code
+extension BookTableViewController : NSFetchedResultsControllerDelegate {
+    
+    func controllerWillChangeContent(controller: NSFetchedResultsController) {
+        self.tableView.beginUpdates()
+    }
+    
+    func controllerDidChangeContent(controller: NSFetchedResultsController) {
+        self.tableView.endUpdates()
+    }
+    
+    /// Handles any change in the data managed by the controller
+    func controller(controller: NSFetchedResultsController, didChangeObject object: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
+            switch type {
+            case .Insert:
+                self.tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Fade)
+            case .Update:
+                let cell = self.tableView.cellForRowAtIndexPath(indexPath!)
+                self.configureCell(cell!, atIndexPath: indexPath!)
+                self.tableView.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
+            case .Move:
+                self.tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
+                self.tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Fade)
+            case .Delete:
+                self.tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
+            }
+    }
+
+}
 
 extension BookTableViewController{
     /// The possible modes in which the BookTableViewController can be used.

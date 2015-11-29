@@ -8,6 +8,10 @@
 
 import CoreData
 
+/**
+ Standard CoreData boilerplate code.
+ An instance of CoreDataStack can be held by a more specific accessing class.
+*/
 class CoreDataStack {
     /*
     
@@ -39,17 +43,7 @@ class CoreDataStack {
         let modelURL = NSBundle.mainBundle().URLForResource("books", withExtension: "momd")!
         return NSManagedObjectModel(contentsOfURL: modelURL)!
     }()
-    
-    /*
-    Saves the ManagedObjectContect to persistent store.
-    */
-    func save() {
-        do {
-            try managedObjectContext.save()
-        } catch {
-            print("Error saving context: \(error)")
-        }
-    }
+
     
     /*
     
@@ -58,6 +52,11 @@ class CoreDataStack {
         return NSFileManager.defaultManager()
             .URLsForDirectory(NSSearchPathDirectory.DocumentDirectory, inDomains: NSSearchPathDomainMask.UserDomainMask)
             .first!
+    }
+    
+    /// Creates a new item of the specified type with the provided entity name.
+    func createNewItem<T>(entityName: String) -> T {
+        return NSEntityDescription.insertNewObjectForEntityForName(entityName, inManagedObjectContext: managedObjectContext) as! T
     }
     
 }

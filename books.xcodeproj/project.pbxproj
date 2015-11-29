@@ -10,7 +10,7 @@
 		491F14621C02228C0052B355 /* ScanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491F14611C02228C0052B355 /* ScanViewController.swift */; };
 		492132B81C08DCC6002E2124 /* GoogleBooksApiClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 492132B71C08DCC6002E2124 /* GoogleBooksApiClient.swift */; };
 		492141291C05B2030048E647 /* GoogleBooksParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 492141281C05B2030048E647 /* GoogleBooksParser.swift */; };
-		492500781C0B1B0000C149B5 /* CoreDataAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 492500771C0B1B0000C149B5 /* CoreDataAccess.swift */; };
+		492500781C0B1B0000C149B5 /* BooksStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 492500771C0B1B0000C149B5 /* BooksStore.swift */; };
 		4925007C1C0B286F00C149B5 /* AddBookManuallyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4925007B1C0B286F00C149B5 /* AddBookManuallyViewController.swift */; };
 		495879651BF7E76200000131 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 495879641BF7E76200000131 /* CoreDataStack.swift */; };
 		495879681BF7EEBA00000131 /* books.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 495879661BF7EEBA00000131 /* books.xcdatamodeld */; };
@@ -47,7 +47,7 @@
 		491F14611C02228C0052B355 /* ScanViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ScanViewController.swift; path = ../ScanViewController.swift; sourceTree = "<group>"; };
 		492132B71C08DCC6002E2124 /* GoogleBooksApiClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleBooksApiClient.swift; sourceTree = "<group>"; };
 		492141281C05B2030048E647 /* GoogleBooksParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleBooksParser.swift; sourceTree = "<group>"; };
-		492500771C0B1B0000C149B5 /* CoreDataAccess.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataAccess.swift; sourceTree = "<group>"; };
+		492500771C0B1B0000C149B5 /* BooksStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BooksStore.swift; sourceTree = "<group>"; };
 		4925007B1C0B286F00C149B5 /* AddBookManuallyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddBookManuallyViewController.swift; sourceTree = "<group>"; };
 		495879641BF7E76200000131 /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		495879671BF7EEBA00000131 /* books.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = books.xcdatamodel; sourceTree = "<group>"; };
@@ -118,7 +118,7 @@
 			isa = PBXGroup;
 			children = (
 				495879641BF7E76200000131 /* CoreDataStack.swift */,
-				492500771C0B1B0000C149B5 /* CoreDataAccess.swift */,
+				492500771C0B1B0000C149B5 /* BooksStore.swift */,
 			);
 			name = CoreData;
 			sourceTree = "<group>";
@@ -389,7 +389,7 @@
 				495C5D3F1BF1412600E00C07 /* BookTableViewController.swift in Sources */,
 				495C5D101BF1404D00E00C07 /* AppDelegate.swift in Sources */,
 				495C5D431BF14BEB00E00C07 /* BookDetailsViewController.swift in Sources */,
-				492500781C0B1B0000C149B5 /* CoreDataAccess.swift in Sources */,
+				492500781C0B1B0000C149B5 /* BooksStore.swift in Sources */,
 				495879651BF7E76200000131 /* CoreDataStack.swift in Sources */,
 				495C5D411BF1423900E00C07 /* Book.swift in Sources */,
 				4925007C1C0B286F00C149B5 /* AddBookManuallyViewController.swift in Sources */,
