@@ -21,25 +21,19 @@ class Book: NSManagedObject {
     @NSManaged var isbn13: String?
     @NSManaged var coverImage: NSData?
     @NSManaged var readState: BookReadState
-    
-    @NSManaged var authoredBy: NSSet?
+    @NSManaged var authoredBy: NSOrderedSet?
     
     var authorListString: String?{
-        if let authors = authoredBy?.allObjects as? [Author]{
-            var authorListString = String()
-            var first = true
-            for author in authors{
-                if let name = author.name{
-                    if !first{
-                        authorListString += ", "
-                    }
-                    authorListString += name
-                }
-                first = false
+        var authorListString = String()
+        if let authors = authoredBy?.array as? [Author] {
+        for author in authors{
+            if authors.indexOf(author) != 0{
+                authorListString += ", "
             }
-            return authorListString
+            authorListString += author.name!
+            }
         }
-        return nil
+        return authorListString
     }
     
     func PopulateFromParsedResult(parsedResult: BookMetadata){
@@ -51,6 +45,6 @@ class Book: NSManagedObject {
 
 @objc(Author)
 class Author: NSManagedObject{
-    @NSManaged var name: String?
+    @NSManaged var name: String!
     @NSManaged var authorOf: Book
 }

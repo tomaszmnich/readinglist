@@ -1,3 +1,11 @@
+//
+//  BookTableViewController.swift
+//  books
+//
+//  Created by Andrew Bennet on 09/11/2015.
+//  Copyright © 2015 Andrew Bennet. All rights reserved.
+//
+
 import UIKit
 import AVFoundation
 import Alamofire
@@ -10,7 +18,7 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
     let session = AVCaptureSession()
     var previewLayer: AVCaptureVideoPreviewLayer!
     var highlightView = UIView()
-    lazy var coreDataStack = appDelegate().coreDataStack
+    lazy var coreDataAccess = appDelegate().coreDataAccess
     
     @IBAction func CancelWasPressed(sender: UIBarButtonItem) {
         presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
@@ -89,19 +97,19 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
     func ProcessSearchResult(result: BookMetadata?){
         if(result != nil){
             // Construct a new book
-            let newBook = NSEntityDescription.insertNewObjectForEntityForName("Book", inManagedObjectContext: self.coreDataStack.managedObjectContext) as! Book
+            let newBook = coreDataAccess.newBook()
             
             // Populate the book metadata
             newBook.PopulateFromParsedResult(result!)
             
             for authorString in result!.authors{
-                let newAuthor = NSEntityDescription.insertNewObjectForEntityForName("Author", inManagedObjectContext: self.coreDataStack.managedObjectContext) as! Author
+                let newAuthor = coreDataAccess.newAuthor()
                 newAuthor.name = authorString
                 newAuthor.authorOf = newBook
             }
             
             // Save the book!
-            let _ = try? self.coreDataStack.managedObjectContext.save()
+            self.coreDataAccess.save()
         }
         
         // TODO: Do something other than just going back at this point

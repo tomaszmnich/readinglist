@@ -16,9 +16,90 @@ class BookTableViewController: UITableViewController {
     /// The mode in which this BookTableViewController is operating.
     var mode: BookTableViewMode!
     
+    /// The books which this page displays
+    var books: [Book]!
+    
+    /// Reloads the books variable from the core data store
+    private func reloadBooks(){
+        books = appDelegate().coreDataAccess.getBooks(mode.equivalentBookReadState)
+    }
+    
+    override func viewWillAppear(animated: Bool){
+        print("BookTableViewController in \"\(mode.title)\" mode will appear.")
+        
+        // Reload the data and table
+        reloadBooks()
+        tableView.reloadData()
+        
+        super.viewWillAppear(animated)
+    }
+    
+    override func viewDidLoad() {
+        // Set the mode variable
+        switch self.tabBarController!.selectedIndex{
+        case ToReadTabIndex:
+            mode = BookTableViewMode.ToRead
+        case ReadingTabIndex:
+            mode = BookTableViewMode.Reading
+        case FinishedTabIndex:
+            mode = BookTableViewMode.Finished
+        default:
+            print("Unrecognised tab index: \(self.tabBarController!.selectedIndex)")
+        }
+        
+        // Load the books
+        reloadBooks()
+        
+        // Set the title accordinly
+        self.navigationItem.title = mode.title
+        
+        // Set the DZN data set source
+        tableView.emptyDataSetSource = self
+        
+        // This removes the cell separators
+        tableView.tableFooterView = UIView()
+        
+        super.viewDidLoad()
+    }
+    
+    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return books.count
+    }
+    
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        // Get a spare cell
+        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath)
+        
+        // Configure the cell from the corresponding book
+        let book = bookFromIndexPath(indexPath)
+        cell.textLabel?.text = book.title
+        cell.detailTextLabel?.text = book.authorListString
+        return cell
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        // "detailsSegue" is for viewing a specific book
+        if segue.identifier == "detailsSegue" {
+            if let clickedCell = sender as? UITableViewCell {
+                // Get the controller for viewing a book
+                let bookDetailsController = segue.destinationViewController as! BookDetailsViewController
+
+                // Set the book on the controller from the book corresponding to the clicked cell
+                bookDetailsController.book = bookFromIndexPath(tableView.indexPathForCell(clickedCell)!)
+            }
+        }
+    }
+    
+    func bookFromIndexPath(indexPath: NSIndexPath) -> Book{
+        return books[indexPath.item]
+    }
+}
+
+
+extension BookTableViewController{
     /// The possible modes in which the BookTableViewController can be used.
     enum BookTableViewMode: Int{
-
+        
         case Reading
         case ToRead
         case Finished
@@ -48,122 +129,21 @@ class BookTableViewController: UITableViewController {
         }
         
         /// The core data book read state corresponding to this mode
-        var equivalentBookReadState: Int32{
+        var equivalentBookReadState: BookReadState{
             switch self{
             case .Reading:
-                return BookReadState.Reading.rawValue
+                return BookReadState.Reading
             case .ToRead:
-                return BookReadState.ToRead.rawValue
+                return BookReadState.ToRead
             case .Finished:
-                return BookReadState.Finished.rawValue
+                return BookReadState.Finished
             }
         }
     }
-    
-    let coreDataStack = appDelegate().coreDataStack
-    
-    lazy var fetchedResultsController: NSFetchedResultsController = {
-        let fetchRequest = NSFetchRequest(entityName: "Book")
-        fetchRequest.sortDescriptors = [
-            NSSortDescriptor(key: "title", ascending: true)
-        ]
-        fetchRequest.predicate = NSPredicate(format: "readState == \(self.mode.equivalentBookReadState)")
-        let controller = NSFetchedResultsController(fetchRequest: fetchRequest,
-            managedObjectContext: self.coreDataStack.managedObjectContext,
-            sectionNameKeyPath: nil,
-            cacheName: nil)
-        return controller
-    }()
 
-    override func viewWillAppear(animated: Bool){
-        print("BookTableViewController in \"\(mode.title)\" mode will appear.")
-        
-        // Reload the data
-        tryPerformFetch()
-        tableView.reloadData()
-        
-        super.viewWillAppear(animated)
-    }
-    
-    private func tryPerformFetch(){
-        do {
-            try fetchedResultsController.performFetch()
-        } catch {
-            print("Error fetching: \(error)")
-        }
-    }
-    
-    override func viewDidLoad() {
-        // Set the mode variable
-        setMode()
-        
-        // Set the title accordinly
-        self.navigationItem.title = mode.title
-        
-        // Set the DZN data set source
-        tableView.emptyDataSetSource = self
-        
-        // This removes the cell separators
-        tableView.tableFooterView = UIView()
-        
-        super.viewDidLoad()
-    }
-    
-    /// Sets the mode variable based on the currently selected tab.
-    private func setMode() {
-        print("Current tab: \(self.tabBarController!.selectedIndex)")
-        switch self.tabBarController!.selectedIndex{
-        case ToReadTabIndex:
-            mode = BookTableViewMode.ToRead
-        case ReadingTabIndex:
-            mode = BookTableViewMode.Reading
-        case FinishedTabIndex:
-            mode = BookTableViewMode.Finished
-        default:
-            print("Unrecognised tab index: \(self.tabBarController!.selectedIndex)")
-        }
-    }
-    
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return fetchedResultsController.sections?[0].numberOfObjects ?? 0
-    }
-    
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        // Get a spare cell
-        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath)
-        
-        // Configure the cell from the corresponding book
-        let book: Book = bookFromIndexPath(indexPath)
-        cell.textLabel?.text = book.title
-        cell.detailTextLabel?.text = book.authorListString
-        return cell
-    }
-    
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // "detailsSegue" is for viewing a specific book
-        if segue.identifier == "detailsSegue" {
-            if let clickedCell = sender as? UITableViewCell {
-                // Get the controller for viewing a book
-                let bookDetailsController = segue.destinationViewController as! BookDetailsViewController
-
-                // Get the index path of the clicked cell
-                let clickedBook = bookFromIndexPath(tableView.indexPathForCell(clickedCell)!)
-
-                // Set the book on the controller from the book corresponding to the clicked cell
-                bookDetailsController.book = clickedBook
-            }
-        }
-    }
-    
-    /*
-        Gets the book corresponding to a specific index path in the table.
-    */
-    func bookFromIndexPath(indexPath: NSIndexPath) -> Book {
-        return fetchedResultsController.objectAtIndexPath(indexPath) as! Book
-    }
 }
 
-/*
+/**
     Functions controlling the DZNEmptyDataSet.
 */
 extension BookTableViewController : DZNEmptyDataSetSource{
