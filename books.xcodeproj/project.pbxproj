@@ -12,6 +12,7 @@
 		492141291C05B2030048E647 /* GoogleBooksParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 492141281C05B2030048E647 /* GoogleBooksParser.swift */; };
 		492500781C0B1B0000C149B5 /* BooksStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 492500771C0B1B0000C149B5 /* BooksStore.swift */; };
 		4925007C1C0B286F00C149B5 /* AddBookManuallyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4925007B1C0B286F00C149B5 /* AddBookManuallyViewController.swift */; };
+		494C61D21C0BAF8C00F64105 /* SearchResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494C61D11C0BAF8C00F64105 /* SearchResultsViewController.swift */; };
 		495879651BF7E76200000131 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 495879641BF7E76200000131 /* CoreDataStack.swift */; };
 		495879681BF7EEBA00000131 /* books.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 495879661BF7EEBA00000131 /* books.xcdatamodeld */; };
 		495C5D101BF1404D00E00C07 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 495C5D0F1BF1404D00E00C07 /* AppDelegate.swift */; };
@@ -49,6 +50,7 @@
 		492141281C05B2030048E647 /* GoogleBooksParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleBooksParser.swift; sourceTree = "<group>"; };
 		492500771C0B1B0000C149B5 /* BooksStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BooksStore.swift; sourceTree = "<group>"; };
 		4925007B1C0B286F00C149B5 /* AddBookManuallyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddBookManuallyViewController.swift; sourceTree = "<group>"; };
+		494C61D11C0BAF8C00F64105 /* SearchResultsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResultsViewController.swift; sourceTree = "<group>"; };
 		495879641BF7E76200000131 /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		495879671BF7EEBA00000131 /* books.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = books.xcdatamodel; sourceTree = "<group>"; };
 		495C5D0C1BF1404D00E00C07 /* books.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = books.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -196,6 +198,7 @@
 				495C5D3E1BF1412600E00C07 /* BookTableViewController.swift */,
 				495C5D421BF14BEB00E00C07 /* BookDetailsViewController.swift */,
 				4925007B1C0B286F00C149B5 /* AddBookManuallyViewController.swift */,
+				494C61D11C0BAF8C00F64105 /* SearchResultsViewController.swift */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -386,6 +389,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				492141291C05B2030048E647 /* GoogleBooksParser.swift in Sources */,
+				494C61D21C0BAF8C00F64105 /* SearchResultsViewController.swift in Sources */,
 				495C5D3F1BF1412600E00C07 /* BookTableViewController.swift in Sources */,
 				495C5D101BF1404D00E00C07 /* AppDelegate.swift in Sources */,
 				495C5D431BF14BEB00E00C07 /* BookDetailsViewController.swift in Sources */,

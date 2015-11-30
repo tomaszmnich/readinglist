@@ -12,6 +12,7 @@ import UIKit
 class AddBookManuallyViewController: UIViewController{
     
     lazy var booksStore = appDelegate().booksStore
+    var bookReadState: BookReadState!
     
     @IBOutlet weak var titleField: UITextField!
     @IBOutlet weak var authorField: UITextField!
@@ -20,6 +21,7 @@ class AddBookManuallyViewController: UIViewController{
     @IBAction func doneWasPressed(sender: UIBarButtonItem) {
         let book = booksStore.newBook()
         book.title = titleField.text
+        book.readState = bookReadState
         
         let author = booksStore.newAuthor()
         author.name = authorField.text

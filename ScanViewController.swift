@@ -15,25 +15,20 @@ import CoreData
 
 class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     
+    @IBOutlet weak var cameraPreviewPlaceholder: UIView!
     let session = AVCaptureSession()
     var previewLayer: AVCaptureVideoPreviewLayer!
-    var highlightView = UIView()
     lazy var booksStore = appDelegate().booksStore
     
-    @IBAction func CancelWasPressed(sender: UIBarButtonItem) {
+    var bookReadState: BookReadState!
+    
+    @IBAction func cancelWasPressed(sender: UIBarButtonItem) {
+        session.stopRunning()
         presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // Allow the view to resize freely
-        self.highlightView.autoresizingMask = [.FlexibleTopMargin, .FlexibleBottomMargin, .FlexibleLeftMargin, .FlexibleRightMargin]
-        
-        // We'll draw a thin blue box on the barcode when we detect it
-        self.highlightView.layer.borderColor = UIColor.blueColor().CGColor
-        self.highlightView.layer.borderWidth = 1
-        self.view.addSubview(self.highlightView)
         
         // Setup the input
         let input: AVCaptureDeviceInput!
@@ -56,7 +51,7 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
         
         // We want to view what the camera is seeing
         previewLayer = AVCaptureVideoPreviewLayer(session: session)
-        previewLayer.frame = self.view.bounds
+        previewLayer.frame = cameraPreviewPlaceholder.frame
         previewLayer.videoGravity = AVLayerVideoGravityResize
         self.view.layer.addSublayer(previewLayer)
         
@@ -79,42 +74,19 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
             let detectedIsbn13 = avMetadata.stringValue
             print("Barcode decoded: " + detectedIsbn13!)
             
-            // Draw a rectangle on the barcode
-            self.highlightView.frame = self.previewLayer.transformedMetadataObjectForMetadataObject(avMetadata).bounds
-            self.view.bringSubviewToFront(self.highlightView)
-            
             // Since we have a result, stop the session
             self.session.stopRunning()
-        
-            // We've found an ISBN-13. Let's search for it online and if we
-            // find anything useful use it to build a Book object.
-            GoogleBooksApiClient.SearchByIsbn(detectedIsbn13, callback: ProcessSearchResult)
+            
+            // Pop to the next page
+            performSegueWithIdentifier("isbnDetectedSegue", sender: detectedIsbn13)
         }
- 
     }
     
-    /// Responds to a search result completion
-    func ProcessSearchResult(result: BookMetadata?){
-        if(result != nil){
-            // Construct a new book
-            let newBook = booksStore.newBook()
-            
-            // Populate the book metadata
-            newBook.PopulateFromParsedResult(result!)
-            
-            for authorString in result!.authors{
-                let newAuthor = booksStore.newAuthor()
-                newAuthor.name = authorString
-                newAuthor.authorOf = newBook
-            }
-            
-            // Save the book!
-            self.booksStore.save()
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "isbnDetectedSegue" {
+            let searchResultsController = segue.destinationViewController as! SearchResultsViewController
+            searchResultsController.isbn13 = sender as! String
+            searchResultsController.bookReadState = bookReadState
         }
-        
-        // TODO: Do something other than just going back at this point
-        self.navigationController?.popViewControllerAnimated(true)
     }
-    
-    
 }

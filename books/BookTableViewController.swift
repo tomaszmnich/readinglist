@@ -6,7 +6,6 @@
 //  Copyright © 2015 Andrew Bennet. All rights reserved.
 //
 
-import Foundation
 import UIKit
 import DZNEmptyDataSet
 import CoreData
@@ -50,6 +49,11 @@ class BookTableViewController: UITableViewController {
         super.viewDidLoad()
     }
     
+    override func viewWillAppear(animated: Bool) {
+        tableView.reloadData()
+        super.viewWillAppear(animated)
+    }
+    
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.booksResultsController.sections![section].numberOfObjects
     }
@@ -73,6 +77,10 @@ class BookTableViewController: UITableViewController {
                 // Set the book on the controller from the book corresponding to the clicked cell
                 bookDetailsController.book = bookAtIndexPath(tableView.indexPathForCell(clickedCell)!)
             }
+        }
+        if segue.identifier == "addBookSegue"{
+            let addBookController = (segue.destinationViewController as! UINavigationController).viewControllers.first as! ScannerViewController
+            addBookController.bookReadState = mode.equivalentBookReadState
         }
     }
     
@@ -98,6 +106,8 @@ extension BookTableViewController : NSFetchedResultsControllerDelegate {
     }
     
     func controllerDidChangeContent(controller: NSFetchedResultsController) {
+        let _ = try? controller.performFetch()
+        self.tableView.reloadData()
         self.tableView.endUpdates()
     }
     
