@@ -20,6 +20,7 @@ class BookDetailsViewController: UIViewController{
     @IBOutlet weak var imageView: UIImageView!
     
     override func viewDidLoad() {
+        self.navigationController!.navigationBar.topItem!.title = "";
         titleLabel.text = book.title
         authorLabel.text = book.authorListString
         if let coverImg = book.coverImage {

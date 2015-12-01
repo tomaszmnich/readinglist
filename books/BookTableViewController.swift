@@ -76,6 +76,7 @@ class BookTableViewController: UITableViewController {
 
                 // Set the book on the controller from the book corresponding to the clicked cell
                 bookDetailsController.book = bookAtIndexPath(tableView.indexPathForCell(clickedCell)!)
+                bookDetailsController.hidesBottomBarWhenPushed = true
             }
         }
         if segue.identifier == "addBookSegue"{

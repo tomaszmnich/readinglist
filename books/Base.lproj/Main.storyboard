@@ -6,7 +6,7 @@
         <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
     </dependencies>
     <scenes>
-        <!--Book List-->
+        <!--Item-->
         <scene sceneID="qlX-do-f99">
             <objects>
                 <tableViewController id="C5g-2z-GZ0" customClass="BookTableViewController" customModule="books" customModuleProvider="target" sceneMemberID="viewController">
@@ -17,7 +17,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="Cell" textLabel="EBD-nK-gw8" detailTextLabel="G6v-p2-6oc" style="IBUITableViewCellStyleSubtitle" id="fCz-ao-P8o">
-                                <rect key="frame" x="0.0" y="92" width="320" height="44"/>
+                                <rect key="frame" x="0.0" y="28" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="fCz-ao-P8o" id="Vbo-cQ-i5y">
                                     <rect key="frame" x="0.0" y="0.0" width="287" height="43.5"/>
@@ -54,7 +54,7 @@
                         </connections>
                     </tableView>
                     <tabBarItem key="tabBarItem" title="Item" id="p31-TG-QQh"/>
-                    <navigationItem key="navigationItem" title="Book List" id="eBb-GO-saU">
+                    <navigationItem key="navigationItem" id="eBb-GO-saU">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="vEK-K1-cdq">
                             <connections>
                                 <segue destination="pS6-3L-WFP" kind="modal" identifier="addBookSegue" id="TEf-Jy-hbV"/>
@@ -70,7 +70,7 @@
         <scene sceneID="5us-Nf-OVY">
             <objects>
                 <navigationController id="xOz-uh-Uha" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="To Read" id="QJz-3R-95Z"/>
+                    <tabBarItem key="tabBarItem" title="To Read" image="Courses" id="QJz-3R-95Z"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="sZF-AS-Oco">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -84,11 +84,139 @@
             </objects>
             <point key="canvasLocation" x="-1032" y="216"/>
         </scene>
+        <!--Settings-->
+        <scene sceneID="aGE-yS-DtZ">
+            <objects>
+                <navigationController id="ruB-kY-mJU" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Settings" image="Settings" id="i0L-aK-xsy"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Nox-gX-uUU">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <animations/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="pCi-Xo-XrY" kind="relationship" relationship="rootViewController" id="Vd0-cd-Nsl"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="q7Z-Qf-N76" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1224" y="905"/>
+        </scene>
+        <!--Table View Controller-->
+        <scene sceneID="vgH-f1-bNJ">
+            <objects>
+                <tableViewController id="pCi-Xo-XrY" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="V8M-7d-0Co">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <animations/>
+                        <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+                        <sections>
+                            <tableViewSection id="MTZ-1b-rRM">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" textLabel="0kf-SC-dDP" style="IBUITableViewCellStyleDefault" id="KaL-bg-1pg">
+                                        <rect key="frame" x="0.0" y="99" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KaL-bg-1pg" id="xZi-sy-MDp">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="About" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="0kf-SC-dDP">
+                                                    <rect key="frame" x="15" y="0.0" width="290" height="43.5"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <animations/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <animations/>
+                                        </tableViewCellContentView>
+                                        <animations/>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" textLabel="xLd-Ak-mzP" style="IBUITableViewCellStyleDefault" id="rgi-az-uqb">
+                                        <rect key="frame" x="0.0" y="143" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="rgi-az-uqb" id="b7J-pu-kKf">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Help" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="xLd-Ak-mzP">
+                                                    <rect key="frame" x="15" y="0.0" width="290" height="43.5"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <animations/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <animations/>
+                                        </tableViewCellContentView>
+                                        <animations/>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                            <tableViewSection id="xsY-Wh-WA9">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" textLabel="B8O-WK-4Hl" style="IBUITableViewCellStyleDefault" id="mXy-1k-SvT">
+                                        <rect key="frame" x="0.0" y="223" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="mXy-1k-SvT" id="ZeX-st-7NV">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Something Else" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="B8O-WK-4Hl">
+                                                    <rect key="frame" x="15" y="0.0" width="290" height="43.5"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <animations/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <animations/>
+                                        </tableViewCellContentView>
+                                        <animations/>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" textLabel="6Qy-fy-Um0" style="IBUITableViewCellStyleDefault" id="00s-ck-nXq">
+                                        <rect key="frame" x="0.0" y="267" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="00s-ck-nXq" id="fhc-Pm-02y">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="One More Thing" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="6Qy-fy-Um0">
+                                                    <rect key="frame" x="15" y="0.0" width="290" height="43.5"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <animations/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <animations/>
+                                        </tableViewCellContentView>
+                                        <animations/>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                        </sections>
+                        <connections>
+                            <outlet property="dataSource" destination="pCi-Xo-XrY" id="rKU-Dl-Vxb"/>
+                            <outlet property="delegate" destination="pCi-Xo-XrY" id="5HC-K3-ROM"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="xi0-h7-Fcc"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="bbh-Ui-xne" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-662" y="937"/>
+        </scene>
         <!--Finished-->
         <scene sceneID="Vw8-mu-HH1">
             <objects>
                 <navigationController id="ouW-H7-g4X" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Finished" id="8rL-oF-zTi"/>
+                    <tabBarItem key="tabBarItem" title="Finished" image="ToDo" id="8rL-oF-zTi"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="li1-qi-IeN">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -111,7 +239,7 @@
         <scene sceneID="Ebw-UR-fdg">
             <objects>
                 <navigationController id="1rq-F2-SE1" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Reading" id="4sW-eC-quq"/>
+                    <tabBarItem key="tabBarItem" title="Reading" image="Literature" id="4sW-eC-quq"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Vhm-hD-UD2">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -136,9 +264,10 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </tabBar>
                     <connections>
-                        <segue destination="xOz-uh-Uha" kind="relationship" relationship="viewControllers" id="3JW-IV-0K3"/>
                         <segue destination="1rq-F2-SE1" kind="relationship" relationship="viewControllers" id="Rdw-Rq-chs"/>
+                        <segue destination="xOz-uh-Uha" kind="relationship" relationship="viewControllers" id="3JW-IV-0K3"/>
                         <segue destination="ouW-H7-g4X" kind="relationship" relationship="viewControllers" id="7S1-dH-5Dj"/>
+                        <segue destination="ruB-kY-mJU" kind="relationship" relationship="viewControllers" id="ezx-tl-oRe"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VjV-82-6SV" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -148,7 +277,7 @@
         <!--Search Results View Controller-->
         <scene sceneID="IMM-IK-owI">
             <objects>
-                <viewController id="Lqd-C4-BX8" customClass="SearchResultsViewController" customModule="books" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController modalTransitionStyle="flipHorizontal" id="Lqd-C4-BX8" customClass="SearchResultsViewController" customModule="books" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="eaS-Su-O3Q">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -227,7 +356,7 @@
             </objects>
             <point key="canvasLocation" x="488" y="-222"/>
         </scene>
-        <!--Add Books-->
+        <!--Add Book-->
         <scene sceneID="0aL-A1-3Fw">
             <objects>
                 <viewController id="RLM-Yq-lvb" customClass="ScannerViewController" customModule="books" customModuleProvider="target" sceneMemberID="viewController">
@@ -235,26 +364,26 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Scan a barcode to add a book" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="oqK-1r-Xy8">
-                                <rect key="frame" x="20" y="80" width="280" height="21"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                <animations/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <view contentMode="scaleToFill" id="fRc-A1-jhP">
                                 <rect key="frame" x="0.0" y="109" width="320" height="459"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <animations/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Scan a barcode to add a book" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="oqK-1r-Xy8">
+                                <rect key="frame" x="20" y="80" width="280" height="21"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <animations/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Item" id="EOd-Tk-otY"/>
-                    <navigationItem key="navigationItem" title="Add Books" id="yDi-Z7-Ie2">
+                    <navigationItem key="navigationItem" title="Add Book" id="yDi-Z7-Ie2">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="3fF-kh-qUy">
                             <connections>
                                 <action selector="cancelWasPressed:" destination="RLM-Yq-lvb" id="Uit-Gj-Jz3"/>
@@ -278,7 +407,7 @@
             </objects>
             <point key="canvasLocation" x="952" y="-286"/>
         </scene>
-        <!--Information-->
+        <!--Book Details View Controller-->
         <scene sceneID="dhn-Z4-2RQ">
             <objects>
                 <viewController id="rfy-0O-jij" customClass="BookDetailsViewController" customModule="books" customModuleProvider="target" sceneMemberID="viewController">
@@ -322,7 +451,7 @@
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Information" id="DgK-LA-eKB"/>
+                    <navigationItem key="navigationItem" id="DgK-LA-eKB"/>
                     <connections>
                         <outlet property="authorLabel" destination="PH6-rQ-k8i" id="Gkk-MX-JHQ"/>
                         <outlet property="imageView" destination="f9A-ld-euG" id="TRN-zG-Uok"/>
@@ -334,7 +463,13 @@
             <point key="canvasLocation" x="600" y="-900"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="Courses" width="25" height="25"/>
+        <image name="Literature" width="25" height="25"/>
+        <image name="Settings" width="25" height="25"/>
+        <image name="ToDo" width="25" height="25"/>
+    </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="oo7-bc-l0y"/>
+        <segue reference="poC-1I-Sew"/>
     </inferredMetricsTieBreakers>
 </document>
