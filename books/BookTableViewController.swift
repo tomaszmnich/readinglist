@@ -10,7 +10,7 @@ import UIKit
 import DZNEmptyDataSet
 import CoreData
 
-class BookTableViewController: UITableViewController {
+class BookTableViewController: UITableViewController, UISearchResultsUpdating {
     
     /// The mode in which this BookTableViewController is operating.
     var mode: BookTableViewMode!
@@ -18,26 +18,23 @@ class BookTableViewController: UITableViewController {
     /// The books which this page displays
     var booksResultsController: NSFetchedResultsController!
     
+    /// The UISearchController to which this UITableViewController is connected.
+    var searchResultsController = UISearchController(searchResultsController: nil)
+    
     override func viewDidLoad() {
         // Set the mode variable
-        switch self.tabBarController!.selectedIndex{
-        case ToReadTabIndex:
-            mode = BookTableViewMode.ToRead
-        case ReadingTabIndex:
-            mode = BookTableViewMode.Reading
-        case FinishedTabIndex:
-            mode = BookTableViewMode.Finished
-        default:
-            print("Unrecognised tab index: \(self.tabBarController!.selectedIndex)")
-        }
+        mode = BookTableViewMode.modeFromTabIndex(self.tabBarController!.selectedIndex)
         
         // Setup the fetched results controller, attaching this TableViewController
         // as a delegate on it, and perform the initial fetch.
-        booksResultsController = appDelegate().booksStore.fetchedBooksController(mode.equivalentBookReadState)
-        booksResultsController.delegate = self
-        let _ = try? booksResultsController.performFetch()
+        buildFetchedResultsControllerAndFetch(BookFetchedResultFilterer(titleText: nil, readState: mode.equivalentBookReadState))
         
-        // Set the title accordinly
+        // Setup the search bar
+        self.searchResultsController.searchResultsUpdater = self
+        self.tableView.tableHeaderView = searchResultsController.searchBar
+        
+        // Set the title accordingly. 
+        // Why?
         self.navigationItem.title = mode.title
         
         // Set the DZN data set source
@@ -47,6 +44,18 @@ class BookTableViewController: UITableViewController {
         tableView.tableFooterView = UIView()
         
         super.viewDidLoad()
+    }
+    
+    func buildFetchedResultsControllerAndFetch(filter: BookFetchedResultFilterer){
+        // Currently we only support sorting by TitleAscending
+        booksResultsController = appDelegate().booksStore.FetchedBooksController([BookSortOrder.TitleAscending], filter: filter)
+        booksResultsController.delegate = self
+        let _ = try? booksResultsController.performFetch()
+        tableView.reloadData()
+    }
+    
+    func updateSearchResultsForSearchController(searchController: UISearchController) {
+        buildFetchedResultsControllerAndFetch(BookFetchedResultFilterer(titleText: searchController.searchBar.text, readState: mode.equivalentBookReadState))
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -60,7 +69,7 @@ class BookTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         // Get a spare cell
-        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath)
+        let cell = self.tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath)
         
         // Configure the cell from the corresponding book
         self.configureCell(cell, atIndexPath: indexPath)
@@ -95,6 +104,9 @@ class BookTableViewController: UITableViewController {
         let book = self.booksResultsController.objectAtIndexPath(indexPath) as! Book
         cell.textLabel!.text = book.title
         cell.detailTextLabel!.text = book.authorListString
+        if book.coverImage != nil {
+            cell.imageView?.image = UIImage(data: book.coverImage!)
+        }
     }
 }
 
@@ -116,16 +128,17 @@ extension BookTableViewController : NSFetchedResultsControllerDelegate {
     func controller(controller: NSFetchedResultsController, didChangeObject object: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
             switch type {
             case .Insert:
-                self.tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Fade)
+                self.tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .None)
             case .Update:
-                let cell = self.tableView.cellForRowAtIndexPath(indexPath!)
-                self.configureCell(cell!, atIndexPath: indexPath!)
-                self.tableView.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
+                if let cell = self.tableView.cellForRowAtIndexPath(indexPath!){
+                    self.configureCell(cell, atIndexPath: indexPath!)
+                    self.tableView.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
+                }
             case .Move:
                 self.tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
                 self.tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Fade)
             case .Delete:
-                self.tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
+                self.tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .None)
             }
     }
 
@@ -133,7 +146,7 @@ extension BookTableViewController : NSFetchedResultsControllerDelegate {
     /**
      The possible modes in which the BookTableViewController can be used.
     */
-    enum BookTableViewMode: Int {
+    enum BookTableViewMode {
         
         case Reading
         case ToRead
@@ -174,8 +187,21 @@ extension BookTableViewController : NSFetchedResultsControllerDelegate {
                 return BookReadState.Finished
             }
         }
+        
+        static func modeFromTabIndex(tabIndex: Int) -> BookTableViewMode{
+            switch tabIndex{
+            case ToReadTabIndex:
+                return BookTableViewMode.ToRead
+            case ReadingTabIndex:
+                return BookTableViewMode.Reading
+            case FinishedTabIndex:
+                return BookTableViewMode.Finished
+            default:
+                print("Unrecognised index: \(tabIndex)")
+                return BookTableViewMode.ToRead
+            }
+        }
     }
-
 }
 
 /**

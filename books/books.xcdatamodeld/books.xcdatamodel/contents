@@ -6,13 +6,24 @@
     </entity>
     <entity name="Book" representedClassName="Book" syncable="YES">
         <attribute name="coverImage" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES" syncable="YES"/>
+        <attribute name="globalId" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="isbn13" optional="YES" attributeType="String" minValueString="13" maxValueString="13" regularExpressionString="[0-9]+" syncable="YES"/>
-        <attribute name="readState" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
-        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="pageCount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="publishedDate" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="publisher" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="readState" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="source" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="sourceId" attributeType="String" syncable="YES"/>
+        <attribute name="title" attributeType="String" indexed="YES" syncable="YES"/>
         <relationship name="authoredBy" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Author" inverseName="authorOf" inverseEntity="Author" syncable="YES"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="globalId"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
     </entity>
     <elements>
         <element name="Author" positionX="151" positionY="12" width="128" height="75"/>
-        <element name="Book" positionX="-63" positionY="-18" width="128" height="120"/>
+        <element name="Book" positionX="-63" positionY="-18" width="128" height="210"/>
     </elements>
 </model>

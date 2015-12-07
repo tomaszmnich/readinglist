@@ -26,21 +26,14 @@ class SearchResultsViewController: UIViewController{
     /// Responds to a search result completion
     func ProcessSearchResult(result: BookMetadata?){
         if(result != nil){
+            // just in case...
+            result!.readState = bookReadState
+            
             // Construct a new book
-            let newBook = booksStore.newBook()
-            
-            // Populate the book metadata
-            newBook.PopulateFromParsedResult(result!)
-            newBook.readState = bookReadState
-            
-            for authorString in result!.authors{
-                let newAuthor = booksStore.newAuthor()
-                newAuthor.name = authorString
-                newAuthor.authorOf = newBook
-            }
+            let _ = booksStore.CreateBook(result!)
             
             // Save the book!
-            self.booksStore.save()
+            self.booksStore.Save()
         }
         
         // TODO: Do something other than just going back at this point

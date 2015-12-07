@@ -6,6 +6,7 @@ use_frameworks!
 target 'books' do
   pod 'DZNEmptyDataSet', '~> 1.7.2'
   pod 'Alamofire', '~> 3.0'
+  pod 'AlamofireImage', '~> 2.0'
   pod 'SwiftyJSON', :git => 'https://github.com/SwiftyJSON/SwiftyJSON.git'
 end
 

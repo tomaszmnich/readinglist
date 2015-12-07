@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 class AddBookManuallyViewController: UIViewController{
-    
+    /*
     lazy var booksStore = appDelegate().booksStore
     var bookReadState: BookReadState!
     
@@ -20,7 +20,7 @@ class AddBookManuallyViewController: UIViewController{
     
     @IBAction func doneWasPressed(sender: UIBarButtonItem) {
         let book = booksStore.newBook()
-        book.title = titleField.text
+        book.title = titleField.text!
         book.readState = bookReadState
         
         let author = booksStore.newAuthor()
@@ -34,5 +34,5 @@ class AddBookManuallyViewController: UIViewController{
     
     @IBAction func cancelWasPressed(sender: UIBarButtonItem) {
         self.navigationController!.popToRootViewControllerAnimated(true)
-    }
+    }*/
 }

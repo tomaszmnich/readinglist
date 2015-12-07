@@ -1,4 +1,4 @@
-//
+ //
 //  AppDelegate.swift
 //  books
 //
@@ -24,6 +24,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+        return true
+    }
+    
+    func application(application: UIApplication, continueUserActivity userActivity: NSUserActivity, restorationHandler: [AnyObject]? -> Void) -> Bool {
+        
+        if userActivity.activityType == "com.andrewbennet.com.books.book" {
+            print("hello")
+        }
+        
         return true
     }
 
