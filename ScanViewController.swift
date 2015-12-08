@@ -28,36 +28,49 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
     }
     
     override func viewDidLoad() {
+        // We need access to the camera in order to access this page at all
+        AVCaptureDevice.requestAccessForMediaType(AVMediaTypeVideo, completionHandler: respondToMediaAccessResult)
         super.viewDidLoad()
+    }
+    
+    func respondToMediaAccessResult(access: Bool) {
+        if access{
+            // Setup the input
+            let input: AVCaptureDeviceInput!
+            do {
+                // The default device with Video media type is the camera
+                input = try AVCaptureDeviceInput(device: AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeVideo))
+                session.addInput(input)
+            }
+            catch {
+                // TODO: Handle this error properly
+                print("AVCaptureDeviceInput failed to initialise.")
+                self.navigationController?.popViewControllerAnimated(true)
+            }
         
-        // Setup the input
-        let input: AVCaptureDeviceInput!
-        do {
-            // The default device with Video media type is the camera
-            input = try AVCaptureDeviceInput(device: AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeVideo))
-            session.addInput(input)
+            // Prepare the metadata output and add to the session
+            let output = AVCaptureMetadataOutput()
+            output.setMetadataObjectsDelegate(self, queue: dispatch_get_main_queue())
+            session.addOutput(output)
+            output.metadataObjectTypes = output.availableMetadataObjectTypes
+        
+            // We want to view what the camera is seeing
+            previewLayer = AVCaptureVideoPreviewLayer(session: session)
+            previewLayer.frame = cameraPreviewPlaceholder.frame
+            previewLayer.videoGravity = AVLayerVideoGravityResize
+            self.view.layer.addSublayer(previewLayer)
+        
+            // Start the scanner. We'll end it once we catch anything.
+            print("AVCaptureSession starting")
+            session.startRunning()
         }
-        catch {
-            // TODO: Handle this error properly
-            print("AVCaptureDeviceInput failed to initialise.")
-            self.navigationController?.popViewControllerAnimated(true)
+        else{
+            let alertController = UIAlertController(title: "Camera Access Denied", message: "Cannot scan book barcode.", preferredStyle: UIAlertControllerStyle.Alert)
+            alertController.addAction(UIAlertAction(title: "Return", style: UIAlertActionStyle.Default, handler: nil))
+            
+            self.dismissViewControllerAnimated(true, completion: nil)
+
         }
-        
-        // Prepare the metadata output and add to the session
-        let output = AVCaptureMetadataOutput()
-        output.setMetadataObjectsDelegate(self, queue: dispatch_get_main_queue())
-        session.addOutput(output)
-        output.metadataObjectTypes = output.availableMetadataObjectTypes
-        
-        // We want to view what the camera is seeing
-        previewLayer = AVCaptureVideoPreviewLayer(session: session)
-        previewLayer.frame = cameraPreviewPlaceholder.frame
-        previewLayer.videoGravity = AVLayerVideoGravityResize
-        self.view.layer.addSublayer(previewLayer)
-        
-        // Start the scanner. We'll end it once we catch anything.
-        print("AVCaptureSession starting")
-        session.startRunning()
     }
     
     // This is called when we find a known barcode type with the camera.
