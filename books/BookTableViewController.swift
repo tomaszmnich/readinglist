@@ -29,7 +29,7 @@ class BookTableViewController: UITableViewController, UISearchResultsUpdating {
         // as a delegate on it, and perform the initial fetch.
         buildFetchedResultsControllerAndFetch(BookFetchedResultFilterer(titleText: nil, readState: mode.equivalentBookReadState))
         
-        // Setup the search bar
+        // Setup the search bar. Not really sure what or why the second line is about.
         self.searchResultsController.searchResultsUpdater = self
         self.tableView.tableHeaderView = searchResultsController.searchBar
         
@@ -48,7 +48,7 @@ class BookTableViewController: UITableViewController, UISearchResultsUpdating {
     
     func buildFetchedResultsControllerAndFetch(filter: BookFetchedResultFilterer){
         // Currently we only support sorting by TitleAscending
-        booksResultsController = appDelegate().booksStore.FetchedBooksController([BookSortOrder.TitleAscending], filter: filter)
+        booksResultsController = appDelegate.booksStore.FetchedBooksController([BookSortOrder.TitleAscending], filter: filter)
         booksResultsController.delegate = self
         let _ = try? booksResultsController.performFetch()
         tableView.reloadData()

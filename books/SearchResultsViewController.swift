@@ -15,7 +15,7 @@ class SearchResultsViewController: UIViewController{
     var bookReadState: BookReadState!
     
     // We will likely need data access
-    lazy var booksStore = appDelegate().booksStore
+    lazy var booksStore = appDelegate.booksStore
     
     override func viewDidLoad() {
         // We've found an ISBN-13. Let's search for it online and if we

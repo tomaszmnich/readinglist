@@ -26,17 +26,15 @@ class GoogleBooksApiClient {
 
         print("Requesting \(searchRequestUrl)")
         Alamofire.request(.GET, searchRequestUrl).responseJSON {
-            response in
-            
-            if(response.result.isSuccess){
+            if($0.result.isSuccess){
                 // Get a ParsedBookResult with some populated metadata
-                parsedResult = HandleSuccessfulIsbnResponse(isbn, response: response)
+                parsedResult = HandleSuccessfulIsbnResponse(isbn, response: $0)
                 
                 // If the metadata contained an image URL, request that too
                 SupplementWithImageAndCallback(parsedResult, callback: callback)
             }
             else{
-                LogError(response)
+                LogError($0)
             }
         }
     }
@@ -46,13 +44,12 @@ class GoogleBooksApiClient {
      Constructs a ParsedBookResult to represent the metadata obtained.
     */
     private static func HandleSuccessfulIsbnResponse(isbn: String, response: Response<AnyObject, NSError>) -> BookMetadata? {
-        var parsedResult: BookMetadata?
-        
         print("Success response received")
+        var parsedResult: BookMetadata!
         if let responseData = response.result.value {
             parsedResult = GoogleBooksParser.parseJsonResponse(isbn, jResponse: JSON(responseData))
+            print("Parsed response.")
         }
-        print("Parsed result: \(parsedResult)")
         return parsedResult
     }
     

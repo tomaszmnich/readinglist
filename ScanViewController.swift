@@ -17,8 +17,7 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
     
     @IBOutlet weak var cameraPreviewPlaceholder: UIView!
     let session = AVCaptureSession()
-    var previewLayer: AVCaptureVideoPreviewLayer!
-    lazy var booksStore = appDelegate().booksStore
+    lazy var booksStore = appDelegate.booksStore
     
     var bookReadState: BookReadState!
     
@@ -48,17 +47,21 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
                 self.navigationController?.popViewControllerAnimated(true)
             }
         
-            // Prepare the metadata output and add to the session
-            let output = AVCaptureMetadataOutput()
-            output.setMetadataObjectsDelegate(self, queue: dispatch_get_main_queue())
-            session.addOutput(output)
-            output.metadataObjectTypes = output.availableMetadataObjectTypes
+            // Add a metadata output to the session
+            session.addOutput({
+                let output = AVCaptureMetadataOutput()
+                output.setMetadataObjectsDelegate(self, queue: dispatch_get_main_queue())
+                output.metadataObjectTypes = output.availableMetadataObjectTypes
+                return output
+            }())
         
-            // We want to view what the camera is seeing
-            previewLayer = AVCaptureVideoPreviewLayer(session: session)
-            previewLayer.frame = cameraPreviewPlaceholder.frame
-            previewLayer.videoGravity = AVLayerVideoGravityResize
-            self.view.layer.addSublayer(previewLayer)
+            // Add a sublayer to preview what the camera sees
+            self.view.layer.addSublayer({
+                let previewLayer = AVCaptureVideoPreviewLayer(session: session)
+                previewLayer.frame = cameraPreviewPlaceholder.frame
+                previewLayer.videoGravity = AVLayerVideoGravityResize
+                return previewLayer
+            }())
         
             // Start the scanner. We'll end it once we catch anything.
             print("AVCaptureSession starting")
@@ -78,9 +81,7 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
         
         // The scanner is capable of capturing multiple 2-dimensional barcodes in one scan.
         // Filter out everything which is not a EAN13 code.
-        let ean13MetadataObjects = metadataObjects.filter{metadata in
-            return metadata.type == AVMetadataObjectTypeEAN13Code
-        }
+        let ean13MetadataObjects = metadataObjects.filter{$0.type == AVMetadataObjectTypeEAN13Code}
         
         if let avMetadata = ean13MetadataObjects.first as? AVMetadataMachineReadableCodeObject{
             // Store the detected value of the barcode

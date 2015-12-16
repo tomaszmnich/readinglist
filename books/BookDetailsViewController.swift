@@ -13,7 +13,7 @@ import CoreData
 class BookDetailsViewController: UIViewController{
     
     var book: Book!
-    lazy var booksStore = appDelegate().booksStore
+    lazy var booksStore = appDelegate.booksStore
     
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var authorLabel: UILabel!
@@ -37,30 +37,18 @@ class BookDetailsViewController: UIViewController{
     @IBAction func moreIsPressed(sender: UIBarButtonItem) {
         // We are going to show an action sheet
         let optionMenu = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
-
+        
+        // For a BookReadState, adds the option
+        func addOptionToSwitchToState(state: BookReadState){
+            optionMenu.addAction(pageActions.forReadState(state).makeUIAlertAction{self.switchState(state)})
+        }
+        
         // Add the options to switch read state. We will exclude the state we are currenly in.
-        if book.readState != .Reading{
-            optionMenu.addAction(pageActions.markAsReading.makeUIAlertAction({alertAction in
-                self.switchState(.Reading)
-            }))
-        }
-        if book.readState != .ToRead{
-            optionMenu.addAction(pageActions.markAsToRead.makeUIAlertAction({alertAction in
-                self.switchState(.ToRead)
-            }))
-        }
-        if book.readState != .Finished{
-            optionMenu.addAction(pageActions.markAsFinished.makeUIAlertAction({alertAction in
-                self.switchState(.Finished)
-            }))
-        }
+        [.Reading, .ToRead, .Finished].filter(){$0 != book.readState}.forEach(addOptionToSwitchToState)
         
         // Always add the delete and cancel options
-        optionMenu.addAction(pageActions.delete.makeUIAlertAction({alertAction in
-            self.delete()
-        }))
-        
-        optionMenu.addAction(pageActions.cancel.makeUIAlertAction(nil))
+        optionMenu.addAction(pageActions.delete.makeUIAlertAction{self.delete()})
+        optionMenu.addAction(pageActions.cancel.makeUIAlertAction{})
         
         // Bring up the action sheet
         self.presentViewController(optionMenu, animated: true, completion: nil)
@@ -113,8 +101,23 @@ class BookDetailsViewController: UIViewController{
             }
         }
         
-        func makeUIAlertAction(bookFunction: (UIAlertAction -> Void)?) -> UIAlertAction{
-            return UIAlertAction(title: titleText, style: style, handler: bookFunction)
+        static func forReadState(state: BookReadState) -> pageActions {
+            switch state{
+            case .Reading:
+                return .markAsReading
+            case .ToRead:
+                return .markAsToRead
+            case .Finished:
+                return .markAsFinished
+            }
+        }
+        
+        func makeUIAlertAction(bookFunction: (Void -> Void)) -> UIAlertAction{
+            // Wrap the supplied function in one whose signature matches the UIAlertAction constructor
+            func bookFunctionWithInput(_: UIAlertAction) -> Void{
+                bookFunction()
+            }
+            return UIAlertAction(title: titleText, style: style, handler: bookFunctionWithInput)
         }
     }
 }

@@ -18,11 +18,11 @@ class OptionsViewController: UIViewController {
         dispatch_async(dispatch_get_main_queue()) {
         self.booksProcessed++
         if parsedResult != nil{
-            appDelegate().booksStore.CreateBook(parsedResult!)
+            appDelegate.booksStore.CreateBook(parsedResult!)
         }
         
         if self.booksProcessed == self.isbns.count{
-            appDelegate().booksStore.Save()
+            appDelegate.booksStore.Save()
             let alert = UIAlertController(title: "Complete", message: "\(self.booksProcessed) Books Added", preferredStyle: UIAlertControllerStyle.Alert)
             alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
             self.presentViewController(alert, animated: true, completion: nil)

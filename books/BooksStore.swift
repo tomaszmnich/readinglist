@@ -68,17 +68,19 @@ class BooksStore {
             newAuthor.authorOf = newBook
         }
         
-        let activity = NSUserActivity(activityType: "com.andrewbennet.books.book")
-        activity.userInfo = ["globalId": newBook.globalId]
-        activity.title = newBook.title
-        activity.keywords = Set(newBook.title.componentsSeparatedByString(" "))
-        activity.eligibleForHandoff = false
-        activity.eligibleForSearch = true
-        //activity.eligibleForPublicIndexing = true
-        //activity.expirationDate = NSDate()
+        func makeBookActivity(title: String, globalId: String) -> NSUserActivity{
+            let activity = NSUserActivity(activityType: "com.andrewbennet.books.book")
+            activity.userInfo = ["globalId": globalId]
+            activity.title = title
+            activity.keywords = Set(title.componentsSeparatedByString(" "))
+            activity.eligibleForHandoff = false
+            activity.eligibleForSearch = true
+            //activity.eligibleForPublicIndexing = true
+            //activity.expirationDate = NSDate()
+            return activity
+        }
         
-        activity.becomeCurrent()
-        
+        makeBookActivity(newBook.title, globalId: newBook.globalId).becomeCurrent()
         return newBook
     }
     

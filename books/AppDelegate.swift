@@ -8,13 +8,19 @@
 
 import UIKit
 
-func appDelegate() -> AppDelegate {
+// Some global variables
+var appDelegate: AppDelegate {
     return UIApplication.sharedApplication().delegate as! AppDelegate
 }
-
-var ReadingTabIndex = 0
-var ToReadTabIndex = 1
-var FinishedTabIndex = 2
+var ReadingTabIndex: Int {
+    return 0
+}
+var ToReadTabIndex: Int{
+    return 1
+}
+var FinishedTabIndex: Int{
+    return 2
+}
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -23,6 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     lazy var booksStore = BooksStore()
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+        
         // Override point for customization after application launch.
         return true
     }
