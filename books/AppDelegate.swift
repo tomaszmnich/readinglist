@@ -40,6 +40,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if userActivity.activityType == CSSearchableItemActionType {
             if let globalId = userActivity.userInfo?[CSSearchableItemActivityIdentifier] as? String {
                 print("In restoration handler with unique identifier: \(globalId)")
+                
+                func tabIndexFromReadState(readState: BookReadState) -> Int{
+                    switch readState{
+                    case .ToRead: return ToReadTabIndex
+                    case.Reading: return ReadingTabIndex
+                    case.Finished: return FinishedTabIndex
+                    }
+                }
+                
+                if let book = booksStore.GetBook(globalId){
+                    let relevantTabNavController = (window!.rootViewController as! UITabBarController).viewControllers![tabIndexFromReadState(book.readState)] as! UINavigationController
+                    print("got relevant tab nav controller")
+                    let tableViewController = relevantTabNavController.viewControllers[0]
+                    print("got tableviewcontroller")
+                    tableViewController.performSegueWithIdentifier("detailsSegue", sender: nil)
+                    print("performing segue")
+                }                
             }
         }
         

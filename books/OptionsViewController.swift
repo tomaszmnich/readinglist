@@ -12,16 +12,22 @@ class OptionsViewController: UIViewController {
     
     var booksProcessed = 0
     
-    let booksToAdd: [(isbn: String, readState: BookReadState)] =
-        [("9780099529125", .Finished),
-         ("9780241950432", .ToRead),
-         ("9780099800200", .Finished),
-         ("9780006546061", .Finished),
-         ("9781442369054", .ToRead),
-         ("9780007532766", .ToRead),
-         ("9780718197384", .Finished),
-         ("9780099889809", .ToRead),
-         ("9780241197790", .Reading)]
+    let booksToAdd: [(isbn: String, readState: BookReadState, titleDesc: String)] =
+        [("9780007232444", .Finished, "The Corrections"),
+         ("9780099529125", .Finished, "Catch-22"),
+         ("9780141187761", .Finished, "1984"),
+         ("9780735611313", .Finished, "Code"),
+         ("9780857282521", .ToRead, "The Entrepreneurial State"),
+         ("9780330510936", .ToRead, "All the Pretty Horses"),
+         ("9780006480419", .ToRead, "Neuromancer"),
+         ("9780241950432", .Finished, "Catcher in the Rye"),
+         ("9780099800200", .Finished, "Slaughterhouse 5"),
+         ("9780006546061", .ToRead, "Farenheit 451"),
+         ("9781442369054", .ToRead, "Steve Jobs"),
+         ("9780007532766", .Finished, "Purity"),
+         ("9780718197384", .ToRead, "The Price of Inequality"),
+         ("9780099889809", .ToRead, "Something Happened"),
+         ("9780241197790", .Reading, "The Trial")]
     
     func makeAddBookFunc(readState: BookReadState) -> (BookMetadata?) -> Void{
         func addBook(parsedResult: BookMetadata?){

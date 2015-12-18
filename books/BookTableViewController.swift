@@ -87,6 +87,14 @@ class BookTableViewController: UITableViewController, UISearchResultsUpdating {
                 bookDetailsController.book = bookAtIndexPath(tableView.indexPathForCell(clickedCell)!)
                 bookDetailsController.hidesBottomBarWhenPushed = true
             }
+            else if let senderBook = sender as? Book{
+                // Get the controller for viewing a book
+                let bookDetailsController = segue.destinationViewController as! BookDetailsViewController
+                
+                // Set the book on the controller from the book corresponding to the clicked cell
+                bookDetailsController.book = senderBook
+                bookDetailsController.hidesBottomBarWhenPushed = true
+            }
         }
         if segue.identifier == "addBookSegue"{
             let addBookController = (segue.destinationViewController as! UINavigationController).viewControllers.first as! ScannerViewController

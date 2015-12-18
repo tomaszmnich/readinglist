@@ -59,7 +59,7 @@
                     <navigationItem key="navigationItem" id="eBb-GO-saU">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="vEK-K1-cdq">
                             <connections>
-                                <segue destination="pS6-3L-WFP" kind="modal" identifier="addBookSegue" id="TEf-Jy-hbV"/>
+                                <segue destination="pS6-3L-WFP" kind="modal" identifier="addBookSegue" id="IPM-JB-V7S"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -449,6 +449,6 @@
         <image name="ToDoFilled" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="LiR-sg-boT"/>
+        <segue reference="poC-1I-Sew"/>
     </inferredMetricsTieBreakers>
 </document>

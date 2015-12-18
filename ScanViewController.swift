@@ -8,17 +8,12 @@
 
 import UIKit
 import AVFoundation
-import Alamofire
-import SwiftyJSON
-import CoreData
-
 
 class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     
     @IBOutlet weak var cameraPreviewPlaceholder: UIView!
     let session = AVCaptureSession()
     lazy var booksStore = appDelegate.booksStore
-    
     var bookReadState: BookReadState!
     
     @IBAction func cancelWasPressed(sender: UIBarButtonItem) {
@@ -27,53 +22,45 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
     }
     
     override func viewDidLoad() {
-        // We need access to the camera in order to access this page at all
-        AVCaptureDevice.requestAccessForMediaType(AVMediaTypeVideo, completionHandler: respondToMediaAccessResult)
         super.viewDidLoad()
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+            // Setup the camera
+            self.setupAvSession()
+        }
     }
     
-    func respondToMediaAccessResult(access: Bool) {
-        if access{
-            // Setup the input
-            let input: AVCaptureDeviceInput!
-            do {
-                // The default device with Video media type is the camera
-                input = try AVCaptureDeviceInput(device: AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeVideo))
-                session.addInput(input)
-            }
-            catch {
-                // TODO: Handle this error properly
-                print("AVCaptureDeviceInput failed to initialise.")
-                self.navigationController?.popViewControllerAnimated(true)
-            }
-        
-            // Add a metadata output to the session
-            session.addOutput({
-                let output = AVCaptureMetadataOutput()
-                output.setMetadataObjectsDelegate(self, queue: dispatch_get_main_queue())
-                output.metadataObjectTypes = output.availableMetadataObjectTypes
-                return output
-            }())
-        
-            // Add a sublayer to preview what the camera sees
-            self.view.layer.addSublayer({
-                let previewLayer = AVCaptureVideoPreviewLayer(session: session)
-                previewLayer.frame = cameraPreviewPlaceholder.frame
-                previewLayer.videoGravity = AVLayerVideoGravityResize
-                return previewLayer
-            }())
-        
-            // Start the scanner. We'll end it once we catch anything.
-            print("AVCaptureSession starting")
-            session.startRunning()
+    private func setupAvSession(){
+        // Setup the input
+        let input: AVCaptureDeviceInput!
+        do {
+            // The default device with Video media type is the camera
+            input = try AVCaptureDeviceInput(device: AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeVideo))
+            self.session.addInput(input)
         }
-        else{
-            let alertController = UIAlertController(title: "Camera Access Denied", message: "Cannot scan book barcode.", preferredStyle: UIAlertControllerStyle.Alert)
-            alertController.addAction(UIAlertAction(title: "Return", style: UIAlertActionStyle.Default, handler: nil))
-            
-            self.dismissViewControllerAnimated(true, completion: nil)
-
+        catch {
+            // TODO: Handle this error properly
+            print("AVCaptureDeviceInput failed to initialise.")
+            self.navigationController?.popViewControllerAnimated(true)
         }
+        
+        // Prepare the metadata output and add to the session
+        let output = AVCaptureMetadataOutput()
+        output.setMetadataObjectsDelegate(self, queue: dispatch_get_main_queue())
+        self.session.addOutput(output)
+        output.metadataObjectTypes = output.availableMetadataObjectTypes
+        
+        // We want to view what the camera is seeing
+        let previewLayer = AVCaptureVideoPreviewLayer(session: self.session)
+        previewLayer.frame = self.cameraPreviewPlaceholder.frame
+        previewLayer.videoGravity = AVLayerVideoGravityResize
+        dispatch_async(dispatch_get_main_queue()) {
+            self.view.layer.addSublayer(previewLayer)
+        }
+        
+        // Start the scanner. We'll end it once we catch anything.
+        print("AVCaptureSession starting")
+        self.session.startRunning()
     }
     
     // This is called when we find a known barcode type with the camera.
@@ -81,7 +68,9 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
         
         // The scanner is capable of capturing multiple 2-dimensional barcodes in one scan.
         // Filter out everything which is not a EAN13 code.
-        let ean13MetadataObjects = metadataObjects.filter{$0.type == AVMetadataObjectTypeEAN13Code}
+        let ean13MetadataObjects = metadataObjects.filter{metadata in
+            return metadata.type == AVMetadataObjectTypeEAN13Code
+        }
         
         if let avMetadata = ean13MetadataObjects.first as? AVMetadataMachineReadableCodeObject{
             // Store the detected value of the barcode
