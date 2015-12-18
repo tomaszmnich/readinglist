@@ -74,12 +74,15 @@ class GoogleBooksApiClient {
                 else{
                     print("No image data")
                 }
-                
-                callback(parsedResult: parsedBook)
+                dispatch_async(dispatch_get_main_queue()) {
+                    callback(parsedResult: parsedBook)
+                }
             }
         }
         else{
-            callback(parsedResult: parsedBook)
+            dispatch_async(dispatch_get_main_queue()) {
+                callback(parsedResult: parsedBook)
+            }
         }
     }
     

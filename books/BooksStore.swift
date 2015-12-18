@@ -7,6 +7,8 @@
 //
 
 import CoreData
+import CoreSpotlight
+import MobileCoreServices
 
 // Field and Entity name strings should be held in one place: here.
 private let bookEntityName = "Book"
@@ -29,10 +31,7 @@ class BooksStore {
         let fetchRequest = NSFetchRequest(entityName: bookEntityName)
 
         // Convert the BookSortOrders into NSSortDescriptors
-        fetchRequest.sortDescriptors = []
-        for sort in sorters{
-            fetchRequest.sortDescriptors!.append(sort.GetSortDescriptor())
-        }
+        fetchRequest.sortDescriptors = sorters.map{ $0.GetSortDescriptor() }
         
         // Convert the Filterer into a NSPredicate
         fetchRequest.predicate = filter.GetPredicate()
@@ -47,10 +46,29 @@ class BooksStore {
     /**
      Returns whether a Book exists with the given globalId.
     */
-    func BookExists(globalId: String) -> Bool{
-        let fetchOneBook = NSFetchRequest(entityName: bookEntityName)
-        fetchOneBook.predicate = NSPredicate(format: "\(globalIdFieldName) == \(globalId)")
+    func BookExists(globalId: String) -> Bool {
+        let fetchOneBook = singleBookPredicate(globalId)
         return coreDataStack.managedObjectContext.countForFetchRequest(fetchOneBook, error: nil) != 0
+    }
+    
+    /**
+     Retrieves the specified Book, if it exists.
+    */
+    func GetBook(globalId: String) -> Book? {
+        let fetchRequest = singleBookPredicate(globalId)
+        if let results = try? coreDataStack.managedObjectContext.executeFetchRequest(fetchRequest){
+            return results[0] as? Book
+        }
+        return nil
+    }
+    
+    /**
+     Retrieves an NSPredicate for selecting a single book with a given globalId.
+    */
+    private func singleBookPredicate(globalId: String) -> NSFetchRequest{
+        let fetchOneBook = NSFetchRequest(entityName: bookEntityName)
+        fetchOneBook.predicate = NSPredicate(format: "\(globalIdFieldName) == \"\(globalId)\"")
+        return fetchOneBook
     }
     
     
@@ -68,19 +86,21 @@ class BooksStore {
             newAuthor.authorOf = newBook
         }
         
-        func makeBookActivity(title: String, globalId: String) -> NSUserActivity{
-            let activity = NSUserActivity(activityType: "com.andrewbennet.books.book")
-            activity.userInfo = ["globalId": globalId]
-            activity.title = title
-            activity.keywords = Set(title.componentsSeparatedByString(" "))
-            activity.eligibleForHandoff = false
-            activity.eligibleForSearch = true
-            //activity.eligibleForPublicIndexing = true
-            //activity.expirationDate = NSDate()
-            return activity
+        let attributeSet = CSSearchableItemAttributeSet(itemContentType: kUTTypeText as String)
+        attributeSet.title = newBook.title
+        attributeSet.contentDescription = "A test description"
+        
+        let item = CSSearchableItem(uniqueIdentifier: newBook.globalId, domainIdentifier: "com.andrewbennet.books", attributeSet: attributeSet)
+        item.expirationDate = NSDate.distantFuture()
+        CSSearchableIndex.defaultSearchableIndex().indexSearchableItems([item]) {
+            (error: NSError?) -> Void in
+            if let error = error {
+                print("Indexing error: \(error.localizedDescription)")
+            } else {
+                print("Search item successfully indexed!")
+            }
         }
         
-        makeBookActivity(newBook.title, globalId: newBook.globalId).becomeCurrent()
         return newBook
     }
     
@@ -89,6 +109,16 @@ class BooksStore {
     */
     func DeleteBook(bookToDelete: Book) {
         coreDataStack.managedObjectContext.deleteObject(bookToDelete)
+        
+        CSSearchableIndex.defaultSearchableIndex().deleteSearchableItemsWithIdentifiers([bookToDelete.globalId]) {
+            (error: NSError?) -> Void in
+            if let error = error {
+                print("Deindexing error: \(error.localizedDescription)")
+            }
+            else {
+                print("Search item successfully removed!")
+            }
+        }
     }
     
     /**
