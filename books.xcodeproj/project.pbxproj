@@ -60,7 +60,7 @@
 		4925007B1C0B286F00C149B5 /* AddBookManuallyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddBookManuallyViewController.swift; sourceTree = "<group>"; };
 		494C61D11C0BAF8C00F64105 /* SearchResultsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResultsViewController.swift; sourceTree = "<group>"; };
 		495879641BF7E76200000131 /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
-		495C5D0C1BF1404D00E00C07 /* books.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = books.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		495C5D0C1BF1404D00E00C07 /* Reading List.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Reading List.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		495C5D0F1BF1404D00E00C07 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		495C5D141BF1404D00E00C07 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		495C5D161BF1404D00E00C07 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -156,7 +156,7 @@
 		495C5D0D1BF1404D00E00C07 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				495C5D0C1BF1404D00E00C07 /* books.app */,
+				495C5D0C1BF1404D00E00C07 /* Reading List.app */,
 				495C5D201BF1404D00E00C07 /* booksTests.xctest */,
 				495C5D2B1BF1404D00E00C07 /* booksUITests.xctest */,
 			);
@@ -243,7 +243,7 @@
 			);
 			name = books;
 			productName = books;
-			productReference = 495C5D0C1BF1404D00E00C07 /* books.app */;
+			productReference = 495C5D0C1BF1404D00E00C07 /* Reading List.app */;
 			productType = "com.apple.product-type.application";
 		};
 		495C5D1F1BF1404D00E00C07 /* booksTests */ = {
@@ -568,7 +568,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.andrewbennet.books;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Reading List";
 			};
 			name = Debug;
 		};
@@ -581,7 +581,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.andrewbennet.books;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Reading List";
 			};
 			name = Release;
 		};
