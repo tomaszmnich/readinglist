@@ -13,11 +13,14 @@ class SearchResultsViewController: UIViewController{
     /// This must be populated by any controller segueing to this one
     var isbn13: String!
     var bookReadState: BookReadState!
+    @IBOutlet weak var spinner: UIActivityIndicatorView!
     
     // We will likely need data access
     lazy var booksStore = appDelegate.booksStore
     
     override func viewDidLoad() {
+        spinner.startAnimating()
+        
         // We've found an ISBN-13. Let's search for it online and if we
         // find anything useful use it to build a Book object.
         GoogleBooksApiClient.SearchByIsbn(isbn13, callback: ProcessSearchResult)
@@ -37,6 +40,7 @@ class SearchResultsViewController: UIViewController{
         }
         
         // TODO: Do something other than just going back at this point
+        spinner.stopAnimating()
         self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
     }
 }

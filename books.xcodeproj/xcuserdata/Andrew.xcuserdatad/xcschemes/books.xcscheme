@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "495C5D0B1BF1404D00E00C07"
-               BuildableName = "books.app"
+               BuildableName = "Reading List.app"
                BlueprintName = "books"
                ReferencedContainer = "container:books.xcodeproj">
             </BuildableReference>
@@ -53,7 +53,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "495C5D0B1BF1404D00E00C07"
-            BuildableName = "books.app"
+            BuildableName = "Reading List.app"
             BlueprintName = "books"
             ReferencedContainer = "container:books.xcodeproj">
          </BuildableReference>
@@ -76,7 +76,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "495C5D0B1BF1404D00E00C07"
-            BuildableName = "books.app"
+            BuildableName = "Reading List.app"
             BlueprintName = "books"
             ReferencedContainer = "container:books.xcodeproj">
          </BuildableReference>
@@ -95,7 +95,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "495C5D0B1BF1404D00E00C07"
-            BuildableName = "books.app"
+            BuildableName = "Reading List.app"
             BlueprintName = "books"
             ReferencedContainer = "container:books.xcodeproj">
          </BuildableReference>

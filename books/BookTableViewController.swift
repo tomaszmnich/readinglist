@@ -69,7 +69,7 @@ class BookTableViewController: UITableViewController, UISearchResultsUpdating {
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         // Get a spare cell
-        let cell = self.tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath)
+        let cell = self.tableView.dequeueReusableCellWithIdentifier("BookTableViewCell", forIndexPath: indexPath) as! BookTableViewCell
         
         // Configure the cell from the corresponding book
         self.configureCell(cell, atIndexPath: indexPath)
@@ -108,12 +108,12 @@ class BookTableViewController: UITableViewController, UISearchResultsUpdating {
     }
     
     /// Configures the text labels on the UICell according to the book at the specified index path
-    private func configureCell(cell: UITableViewCell, atIndexPath indexPath: NSIndexPath) {
+    private func configureCell(cell: BookTableViewCell, atIndexPath indexPath: NSIndexPath) {
         let book = self.booksResultsController.objectAtIndexPath(indexPath) as! Book
-        cell.textLabel!.text = book.title
-        cell.detailTextLabel!.text = book.authorListString
+        cell.titleLabel!.text = book.title
+        cell.authorsLabel!.text = book.authorListString
         if book.coverImage != nil {
-            cell.imageView?.image = UIImage(data: book.coverImage!)
+            cell.bookImageView!.image = UIImage(data: book.coverImage!)
         }
     }
 }
@@ -139,7 +139,7 @@ extension BookTableViewController : NSFetchedResultsControllerDelegate {
                 self.tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .None)
             case .Update:
                 if let cell = self.tableView.cellForRowAtIndexPath(indexPath!){
-                    self.configureCell(cell, atIndexPath: indexPath!)
+                    self.configureCell(cell as! BookTableViewCell, atIndexPath: indexPath!)
                     self.tableView.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
                 }
             case .Move:

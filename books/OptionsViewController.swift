@@ -29,20 +29,19 @@ class OptionsViewController: UIViewController {
          ("9780099889809", .ToRead, "Something Happened"),
          ("9780241197790", .Reading, "The Trial")]
     
-    func makeAddBookFunc(readState: BookReadState) -> (BookMetadata?) -> Void{
-        func addBook(parsedResult: BookMetadata?){
-        dispatch_async(dispatch_get_main_queue()) {
-            self.booksProcessed++
-            if parsedResult != nil{
-                parsedResult!.readState = readState
-                appDelegate.booksStore.CreateBook(parsedResult!)
-            }
+    func makeAddBookFunc(readState: BookReadState) -> ((BookMetadata?) -> Void) {
+        return {
+            (parsedResult: BookMetadata?) -> Void in
+            dispatch_async(dispatch_get_main_queue()) {
+                self.booksProcessed++
+                if parsedResult != nil{
+                    parsedResult!.readState = readState
+                    appDelegate.booksStore.CreateBook(parsedResult!)
+                }
             
-            self.showMessageIfAllAdded()
+                self.showMessageIfAllAdded()
             }
         }
-        
-        return addBook
     }
     
     func showMessageIfAllAdded() {
