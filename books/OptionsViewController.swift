@@ -8,8 +8,9 @@
 
 import UIKit
 
-class OptionsViewController: UIViewController {
+class OptionsViewController: UITableViewController {
     
+    @IBOutlet weak var populateDataCell: UITableViewCell!
     var booksProcessed = 0
     
     let booksToAdd: [(isbn: String, readState: BookReadState, titleDesc: String)] =
@@ -53,12 +54,15 @@ class OptionsViewController: UIViewController {
         }
     }
     
-    @IBAction func populateDataIsPressed(sender: UIButton) {
-        booksProcessed = 0
-        for bookToAdd in booksToAdd{
-            GoogleBooksApiClient.SearchByIsbn(bookToAdd.isbn, callback: makeAddBookFunc(bookToAdd.readState))
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        if self.tableView.cellForRowAtIndexPath(indexPath) == populateDataCell{
+            booksProcessed = 0
+            for bookToAdd in booksToAdd{
+                GoogleBooksApiClient.SearchByIsbn(bookToAdd.isbn, callback: makeAddBookFunc(bookToAdd.readState))
+            }
         }
-
     }
+    
+    
     
 }

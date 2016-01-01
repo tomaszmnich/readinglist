@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="9057" systemVersion="15B42" minimumToolsVersion="Xcode 7.0">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="9525" systemVersion="15C50" minimumToolsVersion="Xcode 7.0">
     <entity name="Author" representedClassName="Author" syncable="YES">
         <attribute name="name" attributeType="String" syncable="YES"/>
         <relationship name="authorOf" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Book" inverseName="authoredBy" inverseEntity="Book" syncable="YES"/>
