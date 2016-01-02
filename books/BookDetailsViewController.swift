@@ -19,8 +19,7 @@ class BookDetailsViewController: UIViewController{
     @IBOutlet weak var authorLabel: UILabel!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var pageCountLabel: UILabel!
-    @IBOutlet weak var publishedByLabel: UILabel!
-    @IBOutlet weak var publicationDateLabel: UILabel!
+    @IBOutlet weak var descriptionLabel: UILabel!
     
     override func viewDidLoad() {
         //self.navigationController!.navigationBar.topItem!.title = "";
@@ -30,8 +29,7 @@ class BookDetailsViewController: UIViewController{
             imageView.image = UIImage(data: coverImg)
         }
         pageCountLabel.text = book.pageCount != nil ? "\(book.pageCount!) pages" : ""
-        publishedByLabel.text = book.publisher != nil ? "Published by \(book.publisher!)" : ""
-        publicationDateLabel.text = book.publishedDate
+        descriptionLabel.text = book.bookDescription
     }
     
     @IBAction func moreIsPressed(sender: UIBarButtonItem) {
