@@ -14,7 +14,7 @@ class OpenLibraryParser {
     /// Parses a JSON OpenLibrary response and returns the corresponding ParsedBookResult.
     static func parseJsonResponse(jResponse: JSON) -> BookMetadata {
         // Prepare the result
-        let result = BookMetadata(bookSource: BookSource.OpenLibrary)
+        let result = BookMetadata()
         
         // Add the title
         result.title = jResponse[0]["title"].string

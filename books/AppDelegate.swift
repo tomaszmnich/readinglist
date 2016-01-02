@@ -9,7 +9,7 @@
 import UIKit
 import CoreSpotlight
 
-// Some global variables
+// Some global variables (naughty)
 var appDelegate: AppDelegate {
     return UIApplication.sharedApplication().delegate as! AppDelegate
 }
@@ -30,7 +30,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        
         // Override point for customization after application launch.
         return true
     }
@@ -38,25 +37,39 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, continueUserActivity userActivity: NSUserActivity, restorationHandler: [AnyObject]? -> Void) -> Bool {
         
         if userActivity.activityType == CSSearchableItemActionType {
-            if let globalId = userActivity.userInfo?[CSSearchableItemActivityIdentifier] as? String {
-                print("In restoration handler with unique identifier: \(globalId)")
+            if let activityIdentifier = userActivity.userInfo?[CSSearchableItemActivityIdentifier] as? String {
+                print("In restoration handler with identifier: \(activityIdentifier)")
                 
-                func tabIndexFromReadState(readState: BookReadState) -> Int{
-                    switch readState{
-                    case .ToRead: return ToReadTabIndex
-                    case.Reading: return ReadingTabIndex
-                    case.Finished: return FinishedTabIndex
+                dispatch_async(dispatch_get_main_queue()){
+                    let objectUrl = NSURL(string: activityIdentifier)!
+                    print("objectUrl is \(objectUrl)")
+                    if let book = self.booksStore.GetBook(objectUrl){
+                        print("book is \(book)")
+                    
+                    func tabIndexFromReadState(readState: BookReadState) -> Int{
+                        switch readState{
+                        case .ToRead: return ToReadTabIndex
+                        case.Reading: return ReadingTabIndex
+                        case.Finished: return FinishedTabIndex
+                        }
                     }
-                }
-                
-                if let book = booksStore.GetBook(globalId){
+                    
+                    print(book.title)
+                    
+                    /*
                     let relevantTabNavController = (window!.rootViewController as! UITabBarController).viewControllers![tabIndexFromReadState(book.readState)] as! UINavigationController
                     print("got relevant tab nav controller")
                     let tableViewController = relevantTabNavController.viewControllers[0]
                     print("got tableviewcontroller")
-                    tableViewController.performSegueWithIdentifier("detailsSegue", sender: nil)
-                    print("performing segue")
-                }                
+                    
+                    let mainStoryboard = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle())
+                    let bookDetailsViewController = mainStoryboard.instantiateViewControllerWithIdentifier("bookDetails") as! BookDetailsViewController
+                    bookDetailsViewController.book = book
+                    
+                    tableViewController.presentViewController(bookDetailsViewController, animated: false, completion: nil)*/
+                    
+                    }
+                }
             }
         }
         

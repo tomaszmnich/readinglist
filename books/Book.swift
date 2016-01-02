@@ -25,10 +25,7 @@ class Book: NSManagedObject {
     // Image data of the book cover
     @NSManaged var coverImage: NSData?
 
-    // Internal state managers
-    @NSManaged var source: BookSource
-    @NSManaged var sourceId: String!
-    @NSManaged var globalId: String!
+    
     @NSManaged var readState: BookReadState
     
     /// Builds a string consisting of a comma separated list of the authors
@@ -50,15 +47,8 @@ class Book: NSManagedObject {
      Does not populate Author objects - these must be done separately.
     */
     func Populate(metadata: BookMetadata){
-        source = metadata.source
         isbn13 = metadata.isbn13
         readState = metadata.readState
-        switch source{
-        case BookSource.Manual:
-            sourceId = NSUUID().UUIDString
-        default:
-            sourceId = isbn13
-        }
         title = metadata.title!
         if metadata.pageCount != nil{
             pageCount = NSNumber(int: Int32(metadata.pageCount!))
@@ -68,7 +58,6 @@ class Book: NSManagedObject {
         
         coverImage = metadata.imageData
         
-        globalId = "\(source.rawValue):\(sourceId)"
     }
 }
 
@@ -85,23 +74,11 @@ class Author: NSManagedObject{
     case Finished = 3
 }
 
-/// The source of the information for a Book
-@objc enum BookSource: Int32 {
-    case Manual = 1
-    case GoogleBooks = 2
-    case OpenLibrary = 3
-}
-
 /// Holds metadata about a book. Merely a holding bay.
 class BookMetadata : CustomStringConvertible {
-
-    init(bookSource: BookSource){
-        source = bookSource
-    }
     
     // temporarily always set
     var readState = BookReadState.Reading
-    var source: BookSource!
     var isbn13: String?
     var title: String!
     var authors = [String]()

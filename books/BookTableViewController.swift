@@ -79,27 +79,26 @@ class BookTableViewController: UITableViewController, UISearchResultsUpdating {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         // "detailsSegue" is for viewing a specific book
         if segue.identifier == "detailsSegue" {
-            if let clickedCell = sender as? UITableViewCell {
-                // Get the controller for viewing a book
-                let bookDetailsController = segue.destinationViewController as! BookDetailsViewController
 
+            // Get the controller for viewing a book
+            let bookDetailsController = segue.destinationViewController as! BookDetailsViewController
+            bookDetailsController.hidesBottomBarWhenPushed = true
+            
+            if let clickedCell = sender as? UITableViewCell {
                 // Set the book on the controller from the book corresponding to the clicked cell
                 bookDetailsController.book = bookAtIndexPath(tableView.indexPathForCell(clickedCell)!)
-                bookDetailsController.hidesBottomBarWhenPushed = true
             }
             else if let senderBook = sender as? Book{
-                // Get the controller for viewing a book
-                let bookDetailsController = segue.destinationViewController as! BookDetailsViewController
-                
                 // Set the book on the controller from the book corresponding to the clicked cell
                 bookDetailsController.book = senderBook
-                bookDetailsController.hidesBottomBarWhenPushed = true
             }
         }
-        if segue.identifier == "addBookSegue"{
+        else if segue.identifier == "addBookSegue" {
             let addBookController = (segue.destinationViewController as! UINavigationController).viewControllers.first as! ScannerViewController
             addBookController.bookReadState = mode.equivalentBookReadState
         }
+        
+        super.prepareForSegue(segue, sender: sender)
     }
     
     /// Gets the specified object from the results controller, casted to a Book

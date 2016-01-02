@@ -37,7 +37,10 @@ class OptionsViewController: UITableViewController {
                 self.booksProcessed++
                 if parsedResult != nil{
                     parsedResult!.readState = readState
-                    appDelegate.booksStore.CreateBook(parsedResult!)
+                    let newBook = appDelegate.booksStore.CreateBook(parsedResult!)
+                    appDelegate.booksStore.Save()
+                    
+                    appDelegate.booksStore.IndexBookInSpotlight(newBook)
                 }
             
                 self.showMessageIfAllAdded()
@@ -47,7 +50,6 @@ class OptionsViewController: UITableViewController {
     
     func showMessageIfAllAdded() {
         if self.booksProcessed == self.booksToAdd.count{
-            appDelegate.booksStore.Save()
             let alert = UIAlertController(title: "Complete", message: "\(self.booksProcessed) Books Added", preferredStyle: UIAlertControllerStyle.Alert)
             alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
             self.presentViewController(alert, animated: true, completion: nil)

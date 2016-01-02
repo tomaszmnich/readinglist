@@ -14,7 +14,7 @@ class GoogleBooksParser {
     /// Parses a JSON GoogleBooks response and returns the corresponding ParsedBookResult.
     static func parseJsonResponse(isbn13: String, jResponse: JSON) -> BookMetadata? {
         // Prepare the result
-        let result = BookMetadata(bookSource: BookSource.GoogleBooks)
+        let result = BookMetadata()
         
         // The information we seek is in the volumneInfo element. FOr ow
         let volumeInfo = jResponse["items"][0]["volumeInfo"]

@@ -54,12 +54,16 @@ class BooksStore {
     /**
      Retrieves the specified Book, if it exists.
     */
-    func GetBook(globalId: String) -> Book? {
-        let fetchRequest = singleBookPredicate(globalId)
-        if let results = try? coreDataStack.managedObjectContext.executeFetchRequest(fetchRequest){
-            return results[0] as? Book
+    func GetBook(objectIdUrl: NSURL) -> Book? {
+//        let fetchRequest = singleBookPredicate(globalId)
+        if let bookObjectUrl = coreDataStack.managedObjectContext.persistentStoreCoordinator!.managedObjectIDForURIRepresentation(objectIdUrl){
+            return coreDataStack.managedObjectContext.objectWithID(bookObjectUrl) as? Book
         }
         return nil
+//        if let results = try? coreDataStack.managedObjectContext.executeFetchRequest(fetchRequest){
+//            return results[0] as? Book
+//        }
+//        return nil
     }
     
     /**
@@ -74,7 +78,6 @@ class BooksStore {
     
     /**
      Creates a new Book object, populates the properties on it with those in the BookMetadata.
-     Adds the book to a NSUserActivity for spotlight searching.
      Does not save the managedObjectContent.
     */
     func CreateBook(metadata: BookMetadata) -> Book {
@@ -86,12 +89,24 @@ class BooksStore {
             newAuthor.authorOf = newBook
         }
         
+        return newBook
+    }
+    
+    /**
+     Adds the book to the Spotlight index.
+    */
+    func IndexBookInSpotlight(book: Book){
+        // The AttributeSet is the information which will be visible in Spotlight
         let attributeSet = CSSearchableItemAttributeSet(itemContentType: kUTTypeText as String)
-        attributeSet.title = newBook.title
-        attributeSet.contentDescription = "A test description"
+        attributeSet.title = book.title
+        attributeSet.contentDescription = book.authorListString
+        attributeSet.thumbnailData = book.coverImage
         
-        let item = CSSearchableItem(uniqueIdentifier: newBook.globalId, domainIdentifier: "com.andrewbennet.books", attributeSet: attributeSet)
+        // Create the item to be indexed - the AttributeSet from above and an object identifier
+        let item = CSSearchableItem(uniqueIdentifier: book.objectID.URIRepresentation().absoluteString, domainIdentifier: "com.andrewbennet.books", attributeSet: attributeSet)
         item.expirationDate = NSDate.distantFuture()
+        
+        // Index the item!
         CSSearchableIndex.defaultSearchableIndex().indexSearchableItems([item]) {
             (error: NSError?) -> Void in
             if let error = error {
@@ -100,8 +115,6 @@ class BooksStore {
                 print("Search item successfully indexed!")
             }
         }
-        
-        return newBook
     }
     
     /**
@@ -110,7 +123,7 @@ class BooksStore {
     func DeleteBook(bookToDelete: Book) {
         coreDataStack.managedObjectContext.deleteObject(bookToDelete)
         
-        CSSearchableIndex.defaultSearchableIndex().deleteSearchableItemsWithIdentifiers([bookToDelete.globalId]) {
+        CSSearchableIndex.defaultSearchableIndex().deleteSearchableItemsWithIdentifiers([bookToDelete.objectID.URIRepresentation().lastPathComponent!]) {
             (error: NSError?) -> Void in
             if let error = error {
                 print("Deindexing error: \(error.localizedDescription)")
