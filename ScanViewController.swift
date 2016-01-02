@@ -12,6 +12,7 @@ import AVFoundation
 class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     
     @IBOutlet weak var cameraPreviewPlaceholder: UIView!
+    
     let session = AVCaptureSession()
     lazy var booksStore = appDelegate.booksStore
     var bookReadState: BookReadState!

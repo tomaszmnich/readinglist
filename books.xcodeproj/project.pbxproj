@@ -9,8 +9,6 @@
 /* Begin PBXBuildFile section */
 		4905D85E1C135AB500F57B3C /* books.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4905D85C1C135AB500F57B3C /* books.xcdatamodeld */; };
 		491AABB41C0E486A00D1198B /* OptionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491AABB31C0E486A00D1198B /* OptionsViewController.swift */; };
-		491C1F091C0F95C8001E847E /* OpenLibraryClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491C1F081C0F95C8001E847E /* OpenLibraryClient.swift */; };
-		491C1F0B1C0F970B001E847E /* OpenLibraryParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491C1F0A1C0F970B001E847E /* OpenLibraryParser.swift */; };
 		491F14621C02228C0052B355 /* ScanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491F14611C02228C0052B355 /* ScanViewController.swift */; };
 		492132B81C08DCC6002E2124 /* GoogleBooksApiClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 492132B71C08DCC6002E2124 /* GoogleBooksApiClient.swift */; };
 		492141291C05B2030048E647 /* GoogleBooksParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 492141281C05B2030048E647 /* GoogleBooksParser.swift */; };
@@ -50,8 +48,6 @@
 /* Begin PBXFileReference section */
 		4905D85D1C135AB500F57B3C /* books.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = books.xcdatamodel; sourceTree = "<group>"; };
 		491AABB31C0E486A00D1198B /* OptionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OptionsViewController.swift; sourceTree = "<group>"; };
-		491C1F081C0F95C8001E847E /* OpenLibraryClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenLibraryClient.swift; sourceTree = "<group>"; };
-		491C1F0A1C0F970B001E847E /* OpenLibraryParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenLibraryParser.swift; sourceTree = "<group>"; };
 		491F14611C02228C0052B355 /* ScanViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ScanViewController.swift; path = ../ScanViewController.swift; sourceTree = "<group>"; };
 		492132B71C08DCC6002E2124 /* GoogleBooksApiClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleBooksApiClient.swift; sourceTree = "<group>"; };
 		492141281C05B2030048E647 /* GoogleBooksParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleBooksParser.swift; sourceTree = "<group>"; };
@@ -174,7 +170,7 @@
 				495879601BF7E6BC00000131 /* Models */,
 				495EE92B1C175C9A00EBBC6E /* ApiClients */,
 				495C5D441BF14C4B00E00C07 /* ViewControllers */,
-				49C4517F1C35578A00F431DB /* BookTableViewCell.swift */,
+				49982E9C1C388149009D244D /* Views */,
 			);
 			path = books;
 			sourceTree = "<group>";
@@ -214,10 +210,16 @@
 			children = (
 				492141281C05B2030048E647 /* GoogleBooksParser.swift */,
 				492132B71C08DCC6002E2124 /* GoogleBooksApiClient.swift */,
-				491C1F081C0F95C8001E847E /* OpenLibraryClient.swift */,
-				491C1F0A1C0F970B001E847E /* OpenLibraryParser.swift */,
 			);
 			name = ApiClients;
+			sourceTree = "<group>";
+		};
+		49982E9C1C388149009D244D /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				49C4517F1C35578A00F431DB /* BookTableViewCell.swift */,
+			);
+			name = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -405,7 +407,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				491C1F091C0F95C8001E847E /* OpenLibraryClient.swift in Sources */,
 				492141291C05B2030048E647 /* GoogleBooksParser.swift in Sources */,
 				494C61D21C0BAF8C00F64105 /* SearchResultsViewController.swift in Sources */,
 				495C5D3F1BF1412600E00C07 /* BookTableViewController.swift in Sources */,
@@ -417,7 +418,6 @@
 				495C5D411BF1423900E00C07 /* Book.swift in Sources */,
 				491AABB41C0E486A00D1198B /* OptionsViewController.swift in Sources */,
 				492132B81C08DCC6002E2124 /* GoogleBooksApiClient.swift in Sources */,
-				491C1F0B1C0F970B001E847E /* OpenLibraryParser.swift in Sources */,
 				49C451801C35578A00F431DB /* BookTableViewCell.swift in Sources */,
 				491F14621C02228C0052B355 /* ScanViewController.swift in Sources */,
 			);

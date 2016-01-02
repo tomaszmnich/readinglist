@@ -5,9 +5,10 @@
         <relationship name="authorOf" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Book" inverseName="authoredBy" inverseEntity="Book" syncable="YES"/>
     </entity>
     <entity name="Book" representedClassName="Book" syncable="YES">
+        <attribute name="bookDescription" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="coverImage" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES" syncable="YES"/>
         <attribute name="isbn13" optional="YES" attributeType="String" minValueString="13" maxValueString="13" regularExpressionString="[0-9]+" syncable="YES"/>
-        <attribute name="pageCount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="pageCount" optional="YES" attributeType="Integer 32" syncable="YES"/>
         <attribute name="publishedDate" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="publisher" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="readState" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
@@ -21,6 +22,6 @@
     </entity>
     <elements>
         <element name="Author" positionX="151" positionY="12" width="128" height="75"/>
-        <element name="Book" positionX="-63" positionY="-18" width="128" height="165"/>
+        <element name="Book" positionX="-63" positionY="-18" width="128" height="180"/>
     </elements>
 </model>

@@ -10,10 +10,11 @@ import UIKit
 
 class SearchResultsViewController: UIViewController{
  
+    @IBOutlet weak var spinner: UIActivityIndicatorView!
+    
     /// This must be populated by any controller segueing to this one
     var isbn13: String!
     var bookReadState: BookReadState!
-    @IBOutlet weak var spinner: UIActivityIndicatorView!
     
     // We will likely need data access
     lazy var booksStore = appDelegate.booksStore
@@ -33,10 +34,13 @@ class SearchResultsViewController: UIViewController{
             result!.readState = bookReadState
             
             // Construct a new book
-            let _ = booksStore.CreateBook(result!)
+            let newBook = booksStore.CreateBook(result!)
             
             // Save the book!
             self.booksStore.Save()
+            
+            // Index the book in Spotlight
+            booksStore.IndexBookInSpotlight(newBook)
         }
         
         // TODO: Do something other than just going back at this point

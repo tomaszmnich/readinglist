@@ -18,28 +18,19 @@ class GoogleBooksParser {
         
         // The information we seek is in the volumneInfo element. FOr ow
         let volumeInfo = jResponse["items"][0]["volumeInfo"]
-        
-        // Add the title
-        result.title = volumeInfo["title"].string
-        if result.title == nil {
-            return nil
-        }
 
         // Add all the authors
-        let authors = volumeInfo["authors"]
-        for author in authors{
-            if let authorName = author.1.rawString(){
-                result.authors.append(authorName)
-            }
-        }
-        
+        volumeInfo["authors"].forEach{result.authors.append($0.0)}
+        result.title = volumeInfo["title"].string
         result.isbn13 = isbn13
-        
         result.publishedDate = volumeInfo["publishedDate"].string
         result.publisher = volumeInfo["publisher"].string
         result.pageCount = volumeInfo["pageCount"].int
+        result.bookDescription = volumeInfo["description"].string
         
-        // Add a link at which a front cover image can be found
+        // Add a link at which a front cover image can be found.
+        // The link seems to be equally accessible at https, and iOS apps don't seem to like
+        // accessing http addresses, so adjust the provided url.
         result.imageURL = volumeInfo["imageLinks"]["thumbnail"].string?.stringByReplacingOccurrencesOfString("http://", withString: "https://")
         
         return result

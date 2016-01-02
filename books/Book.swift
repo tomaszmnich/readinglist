@@ -18,6 +18,7 @@ class Book: NSManagedObject {
     @NSManaged var pageCount: NSNumber?
     @NSManaged var publisher: String?
     @NSManaged var publishedDate: String?
+    @NSManaged var bookDescription: String?
     
     // Holds a set of Author objects
     @NSManaged var authoredBy: NSOrderedSet?
@@ -55,7 +56,7 @@ class Book: NSManagedObject {
         }
         publisher = metadata.publisher
         publishedDate = metadata.publishedDate
-        
+        bookDescription = metadata.bookDescription
         coverImage = metadata.imageData
         
     }
@@ -75,20 +76,17 @@ class Author: NSManagedObject{
 }
 
 /// Holds metadata about a book. Merely a holding bay.
-class BookMetadata : CustomStringConvertible {
+class BookMetadata {
     
-    // temporarily always set
+    // (temporarily always set)
     var readState = BookReadState.Reading
     var isbn13: String?
     var title: String!
     var authors = [String]()
     var publishedDate: String?
+    var bookDescription: String?
     var publisher: String?
     var pageCount: Int?
     var imageURL: String?
     var imageData: NSData?
-    
-    var description: String {
-        return title
-    }
 }

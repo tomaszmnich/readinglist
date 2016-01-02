@@ -1,6 +1,6 @@
 //
 //  CoreDataStack.swift
-//  Coffee Timer
+//  books
 //
 //  Created by Andrew Bennet on 08/11/2015.
 //  Copyright © 2015 Andrew Bennet. All rights reserved.
