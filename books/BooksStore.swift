@@ -15,7 +15,6 @@ private let bookEntityName = "Book"
 private let authorEntityName = "Author"
 private let titleFieldName = "title"
 private let readStateFieldName = "readState"
-private let globalIdFieldName = "globalId"
 
 /// Interfaces with the CoreData storage of Book objects
 class BooksStore {
@@ -42,39 +41,14 @@ class BooksStore {
             sectionNameKeyPath: nil,
             cacheName: nil)
     }
-    
-    /**
-     Returns whether a Book exists with the given globalId.
-    */
-    func BookExists(globalId: String) -> Bool {
-        let fetchOneBook = singleBookPredicate(globalId)
-        return coreDataStack.managedObjectContext.countForFetchRequest(fetchOneBook, error: nil) != 0
-    }
-    
+
     /**
      Retrieves the specified Book, if it exists.
     */
     func GetBook(objectIdUrl: NSURL) -> Book? {
-//        let fetchRequest = singleBookPredicate(globalId)
-        if let bookObjectUrl = coreDataStack.managedObjectContext.persistentStoreCoordinator!.managedObjectIDForURIRepresentation(objectIdUrl){
-            return coreDataStack.managedObjectContext.objectWithID(bookObjectUrl) as? Book
-        }
-        return nil
-//        if let results = try? coreDataStack.managedObjectContext.executeFetchRequest(fetchRequest){
-//            return results[0] as? Book
-//        }
-//        return nil
+        let bookObjectUrl = coreDataStack.managedObjectContext.persistentStoreCoordinator!.managedObjectIDForURIRepresentation(objectIdUrl)!
+        return coreDataStack.managedObjectContext.objectWithID(bookObjectUrl) as? Book
     }
-    
-    /**
-     Retrieves an NSPredicate for selecting a single book with a given globalId.
-    */
-    private func singleBookPredicate(globalId: String) -> NSFetchRequest{
-        let fetchOneBook = NSFetchRequest(entityName: bookEntityName)
-        fetchOneBook.predicate = NSPredicate(format: "\(globalIdFieldName) == \"\(globalId)\"")
-        return fetchOneBook
-    }
-    
     
     /**
      Creates a new Book object, populates the properties on it with those in the BookMetadata.
@@ -111,7 +85,8 @@ class BooksStore {
             (error: NSError?) -> Void in
             if let error = error {
                 print("Indexing error: \(error.localizedDescription)")
-            } else {
+            }
+            else {
                 print("Search item successfully indexed!")
             }
         }
