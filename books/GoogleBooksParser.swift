@@ -20,7 +20,7 @@ class GoogleBooksParser {
         let volumeInfo = jResponse["items"][0]["volumeInfo"]
 
         // Add all the authors
-        volumeInfo["authors"].forEach{result.authors.append($0.0)}
+        volumeInfo["authors"].forEach{result.authors.append($1.rawString()!)}
         result.title = volumeInfo["title"].string
         result.isbn13 = isbn13
         result.publishedDate = volumeInfo["publishedDate"].string
