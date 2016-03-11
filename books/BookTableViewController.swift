@@ -37,6 +37,10 @@ class BookTableViewController: UITableViewController, UISearchResultsUpdating {
         // Why?
         self.navigationItem.title = mode.title
         
+        // Set the view of the NavigationController to be white, so that glimpses
+        // of dark colours are not seen through the translucent bar when segueing from this view.
+        self.navigationController?.view.backgroundColor = UIColor.whiteColor()
+        
         // Set the DZN data set source
         tableView.emptyDataSetSource = self
         
@@ -48,7 +52,7 @@ class BookTableViewController: UITableViewController, UISearchResultsUpdating {
     
     func buildFetchedResultsControllerAndFetch(filter: BookFetchedResultFilterer){
         // Currently we only support sorting by TitleAscending
-        booksResultsController = appDelegate.booksStore.FetchedBooksController([BookSortOrder.TitleAscending], filter: filter)
+        booksResultsController = appDelegate.booksStore.FetchedBooksController([BookSortOrder.Title], filter: filter)
         booksResultsController.delegate = self
         let _ = try? booksResultsController.performFetch()
         tableView.reloadData()

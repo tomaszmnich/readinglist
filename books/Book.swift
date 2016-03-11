@@ -25,7 +25,6 @@ class Book: NSManagedObject {
     
     // Image data of the book cover
     @NSManaged var coverImage: NSData?
-
     
     @NSManaged var readState: BookReadState
     
@@ -33,11 +32,11 @@ class Book: NSManagedObject {
     var authorListString: String?{
         var authorListString = String()
         if let authors = authoredBy?.array as? [Author] {
-        for author in authors{
-            if authors.indexOf(author) != 0{
-                authorListString += ", "
-            }
-            authorListString += author.name!
+            for author in authors{
+                if authors.indexOf(author) != 0{
+                    authorListString += ", "
+                }
+                authorListString += author.fullName()
             }
         }
         return authorListString
@@ -50,22 +49,29 @@ class Book: NSManagedObject {
     func Populate(metadata: BookMetadata){
         isbn13 = metadata.isbn13
         readState = metadata.readState
-        title = metadata.title!
-        if metadata.pageCount != nil{
-            pageCount = NSNumber(int: Int32(metadata.pageCount!))
-        }
+        title = metadata.title
+        pageCount = metadata.pageCount != nil ? NSNumber(int: Int32(metadata.pageCount!)) : nil
         publisher = metadata.publisher
         publishedDate = metadata.publishedDate
         bookDescription = metadata.bookDescription
         coverImage = metadata.imageData
-        
     }
 }
 
 @objc(Author)
 class Author: NSManagedObject{
-    @NSManaged var name: String!
+    @NSManaged var lastname: String!
+    @NSManaged var forenames: String?
+
     @NSManaged var authorOf: Book
+    
+    func fullName() -> String {
+        var fullName = lastname
+        if forenames != nil {
+            fullName = forenames! + " " + fullName
+        }
+        return fullName
+    }
 }
 
 /// The availale reading progress states

@@ -57,13 +57,28 @@ class BooksStore {
     func CreateBook(metadata: BookMetadata) -> Book {
         let newBook: Book = coreDataStack.createNewItem(bookEntityName)
         newBook.Populate(metadata)
+        
         for authorName in metadata.authors{
-            let newAuthor: Author = coreDataStack.createNewItem(authorEntityName)
-            newAuthor.name = authorName
-            newAuthor.authorOf = newBook
+            let author = CreateAuthor(authorName)
+            author.authorOf = newBook
         }
         
         return newBook
+    }
+    
+    func CreateAuthor(authorName: String) -> Author {
+        // Construct a new Author object
+        let newAuthor: Author = coreDataStack.createNewItem(authorEntityName)
+        
+        // Split the input string on spaces; assign the last piece to the lastname property
+        var authorNameComponents = authorName.characters.split{$0 == " "}.map(String.init)
+        newAuthor.lastname = authorNameComponents.last
+        
+        // Remove the last piece and join the rest back together
+        authorNameComponents.removeLast()
+        newAuthor.forenames = authorNameComponents.joinWithSeparator(" ")
+        
+        return newAuthor
     }
     
     /**
@@ -158,26 +173,16 @@ class BookFetchedResultFilterer {
 }
 
 enum BookSortOrder {
-    case TitleAscending
-    case TitleDescending
+    case Title
     
     var fieldName: String{
         switch self{
-        case .TitleAscending, .TitleDescending:
+        case .Title:
             return titleFieldName
         }
     }
-    
-    var isAscending: Bool{
-        switch self{
-        case .TitleAscending:
-            return true
-        case .TitleDescending:
-            return false
-        }
-    }
-    
+
     func GetSortDescriptor() -> NSSortDescriptor{
-        return NSSortDescriptor(key: fieldName, ascending: isAscending)
+        return NSSortDescriptor(key: fieldName, ascending: true)
     }
 }
