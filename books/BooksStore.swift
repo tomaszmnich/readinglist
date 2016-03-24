@@ -26,21 +26,33 @@ class BooksStore {
      Creates a NSFetchedResultsController to retrieve books in the given state.
     */
     func FetchedBooksController(sorters: [BookSortOrder], filter: BookFetchedResultFilterer) -> NSFetchedResultsController{
+        // Wrap the fetch request into a fetched results controller, and return that
+        return NSFetchedResultsController(fetchRequest: MakeFetchRequest(sorters, filter: filter),
+            managedObjectContext: self.coreDataStack.managedObjectContext,
+            sectionNameKeyPath: nil,
+            cacheName: nil)
+    }
+    
+    /**
+     Gets Books according to the sort order and filters provided.
+    */
+    func GetBooks(sorters: [BookSortOrder], filter: BookFetchedResultFilterer) -> [Book]{
+        return try! coreDataStack.managedObjectContext.executeFetchRequest(MakeFetchRequest(sorters, filter: filter)) as! [Book]
+    }
+    
+    private func MakeFetchRequest(sorters: [BookSortOrder], filter: BookFetchedResultFilterer) -> NSFetchRequest {
         // We are fetching Books
         let fetchRequest = NSFetchRequest(entityName: bookEntityName)
-
+        
         // Convert the BookSortOrders into NSSortDescriptors
         fetchRequest.sortDescriptors = sorters.map{ $0.GetSortDescriptor() }
         
         // Convert the Filterer into a NSPredicate
         fetchRequest.predicate = filter.GetPredicate()
-
-        // Wrap the fetch request into a fetched results controller, and return that
-        return NSFetchedResultsController(fetchRequest: fetchRequest,
-            managedObjectContext: self.coreDataStack.managedObjectContext,
-            sectionNameKeyPath: nil,
-            cacheName: nil)
+        
+        return fetchRequest;
     }
+    
 
     /**
      Retrieves the specified Book, if it exists.
