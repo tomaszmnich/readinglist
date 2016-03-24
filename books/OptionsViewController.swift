@@ -40,7 +40,7 @@ class OptionsViewController: UITableViewController {
         return {
             (parsedResult: BookMetadata?) -> Void in
             dispatch_async(dispatch_get_main_queue()) {
-                self.booksProcessed++
+                self.booksProcessed += 1
                 if parsedResult != nil{
                     parsedResult!.readState = readState
                     let newBook = appDelegate.booksStore.CreateBook(parsedResult!)
