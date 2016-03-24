@@ -60,10 +60,10 @@
 		495C5D161BF1404D00E00C07 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		495C5D191BF1404D00E00C07 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		495C5D1B1BF1404D00E00C07 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		495C5D201BF1404D00E00C07 /* readinglistTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = readinglistTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		495C5D201BF1404D00E00C07 /* booksTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = booksTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		495C5D241BF1404D00E00C07 /* booksTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = booksTests.swift; sourceTree = "<group>"; };
 		495C5D261BF1404D00E00C07 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		495C5D2B1BF1404D00E00C07 /* readinglistTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = readinglistTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		495C5D2B1BF1404D00E00C07 /* booksUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = booksUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		495C5D2F1BF1404D00E00C07 /* booksUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = booksUITests.swift; sourceTree = "<group>"; };
 		495C5D311BF1404D00E00C07 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		495C5D3E1BF1412600E00C07 /* BookTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookTableViewController.swift; sourceTree = "<group>"; };
@@ -151,8 +151,8 @@
 			isa = PBXGroup;
 			children = (
 				495C5D0C1BF1404D00E00C07 /* Reading List.app */,
-				495C5D201BF1404D00E00C07 /* readinglistTests.xctest */,
-				495C5D2B1BF1404D00E00C07 /* readinglistTests.xctest */,
+				495C5D201BF1404D00E00C07 /* booksTests.xctest */,
+				495C5D2B1BF1404D00E00C07 /* booksUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -225,9 +225,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		495C5D0B1BF1404D00E00C07 /* readinglist */ = {
+		495C5D0B1BF1404D00E00C07 /* books */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 495C5D341BF1404D00E00C07 /* Build configuration list for PBXNativeTarget "readinglist" */;
+			buildConfigurationList = 495C5D341BF1404D00E00C07 /* Build configuration list for PBXNativeTarget "books" */;
 			buildPhases = (
 				DC8BE7EFD411CA50D651385E /* Check Pods Manifest.lock */,
 				495C5D081BF1404D00E00C07 /* Sources */,
@@ -240,14 +240,14 @@
 			);
 			dependencies = (
 			);
-			name = readinglist;
+			name = books;
 			productName = books;
 			productReference = 495C5D0C1BF1404D00E00C07 /* Reading List.app */;
 			productType = "com.apple.product-type.application";
 		};
-		495C5D1F1BF1404D00E00C07 /* readinglistTests */ = {
+		495C5D1F1BF1404D00E00C07 /* booksTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 495C5D371BF1404D00E00C07 /* Build configuration list for PBXNativeTarget "readinglistTests" */;
+			buildConfigurationList = 495C5D371BF1404D00E00C07 /* Build configuration list for PBXNativeTarget "booksTests" */;
 			buildPhases = (
 				495C5D1C1BF1404D00E00C07 /* Sources */,
 				495C5D1D1BF1404D00E00C07 /* Frameworks */,
@@ -258,14 +258,14 @@
 			dependencies = (
 				495C5D221BF1404D00E00C07 /* PBXTargetDependency */,
 			);
-			name = readinglistTests;
+			name = booksTests;
 			productName = booksTests;
-			productReference = 495C5D201BF1404D00E00C07 /* readinglistTests.xctest */;
+			productReference = 495C5D201BF1404D00E00C07 /* booksTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		495C5D2A1BF1404D00E00C07 /* readinglistUITests */ = {
+		495C5D2A1BF1404D00E00C07 /* booksUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 495C5D3A1BF1404D00E00C07 /* Build configuration list for PBXNativeTarget "readinglistUITests" */;
+			buildConfigurationList = 495C5D3A1BF1404D00E00C07 /* Build configuration list for PBXNativeTarget "booksUITests" */;
 			buildPhases = (
 				495C5D271BF1404D00E00C07 /* Sources */,
 				495C5D281BF1404D00E00C07 /* Frameworks */,
@@ -276,9 +276,9 @@
 			dependencies = (
 				495C5D2D1BF1404D00E00C07 /* PBXTargetDependency */,
 			);
-			name = readinglistUITests;
+			name = booksUITests;
 			productName = booksUITests;
-			productReference = 495C5D2B1BF1404D00E00C07 /* readinglistTests.xctest */;
+			productReference = 495C5D2B1BF1404D00E00C07 /* booksUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -307,7 +307,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 495C5D071BF1404D00E00C07 /* Build configuration list for PBXProject "readinglist" */;
+			buildConfigurationList = 495C5D071BF1404D00E00C07 /* Build configuration list for PBXProject "books" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -320,9 +320,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				495C5D0B1BF1404D00E00C07 /* readinglist */,
-				495C5D1F1BF1404D00E00C07 /* readinglistTests */,
-				495C5D2A1BF1404D00E00C07 /* readinglistUITests */,
+				495C5D0B1BF1404D00E00C07 /* books */,
+				495C5D1F1BF1404D00E00C07 /* booksTests */,
+				495C5D2A1BF1404D00E00C07 /* booksUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -444,12 +444,12 @@
 /* Begin PBXTargetDependency section */
 		495C5D221BF1404D00E00C07 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 495C5D0B1BF1404D00E00C07 /* readinglist */;
+			target = 495C5D0B1BF1404D00E00C07 /* books */;
 			targetProxy = 495C5D211BF1404D00E00C07 /* PBXContainerItemProxy */;
 		};
 		495C5D2D1BF1404D00E00C07 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 495C5D0B1BF1404D00E00C07 /* readinglist */;
+			target = 495C5D0B1BF1404D00E00C07 /* books */;
 			targetProxy = 495C5D2C1BF1404D00E00C07 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -563,7 +563,7 @@
 				INFOPLIST_FILE = books/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.andrewbennet.readinglist;
+				PRODUCT_BUNDLE_IDENTIFIER = com.andrewbennet.books;
 				PRODUCT_NAME = "Reading List";
 			};
 			name = Debug;
@@ -576,7 +576,7 @@
 				INFOPLIST_FILE = books/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.andrewbennet.readinglist;
+				PRODUCT_BUNDLE_IDENTIFIER = com.andrewbennet.books;
 				PRODUCT_NAME = "Reading List";
 			};
 			name = Release;
@@ -588,8 +588,8 @@
 				INFOPLIST_FILE = booksTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.andrewbennet.booksTests;
-				PRODUCT_NAME = readinglistTests;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/readinglist.app/readinglist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/books.app/books";
 			};
 			name = Debug;
 		};
@@ -600,8 +600,8 @@
 				INFOPLIST_FILE = booksTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.andrewbennet.booksTests;
-				PRODUCT_NAME = readinglistTests;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/readinglist.app/readinglist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/books.app/books";
 			};
 			name = Release;
 		};
@@ -611,7 +611,7 @@
 				INFOPLIST_FILE = booksUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.andrewbennet.booksUITests;
-				PRODUCT_NAME = readinglistTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_TARGET_NAME = books;
 				USES_XCTRUNNER = YES;
 			};
@@ -623,7 +623,7 @@
 				INFOPLIST_FILE = booksUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.andrewbennet.booksUITests;
-				PRODUCT_NAME = readinglistTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_TARGET_NAME = books;
 				USES_XCTRUNNER = YES;
 			};
@@ -632,7 +632,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		495C5D071BF1404D00E00C07 /* Build configuration list for PBXProject "readinglist" */ = {
+		495C5D071BF1404D00E00C07 /* Build configuration list for PBXProject "books" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				495C5D321BF1404D00E00C07 /* Debug */,
@@ -641,7 +641,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		495C5D341BF1404D00E00C07 /* Build configuration list for PBXNativeTarget "readinglist" */ = {
+		495C5D341BF1404D00E00C07 /* Build configuration list for PBXNativeTarget "books" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				495C5D351BF1404D00E00C07 /* Debug */,
@@ -650,7 +650,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		495C5D371BF1404D00E00C07 /* Build configuration list for PBXNativeTarget "readinglistTests" */ = {
+		495C5D371BF1404D00E00C07 /* Build configuration list for PBXNativeTarget "booksTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				495C5D381BF1404D00E00C07 /* Debug */,
@@ -659,7 +659,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		495C5D3A1BF1404D00E00C07 /* Build configuration list for PBXNativeTarget "readinglistUITests" */ = {
+		495C5D3A1BF1404D00E00C07 /* Build configuration list for PBXNativeTarget "booksUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				495C5D3B1BF1404D00E00C07 /* Debug */,

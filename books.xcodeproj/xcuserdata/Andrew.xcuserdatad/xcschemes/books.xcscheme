@@ -16,8 +16,8 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "495C5D0B1BF1404D00E00C07"
                BuildableName = "Reading List.app"
-               BlueprintName = "readinglist"
-               ReferencedContainer = "container:readinglist.xcodeproj">
+               BlueprintName = "books"
+               ReferencedContainer = "container:books.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "495C5D1F1BF1404D00E00C07"
-               BuildableName = "readinglistTests.xctest"
-               BlueprintName = "readinglistTests"
-               ReferencedContainer = "container:readinglist.xcodeproj">
+               BuildableName = "booksTests.xctest"
+               BlueprintName = "booksTests"
+               ReferencedContainer = "container:books.xcodeproj">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -43,9 +43,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "495C5D2A1BF1404D00E00C07"
-               BuildableName = "readinglistTests.xctest"
-               BlueprintName = "readinglistUITests"
-               ReferencedContainer = "container:readinglist.xcodeproj">
+               BuildableName = "booksUITests.xctest"
+               BlueprintName = "booksUITests"
+               ReferencedContainer = "container:books.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -54,8 +54,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "495C5D0B1BF1404D00E00C07"
             BuildableName = "Reading List.app"
-            BlueprintName = "readinglist"
-            ReferencedContainer = "container:readinglist.xcodeproj">
+            BlueprintName = "books"
+            ReferencedContainer = "container:books.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -77,8 +77,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "495C5D0B1BF1404D00E00C07"
             BuildableName = "Reading List.app"
-            BlueprintName = "readinglist"
-            ReferencedContainer = "container:readinglist.xcodeproj">
+            BlueprintName = "books"
+            ReferencedContainer = "container:books.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -96,8 +96,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "495C5D0B1BF1404D00E00C07"
             BuildableName = "Reading List.app"
-            BlueprintName = "readinglist"
-            ReferencedContainer = "container:readinglist.xcodeproj">
+            BlueprintName = "books"
+            ReferencedContainer = "container:books.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
