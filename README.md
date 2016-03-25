@@ -4,7 +4,7 @@ _An iOS app to record and track reading._
 ### App functions:
 
 - [x] Add books via barcode scanner
-- [ ] Add books via manual entry
+- [ ] Add books via manual entry or text search
 - [x] Progress books through read states (_reading_, _to read_ and  _read_)
 - [ ] Record start and end dates for reading
 - [ ] Display reading time per book
@@ -14,3 +14,4 @@ _An iOS app to record and track reading._
 ### Current stupid things:
 
 - The in-app search works, but you cannot select any of the results without dismissing the search.
+- Adding a duplicate book results in a duplicate _author_ in the already existing book.
