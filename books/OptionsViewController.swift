@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftyJSON
 
 class OptionsViewController: UITableViewController {
     
@@ -36,21 +37,24 @@ class OptionsViewController: UITableViewController {
         ("9780330468466", .Finished, "The Road")
         ]
     
-    func makeAddBookFunc(readState: BookReadState) -> ((BookMetadata?) -> Void) {
+    func makeAddBookFunc(readState: BookReadState) -> ((JSON?) -> Void) {
         return {
-            (parsedResult: BookMetadata?) -> Void in
-            dispatch_async(dispatch_get_main_queue()) {
+            (response: JSON?) -> Void in
                 self.booksProcessed += 1
-                if parsedResult != nil{
-                    parsedResult!.readState = readState
-                    let newBook = appDelegate.booksStore.CreateBook(parsedResult!)
-                    appDelegate.booksStore.Save()
+                
+                if response != nil{
+                    let newBook = appDelegate.booksStore.CreateBook()
+                    GoogleBooksParser.parseJsonResponseIntoBook(newBook, jResponse: response!)
                     
+                    if newBook.coverUrl != nil {
+                        GoogleBooksApiClient.GetDataFromUrl(newBook.coverUrl!, callback: {newBook.coverImage = $0})
+                    }
+                    newBook.readState = readState
                     appDelegate.booksStore.IndexBookInSpotlight(newBook)
                 }
             
                 self.showMessageIfAllAdded()
-            }
+                self.saveIfAllAdded()
         }
     }
     
@@ -59,6 +63,11 @@ class OptionsViewController: UITableViewController {
             let alert = UIAlertController(title: "Complete", message: "\(self.booksProcessed) Books Added", preferredStyle: UIAlertControllerStyle.Alert)
             alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
             self.presentViewController(alert, animated: true, completion: nil)
+        }
+    }
+    func saveIfAllAdded(){
+        if self.booksProcessed == self.booksToAdd.count{
+            appDelegate.booksStore.Save()
         }
     }
     

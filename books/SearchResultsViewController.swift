@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftyJSON
 
 class SearchResultsViewController: UIViewController{
  
@@ -28,19 +29,22 @@ class SearchResultsViewController: UIViewController{
     }
         
     /// Responds to a search result completion
-    func ProcessSearchResult(result: BookMetadata?){
+    func ProcessSearchResult(result: JSON?) {
         if(result != nil){
-            // just in case...
-            result!.readState = bookReadState
             
-            // Construct a new book
-            let newBook = booksStore.CreateBook(result!)
+            // We have a result, so make a Book and populate it
+            let book = booksStore.CreateBook()
+            book.readState = bookReadState
+            GoogleBooksParser.parseJsonResponseIntoBook(book, jResponse: result!)
             
-            // Save the book!
-            self.booksStore.Save()
+            // If there was an image URL in the result, request that too
+            if book.coverUrl != nil {
+                GoogleBooksApiClient.GetDataFromUrl(book.coverUrl!, callback: {book.coverImage = $0})
+            }
             
-            // Index the book in Spotlight
-            booksStore.IndexBookInSpotlight(newBook)
+            // Save the book and index it.
+            booksStore.Save()
+            booksStore.IndexBookInSpotlight(book)
         }
         
         // TODO: Do something other than just going back at this point

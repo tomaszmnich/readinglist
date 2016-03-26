@@ -12,27 +12,22 @@ import SwiftyJSON
 class GoogleBooksParser {
     
     /// Parses a JSON GoogleBooks response and returns the corresponding ParsedBookResult.
-    static func parseJsonResponse(isbn13: String, jResponse: JSON) -> BookMetadata? {
-        // Prepare the result
-        let result = BookMetadata()
+    static func parseJsonResponseIntoBook(bookToPopulate: Book, jResponse: JSON) {
+        print("Parsing JSON into book with id \(bookToPopulate.objectID.URIRepresentation())")
         
-        // The information we seek is in the volumneInfo element. FOr ow
+        // The information we seek is in the volumneInfo element.
         let volumeInfo = jResponse["items"][0]["volumeInfo"]
 
-        // Add all the authors
-        volumeInfo["authors"].forEach{result.authors.append($1.rawString()!)}
-        result.title = volumeInfo["title"].string
-        result.isbn13 = isbn13
-        result.publishedDate = volumeInfo["publishedDate"].string
-        result.publisher = volumeInfo["publisher"].string
-        result.pageCount = volumeInfo["pageCount"].int
-        result.bookDescription = volumeInfo["description"].string
+        bookToPopulate.title = volumeInfo["title"].string
+        bookToPopulate.publishedDate = volumeInfo["publishedDate"].string
+        bookToPopulate.publisher = volumeInfo["publisher"].string
+        bookToPopulate.pageCount = volumeInfo["pageCount"].int
+        bookToPopulate.bookDescription = volumeInfo["description"].string
+        bookToPopulate.authorList = volumeInfo["authors"].map{$1.rawString()!}.joinWithSeparator(", ")
         
         // Add a link at which a front cover image can be found.
         // The link seems to be equally accessible at https, and iOS apps don't seem to like
         // accessing http addresses, so adjust the provided url.
-        result.imageURL = volumeInfo["imageLinks"]["thumbnail"].string?.stringByReplacingOccurrencesOfString("http://", withString: "https://")
-        
-        return result
+        bookToPopulate.coverUrl = volumeInfo["imageLinks"]["thumbnail"].string?.stringByReplacingOccurrencesOfString("http://", withString: "https://")
     }
 }

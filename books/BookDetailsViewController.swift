@@ -24,7 +24,7 @@ class BookDetailsViewController: UIViewController{
     override func viewDidLoad() {
         //self.navigationController!.navigationBar.topItem!.title = "";
         titleLabel.text = book.title
-        authorLabel.text = book.authorListString
+        authorLabel.text = book.authorList
         if let coverImg = book.coverImage {
             imageView.image = UIImage(data: coverImg)
         }

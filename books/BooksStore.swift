@@ -10,9 +10,8 @@ import CoreData
 import CoreSpotlight
 import MobileCoreServices
 
-// Field and Entity name strings should be held in one place: here.
+// Field and Entity name string constants are held here.
 private let bookEntityName = "Book"
-private let authorEntityName = "Author"
 private let titleFieldName = "title"
 private let readStateFieldName = "readState"
 
@@ -40,6 +39,14 @@ class BooksStore {
         return try! coreDataStack.managedObjectContext.executeFetchRequest(MakeFetchRequest(sorters, filter: filter)) as! [Book]
     }
     
+    /**
+     Retrieves the specified Book, if it exists.
+     */
+    func GetBook(objectIdUrl: NSURL) -> Book? {
+        let bookObjectUrl = coreDataStack.managedObjectContext.persistentStoreCoordinator!.managedObjectIDForURIRepresentation(objectIdUrl)!
+        return coreDataStack.managedObjectContext.objectWithID(bookObjectUrl) as? Book
+    }
+    
     private func MakeFetchRequest(sorters: [BookSortOrder], filter: BookFetchedResultFilterer) -> NSFetchRequest {
         // We are fetching Books
         let fetchRequest = NSFetchRequest(entityName: bookEntityName)
@@ -53,44 +60,14 @@ class BooksStore {
         return fetchRequest;
     }
     
-
     /**
-     Retrieves the specified Book, if it exists.
-    */
-    func GetBook(objectIdUrl: NSURL) -> Book? {
-        let bookObjectUrl = coreDataStack.managedObjectContext.persistentStoreCoordinator!.managedObjectIDForURIRepresentation(objectIdUrl)!
-        return coreDataStack.managedObjectContext.objectWithID(bookObjectUrl) as? Book
-    }
-    
-    /**
-     Creates a new Book object, populates the properties on it with those in the BookMetadata.
+     Creates a new Book object.
      Does not save the managedObjectContent.
     */
-    func CreateBook(metadata: BookMetadata) -> Book {
+    func CreateBook() -> Book {
         let newBook: Book = coreDataStack.createNewItem(bookEntityName)
-        newBook.Populate(metadata)
-        
-        for authorName in metadata.authors{
-            let author = CreateAuthor(authorName)
-            author.authorOf = newBook
-        }
-        
+        print("New book created with id \(newBook.objectID.URIRepresentation())")
         return newBook
-    }
-    
-    func CreateAuthor(authorName: String) -> Author {
-        // Construct a new Author object
-        let newAuthor: Author = coreDataStack.createNewItem(authorEntityName)
-        
-        // Split the input string on spaces; assign the last piece to the lastname property
-        var authorNameComponents = authorName.characters.split{$0 == " "}.map(String.init)
-        newAuthor.lastname = authorNameComponents.last
-        
-        // Remove the last piece and join the rest back together
-        authorNameComponents.removeLast()
-        newAuthor.forenames = authorNameComponents.joinWithSeparator(" ")
-        
-        return newAuthor
     }
     
     /**
@@ -100,7 +77,7 @@ class BooksStore {
         // The AttributeSet is the information which will be visible in Spotlight
         let attributeSet = CSSearchableItemAttributeSet(itemContentType: kUTTypeText as String)
         attributeSet.title = book.title
-        attributeSet.contentDescription = book.authorListString
+        attributeSet.contentDescription = book.authorList
         attributeSet.thumbnailData = book.coverImage
         
         // Create the item to be indexed - the AttributeSet from above and an object identifier
@@ -124,8 +101,13 @@ class BooksStore {
     */
     func DeleteBook(bookToDelete: Book) {
         coreDataStack.managedObjectContext.deleteObject(bookToDelete)
-        
-        CSSearchableIndex.defaultSearchableIndex().deleteSearchableItemsWithIdentifiers([bookToDelete.objectID.URIRepresentation().lastPathComponent!]) {
+    }
+    
+    /**
+     Removes the specified book from Spotlight.
+    */
+    func DeindexBookFromSpotlight(book: Book){
+        CSSearchableIndex.defaultSearchableIndex().deleteSearchableItemsWithIdentifiers([book.objectID.URIRepresentation().lastPathComponent!]) {
             (error: NSError?) -> Void in
             if let error = error {
                 print("Deindexing error: \(error.localizedDescription)")

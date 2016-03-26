@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="9525" systemVersion="15C50" minimumToolsVersion="Xcode 7.0">
-    <entity name="Author" representedClassName="Author" syncable="YES">
-        <attribute name="forenames" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="lastname" attributeType="String" syncable="YES"/>
-        <relationship name="authorOf" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Book" inverseName="authoredBy" inverseEntity="Book" syncable="YES"/>
-    </entity>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10171" systemVersion="15E65" minimumToolsVersion="Xcode 7.0">
     <entity name="Book" representedClassName="Book" syncable="YES">
+        <attribute name="authorList" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="bookDescription" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="coverImage" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES" syncable="YES"/>
         <attribute name="isbn13" optional="YES" attributeType="String" minValueString="13" maxValueString="13" regularExpressionString="[0-9]+" syncable="YES"/>
@@ -13,8 +9,7 @@
         <attribute name="publishedDate" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="publisher" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="readState" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
-        <attribute name="title" attributeType="String" indexed="YES" syncable="YES"/>
-        <relationship name="authoredBy" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Author" inverseName="authorOf" inverseEntity="Author" syncable="YES"/>
+        <attribute name="title" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
                 <constraint value="isbn13"/>
@@ -22,7 +17,6 @@
         </uniquenessConstraints>
     </entity>
     <elements>
-        <element name="Author" positionX="151" positionY="12" width="128" height="90"/>
         <element name="Book" positionX="-63" positionY="-18" width="128" height="180"/>
     </elements>
 </model>

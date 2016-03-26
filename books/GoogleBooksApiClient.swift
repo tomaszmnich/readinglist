@@ -14,74 +14,47 @@ import SwiftyJSON
 class GoogleBooksApiClient {
     
     /**
-     Executes a search on the Google Books API for a given ISBN, and returns
-     the parsed result obtained, if there was one.
+     Executes a search on the Google Books API for a given ISBN, and passes the JSON into the callback.
     */
-    static func SearchByIsbn(isbn: String!, callback: (parsedResult: BookMetadata?) -> Void) {
+    static func SearchByIsbn(isbn: String!, callback: (jsonResponse: JSON?) -> Void) {
         
-        var parsedResult: BookMetadata?
-        
-        // Request the metadata first
+        // Request the metadata
         let searchRequestUrl = GoogleBooksRequest.Search(isbn).url
-
         print("Requesting \(searchRequestUrl)")
         Alamofire.request(.GET, searchRequestUrl).responseJSON {
-            if($0.result.isSuccess){
-                // Get a ParsedBookResult with some populated metadata
-                parsedResult = HandleSuccessfulIsbnResponse(isbn, response: $0)
-                
-                // If the metadata contained an image URL, request that too
-                SupplementWithImageAndCallback(parsedResult, callback: callback)
+            var jsonResponse: JSON?
+            
+            if $0.result.isSuccess {
+                if let responseData = $0.result.value {
+                    jsonResponse = JSON(responseData)
+                }
             }
             else{
                 LogError($0)
             }
-        }
-    }
-    
-    /**
-     Responds to a successful response after a search for an ISBN.
-     Constructs a ParsedBookResult to represent the metadata obtained.
-    */
-    private static func HandleSuccessfulIsbnResponse(isbn: String, response: Response<AnyObject, NSError>) -> BookMetadata? {
-        print("Success response received")
-        var parsedResult: BookMetadata!
-        if let responseData = response.result.value {
-            parsedResult = GoogleBooksParser.parseJsonResponse(isbn, jResponse: JSON(responseData))
-            print("Parsed response.")
-        }
-        return parsedResult
-    }
-    
-    /**
-     Takes a ParsedBookResult and, if there is a URL for a cover image,
-     attempts to download the image an attach the data to the ParsedBookResult.
-    */
-    private static func SupplementWithImageAndCallback(parsedBook: BookMetadata!, callback: (parsedResult: BookMetadata!) -> Void){
-
-        // Only proceed if there is a parsedBook with a image URL
-        if let imageUrl = parsedBook?.imageURL{
-            print("Requesting \(imageUrl)")
             
-            // Make a request for the data
-            Alamofire.request(.GET, imageUrl).response {
-                (_, _, data, _) in
-                print("Response received")
-
-                if let image = data! as NSData? {
-                    parsedBook.imageData = image
-                }
-                else{
-                    print("No image data")
-                }
-                dispatch_async(dispatch_get_main_queue()) {
-                    callback(parsedResult: parsedBook)
-                }
+            // Callback on the main thread
+            dispatch_async(dispatch_get_main_queue()) {
+                print("Executing SearchByIsbn callback")
+                callback(jsonResponse: jsonResponse)
             }
         }
-        else{
+    }
+    
+    /**
+     Requests the data from the url, and passes the NSData into the callback.
+    */
+    static func GetDataFromUrl(url: String, callback: (dataResponse: NSData?) -> Void){
+        print("Requesting \(url)")
+        
+        // Make a request for the data
+        Alamofire.request(.GET, url).response {
+            (_, _, data, _) in
+            print("Response received")
+            
+            let nsData = data! as NSData?
             dispatch_async(dispatch_get_main_queue()) {
-                callback(parsedResult: parsedBook)
+                callback(dataResponse: nsData)
             }
         }
     }

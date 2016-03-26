@@ -114,7 +114,7 @@ class BookTableViewController: UITableViewController, UISearchResultsUpdating {
     private func configureCell(cell: BookTableViewCell, atIndexPath indexPath: NSIndexPath) {
         let book = self.booksResultsController.objectAtIndexPath(indexPath) as! Book
         cell.titleLabel!.text = book.title
-        cell.authorsLabel!.text = book.authorListString
+        cell.authorsLabel!.text = book.authorList
         if book.coverImage != nil {
             cell.bookImageView!.image = UIImage(data: book.coverImage!)
         }
