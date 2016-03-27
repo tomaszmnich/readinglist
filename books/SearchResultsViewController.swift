@@ -25,7 +25,8 @@ class SearchResultsViewController: UIViewController{
         
         // We've found an ISBN-13. Let's search for it online and if we
         // find anything useful use it to build a Book object.
-        GoogleBooksApiClient.SearchByIsbn(isbn13, callback: ProcessSearchResult)
+        let searchRequestUrl = GoogleBooksRequest.Search(isbn13).url
+        HttpClient.GetJson(searchRequestUrl, callback: ProcessSearchResult)
     }
         
     /// Responds to a search result completion
@@ -39,7 +40,7 @@ class SearchResultsViewController: UIViewController{
             
             // If there was an image URL in the result, request that too
             if book.coverUrl != nil {
-                GoogleBooksApiClient.GetDataFromUrl(book.coverUrl!, callback: {book.coverImage = $0})
+                HttpClient.GetData(book.coverUrl!, callback: {book.coverImage = $0})
             }
             
             // Save the book and index it.

@@ -28,14 +28,14 @@ class OptionsViewController: UITableViewController {
         ("9781442369054", .ToRead, "Steve Jobs"),
         ("9780007532766", .Finished, "Purity"),
         ("9780718197384", .Reading, "The Price of Inequality"),
-        ("9780099889809", .ToRead, "Something Happened"),
-        ("9780241197790", .Reading, "The Trial"),
+        ("9780099889809", .Reading, "Something Happened"),
+        ("9780241197790", .Finished, "The Trial"),
         ("9780340935125", .ToRead, "Indemnity Only"),
-        ("9780857059994", .ToRead, "The Girl in the Spider's Web"),
+        ("9780857059994", .Finished, "The Girl in the Spider's Web"),
         ("9781846275951", .Finished, "Honourable Friends?"),
         ("9780141047973", .Finished, "23 Things They Don't Tell You About Capitalism"),
         ("9780330468466", .Finished, "The Road")
-        ]
+    ]
     
     func makeAddBookFunc(readState: BookReadState) -> ((JSON?) -> Void) {
         return {
@@ -47,7 +47,7 @@ class OptionsViewController: UITableViewController {
                     GoogleBooksParser.parseJsonResponseIntoBook(newBook, jResponse: response!)
                     
                     if newBook.coverUrl != nil {
-                        GoogleBooksApiClient.GetDataFromUrl(newBook.coverUrl!, callback: {newBook.coverImage = $0})
+                        HttpClient.GetData(newBook.coverUrl!, callback: {newBook.coverImage = $0})
                     }
                     newBook.readState = readState
                     appDelegate.booksStore.IndexBookInSpotlight(newBook)
@@ -75,7 +75,7 @@ class OptionsViewController: UITableViewController {
         if self.tableView.cellForRowAtIndexPath(indexPath) == populateDataCell{
             booksProcessed = 0
             for bookToAdd in booksToAdd{
-                GoogleBooksApiClient.SearchByIsbn(bookToAdd.isbn, callback: makeAddBookFunc(bookToAdd.readState))
+                HttpClient.GetJson(bookToAdd.isbn, callback: makeAddBookFunc(bookToAdd.readState))
             }
         }
     }

@@ -8,6 +8,26 @@
 
 import SwiftyJSON
 
+
+/// Builds a request to perform an operation on the GoogleBooks API.
+enum GoogleBooksRequest {
+    
+    case Search(String)
+    case GetIsbn(String)
+    
+    // The base URL for GoogleBooks API v1 requests
+    static let baseURLString = "https://www.googleapis.com/books/v1"
+    
+    var url: String {
+        switch self{
+        case let Search(query):
+            return "\(GoogleBooksRequest.baseURLString)/volumes?q=\(query)"
+        case let GetIsbn(isbn):
+            return "\(GoogleBooksRequest.baseURLString)/volumes?q=isbn:\(isbn)"
+        }
+    }
+}
+
 /// Deals with parsing the JSON returned by GoogleBook's API into object representations.
 class GoogleBooksParser {
     
