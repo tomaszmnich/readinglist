@@ -36,6 +36,7 @@ class SearchResultsViewController: UIViewController{
             // We have a result, so make a Book and populate it
             book = booksStore.CreateBook()
             book.readState = bookReadState
+            book.isbn13 = isbn13
             GoogleBooksParser.parseJsonResponseIntoBook(book, jResponse: result!)
             
             // If there was an image URL in the result, request that too
