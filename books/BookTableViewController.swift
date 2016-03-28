@@ -20,7 +20,7 @@ class BookTableViewController: UITableViewController, UISearchResultsUpdating {
     var booksResultsController: NSFetchedResultsController!
     
     /// The UISearchController to which this UITableViewController is connected.
-    var searchResultsController: UISearchController!
+    var searchResultsController = UISearchController(searchResultsController: nil)
     
     var selectedBook: Book!
     
@@ -34,7 +34,6 @@ class BookTableViewController: UITableViewController, UISearchResultsUpdating {
         buildFetchedResultsControllerAndFetch([ReadStateFilter(state: mode.equivalentBookReadState)])
         
         // Setup the search bar.
-        searchResultsController = UISearchController()
         self.searchResultsController.searchResultsUpdater = self
         self.tableView.tableHeaderView = searchResultsController.searchBar
         
