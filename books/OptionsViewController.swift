@@ -75,7 +75,7 @@ class OptionsViewController: UITableViewController {
         if self.tableView.cellForRowAtIndexPath(indexPath) == populateDataCell{
             booksProcessed = 0
             for bookToAdd in booksToAdd{
-                HttpClient.GetJson(bookToAdd.isbn, callback: makeAddBookFunc(bookToAdd.readState))
+                HttpClient.GetJson(GoogleBooksRequest.Search(bookToAdd.isbn).url, callback: makeAddBookFunc(bookToAdd.readState))
             }
         }
     }
