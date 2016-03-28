@@ -25,6 +25,7 @@ class BookTableViewController: UITableViewController, UISearchResultsUpdating {
     var selectedBook: Book!
     
     override func viewDidLoad() {
+        self.definesPresentationContext = true
         
         // Set the mode variable
         mode = BookTableViewMode.modeFromTabIndex(self.tabBarController!.selectedIndex)
@@ -35,6 +36,7 @@ class BookTableViewController: UITableViewController, UISearchResultsUpdating {
         
         // Setup the search bar.
         self.searchResultsController.searchResultsUpdater = self
+        self.searchResultsController.dimsBackgroundDuringPresentation = false
         self.tableView.tableHeaderView = searchResultsController.searchBar
         
         // Set the title accordingly.

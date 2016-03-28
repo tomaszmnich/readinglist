@@ -12,17 +12,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <searchBar key="tableHeaderView" contentMode="redraw" id="HZf-9s-QV8">
-                            <rect key="frame" x="0.0" y="64" width="320" height="44"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                            <textInputTraits key="textInputTraits"/>
-                            <connections>
-                                <outlet property="delegate" destination="C5g-2z-GZ0" id="ZYU-up-kwc"/>
-                            </connections>
-                        </searchBar>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="0.0" reuseIdentifier="BookTableViewCell" id="fCz-ao-P8o" customClass="BookTableViewCell" customModule="Reading_List" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="136" width="320" height="71"/>
+                                <rect key="frame" x="0.0" y="92" width="320" height="71"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="fCz-ao-P8o" id="Vbo-cQ-i5y">
                                     <rect key="frame" x="0.0" y="0.0" width="287" height="70.5"/>
@@ -78,7 +70,6 @@
                 <searchDisplayController id="gY2-r2-csL">
                     <connections>
                         <outlet property="delegate" destination="C5g-2z-GZ0" id="PQC-JD-gKj"/>
-                        <outlet property="searchBar" destination="HZf-9s-QV8" id="Wcn-BO-Y1n"/>
                         <outlet property="searchContentsController" destination="C5g-2z-GZ0" id="P03-mn-h4K"/>
                         <outlet property="searchResultsDataSource" destination="C5g-2z-GZ0" id="RWg-iQ-K5s"/>
                         <outlet property="searchResultsDelegate" destination="C5g-2z-GZ0" id="Ivg-t7-Loo"/>
