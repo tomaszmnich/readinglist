@@ -10,10 +10,7 @@ import CoreData
 import CoreSpotlight
 import MobileCoreServices
 
-// Field and Entity name string constants are held here.
 private let bookEntityName = "Book"
-private let titleFieldName = "title"
-private let readStateFieldName = "readState"
 
 /// Interfaces with the CoreData storage of Book objects
 class BooksStore {
@@ -24,9 +21,9 @@ class BooksStore {
     /**
      Creates a NSFetchedResultsController to retrieve books in the given state.
     */
-    func FetchedBooksController(sorters: [BookSortOrder], filter: BookFetchedResultFilterer) -> NSFetchedResultsController{
+    func FetchedBooksController(sorters: [BookSortOrder], filters: [BookFilter]) -> NSFetchedResultsController{
         // Wrap the fetch request into a fetched results controller, and return that
-        return NSFetchedResultsController(fetchRequest: MakeFetchRequest(sorters, filter: filter),
+        return NSFetchedResultsController(fetchRequest: MakeFetchRequest(sorters, filters: filters),
             managedObjectContext: self.coreDataStack.managedObjectContext,
             sectionNameKeyPath: nil,
             cacheName: nil)
@@ -35,8 +32,8 @@ class BooksStore {
     /**
      Gets Books according to the sort order and filters provided.
     */
-    func GetBooks(sorters: [BookSortOrder], filter: BookFetchedResultFilterer) -> [Book]{
-        return try! coreDataStack.managedObjectContext.executeFetchRequest(MakeFetchRequest(sorters, filter: filter)) as! [Book]
+    func GetBooks(sorters: [BookSortOrder], filters: [BookFilter]) -> [Book]{
+        return try! coreDataStack.managedObjectContext.executeFetchRequest(MakeFetchRequest(sorters, filters: filters)) as! [Book]
     }
     
     /**
@@ -47,15 +44,15 @@ class BooksStore {
         return coreDataStack.managedObjectContext.objectWithID(bookObjectUrl) as? Book
     }
     
-    private func MakeFetchRequest(sorters: [BookSortOrder], filter: BookFetchedResultFilterer) -> NSFetchRequest {
+    private func MakeFetchRequest(sorters: [BookSortOrder], filters: [BookFilter]) -> NSFetchRequest {
         // We are fetching Books
         let fetchRequest = NSFetchRequest(entityName: bookEntityName)
         
         // Convert the BookSortOrders into NSSortDescriptors
-        fetchRequest.sortDescriptors = sorters.map{ $0.GetSortDescriptor() }
+        fetchRequest.sortDescriptors = sorters.map{ $0.ToSortDescriptor() }
         
-        // Convert the Filterer into a NSPredicate
-        fetchRequest.predicate = filter.GetPredicate()
+        // Convert the Filters into an NSPredicate
+        fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: filters.map{ $0.ToPredicate() })
         
         return fetchRequest;
     }
@@ -127,56 +124,5 @@ class BooksStore {
         } catch {
             print("Error saving context: \(error)")
         }
-    }
-}
-
-class BookFetchedResultFilterer {
-    
-    init(titleText: String?, readState: BookReadState?){
-        titleFilter = titleText
-        readStateFilter = readState
-    }
-    
-    var titleFilter: String?
-    private func titlePredicate() -> String? {
-        return titleFilter?.isEmpty != false ? nil : "\(titleFieldName) CONTAINS[cd] \"\(titleFilter!)\""
-    }
-    
-    var readStateFilter: BookReadState?
-    private func readStatePredicate() -> String? {
-        return readStateFilter == nil ? nil : "\(readStateFieldName) == \(readStateFilter!.rawValue)"
-    }
-    
-    func GetPredicate() -> NSPredicate? {
-        let predicate1 = titlePredicate()
-        let predicate2 = readStatePredicate()
-        
-        let noPredicates = predicate1 == nil && predicate2 == nil
-        let multiplePredicates = predicate1 != nil && predicate2 != nil
-
-        if noPredicates{
-            return nil
-        }
-        if multiplePredicates{
-            let predicateString = "(\(predicate1!)) AND (\(predicate2!))"
-            print(predicateString)
-            return NSPredicate(format: predicateString)
-        }
-        return NSPredicate(format: predicate1 != nil ? predicate1! : predicate2!)
-    }
-}
-
-enum BookSortOrder {
-    case Title
-    
-    var fieldName: String{
-        switch self{
-        case .Title:
-            return titleFieldName
-        }
-    }
-
-    func GetSortDescriptor() -> NSSortDescriptor{
-        return NSSortDescriptor(key: fieldName, ascending: true)
     }
 }

@@ -24,6 +24,8 @@
 		495C5D411BF1423900E00C07 /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = 495C5D401BF1423900E00C07 /* Book.swift */; };
 		495C5D431BF14BEB00E00C07 /* BookDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 495C5D421BF14BEB00E00C07 /* BookDetailsViewController.swift */; };
 		49812BB21CA6B22200A49EBA /* HttpClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49812BB11CA6B22200A49EBA /* HttpClient.swift */; };
+		49812BB41CA95F0600A49EBA /* BookFilteringSorting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49812BB31CA95F0600A49EBA /* BookFilteringSorting.swift */; };
+		49812BB51CA9630000A49EBA /* BookFilteringSorting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49812BB31CA95F0600A49EBA /* BookFilteringSorting.swift */; };
 		49C451801C35578A00F431DB /* BookTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C4517F1C35578A00F431DB /* BookTableViewCell.swift */; };
 		49E0C8941CA4945700703A9A /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49E0C8931CA4945700703A9A /* NotificationCenter.framework */; };
 		49E0C8971CA4945800703A9A /* TodayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E0C8961CA4945800703A9A /* TodayViewController.swift */; };
@@ -98,6 +100,7 @@
 		495C5D401BF1423900E00C07 /* Book.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Book.swift; sourceTree = "<group>"; };
 		495C5D421BF14BEB00E00C07 /* BookDetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookDetailsViewController.swift; sourceTree = "<group>"; };
 		49812BB11CA6B22200A49EBA /* HttpClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpClient.swift; sourceTree = "<group>"; };
+		49812BB31CA95F0600A49EBA /* BookFilteringSorting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookFilteringSorting.swift; sourceTree = "<group>"; };
 		49C4517F1C35578A00F431DB /* BookTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookTableViewCell.swift; sourceTree = "<group>"; };
 		49E0C8921CA4945700703A9A /* bookWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = bookWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		49E0C8931CA4945700703A9A /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
@@ -166,6 +169,7 @@
 			children = (
 				495879641BF7E76200000131 /* CoreDataStack.swift */,
 				492500771C0B1B0000C149B5 /* BooksStore.swift */,
+				49812BB31CA95F0600A49EBA /* BookFilteringSorting.swift */,
 			);
 			name = CoreData;
 			sourceTree = "<group>";
@@ -496,6 +500,7 @@
 			files = (
 				492141291C05B2030048E647 /* GoogleBooksParser.swift in Sources */,
 				494C61D21C0BAF8C00F64105 /* SearchResultsViewController.swift in Sources */,
+				49812BB41CA95F0600A49EBA /* BookFilteringSorting.swift in Sources */,
 				495C5D3F1BF1412600E00C07 /* BookTableViewController.swift in Sources */,
 				495C5D101BF1404D00E00C07 /* AppDelegate.swift in Sources */,
 				49812BB21CA6B22200A49EBA /* HttpClient.swift in Sources */,
@@ -530,6 +535,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				49812BB51CA9630000A49EBA /* BookFilteringSorting.swift in Sources */,
 				49E0C8A61CA496E500703A9A /* CoreDataStack.swift in Sources */,
 				49E0C8A51CA4969600703A9A /* Book.swift in Sources */,
 				49E0C8A71CA496E800703A9A /* BooksStore.swift in Sources */,

@@ -9,6 +9,7 @@
 import UIKit
 import DZNEmptyDataSet
 import CoreData
+import CoreSpotlight
 
 class BookTableViewController: UITableViewController, UISearchResultsUpdating {
     
@@ -19,22 +20,25 @@ class BookTableViewController: UITableViewController, UISearchResultsUpdating {
     var booksResultsController: NSFetchedResultsController!
     
     /// The UISearchController to which this UITableViewController is connected.
-    var searchResultsController = UISearchController(searchResultsController: nil)
+    var searchResultsController: UISearchController!
+    
+    var selectedBook: Book!
     
     override func viewDidLoad() {
+        
         // Set the mode variable
         mode = BookTableViewMode.modeFromTabIndex(self.tabBarController!.selectedIndex)
         
         // Setup the fetched results controller, attaching this TableViewController
         // as a delegate on it, and perform the initial fetch.
-        buildFetchedResultsControllerAndFetch(BookFetchedResultFilterer(titleText: nil, readState: mode.equivalentBookReadState))
+        buildFetchedResultsControllerAndFetch([ReadStateFilter(state: mode.equivalentBookReadState)])
         
-        // Setup the search bar. Not really sure what or why the second line is about.
+        // Setup the search bar.
+        searchResultsController = UISearchController()
         self.searchResultsController.searchResultsUpdater = self
         self.tableView.tableHeaderView = searchResultsController.searchBar
         
-        // Set the title accordingly. 
-        // Why?
+        // Set the title accordingly.
         self.navigationItem.title = mode.title
         
         // Set the view of the NavigationController to be white, so that glimpses
@@ -50,21 +54,16 @@ class BookTableViewController: UITableViewController, UISearchResultsUpdating {
         super.viewDidLoad()
     }
     
-    func buildFetchedResultsControllerAndFetch(filter: BookFetchedResultFilterer){
+    private func buildFetchedResultsControllerAndFetch(filters: [BookFilter]){
         // Currently we only support sorting by TitleAscending
-        booksResultsController = appDelegate.booksStore.FetchedBooksController([BookSortOrder.Title], filter: filter)
+        booksResultsController = appDelegate.booksStore.FetchedBooksController([BookSortOrder.Title], filters: filters)
         booksResultsController.delegate = self
         let _ = try? booksResultsController.performFetch()
         tableView.reloadData()
     }
     
     func updateSearchResultsForSearchController(searchController: UISearchController) {
-        buildFetchedResultsControllerAndFetch(BookFetchedResultFilterer(titleText: searchController.searchBar.text, readState: mode.equivalentBookReadState))
-    }
-    
-    override func viewWillAppear(animated: Bool) {
-        tableView.reloadData()
-        super.viewWillAppear(animated)
+        buildFetchedResultsControllerAndFetch([ReadStateFilter(state: mode.equivalentBookReadState), TitleFilter(comparison: .Contains, text: searchController.searchBar.text!)])
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -80,22 +79,21 @@ class BookTableViewController: UITableViewController, UISearchResultsUpdating {
         return cell
     }
     
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        selectedBook = bookAtIndexPath(indexPath)
+        performSegueWithIdentifier("detailsSegue", sender: self)
+    }
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        print("Preparing for segue: \(segue.identifier)")
+        
         // "detailsSegue" is for viewing a specific book
         if segue.identifier == "detailsSegue" {
 
             // Get the controller for viewing a book
             let bookDetailsController = segue.destinationViewController as! BookDetailsViewController
             bookDetailsController.hidesBottomBarWhenPushed = true
-            
-            if let clickedCell = sender as? UITableViewCell {
-                // Set the book on the controller from the book corresponding to the clicked cell
-                bookDetailsController.book = bookAtIndexPath(tableView.indexPathForCell(clickedCell)!)
-            }
-            else if let senderBook = sender as? Book{
-                // Set the book on the controller from the book corresponding to the clicked cell
-                bookDetailsController.book = senderBook
-            }
+            bookDetailsController.book = selectedBook
         }
         else if segue.identifier == "addBookSegue" {
             let addBookController = (segue.destinationViewController as! UINavigationController).viewControllers.first as! ScannerViewController
@@ -103,6 +101,18 @@ class BookTableViewController: UITableViewController, UISearchResultsUpdating {
         }
         
         super.prepareForSegue(segue, sender: sender)
+    }
+    
+    override func restoreUserActivityState(activity: NSUserActivity) {
+        print("Restoring user activity state.")
+        if let identifier = activity.userInfo?[CSSearchableItemActivityIdentifier] as! String? {
+            print("Restoring user activity with identifier \(identifier)")
+            selectedBook = appDelegate.booksStore.GetBook(NSURL(string: identifier)!)
+            if selectedBook != nil {
+                print("Restoring to book with title \(selectedBook.title)")
+                self.performSegueWithIdentifier("detailsSegue", sender: self)
+            }
+        }
     }
     
     /// Gets the specified object from the results controller, casted to a Book
@@ -154,65 +164,6 @@ extension BookTableViewController : NSFetchedResultsControllerDelegate {
     }
 
 
-    /**
-     The possible modes in which the BookTableViewController can be used.
-    */
-    enum BookTableViewMode {
-        
-        case Reading
-        case ToRead
-        case Finished
-        
-        /// A heading and description to use when the book list is empty
-        var emptyListTitleAndDescription: (String!, String!){
-            switch self{
-            case Reading:
-                return ("You aren't reading any books", "Add a new book, or start reading one of your to-read books.")
-            case ToRead:
-                return ("You don't have any books on your to-read list", "Why not search for some books to read? Just click Search.")
-            case Finished:
-                return ("You haven't finished any books", "Or, at least, you haven't added any to this list. Want to get started?")
-            }
-        }
-        
-        /// The string to use as the title of the page when it is in this mode.
-        var title: String!{
-            switch self{
-            case Reading:
-                return "Currently Reading"
-            case ToRead:
-                return "To Read"
-            case Finished:
-                return "Finished"
-            }
-        }
-        
-        /// The core data book read state corresponding to this mode
-        var equivalentBookReadState: BookReadState{
-            switch self{
-            case .Reading:
-                return BookReadState.Reading
-            case .ToRead:
-                return BookReadState.ToRead
-            case .Finished:
-                return BookReadState.Finished
-            }
-        }
-        
-        static func modeFromTabIndex(tabIndex: Int) -> BookTableViewMode{
-            switch tabIndex{
-            case ToReadTabIndex:
-                return BookTableViewMode.ToRead
-            case ReadingTabIndex:
-                return BookTableViewMode.Reading
-            case FinishedTabIndex:
-                return BookTableViewMode.Finished
-            default:
-                print("Unrecognised index: \(tabIndex)")
-                return BookTableViewMode.ToRead
-            }
-        }
-    }
 }
 
 /**
@@ -231,5 +182,66 @@ extension BookTableViewController : DZNEmptyDataSetSource{
     func descriptionForEmptyDataSet(scrollView: UIScrollView!) -> NSAttributedString! {
         let attrs = [NSFontAttributeName: UIFont.preferredFontForTextStyle(UIFontTextStyleBody)]
         return NSAttributedString(string: mode.emptyListTitleAndDescription.1, attributes: attrs)
+    }
+}
+
+
+/**
+ The possible modes in which the BookTableViewController can be used.
+ */
+enum BookTableViewMode {
+    
+    case Reading
+    case ToRead
+    case Finished
+    
+    /// A heading and description to use when the book list is empty
+    var emptyListTitleAndDescription: (String!, String!){
+        switch self{
+        case Reading:
+            return ("You aren't reading any books", "Add a new book, or start reading one of your to-read books.")
+        case ToRead:
+            return ("You don't have any books on your to-read list", "Why not search for some books to read? Just click Search.")
+        case Finished:
+            return ("You haven't finished any books", "Or, at least, you haven't added any to this list. Want to get started?")
+        }
+    }
+    
+    /// The string to use as the title of the page when it is in this mode.
+    var title: String!{
+        switch self{
+        case Reading:
+            return "Currently Reading"
+        case ToRead:
+            return "To Read"
+        case Finished:
+            return "Finished"
+        }
+    }
+    
+    /// The core data book read state corresponding to this mode
+    var equivalentBookReadState: BookReadState{
+        switch self{
+        case .Reading:
+            return BookReadState.Reading
+        case .ToRead:
+            return BookReadState.ToRead
+        case .Finished:
+            return BookReadState.Finished
+        }
+    }
+    
+    static func modeFromTabIndex(tabIndex: Int) -> BookTableViewMode{
+        switch tabIndex{
+        case ToReadTabIndex:
+            return BookTableViewMode.ToRead
+        case ReadingTabIndex:
+            return BookTableViewMode.Reading
+        case FinishedTabIndex:
+            return BookTableViewMode.Finished
+        default:
+            print("Unrecognised index: \(tabIndex)")
+            return BookTableViewMode.ToRead
+        }
     }
 }

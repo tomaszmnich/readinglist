@@ -55,7 +55,38 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
-
-
+    
+    func application(application: UIApplication, continueUserActivity userActivity: NSUserActivity, restorationHandler: ([AnyObject]?) -> Void) -> Bool {
+        if userActivity.activityType == CSSearchableItemActionType {
+            
+            if let uniqueIdentifier = userActivity.userInfo?[CSSearchableItemActivityIdentifier] as? String {
+                // Get the book which the user selected
+                if let selectedBook = booksStore.GetBook(NSURL(string: uniqueIdentifier)!){
+                
+                    // The read state controls which tab it will be on
+                    let destinationTabIndex: Int! = {
+                        switch selectedBook.readState{
+                            case .Finished:
+                                return FinishedTabIndex
+                            case .ToRead:
+                                return ToReadTabIndex
+                            case .Reading:
+                                return ReadingTabIndex
+                        }
+                    }()
+                    print("Destination tab index is \(destinationTabIndex)")
+                
+                    let tabViewController = self.window!.rootViewController as! UITabBarController
+                    tabViewController.selectedIndex = destinationTabIndex
+                    
+                    let navigationController = tabViewController.viewControllers![destinationTabIndex] as! UINavigationController
+                    let tableViewController = navigationController.topViewController as! BookTableViewController
+                    
+                    tableViewController.restoreUserActivityState(userActivity)
+                }
+            }
+        }
+        return true
+    }
 }
 

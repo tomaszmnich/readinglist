@@ -53,7 +53,6 @@
                                     <outlet property="bookImageView" destination="nhH-cr-BlF" id="HPn-Lo-hN8"/>
                                     <outlet property="imageView" destination="nhH-cr-BlF" id="7KH-mx-DP2"/>
                                     <outlet property="titleLabel" destination="kqd-gC-7le" id="Pea-4w-UBc"/>
-                                    <segue destination="rfy-0O-jij" kind="push" identifier="detailsSegue" id="Mia-ya-Y0q"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -72,6 +71,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="searchDisplayController" destination="gY2-r2-csL" id="XZT-Hx-Fe3"/>
+                        <segue destination="rfy-0O-jij" kind="push" identifier="detailsSegue" id="v5Q-6a-iOX"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="b9R-CH-CqG" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -85,7 +85,7 @@
                     </connections>
                 </searchDisplayController>
             </objects>
-            <point key="canvasLocation" x="-392" y="-668"/>
+            <point key="canvasLocation" x="164" y="-852"/>
         </scene>
         <!--To Read-->
         <scene sceneID="5us-Nf-OVY">
