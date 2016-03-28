@@ -24,50 +24,18 @@ class SearchResultsViewController: UIViewController{
     override func viewDidLoad() {
         spinner.startAnimating()
         
-        // We've found an ISBN-13. Let's search for it online and if we
-        // find anything useful use it to build a Book object.
-        HttpClient.GetJson(GoogleBooksRequest.Search(isbn13).url, callback: ProcessSearchResult)
+        // We've found an ISBN-13. Let's search for it online.
+        OnlineBookClient<GoogleBooksParser>.TryCreateBook(GoogleBooksRequest.Search(isbn13).url, readState: bookReadState, isbn13: isbn13, completionHandler: searchCompletionHandler)
     }
-        
-    /// Responds to a search result completion
-    func ProcessSearchResult(result: JSON?) {
-        if(result != nil){
-            
-            // We have a result, so make a Book and populate it
-            book = booksStore.CreateBook()
-            book.readState = bookReadState
-            book.isbn13 = isbn13
-            GoogleBooksParser.parseJsonResponseIntoBook(book, jResponse: result!)
-            
-            // If there was an image URL in the result, request that too
-            if book.coverUrl != nil {
-                HttpClient.GetData(book.coverUrl!, callback: SupplementBookWithCoverImageAndExit)
-            }
-            else{
-                StopSpinnerAndExit()
-            }
+    
+    /// If the book argument is nil, presents a "no results" popup. Otherwise, exits.
+    func searchCompletionHandler(book: Book?){
+        if book != nil{
+            StopSpinnerAndExit()
         }
         else{
             PresentNoResultsAlert()
         }
-    }
-    
-    /**
-     Adds the provided data as the coverImage to the book on this controller, saves the book,
-     indexes it in spotlight, and calls the exit method.
-    */
-    func SupplementBookWithCoverImageAndExit(data: NSData?){
-        if data == nil {
-            print("No data received.")
-        }
-        book.coverImage = data
-    
-        // Save the book and index it.
-        booksStore.Save()
-        booksStore.IndexBookInSpotlight(book)
-    
-        // Exit
-        StopSpinnerAndExit()
     }
     
     /// Stops the spinner and dismisses this view controller.

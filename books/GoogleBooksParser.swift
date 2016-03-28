@@ -28,8 +28,12 @@ enum GoogleBooksRequest {
     }
 }
 
+protocol BookParser{
+    static func parseJsonResponseIntoBook(bookToPopulate: Book, jResponse: JSON)
+}
+
 /// Deals with parsing the JSON returned by GoogleBook's API into object representations.
-class GoogleBooksParser {
+class GoogleBooksParser: BookParser {
     
     /// Parses a JSON GoogleBooks response and returns the corresponding ParsedBookResult.
     static func parseJsonResponseIntoBook(bookToPopulate: Book, jResponse: JSON) {

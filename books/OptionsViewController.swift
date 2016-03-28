@@ -37,53 +37,22 @@ class OptionsViewController: UITableViewController {
         ("9780330468466", .Finished, "The Road")
     ]
     
-    var newBooks = [Book]()
-    
-    func makeAddBookFunc(readState: BookReadState) -> ((JSON?) -> Void) {
-        return {
-            (response: JSON?) -> Void in
-                if response != nil{
-                    self.booksProcessed += 1
-                    
-                    let newBook = appDelegate.booksStore.CreateBook()
-                    self.newBooks.append(newBook)
-                    newBook.readState = readState
-                    GoogleBooksParser.parseJsonResponseIntoBook(newBook, jResponse: response!)
-                    
-                    if newBook.coverUrl != nil {
-                        HttpClient.GetData(newBook.coverUrl!, callback: {
-                            newBook.coverImage = $0
-                            if self.booksProcessed == self.booksToAdd.count{
-                                self.Finish()
-                            }
-                        })
-                    }
-                    else{
-                        if self.booksProcessed == self.booksToAdd.count{
-                            self.Finish()
-                        }
-                    }
-                }
-        }
-    }
-    
-    /// Saves the object context and displays a message
-    func Finish(){
-        appDelegate.booksStore.Save()
-        
-        for book in newBooks { appDelegate.booksStore.IndexBookInSpotlight(book) }
-        
-        let alert = UIAlertController(title: "Complete", message: "\(self.booksProcessed) Books Added", preferredStyle: UIAlertControllerStyle.Alert)
-        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
-        self.presentViewController(alert, animated: true, completion: nil)
-    }
-    
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if self.tableView.cellForRowAtIndexPath(indexPath) == populateDataCell{
             booksProcessed = 0
             for bookToAdd in booksToAdd{
-                HttpClient.GetJson(GoogleBooksRequest.Search(bookToAdd.isbn).url, callback: makeAddBookFunc(bookToAdd.readState))
+                OnlineBookClient<GoogleBooksParser>.TryCreateBook(GoogleBooksRequest.Search(bookToAdd.isbn).url, readState: bookToAdd.readState, isbn13: bookToAdd.isbn, completionHandler: BookCreationCompletionHandler)
             }
+        }
+    }
+    
+    /// Saves the object context and displays a message
+    func BookCreationCompletionHandler(createdBook: Book?){
+        booksProcessed += 1
+        if self.booksProcessed == self.booksToAdd.count{
+            let alert = UIAlertController(title: "Complete", message: "\(self.booksProcessed) Books Added", preferredStyle: UIAlertControllerStyle.Alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
+            self.presentViewController(alert, animated: true, completion: nil)
         }
     }
 }
