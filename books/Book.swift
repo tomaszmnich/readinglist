@@ -9,22 +9,20 @@
 import Foundation
 import CoreData
 
-
 @objc(Book)
 class Book: NSManagedObject {
-    // Book properties
     @NSManaged var isbn13: String?
     @NSManaged var title: String?
     @NSManaged var authorList: String?
     @NSManaged var pageCount: NSNumber?
     @NSManaged var publisher: String?
     @NSManaged var publishedDate: String?
+    // 'description' would be a better name but the data model does not support using that term for an attribute
     @NSManaged var bookDescription: String?
-    
-    // Image data of the book cover
+    @NSManaged var startedReading: NSDate?
+    @NSManaged var finishedReading: NSDate?
     var coverUrl: String?
     @NSManaged var coverImage: NSData?
-    
     @NSManaged var readState: BookReadState
 }
 

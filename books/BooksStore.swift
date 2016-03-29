@@ -7,16 +7,23 @@
 //
 
 import CoreData
-import CoreSpotlight
 import MobileCoreServices
-
-private let bookEntityName = "Book"
 
 /// Interfaces with the CoreData storage of Book objects
 class BooksStore {
     
-    /// The core data stack which will be doing the actual work.
+    private let bookEntityName = "Book"
+    
+    /// The core data stack which will be doing the MOM work
     private lazy var coreDataStack = CoreDataStack(sqliteFileName: "books", momdFileName: "books")
+    
+    /// The spotlight stack which will be doing the indexing work
+    private lazy var coreSpotlightStack = CoreSpotlightStack(domainIdentifier: "com.andrewbennet.books")
+    
+    /// The mapping from a Book to a SpotlightItem
+    private func CreateSpotlightItemForBook(book: Book) -> SpotlightItem{
+        return SpotlightItem(uniqueIdentifier: book.objectID.URIRepresentation().absoluteString, title: book.title!, description: book.bookDescription, thumbnailImageData: book.coverImage)
+    }
     
     /**
      Creates a NSFetchedResultsController to retrieve books in the given state.
@@ -45,13 +52,10 @@ class BooksStore {
     }
     
     private func MakeFetchRequest(sorters: [BookSortOrder], filters: [BookFilter]) -> NSFetchRequest {
-        // We are fetching Books
         let fetchRequest = NSFetchRequest(entityName: bookEntityName)
         
-        // Convert the BookSortOrders into NSSortDescriptors
+        // Sorting and Filtering are achieved with sortDescriptors and predicates on the fetch request
         fetchRequest.sortDescriptors = sorters.map{ $0.ToSortDescriptor() }
-        
-        // Convert the Filters into an NSPredicate
         fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: filters.map{ $0.ToPredicate() })
         
         return fetchRequest;
@@ -59,7 +63,7 @@ class BooksStore {
     
     /**
      Creates a new Book object.
-     Does not save the managedObjectContent.
+     Does not save the managedObjectContent; does not add the item to the index.
     */
     func CreateBook() -> Book {
         let newBook: Book = coreDataStack.createNewItem(bookEntityName)
@@ -68,51 +72,18 @@ class BooksStore {
     }
     
     /**
-     Adds the book to the Spotlight index.
+     Adds or updates the book in the Spotlight index.
     */
-    func IndexBookInSpotlight(book: Book){
-        // The AttributeSet is the information which will be visible in Spotlight
-        let attributeSet = CSSearchableItemAttributeSet(itemContentType: kUTTypeText as String)
-        attributeSet.title = book.title
-        attributeSet.contentDescription = book.authorList
-        attributeSet.thumbnailData = book.coverImage
-        
-        // Create the item to be indexed - the AttributeSet from above and an object identifier
-        let item = CSSearchableItem(uniqueIdentifier: book.objectID.URIRepresentation().absoluteString, domainIdentifier: "com.andrewbennet.books", attributeSet: attributeSet)
-        item.expirationDate = NSDate.distantFuture()
-        
-        // Index the item!
-        CSSearchableIndex.defaultSearchableIndex().indexSearchableItems([item]) {
-            (error: NSError?) -> Void in
-            if let error = error {
-                print("Indexing error: \(error.localizedDescription)")
-            }
-            else {
-                print("Search item successfully indexed!")
-            }
-        }
+    func UpdateSpotlightIndex(book: Book) {
+        coreSpotlightStack.UpdateItems([CreateSpotlightItemForBook(book)])
     }
     
     /**
      Deletes the given book from the managed object context.
     */
     func DeleteBook(bookToDelete: Book) {
+        coreSpotlightStack.DeindexItems([CreateSpotlightItemForBook(bookToDelete).uniqueIdentifier])
         coreDataStack.managedObjectContext.deleteObject(bookToDelete)
-    }
-    
-    /**
-     Removes the specified book from Spotlight.
-    */
-    func DeindexBookFromSpotlight(book: Book){
-        CSSearchableIndex.defaultSearchableIndex().deleteSearchableItemsWithIdentifiers([book.objectID.URIRepresentation().lastPathComponent!]) {
-            (error: NSError?) -> Void in
-            if let error = error {
-                print("Deindexing error: \(error.localizedDescription)")
-            }
-            else {
-                print("Search item successfully removed!")
-            }
-        }
     }
     
     /**
@@ -121,7 +92,8 @@ class BooksStore {
     func Save(){
         do {
             try coreDataStack.managedObjectContext.save()
-        } catch {
+        }
+        catch {
             print("Error saving context: \(error)")
         }
     }

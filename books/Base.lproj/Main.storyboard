@@ -404,11 +404,55 @@
                         <outlet property="imageView" destination="f9A-ld-euG" id="TRN-zG-Uok"/>
                         <outlet property="pageCountLabel" destination="lpE-2a-Ppm" id="cvz-1Y-2gI"/>
                         <outlet property="titleLabel" destination="33I-Ad-KXj" id="2Vt-jU-NIb"/>
+                        <segue destination="wie-of-6nq" kind="modal" identifier="dateEntrySegue" id="azJ-Sb-soe"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4ti-Wi-uYS" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="854" y="-1470"/>
+            <point key="canvasLocation" x="808" y="-1473"/>
+        </scene>
+        <!--Date Entry View Controller-->
+        <scene sceneID="yVo-Gg-ftm">
+            <objects>
+                <viewController id="wie-of-6nq" customClass="DateEntryViewController" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="IsP-Dm-hJ3">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="date" minuteInterval="1" id="Pup-49-67I">
+                                <rect key="frame" x="0.0" y="86" width="320" height="216"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <date key="date" timeIntervalSinceReferenceDate="480877651.28101403">
+                                    <!--2016-03-28 17:07:31 +0000-->
+                                </date>
+                            </datePicker>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date Finished" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Lgy-U6-2Bv">
+                                <rect key="frame" x="20" y="57" width="280" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="FXV-p7-ZIo">
+                                <rect key="frame" x="20" y="319" width="280" height="22"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Done"/>
+                                <connections>
+                                    <action selector="doneWasPressed:" destination="wie-of-6nq" eventType="touchUpInside" id="xgu-W3-ivq"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <toolbarItems/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="datePicker" destination="Pup-49-67I" id="5MI-5F-zPK"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="C0J-69-K3N" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1398" y="-1444"/>
         </scene>
     </scenes>
     <resources>

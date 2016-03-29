@@ -80,7 +80,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     tabViewController.selectedIndex = destinationTabIndex
                     
                     let navigationController = tabViewController.viewControllers![destinationTabIndex] as! UINavigationController
-                    let tableViewController = navigationController.topViewController as! BookTableViewController
+                    let tableViewController = navigationController.viewControllers[0] as! BookTableViewController
                     
                     tableViewController.restoreUserActivityState(userActivity)
                 }

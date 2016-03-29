@@ -53,15 +53,28 @@ class BookDetailsViewController: UIViewController{
     }
     
     func switchState(newState: BookReadState){
-        book.readState = newState
-        booksStore.Save()
-        self.navigationController?.popViewControllerAnimated(true)
+        if newState == .Finished{
+            performSegueWithIdentifier("dateEntrySegue", sender: self)
+        }
+        else{
+            book.readState = newState
+            booksStore.Save()
+            self.navigationController?.popViewControllerAnimated(true)
+        }
     }
 
     func delete(){
         booksStore.DeleteBook(book)
         booksStore.Save()
         self.navigationController?.popViewControllerAnimated(true)
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "dateEntrySegue"{
+            let dateViewController = segue.destinationViewController as! DateEntryViewController
+            dateViewController.book = self.book
+        }
+        super.prepareForSegue(segue, sender: sender)
     }
 
     

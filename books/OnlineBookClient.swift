@@ -46,7 +46,7 @@ class OnlineBookClient<TParser: BookParser>{
         func SaveAndIndexAndCallback(){
             appDelegate.booksStore.Save()
             if book != nil {
-                appDelegate.booksStore.IndexBookInSpotlight(book!)
+                appDelegate.booksStore.UpdateSpotlightIndex(book!)
             }
             completionHandler(book)
         }
