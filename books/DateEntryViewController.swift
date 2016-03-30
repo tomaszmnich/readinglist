@@ -12,6 +12,8 @@ import UIKit
 class DateEntryViewController: UIViewController{
 
     var book: Book!
+    var completionHandler: ((book: Book) -> Void)!
+    
     @IBOutlet weak var datePicker: UIDatePicker!
     
     override func viewDidLoad() {
@@ -20,9 +22,9 @@ class DateEntryViewController: UIViewController{
     
     @IBAction func doneWasPressed(sender: UIButton) {
         book.finishedReading = datePicker.date
-        appDelegate.booksStore.Save()
-        self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
+        appDelegate.booksStore.SaveAndUpdateIndex(book)
+        self.dismissViewControllerAnimated(true, completion: {
+            self.completionHandler(book: self.book)
+        })
     }
-    
-    
 }

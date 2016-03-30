@@ -22,7 +22,7 @@ class BooksStore {
     
     /// The mapping from a Book to a SpotlightItem
     private func CreateSpotlightItemForBook(book: Book) -> SpotlightItem{
-        return SpotlightItem(uniqueIdentifier: book.objectID.URIRepresentation().absoluteString, title: book.title!, description: book.bookDescription, thumbnailImageData: book.coverImage)
+        return SpotlightItem(uniqueIdentifier: book.objectID.URIRepresentation().absoluteString, title: book.title, description: "\(book.finishedReading != nil ? "Completed: " + book.finishedReading!.description + ". " : "")\(book.bookDescription != nil ? book.bookDescription! : "")", thumbnailImageData: book.coverImage)
     }
     
     /**
@@ -82,8 +82,12 @@ class BooksStore {
      Deletes the given book from the managed object context.
     */
     func DeleteBook(bookToDelete: Book) {
-        coreSpotlightStack.DeindexItems([CreateSpotlightItemForBook(bookToDelete).uniqueIdentifier])
         coreDataStack.managedObjectContext.deleteObject(bookToDelete)
+    }
+    
+    func SaveAndUpdateIndex(modifiedBook: Book){
+        Save()
+        UpdateSpotlightIndex(modifiedBook)
     }
     
     /**

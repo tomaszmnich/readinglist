@@ -29,20 +29,25 @@ enum GoogleBooksRequest {
 }
 
 protocol BookParser{
-    static func parseJsonResponseIntoBook(bookToPopulate: Book, jResponse: JSON)
+    static func parseJsonResponseIntoBook(bookToPopulate: Book, jResponse: JSON) -> Bool
 }
 
 /// Deals with parsing the JSON returned by GoogleBook's API into object representations.
 class GoogleBooksParser: BookParser {
     
     /// Parses a JSON GoogleBooks response and returns the corresponding ParsedBookResult.
-    static func parseJsonResponseIntoBook(bookToPopulate: Book, jResponse: JSON) {
+    static func parseJsonResponseIntoBook(bookToPopulate: Book, jResponse: JSON) -> Bool {
         print("Parsing JSON into book with id \(bookToPopulate.objectID.URIRepresentation())")
         
         // The information we seek is in the volumneInfo element.
         let volumeInfo = jResponse["items"][0]["volumeInfo"]
 
-        bookToPopulate.title = volumeInfo["title"].string
+        if let title = volumeInfo["title"].string{
+            bookToPopulate.title = title
+        }
+        else{
+            return false
+        }
         bookToPopulate.publishedDate = volumeInfo["publishedDate"].string
         bookToPopulate.publisher = volumeInfo["publisher"].string
         bookToPopulate.pageCount = volumeInfo["pageCount"].int
@@ -53,5 +58,7 @@ class GoogleBooksParser: BookParser {
         // The link seems to be equally accessible at https, and iOS apps don't seem to like
         // accessing http addresses, so adjust the provided url.
         bookToPopulate.coverUrl = volumeInfo["imageLinks"]["thumbnail"].string?.stringByReplacingOccurrencesOfString("http://", withString: "https://")
+        
+        return true
     }
 }

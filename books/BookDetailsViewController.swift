@@ -14,6 +14,7 @@ class BookDetailsViewController: UIViewController{
     
     var book: Book!
     lazy var booksStore = appDelegate.booksStore
+    var newState: BookReadState?
     
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var authorLabel: UILabel!
@@ -53,19 +54,20 @@ class BookDetailsViewController: UIViewController{
     }
     
     func switchState(newState: BookReadState){
+        self.newState = newState
         if newState == .Finished{
             performSegueWithIdentifier("dateEntrySegue", sender: self)
         }
         else{
             book.readState = newState
-            booksStore.Save()
+            booksStore.SaveAndUpdateIndex(book)
             self.navigationController?.popViewControllerAnimated(true)
         }
     }
 
     func delete(){
         booksStore.DeleteBook(book)
-        booksStore.Save()
+        booksStore.SaveAndUpdateIndex(book)
         self.navigationController?.popViewControllerAnimated(true)
     }
     
@@ -73,10 +75,15 @@ class BookDetailsViewController: UIViewController{
         if segue.identifier == "dateEntrySegue"{
             let dateViewController = segue.destinationViewController as! DateEntryViewController
             dateViewController.book = self.book
+            dateViewController.completionHandler = {
+                book in
+                book.readState = self.newState!
+                self.booksStore.SaveAndUpdateIndex(book)
+                self.navigationController?.popViewControllerAnimated(true)
+            }
         }
         super.prepareForSegue(segue, sender: sender)
     }
-
     
     /// Combines all the possible actions which this page can show
     enum pageActions{

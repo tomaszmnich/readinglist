@@ -15,39 +15,44 @@ class OnlineBookClient<TParser: BookParser>{
         var book: Book?
         
         func InitalSearchResultCallback(result: JSON?) {
-            if(result != nil){
+            if let result = result {
                 // We have a result, so make a Book and populate it
                 book = appDelegate.booksStore.CreateBook()
                 
-                // Attach some values which do not necessarily come from the online source
-                book!.readState = readState
-                book!.isbn13 = isbn13
-                
-                // Parse the online response
-                TParser.parseJsonResponseIntoBook(book!, jResponse: result!)
-                
-                // If there was an image URL in the result, request that too
-                if let dataUrl = book!.coverUrl {
-                    HttpClient.GetData(dataUrl, callback: BookCoverImageCallback)
+                // Parse the online response. If it was not valid, set book back to nil
+                if !TParser.parseJsonResponseIntoBook(book!, jResponse: result){
+                    book = nil
                 }
                 else{
-                    SaveAndIndexAndCallback()
+                    let book = book!
+                    
+                    // Attach some values which do not necessarily come from the online source
+                    book.readState = readState
+                    book.isbn13 = isbn13
+                    
+                    // If there was an image URL in the result, request that too
+                    if let dataUrl = book.coverUrl {
+                        HttpClient.GetData(dataUrl, callback: BookCoverImageCallback)
+                    }
+                    else{
+                        SaveAndIndexAndCallback()
+                    }
                 }
+            }
+            else{
+                completionHandler(book)
             }
         }
         
         func BookCoverImageCallback(coverData: NSData?){
-            if coverData != nil{
+            if let coverData = coverData {
                 book!.coverImage = coverData
             }
             SaveAndIndexAndCallback()
         }
         
         func SaveAndIndexAndCallback(){
-            appDelegate.booksStore.Save()
-            if book != nil {
-                appDelegate.booksStore.UpdateSpotlightIndex(book!)
-            }
+            appDelegate.booksStore.SaveAndUpdateIndex(book!)
             completionHandler(book)
         }
         

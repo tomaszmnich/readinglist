@@ -37,6 +37,7 @@ class BookTableViewController: UITableViewController, UISearchResultsUpdating {
         // Setup the search bar.
         self.searchResultsController.searchResultsUpdater = self
         self.searchResultsController.dimsBackgroundDuringPresentation = false
+        searchResultsController.searchBar.returnKeyType = UIReturnKeyType.Done
         self.tableView.tableHeaderView = searchResultsController.searchBar
         
         // Set the title accordingly.
@@ -86,7 +87,6 @@ class BookTableViewController: UITableViewController, UISearchResultsUpdating {
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        print("Preparing for segue: \(segue.identifier)")
         
         // "detailsSegue" is for viewing a specific book
         if segue.identifier == "detailsSegue" {
@@ -105,12 +105,12 @@ class BookTableViewController: UITableViewController, UISearchResultsUpdating {
     }
     
     override func restoreUserActivityState(activity: NSUserActivity) {
-        print("Restoring user activity state.")
         if let identifier = activity.userInfo?[CSSearchableItemActivityIdentifier] as! String? {
             print("Restoring user activity with identifier \(identifier)")
             selectedBook = appDelegate.booksStore.GetBook(NSURL(string: identifier)!)
             if selectedBook != nil {
                 print("Restoring to book with title \(selectedBook.title)")
+                self.navigationController?.popToRootViewControllerAnimated(false)
                 self.performSegueWithIdentifier("detailsSegue", sender: self)
             }
         }
