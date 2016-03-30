@@ -20,7 +20,7 @@ class BookTableViewController: UITableViewController, UISearchResultsUpdating {
     var booksResultsController: NSFetchedResultsController!
     
     /// The UISearchController to which this UITableViewController is connected.
-    var searchResultsController = UISearchController(searchResultsController: nil)
+    var searchController = UISearchController(searchResultsController: nil)
     
     var selectedBook: Book!
     
@@ -35,17 +35,18 @@ class BookTableViewController: UITableViewController, UISearchResultsUpdating {
         buildFetchedResultsControllerAndFetch([ReadStateFilter(state: mode.equivalentBookReadState)])
         
         // Setup the search bar.
-        self.searchResultsController.searchResultsUpdater = self
-        self.searchResultsController.dimsBackgroundDuringPresentation = false
-        searchResultsController.searchBar.returnKeyType = UIReturnKeyType.Done
-        self.tableView.tableHeaderView = searchResultsController.searchBar
+        self.searchController.searchResultsUpdater = self
+        self.searchController.dimsBackgroundDuringPresentation = false
+        searchController.searchBar.returnKeyType = .Done
+        searchController.searchBar.searchBarStyle = .Minimal
+        self.tableView.tableHeaderView = searchController.searchBar
         
         // Set the title accordingly.
         self.navigationItem.title = mode.title
         
         // Set the view of the NavigationController to be white, so that glimpses
         // of dark colours are not seen through the translucent bar when segueing from this view.
-        self.navigationController?.view.backgroundColor = UIColor.whiteColor()
+        self.navigationController!.view.backgroundColor = UIColor.whiteColor()
         
         // Set the DZN data set source
         tableView.emptyDataSetSource = self
@@ -54,6 +55,13 @@ class BookTableViewController: UITableViewController, UISearchResultsUpdating {
         tableView.tableFooterView = UIView()
         
         super.viewDidLoad()
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        // If there is a selected row when the view is going to be shown, deselect it.
+        if let selectedIndexPath = tableView.indexPathForSelectedRow {
+            tableView.deselectRowAtIndexPath(selectedIndexPath, animated: animated)
+        }
     }
     
     private func buildFetchedResultsControllerAndFetch(filters: [BookFilter]){
@@ -87,11 +95,7 @@ class BookTableViewController: UITableViewController, UISearchResultsUpdating {
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        
-        // "detailsSegue" is for viewing a specific book
         if segue.identifier == "detailsSegue" {
-
-            // Get the controller for viewing a book
             let bookDetailsController = segue.destinationViewController as! BookDetailsViewController
             bookDetailsController.hidesBottomBarWhenPushed = true
             bookDetailsController.book = selectedBook
@@ -163,14 +167,12 @@ extension BookTableViewController : NSFetchedResultsControllerDelegate {
                 self.tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .None)
             }
     }
-
-
 }
 
 /**
-    Functions controlling the DZNEmptyDataSet.
-*/
-extension BookTableViewController : DZNEmptyDataSetSource{
+ Functions controlling the DZNEmptyDataSet.
+ */
+extension BookTableViewController : DZNEmptyDataSetSource {
     func imageForEmptyDataSet(scrollView: UIScrollView!) -> UIImage! {
         return UIImage(named: "book_stack")
     }
@@ -197,7 +199,7 @@ enum BookTableViewMode {
     case Finished
     
     /// A heading and description to use when the book list is empty
-    var emptyListTitleAndDescription: (String!, String!){
+    var emptyListTitleAndDescription: (String, String) {
         switch self{
         case Reading:
             return ("You aren't reading any books", "Add a new book, or start reading one of your to-read books.")
@@ -209,7 +211,7 @@ enum BookTableViewMode {
     }
     
     /// The string to use as the title of the page when it is in this mode.
-    var title: String!{
+    var title: String {
         switch self{
         case Reading:
             return "Currently Reading"
@@ -221,7 +223,7 @@ enum BookTableViewMode {
     }
     
     /// The core data book read state corresponding to this mode
-    var equivalentBookReadState: BookReadState{
+    var equivalentBookReadState: BookReadState {
         switch self{
         case .Reading:
             return BookReadState.Reading
