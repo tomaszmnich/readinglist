@@ -60,7 +60,7 @@ class BookDetailsViewController: UIViewController{
         }
         else{
             book.readState = newState
-            booksStore.SaveAndUpdateIndex(book)
+            self.booksStore.SaveAndUpdateIndex(book)
             self.navigationController?.popViewControllerAnimated(true)
         }
     }

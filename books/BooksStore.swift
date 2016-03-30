@@ -28,19 +28,13 @@ class BooksStore {
     /**
      Creates a NSFetchedResultsController to retrieve books in the given state.
     */
-    func FetchedBooksController(sorters: [BookSortOrder], filters: [BookFilter]) -> NSFetchedResultsController{
-        // Wrap the fetch request into a fetched results controller, and return that
-        return NSFetchedResultsController(fetchRequest: MakeFetchRequest(sorters, filters: filters),
+    func FetchedBooksController() -> NSFetchedResultsController {
+        let fetchRequest = NSFetchRequest(entityName: bookEntityName)
+        fetchRequest.sortDescriptors = [BookSortOrder.Title.ToSortDescriptor()]
+        return NSFetchedResultsController(fetchRequest: fetchRequest,
             managedObjectContext: self.coreDataStack.managedObjectContext,
             sectionNameKeyPath: nil,
             cacheName: nil)
-    }
-    
-    /**
-     Gets Books according to the sort order and filters provided.
-    */
-    func GetBooks(sorters: [BookSortOrder], filters: [BookFilter]) -> [Book]{
-        return try! coreDataStack.managedObjectContext.executeFetchRequest(MakeFetchRequest(sorters, filters: filters)) as! [Book]
     }
     
     /**
@@ -49,16 +43,6 @@ class BooksStore {
     func GetBook(objectIdUrl: NSURL) -> Book? {
         let bookObjectUrl = coreDataStack.managedObjectContext.persistentStoreCoordinator!.managedObjectIDForURIRepresentation(objectIdUrl)!
         return coreDataStack.managedObjectContext.objectWithID(bookObjectUrl) as? Book
-    }
-    
-    private func MakeFetchRequest(sorters: [BookSortOrder], filters: [BookFilter]) -> NSFetchRequest {
-        let fetchRequest = NSFetchRequest(entityName: bookEntityName)
-        
-        // Sorting and Filtering are achieved with sortDescriptors and predicates on the fetch request
-        fetchRequest.sortDescriptors = sorters.map{ $0.ToSortDescriptor() }
-        fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: filters.map{ $0.ToPredicate() })
-        
-        return fetchRequest;
     }
     
     /**

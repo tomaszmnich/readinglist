@@ -16,8 +16,6 @@ class TodayViewController: UIViewController, NCWidgetProviding {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view from its nib.
-        let bla = BooksStore().GetBooks([.Title], filters: [ReadStateFilter(state: .Reading)]).count
-        label.text = String(bla)
     }
     
     override func didReceiveMemoryWarning() {

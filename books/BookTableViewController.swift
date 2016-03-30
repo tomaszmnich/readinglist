@@ -32,13 +32,14 @@ class BookTableViewController: UITableViewController, UISearchResultsUpdating {
         
         // Setup the fetched results controller, attaching this TableViewController
         // as a delegate on it, and perform the initial fetch.
-        buildFetchedResultsControllerAndFetch([ReadStateFilter(state: mode.equivalentBookReadState)])
+        booksResultsController = appDelegate.booksStore.FetchedBooksController()
+        updatePredicate([ReadStateFilter(state: mode.equivalentBookReadState)])
+        try! booksResultsController.performFetch()
         
         // Setup the search bar.
         self.searchController.searchResultsUpdater = self
         self.searchController.dimsBackgroundDuringPresentation = false
         searchController.searchBar.returnKeyType = .Done
-        searchController.searchBar.searchBarStyle = .Minimal
         self.tableView.tableHeaderView = searchController.searchBar
         
         // Set the title accordingly.
@@ -58,22 +59,24 @@ class BookTableViewController: UITableViewController, UISearchResultsUpdating {
     }
     
     override func viewWillAppear(animated: Bool) {
+        // Reload the data every time, since other views can send things into this view
+        try! booksResultsController.performFetch()
+        tableView.reloadData()
+        
         // If there is a selected row when the view is going to be shown, deselect it.
         if let selectedIndexPath = tableView.indexPathForSelectedRow {
             tableView.deselectRowAtIndexPath(selectedIndexPath, animated: animated)
         }
     }
     
-    private func buildFetchedResultsControllerAndFetch(filters: [BookFilter]){
-        // Currently we only support sorting by TitleAscending
-        booksResultsController = appDelegate.booksStore.FetchedBooksController([BookSortOrder.Title], filters: filters)
-        booksResultsController.delegate = self
-        let _ = try? booksResultsController.performFetch()
-        tableView.reloadData()
+    private func updatePredicate(filters: [BookFilter]){
+        booksResultsController.fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: filters.map{ $0.ToPredicate() })
     }
     
     func updateSearchResultsForSearchController(searchController: UISearchController) {
-        buildFetchedResultsControllerAndFetch([ReadStateFilter(state: mode.equivalentBookReadState), TitleFilter(comparison: .Contains, text: searchController.searchBar.text!)])
+        updatePredicate([ReadStateFilter(state: mode.equivalentBookReadState), TitleFilter(comparison: .Contains, text: searchController.searchBar.text!)])
+        try! booksResultsController.performFetch()
+        tableView.reloadData()
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -138,7 +141,7 @@ class BookTableViewController: UITableViewController, UISearchResultsUpdating {
 
 
 // Standard fetched results controller delegate code
-extension BookTableViewController : NSFetchedResultsControllerDelegate {
+extension BookTableViewController: NSFetchedResultsControllerDelegate {
     
     func controllerWillChangeContent(controller: NSFetchedResultsController) {
         self.tableView.beginUpdates()

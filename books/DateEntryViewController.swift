@@ -21,10 +21,13 @@ class DateEntryViewController: UIViewController{
     }
     
     @IBAction func doneWasPressed(sender: UIButton) {
-        book.finishedReading = datePicker.date
-        appDelegate.booksStore.SaveAndUpdateIndex(book)
-        self.dismissViewControllerAnimated(true, completion: {
-            self.completionHandler(book: self.book)
-        })
+        //todo: check whether this threading is needed
+        dispatch_async(dispatch_get_main_queue()){
+            self.book.finishedReading = self.datePicker.date
+            appDelegate.booksStore.SaveAndUpdateIndex(self.book)
+            self.dismissViewControllerAnimated(true, completion: {
+                self.completionHandler(book: self.book)
+            })
+        }
     }
 }
