@@ -8,10 +8,5 @@ _An iOS app to record and track reading._
 - [x] Progress books through read states (_reading_, _to read_ and  _read_)
 - [ ] Record start and end dates for reading
 - [ ] Display reading time per book
-- [x] Implement OS spotlight search for books (_partial_)
+- [x] Implement OS spotlight search for books
 - [ ] Implement notification centre widget for marking books as finished, etc.
-
-### Current stupid things:
-
-- The in-app search works, but you cannot select any of the results without dismissing the search.
-- Adding a duplicate book results in a duplicate _author_ in the already existing book.
