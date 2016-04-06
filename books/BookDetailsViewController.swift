@@ -10,10 +10,9 @@ import Foundation
 import UIKit
 import CoreData
 
-class BookDetailsViewController: UIViewController{
+class BookDetailsViewController: UIViewController, BookSelectionDelegate {
     
-    var book: Book!
-    lazy var booksStore = appDelegate.booksStore
+    var book: Book?
     var newState: BookReadState?
     
     @IBOutlet weak var titleLabel: UILabel!
@@ -24,13 +23,7 @@ class BookDetailsViewController: UIViewController{
     
     override func viewDidLoad() {
         //self.navigationController!.navigationBar.topItem!.title = "";
-        titleLabel.text = book.title
-        authorLabel.text = book.authorList
-        if let coverImg = book.coverImage {
-            imageView.image = UIImage(data: coverImg)
-        }
-        pageCountLabel.text = book.pageCount != nil ? "\(book.pageCount!) pages" : ""
-        descriptionLabel.text = book.bookDescription
+        updateUi()
     }
     
     @IBAction func moreIsPressed(sender: UIBarButtonItem) {
@@ -43,7 +36,7 @@ class BookDetailsViewController: UIViewController{
         }
         
         // Add the options to switch read state. We will exclude the state we are currenly in.
-        [.Reading, .ToRead, .Finished].filter(){$0 != book.readState}.forEach(addOptionToSwitchToState)
+        [.Reading, .ToRead, .Finished].filter(){$0 != book?.readState}.forEach(addOptionToSwitchToState)
         
         // Always add the delete and cancel options
         optionMenu.addAction(pageActions.delete.makeUIAlertAction{self.delete()})
@@ -54,21 +47,25 @@ class BookDetailsViewController: UIViewController{
     }
     
     func switchState(newState: BookReadState){
+        if let book = book {
         self.newState = newState
         if newState == .Finished{
             performSegueWithIdentifier("dateEntrySegue", sender: self)
         }
         else{
             book.readState = newState
-            self.booksStore.SaveAndUpdateIndex(book)
+            appDelegate.booksStore.SaveAndUpdateIndex(book)
             self.navigationController?.popViewControllerAnimated(true)
+            }
         }
     }
 
     func delete(){
-        booksStore.DeleteBook(book)
-        booksStore.SaveAndUpdateIndex(book)
-        self.navigationController?.popViewControllerAnimated(true)
+        if let book = book {
+            appDelegate.booksStore.DeleteBook(book)
+            appDelegate.booksStore.SaveAndUpdateIndex(book)
+            self.navigationController?.popViewControllerAnimated(true)
+        }
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -78,11 +75,26 @@ class BookDetailsViewController: UIViewController{
             dateViewController.completionHandler = {
                 book in
                 book.readState = self.newState!
-                self.booksStore.SaveAndUpdateIndex(book)
+                appDelegate.booksStore.SaveAndUpdateIndex(book)
                 self.navigationController?.popViewControllerAnimated(true)
             }
         }
         super.prepareForSegue(segue, sender: sender)
+    }
+    
+    func bookSelected(book: Book) {
+        self.book = book
+        updateUi()
+    }
+    
+    func updateUi(){
+        titleLabel.text = book?.title
+        authorLabel.text = book?.authorList
+        if let coverImg = book?.coverImage {
+            imageView.image = UIImage(data: coverImg)
+        }
+        pageCountLabel.text = book?.pageCount != nil ? "\(book?.pageCount!) pages" : ""
+        descriptionLabel.text = book?.bookDescription
     }
     
     /// Combines all the possible actions which this page can show

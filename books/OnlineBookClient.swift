@@ -11,7 +11,7 @@ import SwiftyJSON
 
 class OnlineBookClient<TParser: BookParser>{
     
-    static func TryCreateBook(searchUrl: String, readState: BookReadState, isbn13: String, completionHandler: (Book? -> Void)){
+    static func TryCreateBook(searchUrl: String, readState: BookReadState, isbn13: String, completionHandler: (Book? -> Void)?){
         var book: Book?
         
         func InitalSearchResultCallback(result: JSON?) {
@@ -39,7 +39,7 @@ class OnlineBookClient<TParser: BookParser>{
                     }
                 }
             }
-            else{
+            else if let completionHandler = completionHandler {
                 completionHandler(book)
             }
         }
@@ -53,7 +53,9 @@ class OnlineBookClient<TParser: BookParser>{
         
         func SaveAndIndexAndCallback(){
             appDelegate.booksStore.SaveAndUpdateIndex(book!)
-            completionHandler(book)
+            if let completionHandler = completionHandler{
+                completionHandler(book)
+            }
         }
         
         HttpClient.GetJson(searchUrl, callback: InitalSearchResultCallback)

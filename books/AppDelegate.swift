@@ -9,18 +9,8 @@
 import UIKit
 import CoreSpotlight
 
-// Some global variables (naughty)
 var appDelegate: AppDelegate {
     return UIApplication.sharedApplication().delegate as! AppDelegate
-}
-var ReadingTabIndex: Int {
-    return 0
-}
-var ToReadTabIndex: Int{
-    return 1
-}
-var FinishedTabIndex: Int{
-    return 2
 }
 
 @UIApplicationMain
@@ -30,7 +20,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        // Override point for customization after application launch.
+        
+        let splitViewController = self.window!.rootViewController as! UISplitViewController
+        let bookDetailViewController = splitViewController.viewControllers.last as! BookDetailsViewController
+        
+        let navController = splitViewController.viewControllers.first as! UINavigationController
+        let bookTableController = navController.topViewController! as! BookTableViewController
+        bookTableController.bookSelectionDelegate = bookDetailViewController
+        
         return true
     }
 
@@ -58,32 +55,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, continueUserActivity userActivity: NSUserActivity, restorationHandler: ([AnyObject]?) -> Void) -> Bool {
         if userActivity.activityType == CSSearchableItemActionType {
-            
-            if let uniqueIdentifier = userActivity.userInfo?[CSSearchableItemActivityIdentifier] as? String {
-                // Get the book which the user selected
-                if let selectedBook = booksStore.GetBook(NSURL(string: uniqueIdentifier)!){
-                
-                    // The read state controls which tab it will be on
-                    let destinationTabIndex: Int! = {
-                        switch selectedBook.readState{
-                            case .Finished:
-                                return FinishedTabIndex
-                            case .ToRead:
-                                return ToReadTabIndex
-                            case .Reading:
-                                return ReadingTabIndex
-                        }
-                    }()
-                    print("Destination tab index is \(destinationTabIndex)")
-                
-                    let tabViewController = self.window!.rootViewController as! UITabBarController
-                    tabViewController.selectedIndex = destinationTabIndex
-                    
-                    let navigationController = tabViewController.viewControllers![destinationTabIndex] as! UINavigationController
-                    let tableViewController = navigationController.viewControllers[0] as! BookTableViewController
-                    
-                    tableViewController.restoreUserActivityState(userActivity)
-                }
+            if let _ = userActivity.userInfo?[CSSearchableItemActivityIdentifier] as? String {
+                let splitViewController = self.window!.rootViewController as! UISplitViewController
+                let navigationController = splitViewController.viewControllers.first as! UINavigationController
+                let tableViewController = navigationController.viewControllers[0] as! BookTableViewController
+                tableViewController.restoreUserActivityState(userActivity)
             }
         }
         return true

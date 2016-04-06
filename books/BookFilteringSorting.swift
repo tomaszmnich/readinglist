@@ -40,14 +40,14 @@ class TitleFilter: BookFilter {
 }
 
 class ReadStateFilter: BookFilter{
-    var readState: BookReadState!
+    var readStates: [BookReadState]!
     
-    init(state: BookReadState){
-        readState = state
+    init(states: [BookReadState]){
+        readStates = states
     }
     
     func ToPredicate() -> NSPredicate{
-        return NSPredicate(format: "\(readStateFieldName) == \(readState.rawValue)")
+        return NSPredicate(format: readStates.map{"(\(readStateFieldName) == \($0.rawValue))"}.joinWithSeparator(" OR "))
     }
 }
 
