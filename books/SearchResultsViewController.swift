@@ -46,7 +46,7 @@ class SearchResultsViewController: UIViewController{
     
     /// Presents a popup alerting the use to the fact that there were no results.
     func PresentNoResultsAlert() {
-        let alert = UIAlertController(title: "No Results", message: "No matching book found online.", preferredStyle: UIAlertControllerStyle.Alert)
+        let alert = UIAlertController(title: "No Results", message: "No matching books found online.", preferredStyle: UIAlertControllerStyle.Alert)
         alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: {
             alertAction in
             self.StopSpinnerAndExit();
