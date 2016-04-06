@@ -18,7 +18,6 @@ class BookDetailsViewController: UIViewController, BookSelectionDelegate {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var authorLabel: UILabel!
     @IBOutlet weak var imageView: UIImageView!
-    @IBOutlet weak var pageCountLabel: UILabel!
     @IBOutlet weak var descriptionLabel: UILabel!
     
     override func viewDidLoad() {
@@ -93,7 +92,6 @@ class BookDetailsViewController: UIViewController, BookSelectionDelegate {
         if let coverImg = book?.coverImage {
             imageView.image = UIImage(data: coverImg)
         }
-        pageCountLabel.text = book?.pageCount != nil ? "\(book?.pageCount!) pages" : ""
         descriptionLabel.text = book?.bookDescription
     }
     
