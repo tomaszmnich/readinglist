@@ -8,7 +8,6 @@
 
 import Foundation
 
-// Field and Entity name string constants are held here.
 private let titleFieldName = "title"
 private let readStateFieldName = "readState"
 

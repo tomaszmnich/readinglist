@@ -42,14 +42,23 @@
                                     <constraint firstAttribute="width" constant="110" id="LxG-OQ-cz6"/>
                                 </constraints>
                             </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WrR-MP-G1c">
+                                <rect key="frame" x="285" y="562" width="30" height="30"/>
+                                <state key="normal" title="Edit"/>
+                                <connections>
+                                    <segue destination="Oh1-EK-JZJ" kind="presentation" identifier="editBookSegue" id="No9-48-HW0"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="PH6-rQ-k8i" firstAttribute="trailing" secondItem="33I-Ad-KXj" secondAttribute="trailing" id="5vo-b1-dwC"/>
                             <constraint firstItem="33I-Ad-KXj" firstAttribute="top" secondItem="fJh-bD-UTl" secondAttribute="top" id="EJh-iD-8NP"/>
                             <constraint firstItem="33I-Ad-KXj" firstAttribute="trailing" secondItem="YlL-Ra-Fvn" secondAttribute="trailingMargin" id="FFG-C6-CCW"/>
+                            <constraint firstItem="cyb-MQ-WdV" firstAttribute="top" secondItem="WrR-MP-G1c" secondAttribute="bottom" constant="8" id="FWc-BW-q9x"/>
                             <constraint firstItem="PH6-rQ-k8i" firstAttribute="leading" secondItem="33I-Ad-KXj" secondAttribute="leading" id="Ppq-Lb-egN"/>
                             <constraint firstItem="33I-Ad-KXj" firstAttribute="leading" secondItem="fJh-bD-UTl" secondAttribute="trailing" constant="8" id="Qmw-Dv-4Zg"/>
+                            <constraint firstItem="WrR-MP-G1c" firstAttribute="centerX" secondItem="YlL-Ra-Fvn" secondAttribute="centerX" id="TYd-Ju-gGf"/>
                             <constraint firstItem="fJh-bD-UTl" firstAttribute="leading" secondItem="YlL-Ra-Fvn" secondAttribute="leadingMargin" id="fqh-xp-EoS"/>
                             <constraint firstItem="BYg-Pc-PXb" firstAttribute="trailing" secondItem="33I-Ad-KXj" secondAttribute="trailing" id="ht8-2r-BsV"/>
                             <constraint firstItem="BYg-Pc-PXb" firstAttribute="leading" secondItem="fJh-bD-UTl" secondAttribute="leading" id="jwe-Et-Zb3"/>
@@ -75,7 +84,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4ti-Wi-uYS" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-3801" y="835"/>
+            <point key="canvasLocation" x="-2433" y="935"/>
         </scene>
         <!--Date Entry View Controller-->
         <scene sceneID="yVo-Gg-ftm">
@@ -119,7 +128,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="C0J-69-K3N" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2675" y="988"/>
+            <point key="canvasLocation" x="-3163" y="1796"/>
         </scene>
         <!--Split View Controller-->
         <scene sceneID="E7I-JX-wrl">
@@ -133,14 +142,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GPR-1o-VSt" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-4353" y="14"/>
-        </scene>
-        <!--Add-->
-        <scene sceneID="kNi-WG-Vfc">
-            <objects>
-                <viewControllerPlaceholder storyboardName="Add" id="0FV-73-d3R" sceneMemberID="viewController"/>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="bhS-Xj-5gN" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-2069.5" y="-159"/>
         </scene>
         <!--Book Table View Controller-->
         <scene sceneID="asB-Kd-tZj">
@@ -208,7 +209,8 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <segments>
                                 <segment title="Reading"/>
-                                <segment title="Finshed"/>
+                                <segment title="To Read"/>
+                                <segment title="Finished"/>
                             </segments>
                             <connections>
                                 <action selector="selectedSegmentChanged:" destination="FON-og-WdI" eventType="valueChanged" id="372-cb-bzb"/>
@@ -216,7 +218,7 @@
                         </segmentedControl>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="ZXY-qd-kDE">
                             <connections>
-                                <segue destination="0FV-73-d3R" kind="presentation" modalPresentationStyle="pageSheet" id="Z5T-4g-yeB"/>
+                                <segue destination="IA5-Oq-XRy" kind="presentation" id="pnq-JL-b7O"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -244,8 +246,154 @@
             </objects>
             <point key="canvasLocation" x="-3533" y="-43"/>
         </scene>
+        <!--Edit Book Details-->
+        <scene sceneID="Qiw-oD-gyK">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="TjN-E9-391" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tableViewController id="Oh1-EK-JZJ" customClass="EditBookDetails" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="wM5-JP-JB4">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SettingCell" id="hy7-Hj-0QD">
+                                <rect key="frame" x="0.0" y="49.5" width="600" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hy7-Hj-0QD" id="Zd6-cV-Byh">
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <sections/>
+                        <connections>
+                            <outlet property="dataSource" destination="Oh1-EK-JZJ" id="MPt-Ry-BXW"/>
+                            <outlet property="delegate" destination="Oh1-EK-JZJ" id="goV-DO-U8p"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="LHy-QN-OHX">
+                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="7Hc-av-Zce"/>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="doneButton" destination="7Hc-av-Zce" id="I77-Sd-wMh"/>
+                    </connections>
+                </tableViewController>
+            </objects>
+            <point key="canvasLocation" x="-1355" y="1057"/>
+        </scene>
+        <!--Search Results View Controller-->
+        <scene sceneID="eFJ-kC-eB4">
+            <objects>
+                <viewController modalTransitionStyle="flipHorizontal" id="eTM-OJ-MME" customClass="SearchResultsViewController" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="5Z0-0O-1bl"/>
+                        <viewControllerLayoutGuide type="bottom" id="wNp-l3-pkc"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="1Sa-X1-LI1">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Searching for Books" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sCo-yn-uou">
+                                <rect key="frame" x="20" y="252.5" width="560" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="sSV-6S-uTM">
+                                <rect key="frame" x="281" y="281" width="37" height="37"/>
+                                <color key="color" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                            </activityIndicatorView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="sSV-6S-uTM" firstAttribute="centerX" secondItem="1Sa-X1-LI1" secondAttribute="centerX" id="LDz-dr-KGV"/>
+                            <constraint firstItem="sSV-6S-uTM" firstAttribute="centerY" secondItem="1Sa-X1-LI1" secondAttribute="centerY" id="VAW-jE-h72"/>
+                            <constraint firstItem="sSV-6S-uTM" firstAttribute="top" secondItem="sCo-yn-uou" secondAttribute="bottom" constant="8" id="Vjq-V3-pTU"/>
+                            <constraint firstItem="sCo-yn-uou" firstAttribute="leading" secondItem="1Sa-X1-LI1" secondAttribute="leadingMargin" id="bAY-Po-hWZ"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="sCo-yn-uou" secondAttribute="trailing" id="zmI-x6-QvP"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="4hc-nu-uIc"/>
+                    <connections>
+                        <outlet property="spinner" destination="sSV-6S-uTM" id="wmz-J1-aqx"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="7gT-5z-qMi" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-212" y="-183"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="D1O-n3-5lh">
+            <objects>
+                <navigationController definesPresentationContext="YES" id="IA5-Oq-XRy" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="IbE-W0-H7w">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="MGK-ee-YjP" kind="relationship" relationship="rootViewController" id="hDe-3j-zdE"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="yh0-5m-Yqk" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1714" y="-191"/>
+        </scene>
+        <!--Scan Barcode-->
+        <scene sceneID="b2c-9w-e3P">
+            <objects>
+                <viewController id="MGK-ee-YjP" customClass="ScannerViewController" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="8uf-ya-Hu9"/>
+                        <viewControllerLayoutGuide type="bottom" id="za8-pr-DLM"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Li1-Bc-Q61">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pEt-SH-GKe">
+                                <rect key="frame" x="0.0" y="64" width="600" height="536"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="pEt-SH-GKe" firstAttribute="top" secondItem="8uf-ya-Hu9" secondAttribute="bottom" id="ILv-3t-B85"/>
+                            <constraint firstItem="za8-pr-DLM" firstAttribute="top" secondItem="pEt-SH-GKe" secondAttribute="bottom" id="KvY-GZ-7e3"/>
+                            <constraint firstAttribute="trailing" secondItem="pEt-SH-GKe" secondAttribute="trailing" id="eOQ-ru-KNI"/>
+                            <constraint firstItem="pEt-SH-GKe" firstAttribute="leading" secondItem="Li1-Bc-Q61" secondAttribute="leading" id="hjg-LJ-wbA"/>
+                        </constraints>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Item" id="C92-un-dfo"/>
+                    <navigationItem key="navigationItem" title="Scan Barcode" id="UpE-wp-wNv">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="CFW-rL-dNB">
+                            <connections>
+                                <action selector="cancelWasPressed:" destination="MGK-ee-YjP" id="74p-1h-9IY"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Manual" id="oSL-w5-bNs">
+                            <connections>
+                                <segue destination="Oh1-EK-JZJ" kind="show" id="4OT-hf-1He">
+                                    <nil key="action"/>
+                                </segue>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="cameraPreviewPlaceholder" destination="pEt-SH-GKe" id="iAc-8o-ged"/>
+                        <segue destination="eTM-OJ-MME" kind="show" identifier="isbnDetectedSegue" id="AvE-Bh-e7Y">
+                            <nil key="action"/>
+                        </segue>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="akl-GW-6eJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-995" y="-191"/>
+        </scene>
     </scenes>
     <resources>
         <image name="More" width="22" height="22"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="No9-48-HW0"/>
+    </inferredMetricsTieBreakers>
 </document>

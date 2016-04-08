@@ -24,6 +24,7 @@ protocol FetchedResultsTable: NSFetchedResultsControllerDelegate{
 }
 
 extension FetchedResultsTable {
+    
     func objectAtIndexPath(indexPath: NSIndexPath) -> resultType? {
         return resultsController.objectAtIndexPath(indexPath) as? resultType
     }

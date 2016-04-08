@@ -19,8 +19,8 @@ class BookTableViewController: UITableViewController, FetchedResultsTable, UISea
 
     @IBOutlet weak var segmentControl: UISegmentedControl!
     
-    /// The currently selected read states
-    var readStates = [BookReadState.ToRead, BookReadState.Reading]
+    /// The currently selected read state
+    var readState = BookReadState.Reading
     
     /// The delegate to handle book selection
     weak var bookSelectionDelegate: BookSelectionDelegate!
@@ -40,7 +40,8 @@ class BookTableViewController: UITableViewController, FetchedResultsTable, UISea
         
         // Setup the fetched results controller, attaching this TableViewController
         // as a delegate on it, and perform the initial fetch.
-        updatePredicate([ReadStateFilter(states: readStates)])
+        resultsController.delegate = self
+        updatePredicate([ReadStateFilter(states: [readState])])
         try! resultsController.performFetch()
         
         // Setup the search bar.
@@ -62,19 +63,23 @@ class BookTableViewController: UITableViewController, FetchedResultsTable, UISea
         super.viewDidLoad()
     }
     
+    override func viewDidAppear(animated: Bool) {
+        
+    }
+    
     private func updatePredicate(filters: [BookFilter]){
         resultsController.fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: filters.map{ $0.ToPredicate() })
     }
     
     func updateSearchResultsForSearchController(searchController: UISearchController) {
-        updatePredicate([ReadStateFilter(states: readStates), TitleFilter(comparison: .Contains, text: searchController.searchBar.text!)])
+        updatePredicate([ReadStateFilter(states: [readState]), TitleFilter(comparison: .Contains, text: searchController.searchBar.text!)])
         try! resultsController.performFetch()
         tableView.reloadData()
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.resultsController.sections![section].numberOfObjects
-    }
+    }    
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         return cellForRowAtIndexPath(indexPath)
@@ -114,13 +119,15 @@ class BookTableViewController: UITableViewController, FetchedResultsTable, UISea
     }
     
     @IBAction func selectedSegmentChanged(sender: AnyObject) {
-        if segmentControl.selectedSegmentIndex == 0 {
-            readStates = [.ToRead, .Reading]
+        switch segmentControl.selectedSegmentIndex{
+        case 2:
+            readState = .Finished
+        case 1:
+            readState = .ToRead
+        default:
+            readState = .Reading
         }
-        else{
-            readStates = [.Finished]
-        }
-        updatePredicate([ReadStateFilter(states: readStates)])
+        updatePredicate([ReadStateFilter(states: [readState])])
         try! resultsController.performFetch()
         tableView.reloadData()
     }

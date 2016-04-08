@@ -21,7 +21,7 @@ class BookDetailsViewController: UIViewController, BookSelectionDelegate {
     @IBOutlet weak var descriptionLabel: UILabel!
     
     override func viewDidLoad() {
-        //self.navigationController!.navigationBar.topItem!.title = "";
+        self.navigationController?.navigationBar.topItem?.title = book?.title;
         updateUi()
     }
     
@@ -77,6 +77,10 @@ class BookDetailsViewController: UIViewController, BookSelectionDelegate {
                 appDelegate.booksStore.SaveAndUpdateIndex(book)
                 self.navigationController?.popViewControllerAnimated(true)
             }
+        }
+        else if segue.identifier == "editBookSegue"{
+            let editBookController = segue.destinationViewController as! EditBookDetails
+            editBookController.book = self.book
         }
         super.prepareForSegue(segue, sender: sender)
     }

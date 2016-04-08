@@ -15,8 +15,7 @@ class SearchResultsViewController: UIViewController{
     
     /// This must be populated by any controller segueing to this one
     var isbn13: String!
-    var bookReadState: BookReadState!
-    var book: Book!
+    var bookReadState: BookReadState = .ToRead
     
     // We will likely need data access
     lazy var booksStore = appDelegate.booksStore
