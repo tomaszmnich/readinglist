@@ -123,7 +123,7 @@ class BookTableViewController: UITableViewController {
 /**
  The handling of updates from the fetched results controller.
 */
-extension BookTableViewController: NSFetchedResultsControllerDelegate{
+extension BookTableViewController: NSFetchedResultsControllerDelegate {
     
     func controllerWillChangeContent(controller: NSFetchedResultsController) {
         tableView.beginUpdates()
@@ -152,7 +152,10 @@ extension BookTableViewController: NSFetchedResultsControllerDelegate{
     }
 }
 
-extension BookTableViewController: UISearchResultsUpdating{
+/**
+ Controls for the Search capabilities of the table.
+ */
+extension BookTableViewController: UISearchResultsUpdating {
     func updateSearchResultsForSearchController(searchController: UISearchController) {
         updatePredicate([ReadStateFilter(states: [readState]), TitleFilter(comparison: .Contains, text: searchController.searchBar.text!)])
         try! resultsController.performFetch()

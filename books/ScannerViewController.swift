@@ -14,8 +14,9 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
     @IBOutlet weak var cameraPreviewPlaceholder: UIView!
     
     let session = AVCaptureSession()
-    lazy var booksStore = appDelegate.booksStore
     var bookReadState: BookReadState!
+    var previewLayer: AVCaptureVideoPreviewLayer!
+    var detectedIsbn13: String!
     
     @IBAction func cancelWasPressed(sender: UIBarButtonItem) {
         session.stopRunning()
@@ -23,14 +24,22 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
     }
     
     override func viewDidLoad() {
-        super.viewDidLoad()
-        
+        // The phrase "Scan Barcode" is a bit long for the back button: use "Scan" instead.
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "Scan", style: .Plain, target: nil, action: nil)
         
+        // Setup the camera preview on another thread
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-            // Setup the camera
             self.setupAvSession()
         }
+        
+        super.viewDidLoad()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        // Reset the frame of the camera preview if the layout changes
+        previewLayer.frame = self.cameraPreviewPlaceholder.frame
+        previewLayer.videoGravity = AVLayerVideoGravityResize
+        super.viewDidLayoutSubviews()
     }
     
     private func setupAvSession(){
@@ -62,7 +71,6 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
         }
         
         // Start the scanner. We'll end it once we catch anything.
-        print("AVCaptureSession starting")
         self.session.startRunning()
     }
     
@@ -77,21 +85,18 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
         
         if let avMetadata = ean13MetadataObjects.first as? AVMetadataMachineReadableCodeObject{
             // Store the detected value of the barcode
-            let detectedIsbn13 = avMetadata.stringValue
-            print("Barcode decoded: " + detectedIsbn13!)
+            detectedIsbn13 = avMetadata.stringValue
             
-            // Since we have a result, stop the session
+            // Since we have a result, stop the session and pop to the next page
             self.session.stopRunning()
-            
-            // Pop to the next page
-            performSegueWithIdentifier("isbnDetectedSegue", sender: detectedIsbn13)
+            performSegueWithIdentifier("isbnDetectedSegue", sender: self)
         }
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "isbnDetectedSegue" {
             let searchResultsController = segue.destinationViewController as! SearchResultsViewController
-            searchResultsController.isbn13 = sender as! String
+            searchResultsController.isbn13 = detectedIsbn13
             searchResultsController.bookReadState = bookReadState
         }
     }

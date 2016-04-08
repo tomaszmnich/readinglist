@@ -15,10 +15,7 @@ class SearchResultsViewController: UIViewController{
     
     /// This must be populated by any controller segueing to this one
     var isbn13: String!
-    var bookReadState: BookReadState = .ToRead
-    
-    // We will likely need data access
-    lazy var booksStore = appDelegate.booksStore
+    var bookReadState: BookReadState!
     
     override func viewDidLoad() {
         spinner.startAnimating()
@@ -29,7 +26,7 @@ class SearchResultsViewController: UIViewController{
     
     /// If the book argument is nil, presents a "no results" popup. Otherwise, exits.
     func searchCompletionHandler(book: Book?){
-        if book != nil{
+        if book != nil {
             StopSpinnerAndExit()
         }
         else{
@@ -38,7 +35,7 @@ class SearchResultsViewController: UIViewController{
     }
     
     /// Stops the spinner and dismisses this view controller.
-    func StopSpinnerAndExit(){
+    func StopSpinnerAndExit() {
         spinner.stopAnimating()
         self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
     }
