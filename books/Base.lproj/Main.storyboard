@@ -42,23 +42,14 @@
                                     <constraint firstAttribute="width" constant="110" id="LxG-OQ-cz6"/>
                                 </constraints>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WrR-MP-G1c">
-                                <rect key="frame" x="285" y="562" width="30" height="30"/>
-                                <state key="normal" title="Edit"/>
-                                <connections>
-                                    <segue destination="Oh1-EK-JZJ" kind="presentation" identifier="editBookSegue" id="No9-48-HW0"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="PH6-rQ-k8i" firstAttribute="trailing" secondItem="33I-Ad-KXj" secondAttribute="trailing" id="5vo-b1-dwC"/>
                             <constraint firstItem="33I-Ad-KXj" firstAttribute="top" secondItem="fJh-bD-UTl" secondAttribute="top" id="EJh-iD-8NP"/>
                             <constraint firstItem="33I-Ad-KXj" firstAttribute="trailing" secondItem="YlL-Ra-Fvn" secondAttribute="trailingMargin" id="FFG-C6-CCW"/>
-                            <constraint firstItem="cyb-MQ-WdV" firstAttribute="top" secondItem="WrR-MP-G1c" secondAttribute="bottom" constant="8" id="FWc-BW-q9x"/>
                             <constraint firstItem="PH6-rQ-k8i" firstAttribute="leading" secondItem="33I-Ad-KXj" secondAttribute="leading" id="Ppq-Lb-egN"/>
                             <constraint firstItem="33I-Ad-KXj" firstAttribute="leading" secondItem="fJh-bD-UTl" secondAttribute="trailing" constant="8" id="Qmw-Dv-4Zg"/>
-                            <constraint firstItem="WrR-MP-G1c" firstAttribute="centerX" secondItem="YlL-Ra-Fvn" secondAttribute="centerX" id="TYd-Ju-gGf"/>
                             <constraint firstItem="fJh-bD-UTl" firstAttribute="leading" secondItem="YlL-Ra-Fvn" secondAttribute="leadingMargin" id="fqh-xp-EoS"/>
                             <constraint firstItem="BYg-Pc-PXb" firstAttribute="trailing" secondItem="33I-Ad-KXj" secondAttribute="trailing" id="ht8-2r-BsV"/>
                             <constraint firstItem="BYg-Pc-PXb" firstAttribute="leading" secondItem="fJh-bD-UTl" secondAttribute="leading" id="jwe-Et-Zb3"/>
@@ -79,56 +70,11 @@
                         <outlet property="descriptionLabel" destination="BYg-Pc-PXb" id="B3P-yx-UFJ"/>
                         <outlet property="imageView" destination="fJh-bD-UTl" id="T8v-Na-frD"/>
                         <outlet property="titleLabel" destination="33I-Ad-KXj" id="2Vt-jU-NIb"/>
-                        <segue destination="wie-of-6nq" kind="presentation" identifier="dateEntrySegue" id="azJ-Sb-soe"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4ti-Wi-uYS" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-2433" y="935"/>
-        </scene>
-        <!--Date Entry View Controller-->
-        <scene sceneID="yVo-Gg-ftm">
-            <objects>
-                <viewController id="wie-of-6nq" customClass="DateEntryViewController" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="TW9-A1-NYb"/>
-                        <viewControllerLayoutGuide type="bottom" id="S0c-In-SNa"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="IsP-Dm-hJ3">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <datePicker contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="date" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="Pup-49-67I">
-                                <rect key="frame" x="0.0" y="86" width="320" height="216"/>
-                                <date key="date" timeIntervalSinceReferenceDate="480877651.28101403">
-                                    <!--2016-03-28 17:07:31 +0000-->
-                                </date>
-                            </datePicker>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Date Finished" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lgy-U6-2Bv">
-                                <rect key="frame" x="20" y="57" width="280" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FXV-p7-ZIo">
-                                <rect key="frame" x="20" y="319" width="280" height="22"/>
-                                <state key="normal" title="Done"/>
-                                <connections>
-                                    <action selector="doneWasPressed:" destination="wie-of-6nq" eventType="touchUpInside" id="xgu-W3-ivq"/>
-                                </connections>
-                            </button>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <toolbarItems/>
-                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
-                    <connections>
-                        <outlet property="datePicker" destination="Pup-49-67I" id="5MI-5F-zPK"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="C0J-69-K3N" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-3163" y="1796"/>
         </scene>
         <!--Split View Controller-->
         <scene sceneID="E7I-JX-wrl">
@@ -146,7 +92,7 @@
         <!--Book Table View Controller-->
         <scene sceneID="asB-Kd-tZj">
             <objects>
-                <tableViewController id="FON-og-WdI" customClass="BookTableViewController" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController definesPresentationContext="YES" id="FON-og-WdI" customClass="BookTableViewController" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="92" sectionHeaderHeight="28" sectionFooterHeight="28" id="AIa-Vb-4Tr">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -249,7 +195,6 @@
         <!--Edit Book Details-->
         <scene sceneID="Qiw-oD-gyK">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="TjN-E9-391" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tableViewController id="Oh1-EK-JZJ" customClass="EditBookDetails" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="wM5-JP-JB4">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
@@ -257,7 +202,7 @@
                         <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SettingCell" id="hy7-Hj-0QD">
-                                <rect key="frame" x="0.0" y="49.5" width="600" height="44"/>
+                                <rect key="frame" x="0.0" y="113.5" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hy7-Hj-0QD" id="Zd6-cV-Byh">
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
@@ -278,6 +223,7 @@
                         <outlet property="doneButton" destination="7Hc-av-Zce" id="I77-Sd-wMh"/>
                     </connections>
                 </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="TjN-E9-391" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1355" y="1057"/>
         </scene>
@@ -393,7 +339,4 @@
     <resources>
         <image name="More" width="22" height="22"/>
     </resources>
-    <inferredMetricsTieBreakers>
-        <segue reference="No9-48-HW0"/>
-    </inferredMetricsTieBreakers>
 </document>

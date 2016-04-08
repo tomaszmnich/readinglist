@@ -13,7 +13,6 @@ import CoreData
 class BookDetailsViewController: UIViewController, BookSelectionDelegate {
     
     var book: Book?
-    var newState: BookReadState?
     
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var authorLabel: UILabel!
@@ -21,7 +20,6 @@ class BookDetailsViewController: UIViewController, BookSelectionDelegate {
     @IBOutlet weak var descriptionLabel: UILabel!
     
     override func viewDidLoad() {
-        self.navigationController?.navigationBar.topItem?.title = book?.title;
         updateUi()
     }
     
@@ -47,15 +45,9 @@ class BookDetailsViewController: UIViewController, BookSelectionDelegate {
     
     func switchState(newState: BookReadState){
         if let book = book {
-        self.newState = newState
-        if newState == .Finished{
-            performSegueWithIdentifier("dateEntrySegue", sender: self)
-        }
-        else{
             book.readState = newState
             appDelegate.booksStore.SaveAndUpdateIndex(book)
             self.navigationController?.popViewControllerAnimated(true)
-            }
         }
     }
 
@@ -65,24 +57,6 @@ class BookDetailsViewController: UIViewController, BookSelectionDelegate {
             appDelegate.booksStore.SaveAndUpdateIndex(book)
             self.navigationController?.popViewControllerAnimated(true)
         }
-    }
-    
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "dateEntrySegue"{
-            let dateViewController = segue.destinationViewController as! DateEntryViewController
-            dateViewController.book = self.book
-            dateViewController.completionHandler = {
-                book in
-                book.readState = self.newState!
-                appDelegate.booksStore.SaveAndUpdateIndex(book)
-                self.navigationController?.popViewControllerAnimated(true)
-            }
-        }
-        else if segue.identifier == "editBookSegue"{
-            let editBookController = segue.destinationViewController as! EditBookDetails
-            editBookController.book = self.book
-        }
-        super.prepareForSegue(segue, sender: sender)
     }
     
     func bookSelected(book: Book) {

@@ -15,9 +15,12 @@ protocol BookSelectionDelegate: class {
     func bookSelected(book: Book)
 }
 
-class BookTableViewController: UITableViewController, FetchedResultsTable, UISearchResultsUpdating {
+class BookTableViewController: UITableViewController {
 
     @IBOutlet weak var segmentControl: UISegmentedControl!
+    
+    /// The controller to get the results to display in this view
+    var resultsController = appDelegate.booksStore.FetchedBooksController()
     
     /// The currently selected read state
     var readState = BookReadState.Reading
@@ -28,21 +31,16 @@ class BookTableViewController: UITableViewController, FetchedResultsTable, UISea
     /// The UISearchController to which this UITableViewController is connected.
     var searchController = UISearchController(searchResultsController: nil)
     
-    /// The books which this page displays
-    var resultsController = appDelegate.booksStore.FetchedBooksController()
-    
-    typealias cellType = BookTableViewCell
-    typealias resultType = Book
-    
     override func viewDidLoad() {
+        // Set the results controller
+        updatePredicate([ReadStateFilter(states: [readState])])
+        
+        // Attach this controller as a delegate on for the results controller, and perform the initial fetch.
+        resultsController.delegate = self
+        try! resultsController.performFetch()
+        
         // Hacky way of getting some test data.
         self.loadDefaultDataIfFirstLaunch()
-        
-        // Setup the fetched results controller, attaching this TableViewController
-        // as a delegate on it, and perform the initial fetch.
-        resultsController.delegate = self
-        updatePredicate([ReadStateFilter(states: [readState])])
-        try! resultsController.performFetch()
         
         // Setup the search bar.
         self.searchController.searchResultsUpdater = self
@@ -63,30 +61,23 @@ class BookTableViewController: UITableViewController, FetchedResultsTable, UISea
         super.viewDidLoad()
     }
     
-    override func viewDidAppear(animated: Bool) {
-        
-    }
-    
     private func updatePredicate(filters: [BookFilter]){
         resultsController.fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: filters.map{ $0.ToPredicate() })
     }
     
-    func updateSearchResultsForSearchController(searchController: UISearchController) {
-        updatePredicate([ReadStateFilter(states: [readState]), TitleFilter(comparison: .Contains, text: searchController.searchBar.text!)])
-        try! resultsController.performFetch()
-        tableView.reloadData()
-    }
-    
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.resultsController.sections![section].numberOfObjects
-    }    
+    }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        return cellForRowAtIndexPath(indexPath)
+        // Get a spare cell, configure the cell for the specified index path and return it
+        let cell = tableView.dequeueReusableCellWithIdentifier(String(BookTableViewCell), forIndexPath: indexPath) as! BookTableViewCell
+        configureCell(cell, fromResult: resultsController.objectAtIndexPath(indexPath) as? Book)
+        return cell
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if let selectedBook = objectAtIndexPath(indexPath){
+        if let selectedBook = resultsController.objectAtIndexPath(indexPath) as? Book {
             showSelectedBook(selectedBook)
         }
     }
@@ -99,15 +90,10 @@ class BookTableViewController: UITableViewController, FetchedResultsTable, UISea
         }
     }
     
-    func configureCell(cell: cellType, fromResult result: resultType){
-        cell.titleLabel!.text = result.title
-        cell.authorsLabel!.text = result.authorList
-        if result.coverImage != nil {
-            cell.bookCover!.image = UIImage(data: result.coverImage!)
-        }
-        else{
-            cell.bookCover!.image = nil
-        }
+    private func configureCell(cell: BookTableViewCell, fromResult result: Book?){
+        cell.titleLabel!.text = result?.title
+        cell.authorsLabel!.text = result?.authorList
+        cell.bookCover!.image = result?.coverImage != nil ? UIImage(data: result!.coverImage!) : nil
     }
     
     /// Shows the selected book in the details controller
@@ -132,6 +118,48 @@ class BookTableViewController: UITableViewController, FetchedResultsTable, UISea
         tableView.reloadData()
     }
 }
+
+
+/**
+ The handling of updates from the fetched results controller.
+*/
+extension BookTableViewController: NSFetchedResultsControllerDelegate{
+    
+    func controllerWillChangeContent(controller: NSFetchedResultsController) {
+        tableView.beginUpdates()
+    }
+    
+    func controllerDidChangeContent(controller: NSFetchedResultsController) {
+        try! controller.performFetch()
+        tableView.reloadData()
+        tableView.endUpdates()
+    }
+    
+    func controller(controller: NSFetchedResultsController, didChangeObject object: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
+        switch type {
+        case .Update:
+            if let cell = tableView.cellForRowAtIndexPath(indexPath!) as? BookTableViewCell {
+                configureCell(cell, fromResult: resultsController.objectAtIndexPath(indexPath!) as? Book)
+            }
+        case .Insert:
+            tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .None)
+        case .Move:
+            tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
+            tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Fade)
+        case .Delete:
+            tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .None)
+        }
+    }
+}
+
+extension BookTableViewController: UISearchResultsUpdating{
+    func updateSearchResultsForSearchController(searchController: UISearchController) {
+        updatePredicate([ReadStateFilter(states: [readState]), TitleFilter(comparison: .Contains, text: searchController.searchBar.text!)])
+        try! resultsController.performFetch()
+        tableView.reloadData()
+    }
+}
+
 
 /**
  Functions controlling the DZNEmptyDataSet.
@@ -188,13 +216,9 @@ extension BookTableViewController{
             for bookToAdd in booksToAdd {
                 OnlineBookClient<GoogleBooksParser>.TryCreateBook(GoogleBooksRequest.Search(bookToAdd.isbn).url, readState: bookToAdd.readState, isbn13: bookToAdd.isbn, completionHandler:{
                         book in
-                        self.reloadTable()
+                        self.tableView.reloadData()
                     })
             }
         }
-    }
-    
-    func reloadTable() {
-        controllerDidChangeContent(self.resultsController)
     }
 }
