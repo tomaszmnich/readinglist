@@ -117,6 +117,14 @@ class BookTableViewController: UITableViewController {
         try! resultsController.performFetch()
         tableView.reloadData()
     }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "addBook" {
+            let navigationController = segue.destinationViewController as! UINavigationController
+            let scannerViewController = navigationController.viewControllers.first as! ScannerViewController
+            scannerViewController.bookReadState = readState
+        }
+    }
 }
 
 

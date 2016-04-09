@@ -15,8 +15,8 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
     
     let session = AVCaptureSession()
     var bookReadState: BookReadState!
-    var previewLayer: AVCaptureVideoPreviewLayer!
-    var detectedIsbn13: String!
+    var previewLayer: AVCaptureVideoPreviewLayer?
+    var detectedIsbn13: String?
     
     @IBAction func cancelWasPressed(sender: UIBarButtonItem) {
         session.stopRunning()
@@ -33,13 +33,6 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
         }
         
         super.viewDidLoad()
-    }
-    
-    override func viewDidLayoutSubviews() {
-        // Reset the frame of the camera preview if the layout changes
-        previewLayer.frame = self.cameraPreviewPlaceholder.frame
-        previewLayer.videoGravity = AVLayerVideoGravityResize
-        super.viewDidLayoutSubviews()
     }
     
     private func setupAvSession(){
@@ -63,11 +56,11 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
         output.metadataObjectTypes = output.availableMetadataObjectTypes
         
         // We want to view what the camera is seeing
-        let previewLayer = AVCaptureVideoPreviewLayer(session: self.session)
-        previewLayer.frame = self.cameraPreviewPlaceholder.frame
-        previewLayer.videoGravity = AVLayerVideoGravityResize
+        previewLayer = AVCaptureVideoPreviewLayer(session: self.session)
+        previewLayer!.frame = self.cameraPreviewPlaceholder.frame
+        previewLayer!.videoGravity = AVLayerVideoGravityResize
         dispatch_async(dispatch_get_main_queue()) {
-            self.view.layer.addSublayer(previewLayer)
+            self.view.layer.addSublayer(self.previewLayer!)
         }
         
         // Start the scanner. We'll end it once we catch anything.
@@ -93,10 +86,37 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
         }
     }
     
+    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+        
+        super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
+        
+        if let connection = self.previewLayer?.connection {
+            if connection.supportsVideoOrientation {
+                switch UIDevice.currentDevice().orientation {
+                case .Portrait:
+                    connection.videoOrientation = AVCaptureVideoOrientation.Portrait
+                    break
+                case .LandscapeRight:
+                    connection.videoOrientation = AVCaptureVideoOrientation.LandscapeLeft
+                    break
+                case .LandscapeLeft:
+                    connection.videoOrientation = AVCaptureVideoOrientation.LandscapeRight
+                    break
+                case .PortraitUpsideDown:
+                    connection.videoOrientation = AVCaptureVideoOrientation.PortraitUpsideDown
+                    break
+                default:
+                    connection.videoOrientation = AVCaptureVideoOrientation.Portrait
+                    break
+                }
+            }                
+        }
+    }
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "isbnDetectedSegue" {
             let searchResultsController = segue.destinationViewController as! SearchResultsViewController
-            searchResultsController.isbn13 = detectedIsbn13
+            searchResultsController.isbn13 = detectedIsbn13!
             searchResultsController.bookReadState = bookReadState
         }
     }
