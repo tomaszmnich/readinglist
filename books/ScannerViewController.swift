@@ -72,8 +72,8 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
         
         // The scanner is capable of capturing multiple 2-dimensional barcodes in one scan.
         // Filter out everything which is not a EAN13 code.
-        let ean13MetadataObjects = metadataObjects.filter{metadata in
-            return metadata.type == AVMetadataObjectTypeEAN13Code
+        let ean13MetadataObjects = metadataObjects.filter {
+            return $0.type == AVMetadataObjectTypeEAN13Code
         }
         
         if let avMetadata = ean13MetadataObjects.first as? AVMetadataMachineReadableCodeObject{
@@ -97,10 +97,10 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
                     connection.videoOrientation = AVCaptureVideoOrientation.Portrait
                     break
                 case .LandscapeRight:
-                    connection.videoOrientation = AVCaptureVideoOrientation.LandscapeLeft
+                    connection.videoOrientation = AVCaptureVideoOrientation.LandscapeRight
                     break
                 case .LandscapeLeft:
-                    connection.videoOrientation = AVCaptureVideoOrientation.LandscapeRight
+                    connection.videoOrientation = AVCaptureVideoOrientation.LandscapeLeft
                     break
                 case .PortraitUpsideDown:
                     connection.videoOrientation = AVCaptureVideoOrientation.PortraitUpsideDown
