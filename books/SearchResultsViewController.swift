@@ -37,7 +37,7 @@ class SearchResultsViewController: UIViewController{
     /// Stops the spinner and dismisses this view controller.
     func StopSpinnerAndExit() {
         spinner.stopAnimating()
-        self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
+        self.navigationController!.dismissViewControllerAnimated(true, completion: nil)
     }
     
     /// Presents a popup alerting the use to the fact that there were no results.

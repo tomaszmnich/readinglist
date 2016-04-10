@@ -23,7 +23,18 @@ class BookTableViewController: UITableViewController {
     var resultsController = appDelegate.booksStore.FetchedBooksController()
     
     /// The currently selected read state
-    var readState = BookReadState.Reading
+    var readState: BookReadState {
+        get {
+            switch segmentControl.selectedSegmentIndex {
+                case 2:
+                    return .Finished
+                case 1:
+                    return .ToRead
+                default:
+                    return .Reading
+            }
+        }
+    }
     
     /// The delegate to handle book selection
     weak var bookSelectionDelegate: BookSelectionDelegate!
@@ -105,14 +116,6 @@ class BookTableViewController: UITableViewController {
     }
     
     @IBAction func selectedSegmentChanged(sender: AnyObject) {
-        switch segmentControl.selectedSegmentIndex{
-        case 2:
-            readState = .Finished
-        case 1:
-            readState = .ToRead
-        default:
-            readState = .Reading
-        }
         updatePredicate([ReadStateFilter(states: [readState])])
         try! resultsController.performFetch()
         tableView.reloadData()
