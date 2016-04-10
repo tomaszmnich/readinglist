@@ -11,20 +11,50 @@ import CoreData
 
 @objc(Book)
 class Book: NSManagedObject {
-    @NSManaged var isbn13: String
     @NSManaged var title: String
     @NSManaged var authorList: String?
+    @NSManaged var isbn13: String?
     @NSManaged var pageCount: NSNumber?
-    @NSManaged var publisher: String?
     @NSManaged var publishedDate: String?
-    // 'description' would be a better name but the data model does not support using that term for an attribute
-    @NSManaged var bookDescription: String?
-    @NSManaged var startedReading: NSDate?
-    @NSManaged var finishedReading: NSDate?
-    var coverUrl: String?
+    @NSManaged var bookDescription: String? // 'description' would be a better name but the data model does not support using that term for an attribute
     @NSManaged var coverImage: NSData?
     @NSManaged var readState: BookReadState
+    
+    @NSManaged var startedReading: NSDate?
+    @NSManaged var finishedReading: NSDate?
+    
+    var coverUrl: String?
+    
+    func UpdateFromMetadata(metadata: BookMetadata){
+        title = metadata.title
+        authorList = metadata.authorList
+        isbn13 = metadata.isbn13
+        pageCount = metadata.pageCount
+        publishedDate = metadata.publishedDate
+        bookDescription = metadata.bookDescription
+        startedReading = metadata.startedReading
+        finishedReading = metadata.finishedReading
+        coverImage = metadata.coverImage
+    }
 }
+
+/// A mutable, non-persistent representation of a Book object.
+/// Useful for maintaining in-creation books, or books being edited.
+class BookMetadata {
+    var title: String!
+    var readState: BookReadState!
+    
+    var isbn13: String?
+    var authorList: String?
+    var pageCount: NSNumber?
+    var publishedDate: String?
+    var bookDescription: String?
+    var startedReading: NSDate?
+    var finishedReading: NSDate?
+    var coverUrl: String?
+    var coverImage: NSData?
+}
+
 
 /// The availale reading progress states
 @objc enum BookReadState : Int32 {

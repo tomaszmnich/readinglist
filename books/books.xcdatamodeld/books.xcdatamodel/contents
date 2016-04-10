@@ -5,20 +5,14 @@
         <attribute name="bookDescription" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="coverImage" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES" syncable="YES"/>
         <attribute name="finishedReading" optional="YES" attributeType="Date" syncable="YES"/>
-        <attribute name="isbn13" attributeType="String" minValueString="13" maxValueString="13" regularExpressionString="[0-9]+" syncable="YES"/>
+        <attribute name="isbn13" optional="YES" attributeType="String" minValueString="13" maxValueString="13" regularExpressionString="[0-9]+" syncable="YES"/>
         <attribute name="pageCount" optional="YES" attributeType="Integer 32" syncable="YES"/>
         <attribute name="publishedDate" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="publisher" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="readState" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="startedReading" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="title" attributeType="String" indexed="YES" syncable="YES"/>
-        <uniquenessConstraints>
-            <uniquenessConstraint>
-                <constraint value="isbn13"/>
-            </uniquenessConstraint>
-        </uniquenessConstraints>
     </entity>
     <elements>
-        <element name="Book" positionX="-63" positionY="-18" width="128" height="210"/>
+        <element name="Book" positionX="-63" positionY="-18" width="128" height="195"/>
     </elements>
 </model>

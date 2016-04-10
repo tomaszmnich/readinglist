@@ -49,7 +49,6 @@ class GoogleBooksParser: BookParser {
             return false
         }
         bookToPopulate.publishedDate = volumeInfo["publishedDate"].string
-        bookToPopulate.publisher = volumeInfo["publisher"].string
         bookToPopulate.pageCount = volumeInfo["pageCount"].int
         bookToPopulate.bookDescription = volumeInfo["description"].string
         bookToPopulate.authorList = volumeInfo["authors"].map{$1.rawString()!}.joinWithSeparator(", ")
