@@ -29,16 +29,15 @@
 		498B4D4D1CB1AB7A00C5F38B /* SplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 498B4D4C1CB1AB7A00C5F38B /* SplitViewController.swift */; };
 		49C451801C35578A00F431DB /* BookTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C4517F1C35578A00F431DB /* BookTableViewCell.swift */; };
 		49CFCF961CAB380000A2A76B /* CoreSpotlightStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49D93AA41CAB16F800AE6611 /* CoreSpotlightStack.swift */; };
+		49D68E481CBA67F900734583 /* EditBookViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49D68E471CBA67F900734583 /* EditBookViewController.swift */; };
 		49D93AA51CAB16F800AE6611 /* CoreSpotlightStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49D93AA41CAB16F800AE6611 /* CoreSpotlightStack.swift */; };
 		49E0C8941CA4945700703A9A /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49E0C8931CA4945700703A9A /* NotificationCenter.framework */; };
 		49E0C8971CA4945800703A9A /* TodayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E0C8961CA4945800703A9A /* TodayViewController.swift */; };
 		49E0C89A1CA4945800703A9A /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 49E0C8981CA4945800703A9A /* MainInterface.storyboard */; };
-		49E0C89E1CA4945800703A9A /* bookWidget.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 49E0C8921CA4945700703A9A /* bookWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		49E0C8A51CA4969600703A9A /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = 495C5D401BF1423900E00C07 /* Book.swift */; };
 		49E0C8A61CA496E500703A9A /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 495879641BF7E76200000131 /* CoreDataStack.swift */; };
 		49E0C8A71CA496E800703A9A /* BooksStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 492500771C0B1B0000C149B5 /* BooksStore.swift */; };
 		49E0C8A81CA49D9A00703A9A /* BookTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C4517F1C35578A00F431DB /* BookTableViewCell.swift */; };
-		49EFCEE31CB5A9D300EF82FF /* EditBookDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49EFCEE21CB5A9D300EF82FF /* EditBookDetails.swift */; };
 		73348FAAE949853D27BCA230 /* Pods_books.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D80356B682624FA0CCE1BB7 /* Pods_books.framework */; };
 /* End PBXBuildFile section */
 
@@ -57,28 +56,7 @@
 			remoteGlobalIDString = 495C5D0B1BF1404D00E00C07;
 			remoteInfo = books;
 		};
-		49E0C89C1CA4945800703A9A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 495C5D041BF1404D00E00C07 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 49E0C8911CA4945700703A9A;
-			remoteInfo = bookWidget;
-		};
 /* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		49E0C8A21CA4945800703A9A /* Embed App Extensions */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 13;
-			files = (
-				49E0C89E1CA4945800703A9A /* bookWidget.appex in Embed App Extensions */,
-			);
-			name = "Embed App Extensions";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		4905D85D1C135AB500F57B3C /* books.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = books.xcdatamodel; sourceTree = "<group>"; };
@@ -107,13 +85,13 @@
 		49812BB31CA95F0600A49EBA /* BookFilteringSorting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookFilteringSorting.swift; sourceTree = "<group>"; };
 		498B4D4C1CB1AB7A00C5F38B /* SplitViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplitViewController.swift; sourceTree = "<group>"; };
 		49C4517F1C35578A00F431DB /* BookTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookTableViewCell.swift; sourceTree = "<group>"; };
+		49D68E471CBA67F900734583 /* EditBookViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditBookViewController.swift; sourceTree = "<group>"; };
 		49D93AA41CAB16F800AE6611 /* CoreSpotlightStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreSpotlightStack.swift; sourceTree = "<group>"; };
 		49E0C8921CA4945700703A9A /* bookWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = bookWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		49E0C8931CA4945700703A9A /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
 		49E0C8961CA4945800703A9A /* TodayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayViewController.swift; sourceTree = "<group>"; };
 		49E0C8991CA4945800703A9A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		49E0C89B1CA4945800703A9A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		49EFCEE21CB5A9D300EF82FF /* EditBookDetails.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditBookDetails.swift; sourceTree = "<group>"; };
 		6599853058BE3AF83256F7E7 /* Pods-books.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-books.debug.xcconfig"; path = "Pods/Target Support Files/Pods-books/Pods-books.debug.xcconfig"; sourceTree = "<group>"; };
 		6D80356B682624FA0CCE1BB7 /* Pods_books.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_books.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2FE9CFA0B8DE919020D9665 /* Pods-books.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-books.release.xcconfig"; path = "Pods/Target Support Files/Pods-books/Pods-books.release.xcconfig"; sourceTree = "<group>"; };
@@ -171,15 +149,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		4925007A1C0B1CFC00C149B5 /* CoreData */ = {
+		4925007A1C0B1CFC00C149B5 /* Data */ = {
 			isa = PBXGroup;
 			children = (
 				495879641BF7E76200000131 /* CoreDataStack.swift */,
+				49D93AA41CAB16F800AE6611 /* CoreSpotlightStack.swift */,
 				492500771C0B1B0000C149B5 /* BooksStore.swift */,
 				49812BB31CA95F0600A49EBA /* BookFilteringSorting.swift */,
-				49D93AA41CAB16F800AE6611 /* CoreSpotlightStack.swift */,
 			);
-			name = CoreData;
+			name = Data;
 			sourceTree = "<group>";
 		};
 		495879601BF7E6BC00000131 /* Models */ = {
@@ -223,7 +201,7 @@
 				4968A2B11CB3E0BF00CBF3F0 /* LaunchScreen.storyboard */,
 				495C5D161BF1404D00E00C07 /* Assets.xcassets */,
 				495C5D1B1BF1404D00E00C07 /* Info.plist */,
-				4925007A1C0B1CFC00C149B5 /* CoreData */,
+				4925007A1C0B1CFC00C149B5 /* Data */,
 				495879601BF7E6BC00000131 /* Models */,
 				495EE92B1C175C9A00EBBC6E /* ApiClients */,
 				495C5D441BF14C4B00E00C07 /* ViewControllers */,
@@ -258,7 +236,7 @@
 				495C5D421BF14BEB00E00C07 /* BookDetailsViewController.swift */,
 				494C61D11C0BAF8C00F64105 /* SearchResultsViewController.swift */,
 				498B4D4C1CB1AB7A00C5F38B /* SplitViewController.swift */,
-				49EFCEE21CB5A9D300EF82FF /* EditBookDetails.swift */,
+				49D68E471CBA67F900734583 /* EditBookViewController.swift */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -304,12 +282,10 @@
 				495C5D0A1BF1404D00E00C07 /* Resources */,
 				AA8CCC9DE8B9D46125F6AFBC /* Embed Pods Frameworks */,
 				C92D7D3C647A526A5EFD5CBA /* Copy Pods Resources */,
-				49E0C8A21CA4945800703A9A /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				49E0C89D1CA4945800703A9A /* PBXTargetDependency */,
 			);
 			name = books;
 			productName = books;
@@ -511,6 +487,7 @@
 				492141291C05B2030048E647 /* GoogleBooksParser.swift in Sources */,
 				494C61D21C0BAF8C00F64105 /* SearchResultsViewController.swift in Sources */,
 				49812BB41CA95F0600A49EBA /* BookFilteringSorting.swift in Sources */,
+				49D68E481CBA67F900734583 /* EditBookViewController.swift in Sources */,
 				495C5D3F1BF1412600E00C07 /* BookTableViewController.swift in Sources */,
 				495C5D101BF1404D00E00C07 /* AppDelegate.swift in Sources */,
 				49812BB21CA6B22200A49EBA /* HttpClient.swift in Sources */,
@@ -520,7 +497,6 @@
 				4905D85E1C135AB500F57B3C /* books.xcdatamodeld in Sources */,
 				495879651BF7E76200000131 /* CoreDataStack.swift in Sources */,
 				495C5D411BF1423900E00C07 /* Book.swift in Sources */,
-				49EFCEE31CB5A9D300EF82FF /* EditBookDetails.swift in Sources */,
 				49D93AA51CAB16F800AE6611 /* CoreSpotlightStack.swift in Sources */,
 				49C451801C35578A00F431DB /* BookTableViewCell.swift in Sources */,
 				498B4D4D1CB1AB7A00C5F38B /* SplitViewController.swift in Sources */,
@@ -570,11 +546,6 @@
 			isa = PBXTargetDependency;
 			target = 495C5D0B1BF1404D00E00C07 /* books */;
 			targetProxy = 495C5D2C1BF1404D00E00C07 /* PBXContainerItemProxy */;
-		};
-		49E0C89D1CA4945800703A9A /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 49E0C8911CA4945700703A9A /* bookWidget */;
-			targetProxy = 49E0C89C1CA4945800703A9A /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -686,7 +657,6 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "Brand Assets";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = books/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -703,7 +673,6 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "Brand Assets";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = books/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
