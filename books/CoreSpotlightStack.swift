@@ -11,9 +11,9 @@ import MobileCoreServices
 
 class CoreSpotlightStack{
     
-    var domainIdentifier: String!
+    var domainIdentifier: String
     
-    init(domainIdentifier: String){
+    init(domainIdentifier: String) {
         self.domainIdentifier = domainIdentifier
     }
     
@@ -34,7 +34,10 @@ class CoreSpotlightStack{
     func DeindexItems(items: [SpotlightItem]){
         DeindexItems(items.map{$0.uniqueIdentifier})
     }
-    
+
+    /**
+     Removes the items from the Spotlight index.
+     */
     func DeindexItems(identifiers: [String]){
         CSSearchableIndex.defaultSearchableIndex().deleteSearchableItemsWithIdentifiers(identifiers) {
             if $0 != nil {
@@ -52,8 +55,14 @@ class CoreSpotlightStack{
     }
     
     private func CreateSearchableItem(spotlightItem: SpotlightItem) -> CSSearchableItem {
+        // Create an attribute set from the spotlight item
+        let attributeSet = CSSearchableItemAttributeSet(itemContentType: kUTTypeText as String)
+        attributeSet.title = spotlightItem.title
+        attributeSet.contentDescription = spotlightItem.description
+        attributeSet.thumbnailData = spotlightItem.thumbnailImageData
+        
         // Create the searchable item from the spotlight item, and set the expiry to be never
-        let searchableItem = CSSearchableItem(uniqueIdentifier: spotlightItem.uniqueIdentifier, domainIdentifier: self.domainIdentifier, attributeSet: spotlightItem.ToAttributeSet())
+        let searchableItem = CSSearchableItem(uniqueIdentifier: spotlightItem.uniqueIdentifier, domainIdentifier: self.domainIdentifier, attributeSet: attributeSet)
         searchableItem.expirationDate = NSDate.distantFuture()
         return searchableItem
     }
@@ -70,13 +79,5 @@ class SpotlightItem {
         self.title = title
         self.description = description
         self.thumbnailImageData = thumbnailImageData
-    }
-    
-    func ToAttributeSet() -> CSSearchableItemAttributeSet{
-        let attributeSet = CSSearchableItemAttributeSet(itemContentType: kUTTypeText as String)
-        attributeSet.title = title
-        attributeSet.contentDescription = description
-        attributeSet.thumbnailData = thumbnailImageData
-        return attributeSet
     }
 }
