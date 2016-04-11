@@ -70,6 +70,9 @@ class BookDetailsViewController: UIViewController, BookSelectionDelegate {
         if let coverImg = book?.coverImage {
             imageView.image = UIImage(data: coverImg)
         }
+        else{
+            imageView.image = nil
+        }
         descriptionLabel.text = book?.bookDescription
     }
     
