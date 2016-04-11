@@ -35,10 +35,10 @@ class EditBookViewController: UITableViewController {
     }
     
     func createBook() {
-        /*let bookMetadata = BookMetadata()
+        let bookMetadata = BookMetadata()
         bookMetadata.title = titleTextField.text
         bookMetadata.authorList = authorTextField.text
         bookMetadata.readState = defaultReadState
-        appDelegate.booksStore.CreateBook(bookMetadata)*/
+        appDelegate.booksStore.CreateBook(bookMetadata)
     }
 }

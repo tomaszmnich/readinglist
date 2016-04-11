@@ -27,6 +27,7 @@ class Book: NSManagedObject {
     
     func UpdateFromMetadata(metadata: BookMetadata){
         title = metadata.title
+        readState = metadata.readState
         authorList = metadata.authorList
         isbn13 = metadata.isbn13
         pageCount = metadata.pageCount

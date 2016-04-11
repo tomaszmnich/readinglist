@@ -49,7 +49,7 @@ class BooksStore {
      Creates a new Book object.
      Does not save the managedObjectContent; does not add the item to the index.
     */
-    func CreateBook() -> Book {
+    private func CreateBook() -> Book {
         let newBook: Book = coreDataStack.createNewItem(bookEntityName)
         print("New book created with id \(newBook.objectID.URIRepresentation())")
         return newBook
@@ -64,14 +64,23 @@ class BooksStore {
     
     /**
      Deletes the given book from the managed object context.
+     Deindexes from Spotlight if necessary.
     */
-    func DeleteBook(bookToDelete: Book) {
+    func DeleteBookAndDeindex(bookToDelete: Book) {
+        coreSpotlightStack.DeindexItems([bookToDelete.objectID.URIRepresentation().absoluteString])
         coreDataStack.managedObjectContext.deleteObject(bookToDelete)
+        Save()
     }
     
-    func SaveAndUpdateIndex(modifiedBook: Book){
+    /**
+     Creates a new Book object, populates with the provided metadata, saves the
+     object context, and adds the book to the Spotlight index.
+    */
+    func CreateBook(metadata: BookMetadata) {
+        let book = CreateBook()
+        book.UpdateFromMetadata(metadata)
         Save()
-        UpdateSpotlightIndex(modifiedBook)
+        UpdateSpotlightIndex(book)
     }
     
     /**

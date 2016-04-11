@@ -21,15 +21,18 @@ class SearchResultsViewController: UIViewController{
         spinner.startAnimating()
         
         // We've found an ISBN-13. Let's search for it online.
-        OnlineBookClient<GoogleBooksParser>.TryCreateBook(GoogleBooksRequest.Search(isbn13).url, readState: bookReadState, isbn13: isbn13, completionHandler: searchCompletionHandler)
+        OnlineBookClient<GoogleBooksParser>.TryGetBookMetadata(GoogleBooksRequest.Search(isbn13).url, completionHandler: searchCompletionHandler)
     }
     
-    /// If the book argument is nil, presents a "no results" popup. Otherwise, exits.
-    func searchCompletionHandler(book: Book?){
-        if book != nil {
+    func searchCompletionHandler(metadata: BookMetadata?) {
+        if let metadata = metadata {
+            metadata.isbn13 = isbn13
+            metadata.readState = bookReadState
+            
+            appDelegate.booksStore.CreateBook(metadata)
             StopSpinnerAndExit()
         }
-        else{
+        else {
             PresentNoResultsAlert()
         }
     }

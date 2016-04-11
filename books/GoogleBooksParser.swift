@@ -29,35 +29,35 @@ enum GoogleBooksRequest {
 }
 
 protocol BookParser{
-    static func parseJsonResponseIntoBook(bookToPopulate: Book, jResponse: JSON) -> Bool
+    static func ParseJsonResponse(jResponse: JSON) -> BookMetadata?
 }
 
 /// Deals with parsing the JSON returned by GoogleBook's API into object representations.
 class GoogleBooksParser: BookParser {
     
-    /// Parses a JSON GoogleBooks response and returns the corresponding ParsedBookResult.
-    static func parseJsonResponseIntoBook(bookToPopulate: Book, jResponse: JSON) -> Bool {
-        print("Parsing JSON into book with id \(bookToPopulate.objectID.URIRepresentation())")
+    static func ParseJsonResponse(jResponse: JSON) -> BookMetadata? {
+        
+        let book = BookMetadata()
         
         // The information we seek is in the volumneInfo element.
         let volumeInfo = jResponse["items"][0]["volumeInfo"]
 
         if let title = volumeInfo["title"].string{
-            bookToPopulate.title = title
+            book.title = title
         }
         else{
-            return false
+            return nil
         }
-        bookToPopulate.publishedDate = volumeInfo["publishedDate"].string
-        bookToPopulate.pageCount = volumeInfo["pageCount"].int
-        bookToPopulate.bookDescription = volumeInfo["description"].string
-        bookToPopulate.authorList = volumeInfo["authors"].map{$1.rawString()!}.joinWithSeparator(", ")
+        book.publishedDate = volumeInfo["publishedDate"].string
+        book.pageCount = volumeInfo["pageCount"].int
+        book.bookDescription = volumeInfo["description"].string
+        book.authorList = volumeInfo["authors"].map{$1.rawString()!}.joinWithSeparator(", ")
         
         // Add a link at which a front cover image can be found.
         // The link seems to be equally accessible at https, and iOS apps don't seem to like
         // accessing http addresses, so adjust the provided url.
-        bookToPopulate.coverUrl = volumeInfo["imageLinks"]["thumbnail"].string?.stringByReplacingOccurrencesOfString("http://", withString: "https://")
+        book.coverUrl = volumeInfo["imageLinks"]["thumbnail"].string?.stringByReplacingOccurrencesOfString("http://", withString: "https://")
         
-        return true
+        return book
     }
 }

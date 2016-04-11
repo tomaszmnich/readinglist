@@ -11,53 +11,28 @@ import SwiftyJSON
 
 class OnlineBookClient<TParser: BookParser>{
     
-    static func TryCreateBook(searchUrl: String, readState: BookReadState, isbn13: String, completionHandler: (Book? -> Void)?){
-        var book: Book?
+    static func TryGetBookMetadata(searchUrl: String, completionHandler: (BookMetadata? -> Void)) {
+        var bookMetadata: BookMetadata?
         
-        func InitalSearchResultCallback(result: JSON?) {
+        func SearchResultCallback(result: JSON?) {
             if let result = result {
-                // We have a result, so make a Book and populate it
-                book = appDelegate.booksStore.CreateBook()
                 
-                // Parse the online response. If it was not valid, set book back to nil
-                if !TParser.parseJsonResponseIntoBook(book!, jResponse: result){
-                    book = nil
-                }
-                else{
-                    let book = book!
-                    
-                    // Attach some values which do not necessarily come from the online source
-                    book.readState = readState
-                    book.isbn13 = isbn13
+                // Parse the online response
+                if let bookMetadata = TParser.ParseJsonResponse(result) {
                     
                     // If there was an image URL in the result, request that too
-                    if let dataUrl = book.coverUrl {
-                        HttpClient.GetData(dataUrl, callback: BookCoverImageCallback)
-                    }
-                    else{
-                        SaveAndIndexAndCallback()
+                    if let dataUrl = bookMetadata.coverUrl {
+                        HttpClient.GetData(dataUrl) {
+                            bookMetadata.coverImage = $0
+                            completionHandler(bookMetadata)
+                        }
+                        return
                     }
                 }
             }
-            else if let completionHandler = completionHandler {
-                completionHandler(book)
-            }
+            completionHandler(bookMetadata)
         }
         
-        func BookCoverImageCallback(coverData: NSData?){
-            if let coverData = coverData {
-                book!.coverImage = coverData
-            }
-            SaveAndIndexAndCallback()
-        }
-        
-        func SaveAndIndexAndCallback(){
-            appDelegate.booksStore.SaveAndUpdateIndex(book!)
-            if let completionHandler = completionHandler{
-                completionHandler(book)
-            }
-        }
-        
-        HttpClient.GetJson(searchUrl, callback: InitalSearchResultCallback)
+        HttpClient.GetJson(searchUrl, callback: SearchResultCallback)
     }
 }

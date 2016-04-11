@@ -46,15 +46,15 @@ class BookDetailsViewController: UIViewController, BookSelectionDelegate {
     func switchState(newState: BookReadState){
         if let book = book {
             book.readState = newState
-            appDelegate.booksStore.SaveAndUpdateIndex(book)
+            appDelegate.booksStore.UpdateSpotlightIndex(book)
+            appDelegate.booksStore.Save()
             self.navigationController?.popViewControllerAnimated(true)
         }
     }
 
     func delete(){
         if let book = book {
-            appDelegate.booksStore.DeleteBook(book)
-            appDelegate.booksStore.SaveAndUpdateIndex(book)
+            appDelegate.booksStore.DeleteBookAndDeindex(book)
             self.navigationController?.popViewControllerAnimated(true)
         }
     }

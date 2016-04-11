@@ -68,6 +68,7 @@ class BookTableViewController: UITableViewController {
         
         // This removes the cell separators
         tableView.tableFooterView = UIView()
+
         
         super.viewDidLoad()
     }
@@ -228,10 +229,14 @@ extension BookTableViewController{
             ]
             
             for bookToAdd in booksToAdd {
-                OnlineBookClient<GoogleBooksParser>.TryCreateBook(GoogleBooksRequest.Search(bookToAdd.isbn).url, readState: bookToAdd.readState, isbn13: bookToAdd.isbn, completionHandler:{
-                        book in
+                OnlineBookClient<GoogleBooksParser>.TryGetBookMetadata(GoogleBooksRequest.Search(bookToAdd.isbn).url, completionHandler: {
+                    if let bookMetadata = $0 {
+                        bookMetadata.isbn13 = bookToAdd.isbn
+                        bookMetadata.readState = bookToAdd.readState
+                        appDelegate.booksStore.CreateBook(bookMetadata)
                         self.tableView.reloadData()
-                    })
+                    }
+                })
             }
         }
     }
