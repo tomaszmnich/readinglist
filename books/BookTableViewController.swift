@@ -22,25 +22,29 @@ class BookTableViewController: UITableViewController {
     /// The controller to get the results to display in this view
     var resultsController = appDelegate.booksStore.FetchedBooksController()
     
-    /// The currently selected read state
-    var readState: BookReadState {
-        get {
-            switch segmentControl.selectedSegmentIndex {
-                case 2:
-                    return .Finished
-                case 1:
-                    return .ToRead
-                default:
-                    return .Reading
-            }
+    func segmentToReadState(segmentIndex: Int) -> BookReadState {
+        switch segmentControl.selectedSegmentIndex {
+        case 2:
+            return .Finished
+        case 1:
+            return .ToRead
+        default:
+            return .Reading
         }
     }
+
+    /// The currently selected read state
+    var readState = BookReadState.Reading
     
     /// The delegate to handle book selection
     weak var bookSelectionDelegate: BookSelectionDelegate!
     
     /// The UISearchController to which this UITableViewController is connected.
     var searchController = UISearchController(searchResultsController: nil)
+    
+    var tableViewScrollPositions: [BookReadState: CGPoint?] = [.Reading: nil,
+                                                              .ToRead: nil,
+                                                              .Finished: nil]
     
     override func viewDidLoad() {
         // Set the results controller
@@ -58,6 +62,7 @@ class BookTableViewController: UITableViewController {
         self.searchController.dimsBackgroundDuringPresentation = false
         searchController.searchBar.returnKeyType = .Done
         self.tableView.tableHeaderView = searchController.searchBar
+        self.tableView.setContentOffset(CGPointMake(0, 44), animated: false)
         
         // Set the view of the NavigationController to be white, so that glimpses
         // of dark colours are not seen through the translucent bar when segueing from this view.
@@ -68,7 +73,6 @@ class BookTableViewController: UITableViewController {
         
         // This removes the cell separators
         tableView.tableFooterView = UIView()
-
         
         super.viewDidLoad()
     }
@@ -117,6 +121,18 @@ class BookTableViewController: UITableViewController {
     }
     
     @IBAction func selectedSegmentChanged(sender: AnyObject) {
+        // Store the scroll position
+        tableViewScrollPositions[readState] = tableView.contentOffset
+        
+        // Update the read state
+        readState = segmentToReadState(segmentControl.selectedSegmentIndex)
+        
+        // Load the stored scroll position
+        if let storedOffset = tableViewScrollPositions[readState]! {
+            tableView.setContentOffset(storedOffset, animated: false)
+        }
+        
+        // Load the data
         updatePredicate([ReadStateFilter(states: [readState])])
         try! resultsController.performFetch()
         tableView.reloadData()
