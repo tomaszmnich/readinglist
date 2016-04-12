@@ -86,21 +86,18 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
         }
     }
     
-    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
-        
-        super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
+    override func viewWillLayoutSubviews() {
+        // Accomodate for device rotation.
+        // This is kind of annoyingly juddery, but I can't find a simple way to stop that.
         
         if let connection = self.previewLayer?.connection {
             if connection.supportsVideoOrientation {
                 switch UIDevice.currentDevice().orientation {
-                case .Portrait:
-                    connection.videoOrientation = AVCaptureVideoOrientation.Portrait
-                    break
                 case .LandscapeRight:
-                    connection.videoOrientation = AVCaptureVideoOrientation.LandscapeRight
+                    connection.videoOrientation = AVCaptureVideoOrientation.LandscapeLeft
                     break
                 case .LandscapeLeft:
-                    connection.videoOrientation = AVCaptureVideoOrientation.LandscapeLeft
+                    connection.videoOrientation = AVCaptureVideoOrientation.LandscapeRight
                     break
                 case .PortraitUpsideDown:
                     connection.videoOrientation = AVCaptureVideoOrientation.PortraitUpsideDown
@@ -109,8 +106,10 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
                     connection.videoOrientation = AVCaptureVideoOrientation.Portrait
                     break
                 }
-            }                
+            }
         }
+        
+        self.previewLayer?.frame = self.view.bounds;
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
