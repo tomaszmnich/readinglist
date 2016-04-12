@@ -23,7 +23,7 @@ class BookTableViewController: UITableViewController {
     var resultsController = appDelegate.booksStore.FetchedBooksController()
     
     func segmentToReadState(segmentIndex: Int) -> BookReadState {
-        switch segmentControl.selectedSegmentIndex {
+        switch segmentIndex {
         case 2:
             return .Finished
         case 1:
@@ -42,9 +42,7 @@ class BookTableViewController: UITableViewController {
     /// The UISearchController to which this UITableViewController is connected.
     var searchController = UISearchController(searchResultsController: nil)
     
-    var tableViewScrollPositions: [BookReadState: CGPoint?] = [.Reading: nil,
-                                                              .ToRead: nil,
-                                                              .Finished: nil]
+    var tableViewScrollPositions = [BookReadState: CGPoint]()
     
     override func viewDidLoad() {
         // Set the results controller
@@ -62,7 +60,11 @@ class BookTableViewController: UITableViewController {
         self.searchController.dimsBackgroundDuringPresentation = false
         searchController.searchBar.returnKeyType = .Done
         self.tableView.tableHeaderView = searchController.searchBar
-        self.tableView.setContentOffset(CGPointMake(0, 44), animated: false)
+        
+        // Offset by the height of the search bar, so as to hide it on load.
+        // However, the contentOffset values will change before the view appears,
+        // due to the adjusted scroll view inset from the navigation bar.
+        self.tableView.setContentOffset(CGPointMake(0, searchController.searchBar.frame.height), animated: false)
         
         // Set the view of the NavigationController to be white, so that glimpses
         // of dark colours are not seen through the translucent bar when segueing from this view.
@@ -75,6 +77,15 @@ class BookTableViewController: UITableViewController {
         tableView.tableFooterView = UIView()
         
         super.viewDidLoad()
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        // Now that the view has appeared, store the current table view offset
+        // as the starting scroll positions for each of the modes.
+        let startingOffset = tableView.contentOffset
+        tableViewScrollPositions[.Reading] = startingOffset
+        tableViewScrollPositions[.ToRead] = startingOffset
+        tableViewScrollPositions[.Finished] = startingOffset
     }
     
     private func updatePredicate(filters: [BookFilter]){
@@ -121,16 +132,14 @@ class BookTableViewController: UITableViewController {
     }
     
     @IBAction func selectedSegmentChanged(sender: AnyObject) {
-        // Store the scroll position
+        // Store the scroll position for the current read state
         tableViewScrollPositions[readState] = tableView.contentOffset
         
-        // Update the read state
+        // Update the read state to the selected read state
         readState = segmentToReadState(segmentControl.selectedSegmentIndex)
         
-        // Load the stored scroll position
-        if let storedOffset = tableViewScrollPositions[readState]! {
-            tableView.setContentOffset(storedOffset, animated: false)
-        }
+        // Load the previously stored scroll position
+        tableView.setContentOffset(tableViewScrollPositions[readState]!, animated: false)
         
         // Load the data
         updatePredicate([ReadStateFilter(states: [readState])])
