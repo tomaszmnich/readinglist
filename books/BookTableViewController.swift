@@ -19,6 +19,8 @@ class BookTableViewController: UITableViewController {
 
     @IBOutlet weak var segmentControl: UISegmentedControl!
     
+    var firstLoad = true
+    
     /// The controller to get the results to display in this view
     var resultsController = appDelegate.booksStore.FetchedBooksController()
     
@@ -82,10 +84,13 @@ class BookTableViewController: UITableViewController {
     override func viewDidAppear(animated: Bool) {
         // Now that the view has appeared, store the current table view offset
         // as the starting scroll positions for each of the modes.
+        if firstLoad {
         let startingOffset = tableView.contentOffset
-        tableViewScrollPositions[.Reading] = startingOffset
-        tableViewScrollPositions[.ToRead] = startingOffset
-        tableViewScrollPositions[.Finished] = startingOffset
+            tableViewScrollPositions[.Reading] = startingOffset
+            tableViewScrollPositions[.ToRead] = startingOffset
+            tableViewScrollPositions[.Finished] = startingOffset
+        }
+        firstLoad = false
     }
     
     private func updatePredicate(filters: [BookFilter]){
