@@ -13,4 +13,9 @@ class BookTableViewCell: UITableViewCell {
     @IBOutlet weak var authorsLabel: UILabel!
     @IBOutlet weak var bookCover: UIImageView!
     
+    func configureFromBook(book: Book?){
+        titleLabel.text = book?.title
+        authorsLabel.text = book?.authorList
+        bookCover.image = book?.coverImage != nil ? UIImage(data: book!.coverImage!) : nil
+    }
 }

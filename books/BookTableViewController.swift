@@ -19,7 +19,7 @@ class BookTableViewController: UITableViewController {
 
     @IBOutlet weak var segmentControl: UISegmentedControl!
     
-    var firstLoad = true
+    var viewHasJustLoaded = true
     
     /// The controller to get the results to display in this view
     var resultsController = appDelegate.booksStore.FetchedBooksController()
@@ -32,6 +32,17 @@ class BookTableViewController: UITableViewController {
             return .ToRead
         default:
             return .Reading
+        }
+    }
+    
+    func readStateToSegment(readState: BookReadState) -> Int {
+        switch readState {
+        case .Reading:
+            return 0;
+        case .ToRead:
+            return 1
+        case .Finished:
+            return 2
         }
     }
 
@@ -47,36 +58,25 @@ class BookTableViewController: UITableViewController {
     var tableViewScrollPositions = [BookReadState: CGPoint]()
     
     override func viewDidLoad() {
-        // Set the results controller
-        updatePredicate([ReadStateFilter(states: [readState])])
-        
         // Attach this controller as a delegate on for the results controller, and perform the initial fetch.
+        updatePredicate([ReadStateFilter(states: [readState])])
         resultsController.delegate = self
         try! resultsController.performFetch()
         
-        // Hacky way of getting some test data.
+        // Hacky way of getting some test data. This will be remove in due course.
         self.loadDefaultDataIfFirstLaunch()
         
         // Setup the search bar.
-        self.searchController.searchResultsUpdater = self
-        self.searchController.dimsBackgroundDuringPresentation = false
-        searchController.searchBar.returnKeyType = .Done
-        self.tableView.tableHeaderView = searchController.searchBar
-        
-        // Offset by the height of the search bar, so as to hide it on load.
-        // However, the contentOffset values will change before the view appears,
-        // due to the adjusted scroll view inset from the navigation bar.
-        self.tableView.setContentOffset(CGPointMake(0, searchController.searchBar.frame.height), animated: false)
+        configureSearchBar()
         
         // Set the view of the NavigationController to be white, so that glimpses
         // of dark colours are not seen through the translucent bar when segueing from this view.
+        // Also, setting the table footer removes the cell separators
         self.navigationController!.view.backgroundColor = UIColor.whiteColor()
-        
+        tableView.tableFooterView = UIView()
+
         // Set the DZN data set source
         tableView.emptyDataSetSource = self
-        
-        // This removes the cell separators
-        tableView.tableFooterView = UIView()
         
         super.viewDidLoad()
     }
@@ -84,13 +84,15 @@ class BookTableViewController: UITableViewController {
     override func viewDidAppear(animated: Bool) {
         // Now that the view has appeared, store the current table view offset
         // as the starting scroll positions for each of the modes.
-        if firstLoad {
+        if viewHasJustLoaded {
         let startingOffset = tableView.contentOffset
             tableViewScrollPositions[.Reading] = startingOffset
             tableViewScrollPositions[.ToRead] = startingOffset
             tableViewScrollPositions[.Finished] = startingOffset
         }
-        firstLoad = false
+        viewHasJustLoaded = false
+        
+        super.viewDidAppear(animated)
     }
     
     private func updatePredicate(filters: [BookFilter]){
@@ -104,7 +106,7 @@ class BookTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         // Get a spare cell, configure the cell for the specified index path and return it
         let cell = tableView.dequeueReusableCellWithIdentifier(String(BookTableViewCell), forIndexPath: indexPath) as! BookTableViewCell
-        configureCell(cell, fromResult: resultsController.objectAtIndexPath(indexPath) as? Book)
+        cell.configureFromBook(resultsController.objectAtIndexPath(indexPath) as? Book)
         return cell
     }
     
@@ -114,18 +116,52 @@ class BookTableViewController: UITableViewController {
         }
     }
     
+    override func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
+    
+        let delete = UITableViewRowAction(style: .Destructive, title: "Delete") {
+            action, index in
+        
+            let optionMenu = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
+            let deleteAction = UIAlertAction(title: "Delete", style: .Destructive){
+                _ in
+                self.tableView.editing = true
+                let selectedBook = self.resultsController.objectAtIndexPath(index) as! Book
+                appDelegate.booksStore.DeleteBookAndDeindex(selectedBook)
+                self.tableView.editing = false
+                tableView.deleteRowsAtIndexPaths([index], withRowAnimation: .Automatic)
+            }
+            optionMenu.addAction(deleteAction)
+            optionMenu.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
+            
+            // Bring up the action sheet
+            self.presentViewController(optionMenu, animated: true, completion: nil)
+
+        }
+        delete.backgroundColor = UIColor.redColor()
+        
+        return [delete]
+    }
+    
+    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        // All cells are "editable"
+        return true
+    }
+    
+    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        // you need to implement this method too or you can't swipe to display the actions
+    }
+    
     override func restoreUserActivityState(activity: NSUserActivity) {
         if let identifier = activity.userInfo?[CSSearchableItemActivityIdentifier] as! String? {
             if let selectedBook = appDelegate.booksStore.GetBook(NSURL(string: identifier)!) {
+                // Update the selected segment and table on display
+                segmentControl.selectedSegmentIndex = readStateToSegment(selectedBook.readState)
+                selectedSegmentChanged(self)
+                
+                // Show the book
                 showSelectedBook(selectedBook)
             }
         }
-    }
-    
-    private func configureCell(cell: BookTableViewCell, fromResult result: Book?){
-        cell.titleLabel!.text = result?.title
-        cell.authorsLabel!.text = result?.authorList
-        cell.bookCover!.image = result?.coverImage != nil ? UIImage(data: result!.coverImage!) : nil
     }
     
     /// Shows the selected book in the details controller
@@ -168,26 +204,37 @@ class BookTableViewController: UITableViewController {
 extension BookTableViewController: NSFetchedResultsControllerDelegate {
     
     func controllerWillChangeContent(controller: NSFetchedResultsController) {
+        if tableView.editing {
+            return
+        }
         tableView.beginUpdates()
     }
     
     func controllerDidChangeContent(controller: NSFetchedResultsController) {
+        if tableView.editing {
+            return
+        }
         try! controller.performFetch()
         tableView.reloadData()
         tableView.endUpdates()
     }
     
     func controller(controller: NSFetchedResultsController, didChangeObject object: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
+        if tableView.editing {
+            // If the user is editing stuff directly in the table, 
+            // don't worry about trying to keep it up to date here too.
+            return
+        }
         switch type {
         case .Update:
             if let cell = tableView.cellForRowAtIndexPath(indexPath!) as? BookTableViewCell {
-                configureCell(cell, fromResult: resultsController.objectAtIndexPath(indexPath!) as? Book)
+                cell.configureFromBook(resultsController.objectAtIndexPath(indexPath!) as? Book)
             }
         case .Insert:
             tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .None)
         case .Move:
-            tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
-            tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Fade)
+            tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .None)
+            tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .None)
         case .Delete:
             tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .None)
         }
@@ -198,6 +245,18 @@ extension BookTableViewController: NSFetchedResultsControllerDelegate {
  Controls for the Search capabilities of the table.
  */
 extension BookTableViewController: UISearchResultsUpdating {
+    func configureSearchBar(){
+        self.searchController.searchResultsUpdater = self
+        self.searchController.dimsBackgroundDuringPresentation = false
+        searchController.searchBar.returnKeyType = .Done
+        self.tableView.tableHeaderView = searchController.searchBar
+        
+        // Offset by the height of the search bar, so as to hide it on load.
+        // However, the contentOffset values will change before the view appears,
+        // due to the adjusted scroll view inset from the navigation bar.
+        self.tableView.setContentOffset(CGPointMake(0, searchController.searchBar.frame.height), animated: false)
+    }
+    
     func updateSearchResultsForSearchController(searchController: UISearchController) {
         updatePredicate([ReadStateFilter(states: [readState]), TitleFilter(comparison: .Contains, text: searchController.searchBar.text!)])
         try! resultsController.performFetch()
