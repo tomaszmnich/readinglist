@@ -28,7 +28,7 @@ enum GoogleBooksRequest {
     }
 }
 
-protocol BookParser{
+protocol BookParser {
     static func ParseJsonResponse(jResponse: JSON) -> BookMetadata?
 }
 
@@ -42,10 +42,10 @@ class GoogleBooksParser: BookParser {
         // The information we seek is in the volumneInfo element.
         let volumeInfo = jResponse["items"][0]["volumeInfo"]
 
-        if let title = volumeInfo["title"].string{
+        if let title = volumeInfo["title"].string {
             book.title = title
         }
-        else{
+        else {
             return nil
         }
         book.publishedDate = volumeInfo["publishedDate"].string
