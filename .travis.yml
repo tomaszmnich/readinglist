@@ -1,7 +1,3 @@
 language: objective-c
 osx_image: xcode7.3
-xcode_workspace: books.xcworkspace
-xcode_scheme: books
-
-script:
-  - xcodebuild [DEFAULT_OPTIONS] CODE_SIGNING_REQUIRED=NO
+script: xcodebuild -workspace books.xcworkspace -scheme books -sdk iphonesimulator CODE_SIGNING_REQUIRED=NO
