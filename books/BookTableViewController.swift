@@ -261,20 +261,41 @@ extension BookTableViewController: UISearchResultsUpdating {
  Functions controlling the DZNEmptyDataSet.
  */
 extension BookTableViewController : DZNEmptyDataSetSource {
+    
+    private func IsShowingSearchResults() -> Bool {
+        if !searchController.active {
+            // If the search controller is not active, we are definitely not searching
+            return false
+        }
+        
+        if let searchText = searchController.searchBar.text{
+            // If there is some search text, we are searching if that text is not empty
+            return !searchText.isEmpty
+        }
+        return false
+    }
+    
     func imageForEmptyDataSet(scrollView: UIScrollView!) -> UIImage! {
-        return UIImage(named: "book_stack")
+        if IsShowingSearchResults() {
+            return UIImage(named: "fa-search")
+        }
+        return UIImage(named: "fa-book")
     }
     
     func titleForEmptyDataSet(scrollView: UIScrollView!) -> NSAttributedString! {
         let attrs = [NSFontAttributeName: UIFont.preferredFontForTextStyle(UIFontTextStyleHeadline)]
-        //return NSAttributedString(string: mode.emptyListTitleAndDescription.0, attributes: attrs)
-        return NSAttributedString(string: "Empty", attributes: attrs)
+        if IsShowingSearchResults() {
+            return NSAttributedString(string: "No results :(", attributes: attrs)
+        }
+        return NSAttributedString(string: "No books yet", attributes: attrs)
     }
     
     func descriptionForEmptyDataSet(scrollView: UIScrollView!) -> NSAttributedString! {
         let attrs = [NSFontAttributeName: UIFont.preferredFontForTextStyle(UIFontTextStyleBody)]
-        //return NSAttributedString(string: mode.emptyListTitleAndDescription.1, attributes: attrs)
-        return NSAttributedString(string: "Empty", attributes: attrs)
+        if IsShowingSearchResults() {
+            return NSAttributedString(string: "Try changing your search, or add a new book with the + button above.", attributes: attrs)
+        }
+        return NSAttributedString(string: "Add a book by clicking the + button above.", attributes: attrs)
     }
 }
 
