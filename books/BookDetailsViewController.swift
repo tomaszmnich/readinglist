@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import CoreData
 
-class BookDetailsViewController: UIViewController, BookSelectionDelegate {
+class BookDetailsViewController: UIViewController {
     
     var book: Book?
     
@@ -19,7 +19,7 @@ class BookDetailsViewController: UIViewController, BookSelectionDelegate {
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var descriptionLabel: UILabel!
     
-    override func viewDidLoad() {
+    override func viewWillAppear(animated: Bool) {
         updateUi()
     }
     
@@ -57,11 +57,6 @@ class BookDetailsViewController: UIViewController, BookSelectionDelegate {
             appDelegate.booksStore.DeleteBookAndDeindex(book)
             self.navigationController?.popViewControllerAnimated(true)
         }
-    }
-    
-    func bookSelected(book: Book) {
-        self.book = book
-        updateUi()
     }
     
     func updateUi(){

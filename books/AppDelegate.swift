@@ -20,14 +20,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        
-        let splitViewController = self.window!.rootViewController as! UISplitViewController
-        let bookDetailViewController = splitViewController.viewControllers.last as! BookDetailsViewController
-        
-        let navController = splitViewController.viewControllers.first as! UINavigationController
-        let bookTableController = navController.topViewController! as! BookTableViewController
-        bookTableController.bookSelectionDelegate = bookDetailViewController
-        
         return true
     }
 

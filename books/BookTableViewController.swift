@@ -11,10 +11,6 @@ import DZNEmptyDataSet
 import CoreData
 import CoreSpotlight
 
-protocol BookSelectionDelegate: class {
-    func bookSelected(book: Book)
-}
-
 class BookTableViewController: UITableViewController {
 
     @IBOutlet weak var segmentControl: UISegmentedControl!
@@ -48,9 +44,6 @@ class BookTableViewController: UITableViewController {
 
     /// The currently selected read state
     var readState = BookReadState.Reading
-    
-    /// The delegate to handle book selection
-    weak var bookSelectionDelegate: BookSelectionDelegate!
     
     /// The UISearchController to which this UITableViewController is connected.
     var searchController = UISearchController(searchResultsController: nil)
@@ -110,12 +103,6 @@ class BookTableViewController: UITableViewController {
         return cell
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if let selectedBook = resultsController.objectAtIndexPath(indexPath) as? Book {
-            showSelectedBook(selectedBook)
-        }
-    }
-    
     override func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
     
         let delete = UITableViewRowAction(style: .Destructive, title: "Delete") {
@@ -159,16 +146,8 @@ class BookTableViewController: UITableViewController {
                 selectedSegmentChanged(self)
                 
                 // Show the book
-                showSelectedBook(selectedBook)
+                performSegueWithIdentifier("showDetail", sender: selectedBook)
             }
-        }
-    }
-    
-    /// Shows the selected book in the details controller
-    private func showSelectedBook(selectedBook: Book){
-        if let bookDetailsController = self.bookSelectionDelegate as? BookDetailsViewController {
-            bookDetailsController.bookSelected(selectedBook)
-            splitViewController?.showDetailViewController(bookDetailsController, sender: nil)
         }
     }
     
@@ -193,6 +172,19 @@ class BookTableViewController: UITableViewController {
             let navigationController = segue.destinationViewController as! UINavigationController
             let scannerViewController = navigationController.viewControllers.first as! ScannerViewController
             scannerViewController.bookReadState = readState
+        }
+        else if segue.identifier == "showDetail" {
+            var selectedBook: Book!
+            if let bookSender = sender as? Book{
+                selectedBook = bookSender
+            }
+            else if let cellSender = sender as? UITableViewCell {
+                let selectedIndex = self.tableView.indexPathForCell(cellSender)
+                selectedBook = self.resultsController.objectAtIndexPath(selectedIndex!) as! Book
+            }
+            let destinationNavController = segue.destinationViewController as! UINavigationController
+            let destinationViewController = destinationNavController.topViewController as! BookDetailsViewController
+            destinationViewController.book = selectedBook
         }
     }
 }

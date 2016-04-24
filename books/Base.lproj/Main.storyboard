@@ -14,11 +14,11 @@
                         <viewControllerLayoutGuide type="bottom" id="yel-qD-x6K"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="EZk-RK-IhE">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="64" width="600" height="536"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WOs-nU-bp0">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="536"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qxc-PW-YFe" userLabel="ContentView">
                                         <rect key="frame" x="0.0" y="0.0" width="600" height="215"/>
@@ -88,6 +88,8 @@
                             <constraint firstAttribute="width" secondItem="Qxc-PW-YFe" secondAttribute="width" id="Ule-jN-VH1"/>
                         </constraints>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
+                    <navigationItem key="navigationItem" id="YRx-69-dRa"/>
                     <connections>
                         <outlet property="authorLabel" destination="k7j-D0-s2o" id="3pU-LR-uQp"/>
                         <outlet property="descriptionLabel" destination="Sfp-wj-tDM" id="6f1-oz-spK"/>
@@ -97,7 +99,23 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="i9A-VS-Eof" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-3581" y="982"/>
+            <point key="canvasLocation" x="-2973" y="852"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="zdk-AE-L8G">
+            <objects>
+                <navigationController id="xOz-rG-HY1" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Tyo-wU-14L">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="svF-c1-e4g" kind="relationship" relationship="rootViewController" id="4gK-my-E24"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="o6a-7D-sZf" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-3942" y="852"/>
         </scene>
         <!--Split View Controller-->
         <scene sceneID="E7I-JX-wrl">
@@ -105,12 +123,12 @@
                 <splitViewController modalTransitionStyle="flipHorizontal" id="flR-X9-qpy" customClass="SplitViewController" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
                     <connections>
                         <segue destination="UOh-2k-ImR" kind="relationship" relationship="masterViewController" id="gID-65-vXg"/>
-                        <segue destination="svF-c1-e4g" kind="relationship" relationship="detailViewController" id="cxa-b1-aMI"/>
+                        <segue destination="xOz-rG-HY1" kind="relationship" relationship="detailViewController" id="4X1-bu-8ma"/>
                     </connections>
                 </splitViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GPR-1o-VSt" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-4813" y="38"/>
+            <point key="canvasLocation" x="-4865" y="366"/>
         </scene>
         <!--Book Table View Controller-->
         <scene sceneID="asB-Kd-tZj">
@@ -163,6 +181,7 @@
                                     <outlet property="authorsLabel" destination="h5E-hf-HM6" id="RcB-YI-HZq"/>
                                     <outlet property="bookCover" destination="Gpt-3n-dBG" id="umR-g4-0Vd"/>
                                     <outlet property="titleLabel" destination="j4t-DS-san" id="UBn-Ra-1zm"/>
+                                    <segue destination="xOz-rG-HY1" kind="showDetail" identifier="showDetail" id="Iwj-ak-QQE"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -187,7 +206,7 @@
                         </segmentedControl>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="ZXY-qd-kDE">
                             <connections>
-                                <segue destination="IA5-Oq-XRy" kind="presentation" identifier="addBook" id="pnq-JL-b7O"/>
+                                <segue destination="IA5-Oq-XRy" kind="presentation" identifier="addBook" modalPresentationStyle="formSheet" id="pnq-JL-b7O"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -227,7 +246,7 @@
                             <tableViewSection id="aiq-zK-22H">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SettingCell" id="hy7-Hj-0QD">
-                                        <rect key="frame" x="0.0" y="99" width="600" height="44"/>
+                                        <rect key="frame" x="0.0" y="79" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hy7-Hj-0QD" id="Zd6-cV-Byh">
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
@@ -255,7 +274,7 @@
                             <tableViewSection id="UdN-7b-Y79">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SettingCell" id="ZSY-pK-ZEK">
-                                        <rect key="frame" x="0.0" y="169" width="600" height="44"/>
+                                        <rect key="frame" x="0.0" y="149" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ZSY-pK-ZEK" id="Pmz-P1-QaS">
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
@@ -409,4 +428,7 @@
             <point key="canvasLocation" x="-1563" y="-31"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="Iwj-ak-QQE"/>
+    </inferredMetricsTieBreakers>
 </document>
