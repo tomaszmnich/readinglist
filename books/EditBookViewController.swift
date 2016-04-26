@@ -7,38 +7,15 @@
 //
 
 import Foundation
+import Eureka
 import UIKit
 
-class EditBookViewController: UITableViewController {
-    
-    var defaultReadState = BookReadState.Reading
-    
-    @IBOutlet weak var titleTextField: UITextField!
-    @IBOutlet weak var authorTextField: UITextField!
-    @IBOutlet weak var doneButton: UIBarButtonItem!
-    
-    @IBAction func doneWasPressed(sender: UIBarButtonItem) {
-        createBook()
-        self.navigationController!.dismissViewControllerAnimated(true, completion: nil)
-    }
-    
-    @IBAction func titleFieldWasEdited(sender: UITextField) {
-        updateDoneEnabledState()
-    }
-    
+class EditBookViewController: FormViewController {
     override func viewDidLoad() {
-        updateDoneEnabledState()
-    }
-    
-    func updateDoneEnabledState(){
-        doneButton.enabled = !titleTextField.text!.isEmpty
-    }
-    
-    func createBook() {
-        let bookMetadata = BookMetadata()
-        bookMetadata.title = titleTextField.text
-        bookMetadata.authorList = authorTextField.text
-        bookMetadata.readState = defaultReadState
-        appDelegate.booksStore.CreateBook(bookMetadata)
+        super.viewDidLoad()
+        
+        form +++= TextRow()
+        form +++= TextRow()
+        form +++= TextRow()
     }
 }

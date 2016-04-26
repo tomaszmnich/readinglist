@@ -3,10 +3,13 @@ platform :ios, '8.0'
 # Uncomment this line if you're using Swift
 use_frameworks!
 
+source 'https://github.com/CocoaPods/Specs.git'
+
 target 'books' do
   pod 'DZNEmptyDataSet', '~> 1.7.2'
   pod 'Alamofire', '~> 3.0'
   pod 'SwiftyJSON', :git => 'https://github.com/SwiftyJSON/SwiftyJSON.git'
+  pod 'Eureka', '~> 1.5'
 end
 
 target 'booksTests' do
