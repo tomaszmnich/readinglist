@@ -4,11 +4,12 @@ platform :ios, '8.0'
 use_frameworks!
 
 source 'https://github.com/CocoaPods/Specs.git'
+source 'https://github.com/SwiftyJSON/SwiftyJSON.git'
 
 target 'books' do
   pod 'DZNEmptyDataSet', '~> 1.7.2'
   pod 'Alamofire', '~> 3.0'
-  pod 'SwiftyJSON', :git => 'https://github.com/SwiftyJSON/SwiftyJSON.git'
+  pod 'SwiftyJSON', '~> 2.3.1'
   pod 'Eureka', '~> 1.5'
 end
 
