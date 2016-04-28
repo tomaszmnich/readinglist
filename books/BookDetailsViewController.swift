@@ -43,6 +43,13 @@ class BookDetailsViewController: UIViewController {
         self.presentViewController(optionMenu, animated: true, completion: nil)
     }
     
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "editBookSegue"{
+            let editBookController = segue.destinationViewController as! EditBookViewController
+            editBookController.book = self.book
+        }
+    }
+    
     func switchState(newState: BookReadState){
         if let book = book {
             book.readState = newState

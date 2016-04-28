@@ -89,7 +89,13 @@
                         </constraints>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
-                    <navigationItem key="navigationItem" id="YRx-69-dRa"/>
+                    <navigationItem key="navigationItem" id="YRx-69-dRa">
+                        <barButtonItem key="rightBarButtonItem" systemItem="edit" id="AXa-H3-O12">
+                            <connections>
+                                <segue destination="gP2-fQ-9M2" kind="show" identifier="editBookSegue" id="bfD-cG-YZ2"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="authorLabel" destination="k7j-D0-s2o" id="3pU-LR-uQp"/>
                         <outlet property="descriptionLabel" destination="Sfp-wj-tDM" id="6f1-oz-spK"/>
@@ -99,12 +105,31 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="i9A-VS-Eof" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2973" y="852"/>
+            <point key="canvasLocation" x="-3013" y="852"/>
         </scene>
-        <!--Edit Book View Controller-->
+        <!--Edit Book-->
+        <scene sceneID="Ko7-yo-BH0">
+            <objects>
+                <viewController id="gP2-fQ-9M2" customClass="EditBookViewController" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="f9C-6w-24f"/>
+                        <viewControllerLayoutGuide type="bottom" id="khP-od-Jju"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="qfX-42-7bW">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Edit Book" id="Eyo-Wt-Ean"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="cBb-Vl-RIZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2326" y="871"/>
+        </scene>
+        <!--Add New Book-->
         <scene sceneID="25v-fZ-xbG">
             <objects>
-                <viewController id="yLX-6o-qN7" customClass="EditBookViewController" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="yLX-6o-qN7" customClass="CreateBookViewController" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="u4K-nk-gaa"/>
                         <viewControllerLayoutGuide type="bottom" id="FY2-vS-ice"/>
@@ -114,10 +139,20 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
+                    <navigationItem key="navigationItem" title="Add New Book" id="8EQ-Fj-MgA">
+                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="XsD-I0-xq4">
+                            <connections>
+                                <action selector="doneWasPressed:" destination="yLX-6o-qN7" id="i2p-tG-f0C"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="doneButton" destination="XsD-I0-xq4" id="mPj-CH-CO7"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ano-2E-9eJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1563" y="803"/>
+            <point key="canvasLocation" x="-1622" y="858"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="zdk-AE-L8G">
@@ -133,7 +168,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="o6a-7D-sZf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-3942" y="852"/>
+            <point key="canvasLocation" x="-3742" y="852"/>
         </scene>
         <!--Split View Controller-->
         <scene sceneID="E7I-JX-wrl">
@@ -146,7 +181,7 @@
                 </splitViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GPR-1o-VSt" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-4865" y="366"/>
+            <point key="canvasLocation" x="-4997" y="378"/>
         </scene>
         <!--Book Table View Controller-->
         <scene sceneID="asB-Kd-tZj">
@@ -234,7 +269,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="g3f-d3-nU4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-3130" y="-19"/>
+            <point key="canvasLocation" x="-3466" y="-11"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="BSt-Nr-8Po">
@@ -250,7 +285,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0bn-SQ-hPp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-3993" y="-19"/>
+            <point key="canvasLocation" x="-4185" y="-11"/>
         </scene>
         <!--Search Results View Controller-->
         <scene sceneID="eFJ-kC-eB4">
@@ -291,7 +326,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7gT-5z-qMi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-780" y="-23"/>
+            <point key="canvasLocation" x="-1156" y="-3"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="D1O-n3-5lh">
@@ -307,7 +342,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yh0-5m-Yqk" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2282" y="-31"/>
+            <point key="canvasLocation" x="-2658" y="-11"/>
         </scene>
         <!--Scan Barcode-->
         <scene sceneID="b2c-9w-e3P">
@@ -343,7 +378,7 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="Manual" id="oSL-w5-bNs">
                             <connections>
-                                <segue destination="yLX-6o-qN7" kind="show" id="sdV-Hj-KrJ"/>
+                                <segue destination="yLX-6o-qN7" kind="show" id="L7s-ov-WzD"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -356,7 +391,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="akl-GW-6eJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1563" y="-31"/>
+            <point key="canvasLocation" x="-1939" y="-11"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>

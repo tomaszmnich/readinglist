@@ -58,8 +58,19 @@ class BookMetadata {
 
 
 /// The availale reading progress states
-@objc enum BookReadState : Int32 {
+@objc enum BookReadState : Int32, CustomStringConvertible {
     case Reading = 1
     case ToRead = 2
     case Finished = 3
+    
+    var description: String {
+        switch self{
+        case .Reading:
+            return "Reading"
+        case .ToRead:
+            return "To Read"
+        case .Finished:
+            return "Finished"
+        }
+    }
 }
