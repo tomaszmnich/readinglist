@@ -18,11 +18,14 @@ class EditBookViewController: FormViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let bookDetailsSection = Section()
-        bookDetailsSection.append(SegmentedRow<BookReadState>("book-read-state") {
+        let readStateSection = Section("Read state")
+        readStateSection.append(SegmentedRow<BookReadState>("book-read-state") {
             $0.options = [.ToRead, .Reading, .Finished]
             $0.value = book.readState
-        })
+            })
+        form.append(readStateSection)
+        
+        let bookDetailsSection = Section("Book information")
         bookDetailsSection.append(TextRow("title") {
             $0.placeholder = "Title"
             $0.value = book.title
@@ -44,18 +47,11 @@ class EditBookViewController: FormViewController {
         let deleteSection = Section()
         deleteSection.append(ButtonRow("delete"){
             $0.title = "Delete Book"
-        }.onCellSelection{ _ in
-            // We are going to show an action sheet
-            let confirmDeleteAlert = UIAlertController(title: "Delete?", message: nil, preferredStyle: .ActionSheet)
-            
-            // Bring up the action sheet)
-            confirmDeleteAlert.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
-            confirmDeleteAlert.addAction(UIAlertAction(title: "Delete", style: .Destructive) { _ in
-                appDelegate.booksStore.DeleteBookAndDeindex(self.book)
-                self.navigationController?.popViewControllerAnimated(true)
-                // TODO: Dismiss the *other* navigation controller.
-            })
-            self.presentViewController(confirmDeleteAlert, animated: true, completion: nil)
+            }.cellSetup{cell, row in
+                cell.tintColor = UIColor.redColor()
+            }
+        .onCellSelection{ _ in
+            self.presentDeleteAlert()
         })
         form.append(deleteSection)
     }
@@ -63,6 +59,20 @@ class EditBookViewController: FormViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         // TODO: The setting of the values should be done here, not in viewDidLoad().
+    }
+    
+    func presentDeleteAlert(){
+        // We are going to show an action sheet
+        let confirmDeleteAlert = UIAlertController(title: "Confirm", message: nil, preferredStyle: .ActionSheet)
+        
+        // Bring up the action sheet)
+        confirmDeleteAlert.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
+        confirmDeleteAlert.addAction(UIAlertAction(title: "Delete", style: .Destructive) { _ in
+            appDelegate.booksStore.DeleteBookAndDeindex(self.book)
+            self.navigationController?.popViewControllerAnimated(true)
+            // TODO: Dismiss the *other* navigation controller.
+            })
+        self.presentViewController(confirmDeleteAlert, animated: true, completion: nil)
     }
     
     @IBAction func cancelButtonWasPressed(sender: AnyObject) {
@@ -94,7 +104,7 @@ class EditBookViewController: FormViewController {
         else if (formValues["author"] as? String)?.isEmpty ?? true{
             doneButton.enabled = false
         }
-        else{
+        else {
             doneButton.enabled = true
         }
     }
