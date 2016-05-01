@@ -12,27 +12,32 @@ import SwiftyJSON
 class OnlineBookClient<TParser: BookParser>{
     
     static func TryGetBookMetadata(searchUrl: String, completionHandler: (BookMetadata? -> Void)) {
-        var bookMetadata: BookMetadata?
         
         func SearchResultCallback(result: JSON?) {
-            if let result = result {
-                
-                // Parse the online response
-                if let bookMetadata = TParser.ParseJsonResponse(result) {
-                    
-                    // If there was an image URL in the result, request that too
-                    if let dataUrl = bookMetadata.coverUrl {
-                        HttpClient.GetData(dataUrl) {
-                            bookMetadata.coverImage = $0
-                            completionHandler(bookMetadata)
-                        }
-                        return
-                    }
+            
+            // First check there is a JSON result, and it can be parsed.
+            guard let result = result else {
+                completionHandler(nil)
+                return
+            }
+            guard let bookMetadata = TParser.ParseJsonResponse(result) else {
+                completionHandler(nil)
+                return
+            }
+            
+            // Then, if there was an image URL in the result, request that too
+            if let dataUrl = bookMetadata.coverUrl {
+                HttpClient.GetData(dataUrl) {
+                    bookMetadata.coverImage = $0
+                    completionHandler(bookMetadata)
                 }
             }
-            completionHandler(bookMetadata)
+            else {
+                completionHandler(bookMetadata)
+            }
         }
         
+        // Make the request!
         HttpClient.GetJson(searchUrl, callback: SearchResultCallback)
     }
 }
