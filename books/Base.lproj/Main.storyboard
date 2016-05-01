@@ -92,7 +92,7 @@
                     <navigationItem key="navigationItem" id="YRx-69-dRa">
                         <barButtonItem key="rightBarButtonItem" systemItem="edit" id="AXa-H3-O12">
                             <connections>
-                                <segue destination="hSG-hA-aNk" kind="presentation" identifier="editBookSegue" id="bfD-cG-YZ2"/>
+                                <segue destination="hSG-hA-aNk" kind="presentation" identifier="editBookSegue" modalPresentationStyle="formSheet" id="bfD-cG-YZ2"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -258,6 +258,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="Iwj-ak-QQE"/>
+        <segue reference="4X1-bu-8ma"/>
     </inferredMetricsTieBreakers>
 </document>
