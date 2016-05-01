@@ -9,7 +9,7 @@
 import UIKit
 import SwiftyJSON
 
-class SearchResultsViewController: UIViewController {
+class SearchByIsbn: UIViewController {
  
     @IBOutlet weak var spinner: UIActivityIndicatorView!
     

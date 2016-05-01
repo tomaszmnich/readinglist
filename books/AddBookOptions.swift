@@ -9,7 +9,7 @@
 import Foundation
 import Eureka
 
-class AddBookOptionsViewController: FormViewController {
+class AddBookOptions: FormViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         

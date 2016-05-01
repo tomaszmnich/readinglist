@@ -8,10 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		4905D85E1C135AB500F57B3C /* books.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4905D85C1C135AB500F57B3C /* books.xcdatamodeld */; };
-		491F14621C02228C0052B355 /* ScannerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491F14611C02228C0052B355 /* ScannerViewController.swift */; };
+		491F14621C02228C0052B355 /* ScanBarcode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491F14611C02228C0052B355 /* ScanBarcode.swift */; };
 		492141291C05B2030048E647 /* GoogleBooksParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 492141281C05B2030048E647 /* GoogleBooksParser.swift */; };
 		492500781C0B1B0000C149B5 /* BooksStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 492500771C0B1B0000C149B5 /* BooksStore.swift */; };
-		494C61D21C0BAF8C00F64105 /* SearchResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494C61D11C0BAF8C00F64105 /* SearchResultsViewController.swift */; };
+		494C61D21C0BAF8C00F64105 /* SearchByIsbn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494C61D11C0BAF8C00F64105 /* SearchByIsbn.swift */; };
 		494F9D6F1CA98CFB00A9816F /* OnlineBookClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494F9D6E1CA98CFB00A9816F /* OnlineBookClient.swift */; };
 		495879651BF7E76200000131 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 495879641BF7E76200000131 /* CoreDataStack.swift */; };
 		495C5D101BF1404D00E00C07 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 495C5D0F1BF1404D00E00C07 /* AppDelegate.swift */; };
@@ -30,11 +30,11 @@
 		49BDCC631CD2A00F00F20AAE /* EditBookViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BDCC621CD2A00F00F20AAE /* EditBookViewController.swift */; };
 		49BDCC661CD4E6FA00F20AAE /* AddBook.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 49BDCC641CD4E6FA00F20AAE /* AddBook.storyboard */; };
 		49BDCC681CD4E72400F20AAE /* EditBook.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 49BDCC671CD4E72400F20AAE /* EditBook.storyboard */; };
-		49BDCC6A1CD4EADF00F20AAE /* AddBookOptionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BDCC691CD4EADF00F20AAE /* AddBookOptionsViewController.swift */; };
+		49BDCC6A1CD4EADF00F20AAE /* AddBookOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BDCC691CD4EADF00F20AAE /* AddBookOptions.swift */; };
 		49BDCC6C1CD6120400F20AAE /* NavigationControllerWithReadState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BDCC6B1CD6120400F20AAE /* NavigationControllerWithReadState.swift */; };
 		49C451801C35578A00F431DB /* BookTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C4517F1C35578A00F431DB /* BookTableViewCell.swift */; };
 		49CFCF961CAB380000A2A76B /* CoreSpotlightStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49D93AA41CAB16F800AE6611 /* CoreSpotlightStack.swift */; };
-		49D68E481CBA67F900734583 /* CreateBookViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49D68E471CBA67F900734583 /* CreateBookViewController.swift */; };
+		49D68E481CBA67F900734583 /* CreateBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49D68E471CBA67F900734583 /* CreateBook.swift */; };
 		49D93AA51CAB16F800AE6611 /* CoreSpotlightStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49D93AA41CAB16F800AE6611 /* CoreSpotlightStack.swift */; };
 		49E0C8941CA4945700703A9A /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49E0C8931CA4945700703A9A /* NotificationCenter.framework */; };
 		49E0C8971CA4945800703A9A /* TodayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E0C8961CA4945800703A9A /* TodayViewController.swift */; };
@@ -65,10 +65,10 @@
 
 /* Begin PBXFileReference section */
 		4905D85D1C135AB500F57B3C /* books.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = books.xcdatamodel; sourceTree = "<group>"; };
-		491F14611C02228C0052B355 /* ScannerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScannerViewController.swift; sourceTree = "<group>"; };
+		491F14611C02228C0052B355 /* ScanBarcode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScanBarcode.swift; sourceTree = "<group>"; };
 		492141281C05B2030048E647 /* GoogleBooksParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleBooksParser.swift; sourceTree = "<group>"; };
 		492500771C0B1B0000C149B5 /* BooksStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BooksStore.swift; sourceTree = "<group>"; };
-		494C61D11C0BAF8C00F64105 /* SearchResultsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResultsViewController.swift; sourceTree = "<group>"; };
+		494C61D11C0BAF8C00F64105 /* SearchByIsbn.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchByIsbn.swift; sourceTree = "<group>"; };
 		494F9D6E1CA98CFB00A9816F /* OnlineBookClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnlineBookClient.swift; sourceTree = "<group>"; };
 		495879641BF7E76200000131 /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		495C5D0C1BF1404D00E00C07 /* Reading List.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Reading List.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -92,10 +92,10 @@
 		49BDCC621CD2A00F00F20AAE /* EditBookViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditBookViewController.swift; sourceTree = "<group>"; };
 		49BDCC651CD4E6FA00F20AAE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/AddBook.storyboard; sourceTree = "<group>"; };
 		49BDCC671CD4E72400F20AAE /* EditBook.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = EditBook.storyboard; sourceTree = "<group>"; };
-		49BDCC691CD4EADF00F20AAE /* AddBookOptionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddBookOptionsViewController.swift; sourceTree = "<group>"; };
+		49BDCC691CD4EADF00F20AAE /* AddBookOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddBookOptions.swift; sourceTree = "<group>"; };
 		49BDCC6B1CD6120400F20AAE /* NavigationControllerWithReadState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationControllerWithReadState.swift; sourceTree = "<group>"; };
 		49C4517F1C35578A00F431DB /* BookTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookTableViewCell.swift; sourceTree = "<group>"; };
-		49D68E471CBA67F900734583 /* CreateBookViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateBookViewController.swift; sourceTree = "<group>"; };
+		49D68E471CBA67F900734583 /* CreateBook.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateBook.swift; sourceTree = "<group>"; };
 		49D93AA41CAB16F800AE6611 /* CoreSpotlightStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreSpotlightStack.swift; sourceTree = "<group>"; };
 		49E0C8921CA4945700703A9A /* bookWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = bookWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		49E0C8931CA4945700703A9A /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
@@ -274,10 +274,10 @@
 		49BDCC6D1CD614E600F20AAE /* AddBook */ = {
 			isa = PBXGroup;
 			children = (
-				49BDCC691CD4EADF00F20AAE /* AddBookOptionsViewController.swift */,
-				491F14611C02228C0052B355 /* ScannerViewController.swift */,
-				494C61D11C0BAF8C00F64105 /* SearchResultsViewController.swift */,
-				49D68E471CBA67F900734583 /* CreateBookViewController.swift */,
+				49BDCC691CD4EADF00F20AAE /* AddBookOptions.swift */,
+				491F14611C02228C0052B355 /* ScanBarcode.swift */,
+				494C61D11C0BAF8C00F64105 /* SearchByIsbn.swift */,
+				49D68E471CBA67F900734583 /* CreateBook.swift */,
 			);
 			name = AddBook;
 			sourceTree = "<group>";
@@ -510,10 +510,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				492141291C05B2030048E647 /* GoogleBooksParser.swift in Sources */,
-				494C61D21C0BAF8C00F64105 /* SearchResultsViewController.swift in Sources */,
-				49BDCC6A1CD4EADF00F20AAE /* AddBookOptionsViewController.swift in Sources */,
+				494C61D21C0BAF8C00F64105 /* SearchByIsbn.swift in Sources */,
+				49BDCC6A1CD4EADF00F20AAE /* AddBookOptions.swift in Sources */,
 				49812BB41CA95F0600A49EBA /* BookFilteringSorting.swift in Sources */,
-				49D68E481CBA67F900734583 /* CreateBookViewController.swift in Sources */,
+				49D68E481CBA67F900734583 /* CreateBook.swift in Sources */,
 				495C5D3F1BF1412600E00C07 /* BookTableViewController.swift in Sources */,
 				495C5D101BF1404D00E00C07 /* AppDelegate.swift in Sources */,
 				49812BB21CA6B22200A49EBA /* HttpClient.swift in Sources */,
@@ -527,7 +527,7 @@
 				49D93AA51CAB16F800AE6611 /* CoreSpotlightStack.swift in Sources */,
 				49C451801C35578A00F431DB /* BookTableViewCell.swift in Sources */,
 				498B4D4D1CB1AB7A00C5F38B /* SplitViewController.swift in Sources */,
-				491F14621C02228C0052B355 /* ScannerViewController.swift in Sources */,
+				491F14621C02228C0052B355 /* ScanBarcode.swift in Sources */,
 				49BDCC6C1CD6120400F20AAE /* NavigationControllerWithReadState.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -10,7 +10,7 @@ import Foundation
 import Eureka
 import UIKit
 
-class CreateBookViewController: FormViewController {
+class CreateBook: FormViewController {
     
     @IBOutlet weak var doneButton: UIBarButtonItem!
     

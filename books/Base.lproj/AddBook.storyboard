@@ -8,7 +8,7 @@
         <!--Add Book-->
         <scene sceneID="l50-vl-9lD">
             <objects>
-                <viewController id="2iF-zn-joO" customClass="AddBookOptionsViewController" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="2iF-zn-joO" customClass="AddBookOptions" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="2Dg-Xu-Yai"/>
                         <viewControllerLayoutGuide type="bottom" id="Avk-lG-xJS"/>
@@ -37,7 +37,7 @@
         <!--Add Manually-->
         <scene sceneID="25v-fZ-xbG">
             <objects>
-                <viewController id="yLX-6o-qN7" customClass="CreateBookViewController" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="yLX-6o-qN7" customClass="CreateBook" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="u4K-nk-gaa"/>
                         <viewControllerLayoutGuide type="bottom" id="FY2-vS-ice"/>
@@ -62,10 +62,10 @@
             </objects>
             <point key="canvasLocation" x="-991" y="400"/>
         </scene>
-        <!--Search Results View Controller-->
+        <!--Search By Isbn-->
         <scene sceneID="eFJ-kC-eB4">
             <objects>
-                <viewController modalTransitionStyle="flipHorizontal" id="eTM-OJ-MME" customClass="SearchResultsViewController" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController modalTransitionStyle="flipHorizontal" id="eTM-OJ-MME" customClass="SearchByIsbn" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="5Z0-0O-1bl"/>
                         <viewControllerLayoutGuide type="bottom" id="wNp-l3-pkc"/>
@@ -124,7 +124,7 @@
         <!--Scan Barcode-->
         <scene sceneID="b2c-9w-e3P">
             <objects>
-                <viewController id="MGK-ee-YjP" customClass="ScannerViewController" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="MGK-ee-YjP" customClass="ScanBarcode" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="8uf-ya-Hu9"/>
                         <viewControllerLayoutGuide type="bottom" id="za8-pr-DLM"/>

@@ -9,7 +9,7 @@
 import UIKit
 import AVFoundation
 
-class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
+class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     
     @IBOutlet weak var cameraPreviewPlaceholder: UIView!
     
@@ -109,7 +109,7 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "isbnDetectedSegue" {
-            let searchResultsController = segue.destinationViewController as! SearchResultsViewController
+            let searchResultsController = segue.destinationViewController as! SearchByIsbn
             searchResultsController.isbn13 = detectedIsbn13!
         }
     }
