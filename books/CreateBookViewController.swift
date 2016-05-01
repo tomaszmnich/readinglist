@@ -27,12 +27,6 @@ class CreateBookViewController: FormViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let scanButtonSection = Section()
-        scanButtonSection.append(ButtonRow(){
-            $0.title = "Scan Barcode"
-        })
-        form.append(scanButtonSection)
-        
         let bookDetailsSection = Section("Book details")
         bookDetailsSection.append(SegmentedRow<BookReadState>("book-read-state") {
             $0.options = [.ToRead, .Reading, .Finished]

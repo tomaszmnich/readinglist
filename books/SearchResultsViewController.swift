@@ -9,13 +9,12 @@
 import UIKit
 import SwiftyJSON
 
-class SearchResultsViewController: UIViewController{
+class SearchResultsViewController: UIViewController {
  
     @IBOutlet weak var spinner: UIActivityIndicatorView!
     
     /// This must be populated by any controller segueing to this one
     var isbn13: String!
-    var bookReadState: BookReadState!
     
     override func viewDidLoad() {
         spinner.startAnimating()
@@ -27,7 +26,7 @@ class SearchResultsViewController: UIViewController{
     func searchCompletionHandler(metadata: BookMetadata?) {
         if let metadata = metadata {
             metadata.isbn13 = isbn13
-            metadata.readState = bookReadState
+            metadata.readState = (self.navigationController as! NavigationControllerWithReadState).readState
             
             appDelegate.booksStore.CreateBook(metadata)
             StopSpinnerAndExit()

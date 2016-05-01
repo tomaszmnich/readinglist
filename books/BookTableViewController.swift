@@ -169,9 +169,8 @@ class BookTableViewController: UITableViewController {
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "addBook" {
-            let navigationController = segue.destinationViewController as! UINavigationController
-            let scannerViewController = navigationController.viewControllers.first as! ScannerViewController
-            scannerViewController.bookReadState = readState
+            let navigationController = segue.destinationViewController as! NavigationControllerWithReadState
+            navigationController.readState = readState
         }
         else if segue.identifier == "showDetail" {
             var selectedBook: Book!

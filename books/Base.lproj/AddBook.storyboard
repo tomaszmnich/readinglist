@@ -5,7 +5,36 @@
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
-        <!--Add New Book-->
+        <!--Add Book-->
+        <scene sceneID="l50-vl-9lD">
+            <objects>
+                <viewController id="2iF-zn-joO" customClass="AddBookOptionsViewController" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="2Dg-Xu-Yai"/>
+                        <viewControllerLayoutGuide type="bottom" id="Avk-lG-xJS"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="dV4-18-NPL">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Add Book" id="bxB-Ag-GeZ">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="AZ3-wB-6Id">
+                            <connections>
+                                <action selector="cancelWasPressed:" destination="2iF-zn-joO" id="MhP-ku-4jb"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <segue destination="yLX-6o-qN7" kind="show" identifier="addBookManuallySegue" id="Uc7-Hp-KcT"/>
+                        <segue destination="MGK-ee-YjP" kind="show" identifier="scanBarcodeSegue" id="1qA-nS-fF5"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="zp6-iV-lhi" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1943" y="-11"/>
+        </scene>
+        <!--Add Manually-->
         <scene sceneID="25v-fZ-xbG">
             <objects>
                 <viewController id="yLX-6o-qN7" customClass="CreateBookViewController" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
@@ -18,7 +47,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Add New Book" id="8EQ-Fj-MgA">
+                    <navigationItem key="navigationItem" title="Add Manually" id="8EQ-Fj-MgA">
                         <barButtonItem key="rightBarButtonItem" systemItem="done" id="XsD-I0-xq4">
                             <connections>
                                 <action selector="doneWasPressed:" destination="yLX-6o-qN7" id="i2p-tG-f0C"/>
@@ -31,7 +60,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ano-2E-9eJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1934" y="822"/>
+            <point key="canvasLocation" x="-991" y="400"/>
         </scene>
         <!--Search Results View Controller-->
         <scene sceneID="eFJ-kC-eB4">
@@ -72,12 +101,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7gT-5z-qMi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1156" y="-3"/>
+            <point key="canvasLocation" x="-268" y="-391"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Navigation Controller With Read State-->
         <scene sceneID="D1O-n3-5lh">
             <objects>
-                <navigationController definesPresentationContext="YES" id="IA5-Oq-XRy" sceneMemberID="viewController">
+                <navigationController definesPresentationContext="YES" id="IA5-Oq-XRy" customClass="NavigationControllerWithReadState" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
                     <nil key="simulatedStatusBarMetrics"/>
                     <modalFormSheetSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="IbE-W0-H7w">
@@ -85,7 +114,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="MGK-ee-YjP" kind="relationship" relationship="rootViewController" id="hDe-3j-zdE"/>
+                        <segue destination="2iF-zn-joO" kind="relationship" relationship="rootViewController" id="bCm-ia-f7V"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yh0-5m-Yqk" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -118,18 +147,7 @@
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Item" id="C92-un-dfo"/>
-                    <navigationItem key="navigationItem" title="Scan Barcode" id="UpE-wp-wNv">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="CFW-rL-dNB">
-                            <connections>
-                                <action selector="cancelWasPressed:" destination="MGK-ee-YjP" id="74p-1h-9IY"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" title="Manual" id="oSL-w5-bNs">
-                            <connections>
-                                <segue destination="yLX-6o-qN7" kind="show" id="L7s-ov-WzD"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="Scan Barcode" id="UpE-wp-wNv"/>
                     <connections>
                         <outlet property="cameraPreviewPlaceholder" destination="pEt-SH-GKe" id="iAc-8o-ged"/>
                         <segue destination="eTM-OJ-MME" kind="show" identifier="isbnDetectedSegue" id="AvE-Bh-e7Y">
@@ -139,7 +157,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="akl-GW-6eJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1939" y="-11"/>
+            <point key="canvasLocation" x="-991" y="-391"/>
         </scene>
     </scenes>
 </document>

@@ -69,9 +69,11 @@ class EditBookViewController: FormViewController {
         confirmDeleteAlert.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
         confirmDeleteAlert.addAction(UIAlertAction(title: "Delete", style: .Destructive) { _ in
             appDelegate.booksStore.DeleteBookAndDeindex(self.book)
-            self.navigationController?.popViewControllerAnimated(true)
-            // TODO: Dismiss the *other* navigation controller.
-            })
+            self.dismissViewControllerAnimated(true){
+                // TODO: Dismiss instead the *other* navigation controller.
+                self.navigationController?.popViewControllerAnimated(true)
+            }
+        })
         self.presentViewController(confirmDeleteAlert, animated: true, completion: nil)
     }
     

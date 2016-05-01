@@ -30,6 +30,8 @@
 		49BDCC631CD2A00F00F20AAE /* EditBookViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BDCC621CD2A00F00F20AAE /* EditBookViewController.swift */; };
 		49BDCC661CD4E6FA00F20AAE /* AddBook.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 49BDCC641CD4E6FA00F20AAE /* AddBook.storyboard */; };
 		49BDCC681CD4E72400F20AAE /* EditBook.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 49BDCC671CD4E72400F20AAE /* EditBook.storyboard */; };
+		49BDCC6A1CD4EADF00F20AAE /* AddBookOptionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BDCC691CD4EADF00F20AAE /* AddBookOptionsViewController.swift */; };
+		49BDCC6C1CD6120400F20AAE /* NavigationControllerWithReadState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BDCC6B1CD6120400F20AAE /* NavigationControllerWithReadState.swift */; };
 		49C451801C35578A00F431DB /* BookTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C4517F1C35578A00F431DB /* BookTableViewCell.swift */; };
 		49CFCF961CAB380000A2A76B /* CoreSpotlightStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49D93AA41CAB16F800AE6611 /* CoreSpotlightStack.swift */; };
 		49D68E481CBA67F900734583 /* CreateBookViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49D68E471CBA67F900734583 /* CreateBookViewController.swift */; };
@@ -90,6 +92,8 @@
 		49BDCC621CD2A00F00F20AAE /* EditBookViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditBookViewController.swift; sourceTree = "<group>"; };
 		49BDCC651CD4E6FA00F20AAE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/AddBook.storyboard; sourceTree = "<group>"; };
 		49BDCC671CD4E72400F20AAE /* EditBook.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = EditBook.storyboard; sourceTree = "<group>"; };
+		49BDCC691CD4EADF00F20AAE /* AddBookOptionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddBookOptionsViewController.swift; sourceTree = "<group>"; };
+		49BDCC6B1CD6120400F20AAE /* NavigationControllerWithReadState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationControllerWithReadState.swift; sourceTree = "<group>"; };
 		49C4517F1C35578A00F431DB /* BookTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookTableViewCell.swift; sourceTree = "<group>"; };
 		49D68E471CBA67F900734583 /* CreateBookViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateBookViewController.swift; sourceTree = "<group>"; };
 		49D93AA41CAB16F800AE6611 /* CoreSpotlightStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreSpotlightStack.swift; sourceTree = "<group>"; };
@@ -239,13 +243,12 @@
 		495C5D441BF14C4B00E00C07 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				491F14611C02228C0052B355 /* ScannerViewController.swift */,
+				49BDCC6D1CD614E600F20AAE /* AddBook */,
 				495C5D3E1BF1412600E00C07 /* BookTableViewController.swift */,
 				495C5D421BF14BEB00E00C07 /* BookDetailsViewController.swift */,
-				494C61D11C0BAF8C00F64105 /* SearchResultsViewController.swift */,
 				498B4D4C1CB1AB7A00C5F38B /* SplitViewController.swift */,
-				49D68E471CBA67F900734583 /* CreateBookViewController.swift */,
 				49BDCC621CD2A00F00F20AAE /* EditBookViewController.swift */,
+				49BDCC6B1CD6120400F20AAE /* NavigationControllerWithReadState.swift */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -266,6 +269,17 @@
 				49C4517F1C35578A00F431DB /* BookTableViewCell.swift */,
 			);
 			name = Views;
+			sourceTree = "<group>";
+		};
+		49BDCC6D1CD614E600F20AAE /* AddBook */ = {
+			isa = PBXGroup;
+			children = (
+				49BDCC691CD4EADF00F20AAE /* AddBookOptionsViewController.swift */,
+				491F14611C02228C0052B355 /* ScannerViewController.swift */,
+				494C61D11C0BAF8C00F64105 /* SearchResultsViewController.swift */,
+				49D68E471CBA67F900734583 /* CreateBookViewController.swift */,
+			);
+			name = AddBook;
 			sourceTree = "<group>";
 		};
 		49E0C8951CA4945800703A9A /* bookWidget */ = {
@@ -497,6 +511,7 @@
 			files = (
 				492141291C05B2030048E647 /* GoogleBooksParser.swift in Sources */,
 				494C61D21C0BAF8C00F64105 /* SearchResultsViewController.swift in Sources */,
+				49BDCC6A1CD4EADF00F20AAE /* AddBookOptionsViewController.swift in Sources */,
 				49812BB41CA95F0600A49EBA /* BookFilteringSorting.swift in Sources */,
 				49D68E481CBA67F900734583 /* CreateBookViewController.swift in Sources */,
 				495C5D3F1BF1412600E00C07 /* BookTableViewController.swift in Sources */,
@@ -513,6 +528,7 @@
 				49C451801C35578A00F431DB /* BookTableViewCell.swift in Sources */,
 				498B4D4D1CB1AB7A00C5F38B /* SplitViewController.swift in Sources */,
 				491F14621C02228C0052B355 /* ScannerViewController.swift in Sources */,
+				49BDCC6C1CD6120400F20AAE /* NavigationControllerWithReadState.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

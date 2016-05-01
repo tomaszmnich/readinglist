@@ -14,25 +14,20 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
     @IBOutlet weak var cameraPreviewPlaceholder: UIView!
     
     let session = AVCaptureSession()
-    var bookReadState: BookReadState!
     var previewLayer: AVCaptureVideoPreviewLayer?
     var detectedIsbn13: String?
     
-    @IBAction func cancelWasPressed(sender: UIBarButtonItem) {
-        session.stopRunning()
-        presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
-    }
-    
     override func viewDidLoad() {
-        // The phrase "Scan Barcode" is a bit long for the back button: use "Scan" instead.
-        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "Scan", style: .Plain, target: nil, action: nil)
+        super.viewDidLoad()
         
         // Setup the camera preview on another thread
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
             self.setupAvSession()
         }
-        
-        super.viewDidLoad()
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        session.stopRunning()
     }
     
     private func setupAvSession(){
@@ -46,7 +41,7 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
         catch {
             // TODO: Handle this error properly
             print("AVCaptureDeviceInput failed to initialise.")
-            self.navigationController?.popViewControllerAnimated(true)
+            return
         }
         
         // Prepare the metadata output and add to the session
@@ -116,7 +111,6 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
         if segue.identifier == "isbnDetectedSegue" {
             let searchResultsController = segue.destinationViewController as! SearchResultsViewController
             searchResultsController.isbn13 = detectedIsbn13!
-            searchResultsController.bookReadState = bookReadState
         }
     }
 }
