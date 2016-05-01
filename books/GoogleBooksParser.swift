@@ -37,17 +37,14 @@ class GoogleBooksParser: BookParser {
     
     static func ParseJsonResponse(jResponse: JSON) -> BookMetadata? {
         
-        let book = BookMetadata()
-        
         // The information we seek is in the volumneInfo element.
         let volumeInfo = jResponse["items"][0]["volumeInfo"]
-
-        if let title = volumeInfo["title"].string {
-            book.title = title
-        }
-        else {
+        guard let title = volumeInfo["title"].string else {
             return nil
         }
+        
+        let book = BookMetadata()
+        book.title = title
         book.publishedDate = volumeInfo["publishedDate"].string
         book.pageCount = volumeInfo["pageCount"].int
         book.bookDescription = volumeInfo["description"].string
