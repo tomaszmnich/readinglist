@@ -16,9 +16,6 @@ class CreateBook: FormViewController {
     
     var initialBookMetadata: BookMetadata?
     
-    // TODO: Pass this in from the calling view
-    var initialBookReadState: BookReadState! = .Reading
-    
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         setStateOfDoneButton()
@@ -29,8 +26,8 @@ class CreateBook: FormViewController {
         
         let bookDetailsSection = Section("Book details")
         bookDetailsSection.append(SegmentedRow<BookReadState>("book-read-state") {
-            $0.options = [.ToRead, .Reading, .Finished]
-            $0.value = self.initialBookReadState
+            $0.options = [.Reading, .ToRead, .Finished]
+            $0.value = (self.navigationController as! NavWithReadState).readState
         })
         bookDetailsSection.append(TextRow("title") {
             $0.placeholder = "Title"

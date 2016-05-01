@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import CoreData
 
-class BookDetailsViewController: UIViewController {
+class BookDetails: UIViewController {
     
     var book: Book?
     
@@ -24,14 +24,14 @@ class BookDetailsViewController: UIViewController {
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "editBookSegue"{
+        if segue.identifier == "editBookSegue" {
             let navController = segue.destinationViewController as! UINavigationController
-            let editBookController = navController.viewControllers.first as! EditBookViewController
+            let editBookController = navController.viewControllers.first as! EditBook
             editBookController.book = self.book
         }
     }
     
-    func switchState(newState: BookReadState){
+    func switchState(newState: BookReadState) {
         if let book = book {
             book.readState = newState
             appDelegate.booksStore.UpdateSpotlightIndex(book)

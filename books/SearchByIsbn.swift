@@ -26,7 +26,7 @@ class SearchByIsbn: UIViewController {
     func searchCompletionHandler(metadata: BookMetadata?) {
         if let metadata = metadata {
             metadata.isbn13 = isbn13
-            metadata.readState = (self.navigationController as! NavigationControllerWithReadState).readState
+            metadata.readState = (self.navigationController as! NavWithReadState).readState
             
             appDelegate.booksStore.CreateBook(metadata)
             StopSpinnerAndExit()

@@ -11,7 +11,7 @@ import DZNEmptyDataSet
 import CoreData
 import CoreSpotlight
 
-class BookTableViewController: UITableViewController {
+class BookTable: UITableViewController {
 
     @IBOutlet weak var segmentControl: UISegmentedControl!
     
@@ -169,7 +169,7 @@ class BookTableViewController: UITableViewController {
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "addBook" {
-            let navigationController = segue.destinationViewController as! NavigationControllerWithReadState
+            let navigationController = segue.destinationViewController as! NavWithReadState
             navigationController.readState = readState
         }
         else if segue.identifier == "showDetail" {
@@ -182,7 +182,7 @@ class BookTableViewController: UITableViewController {
                 selectedBook = self.resultsController.objectAtIndexPath(selectedIndex!) as! Book
             }
             let destinationNavController = segue.destinationViewController as! UINavigationController
-            let destinationViewController = destinationNavController.topViewController as! BookDetailsViewController
+            let destinationViewController = destinationNavController.topViewController as! BookDetails
             destinationViewController.book = selectedBook
         }
     }
@@ -192,7 +192,7 @@ class BookTableViewController: UITableViewController {
 /**
  The handling of updates from the fetched results controller.
 */
-extension BookTableViewController: NSFetchedResultsControllerDelegate {
+extension BookTable: NSFetchedResultsControllerDelegate {
     
     func controllerWillChangeContent(controller: NSFetchedResultsController) {
         if tableView.editing {
@@ -235,7 +235,7 @@ extension BookTableViewController: NSFetchedResultsControllerDelegate {
 /**
  Controls for the Search capabilities of the table.
  */
-extension BookTableViewController: UISearchResultsUpdating {
+extension BookTable: UISearchResultsUpdating {
     func configureSearchBar(){
         self.searchController.searchResultsUpdater = self
         self.searchController.dimsBackgroundDuringPresentation = false
@@ -259,7 +259,7 @@ extension BookTableViewController: UISearchResultsUpdating {
 /**
  Functions controlling the DZNEmptyDataSet.
  */
-extension BookTableViewController : DZNEmptyDataSetSource {
+extension BookTable : DZNEmptyDataSetSource {
     
     private func IsShowingSearchResults() -> Bool {
         if !searchController.active {
@@ -299,7 +299,7 @@ extension BookTableViewController : DZNEmptyDataSetSource {
 }
 
 
-extension BookTableViewController{
+extension BookTable {
     func loadDefaultDataIfFirstLaunch() {
         let key = "hasLaunchedBefore"
         let launchedBefore = NSUserDefaults.standardUserDefaults().boolForKey(key)

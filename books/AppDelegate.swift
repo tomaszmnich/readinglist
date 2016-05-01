@@ -50,7 +50,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if let _ = userActivity.userInfo?[CSSearchableItemActivityIdentifier] as? String {
                 let splitViewController = self.window!.rootViewController as! UISplitViewController
                 let navigationController = splitViewController.viewControllers.first as! UINavigationController
-                let tableViewController = navigationController.viewControllers[0] as! BookTableViewController
+                let tableViewController = navigationController.viewControllers[0] as! BookTable
                 tableViewController.restoreUserActivityState(userActivity)
             }
         }

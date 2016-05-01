@@ -103,10 +103,10 @@
             </objects>
             <point key="canvasLocation" x="-268" y="-391"/>
         </scene>
-        <!--Navigation Controller With Read State-->
+        <!--Nav With Read State-->
         <scene sceneID="D1O-n3-5lh">
             <objects>
-                <navigationController definesPresentationContext="YES" id="IA5-Oq-XRy" customClass="NavigationControllerWithReadState" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
+                <navigationController definesPresentationContext="YES" id="IA5-Oq-XRy" customClass="NavWithReadState" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
                     <nil key="simulatedStatusBarMetrics"/>
                     <modalFormSheetSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="IbE-W0-H7w">

@@ -10,7 +10,7 @@ import Foundation
 import Eureka
 import UIKit
 
-class EditBookViewController: FormViewController {
+class EditBook: FormViewController {
     
     var book: Book!
     @IBOutlet weak var doneButton: UIBarButtonItem!
@@ -20,7 +20,7 @@ class EditBookViewController: FormViewController {
         
         let readStateSection = Section("Read state")
         readStateSection.append(SegmentedRow<BookReadState>("book-read-state") {
-            $0.options = [.ToRead, .Reading, .Finished]
+            $0.options = [.Reading, .ToRead, .Finished]
             $0.value = book.readState
             })
         form.append(readStateSection)
@@ -63,7 +63,7 @@ class EditBookViewController: FormViewController {
     
     func presentDeleteAlert(){
         // We are going to show an action sheet
-        let confirmDeleteAlert = UIAlertController(title: "Confirm", message: nil, preferredStyle: .ActionSheet)
+        let confirmDeleteAlert = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
         
         // Bring up the action sheet)
         confirmDeleteAlert.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))

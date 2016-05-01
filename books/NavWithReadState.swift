@@ -9,6 +9,6 @@
 import Foundation
 import UIKit
 
-class NavigationControllerWithReadState: UINavigationController {
+class NavWithReadState: UINavigationController {
     var readState: BookReadState!
 }
