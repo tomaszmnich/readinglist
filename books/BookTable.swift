@@ -120,9 +120,21 @@ class BookTable: UITableViewController {
             optionMenu.addAction(deleteAction)
             optionMenu.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
             
-            // Bring up the action sheet
+            // Configure the popover if necessary (i.e. if iPad)
+            if let popoverPresentation = optionMenu.popoverPresentationController {
+                popoverPresentation.permittedArrowDirections = [.Up, .Down]
+                
+                let cell = tableView.cellForRowAtIndexPath(indexPath)!
+                popoverPresentation.sourceView = cell
+                
+                // Set the source of the popover to be roughly on top of the accessory view.
+                // I.e., set the origin of the source to be the top-RIGHT of the cell, give it the same
+                // height as the cell, and guess a width.
+                let cellPosition = cell.bounds
+                popoverPresentation.sourceRect = CGRect(x: Int(cellPosition.maxX), y: Int(cellPosition.minY), width: 64, height: Int(cellPosition.height))
+            }
+            
             self.presentViewController(optionMenu, animated: true, completion: nil)
-
         }
         delete.backgroundColor = UIColor.redColor()
         
@@ -132,10 +144,6 @@ class BookTable: UITableViewController {
     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         // All cells are "editable"
         return true
-    }
-    
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        // you need to implement this method too or you can't swipe to display the actions
     }
     
     override func restoreUserActivityState(activity: NSUserActivity) {
