@@ -327,7 +327,7 @@ extension BookTable {
                 ("9780006546061", .ToRead, "Farenheit 451"),
                 ("9781442369054", .ToRead, "Steve Jobs"),
                 ("9780007532766", .Finished, "Purity"),
-                ("9780718197384", .Reading, "The Price of Inequality"),
+                ("9781847924032", .Reading, "And The Weak Suffer What They Must?"),
                 ("9780099889809", .Reading, "Something Happened"),
                 ("9780241197790", .Finished, "The Trial"),
                 ("9780340935125", .ToRead, "Indemnity Only"),

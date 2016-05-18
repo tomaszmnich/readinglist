@@ -12,10 +12,11 @@ import CoreData
 @objc(Book)
 class Book: NSManagedObject {
     @NSManaged var title: String
+    @NSManaged var subtitle: String?
     @NSManaged var authorList: String?
     @NSManaged var isbn13: String?
     @NSManaged var pageCount: NSNumber?
-    @NSManaged var publishedDate: String?
+    @NSManaged var publishedDate: NSDate?
     @NSManaged var bookDescription: String? // 'description' would be a better name but the data model does not support using that term for an attribute
     @NSManaged var coverImage: NSData?
     @NSManaged var readState: BookReadState
@@ -44,11 +45,11 @@ class Book: NSManagedObject {
 class BookMetadata {
     var title: String!
     var readState: BookReadState!
-    
+    var subtitle: String?
     var isbn13: String?
     var authorList: String?
     var pageCount: NSNumber?
-    var publishedDate: String?
+    var publishedDate: NSDate?
     var bookDescription: String?
     var startedReading: NSDate?
     var finishedReading: NSDate?
