@@ -103,6 +103,11 @@ class BookTable: UITableViewController {
         return cell
     }
     
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        // Deselect selected rows, so they don't stay highlighted
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+    }
+    
     override func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
     
         let delete = UITableViewRowAction(style: .Destructive, title: "Delete") {
@@ -292,9 +297,16 @@ extension BookTable : DZNEmptyDataSetSource {
     func titleForEmptyDataSet(scrollView: UIScrollView!) -> NSAttributedString! {
         let attrs = [NSFontAttributeName: UIFont.preferredFontForTextStyle(UIFontTextStyleHeadline)]
         if IsShowingSearchResults() {
-            return NSAttributedString(string: "No results :(", attributes: attrs)
+            return NSAttributedString(string: "No results", attributes: attrs)
         }
-        return NSAttributedString(string: "No books yet", attributes: attrs)
+        switch self.readState{
+        case .ToRead:
+            return NSAttributedString(string: "You are not planning on reading any books!", attributes: attrs)
+        case .Reading:
+            return NSAttributedString(string: "You are not currently reading anything...", attributes: attrs)
+        case .Finished:
+            return NSAttributedString(string: "You haven't yet finished a book. Get going!", attributes: attrs)
+        }
     }
     
     func descriptionForEmptyDataSet(scrollView: UIScrollView!) -> NSAttributedString! {
