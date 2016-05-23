@@ -18,32 +18,47 @@ class EditBook: FormViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let readStateSection = Section("Read state")
-        readStateSection.append(SegmentedRow<BookReadState>("book-read-state") {
+        // Title and Author
+        let titleAuthorSection = Section("Book Information")
+        titleAuthorSection.append(SegmentedRow<BookReadState>("book-read-state") {
             $0.options = [.Reading, .ToRead, .Finished]
             $0.value = book.readState
-            })
-        form.append(readStateSection)
-        
-        let bookDetailsSection = Section("Book information")
-        bookDetailsSection.append(TextRow("title") {
+        })
+        titleAuthorSection.append(TextRow("title") {
             $0.placeholder = "Title"
             $0.value = book.title
         }.onChange{_ in
             self.setStateOfDoneButton()
         })
-        bookDetailsSection.append(TextRow("author") {
+        titleAuthorSection.append(TextRow("author") {
             $0.placeholder = "Author"
             $0.value = book.authorList
         }.onChange{ _ in
             self.setStateOfDoneButton()
         })
-        bookDetailsSection.append(TextAreaRow("description") {
+        form.append(titleAuthorSection)
+        
+        // Page count and Publication date
+        let pagePublicationSection = Section("Book Details")
+        pagePublicationSection.append(IntRow("page-count") {
+            $0.title = "Pages"
+            $0.value = book.pageCount as Int?
+        })
+        pagePublicationSection.append(DateRow("publication-date") {
+            $0.title = "Published"
+            $0.value = book.publishedDate
+        })
+        form.append(pagePublicationSection)
+        
+        // Description
+        let descriptionSection = Section("Description")
+        descriptionSection.append(TextAreaRow("description") {
             $0.placeholder = "Description"
             $0.value = book.bookDescription
         })
-        form.append(bookDetailsSection)
+        form.append(descriptionSection)
         
+        // Delete button
         let deleteSection = Section()
         deleteSection.append(ButtonRow("delete"){
             $0.title = "Delete Book"
@@ -69,10 +84,12 @@ class EditBook: FormViewController {
         confirmDeleteAlert.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
         confirmDeleteAlert.addAction(UIAlertAction(title: "Delete", style: .Destructive) { _ in
             appDelegate.booksStore.DeleteBookAndDeindex(self.book)
-            self.dismissViewControllerAnimated(true){
-                // TODO: Dismiss instead the *other* navigation controller.
-                self.navigationController?.popViewControllerAnimated(true)
-            }
+            
+            // Pop the detail view, so that the table view is ready for us
+            ((self.presentingViewController as! SplitViewController).viewControllers[0] as! UINavigationController).popViewControllerAnimated(false)
+            
+            // Now dismiss *this* modal view, showing the table view.
+            self.dismissViewControllerAnimated(true, completion: nil)
         })
         self.presentViewController(confirmDeleteAlert, animated: true, completion: nil)
     }
@@ -91,6 +108,8 @@ class EditBook: FormViewController {
         book.title = formValues["title"] as! String
         book.authorList = formValues["author"] as? String
         book.bookDescription = formValues["description"] as? String
+        book.pageCount = formValues["page-count"] as? NSNumber
+        book.publishedDate = formValues["publication-date"] as? NSDate
         
         // Save the book and dismiss this view.
         appDelegate.booksStore.Save()
