@@ -30,10 +30,10 @@ class BooksStore {
     */
     func FetchedBooksController() -> NSFetchedResultsController {
         let fetchRequest = NSFetchRequest(entityName: bookEntityName)
-        fetchRequest.sortDescriptors = [BookSortOrder.Title.ToSortDescriptor()]
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "readState", ascending: true), BookSortOrder.Title.ToSortDescriptor()]
         return NSFetchedResultsController(fetchRequest: fetchRequest,
             managedObjectContext: self.coreDataStack.managedObjectContext,
-            sectionNameKeyPath: nil,
+            sectionNameKeyPath: "readState",
             cacheName: nil)
     }
     

@@ -20,39 +20,40 @@ class BookTable: UITableViewController {
     /// The controller to get the results to display in this view
     var resultsController = appDelegate.booksStore.FetchedBooksController()
     
-    func segmentToReadState(segmentIndex: Int) -> BookReadState {
-        switch segmentIndex {
-        case 2:
-            return .Finished
-        case 1:
-            return .ToRead
-        default:
-            return .Reading
+    enum TableSegmentOption: Int {
+        case ToRead = 0
+        case Finished = 1
+        
+        var toReadStates: [BookReadState] {
+            switch self {
+            case .ToRead:
+                return [.ToRead, .Reading]
+            case .Finished:
+                return [.Finished]
+            }
         }
-    }
-    
-    func readStateToSegment(readState: BookReadState) -> Int {
-        switch readState {
-        case .Reading:
-            return 0;
-        case .ToRead:
-            return 1
-        case .Finished:
-            return 2
+
+        static func fromReadState(state: BookReadState) -> TableSegmentOption{
+            switch state{
+            case .Finished:
+                return .Finished
+            default:
+                return .ToRead
+            }
         }
     }
 
-    /// The currently selected read state
-    var readState = BookReadState.Reading
+    /// The currently selected segment
+    var selectedSegment = TableSegmentOption.ToRead
     
     /// The UISearchController to which this UITableViewController is connected.
     var searchController = UISearchController(searchResultsController: nil)
     
-    var tableViewScrollPositions = [BookReadState: CGPoint]()
+    var tableViewScrollPositions = [TableSegmentOption: CGPoint]()
     
     override func viewDidLoad() {
         // Attach this controller as a delegate on for the results controller, and perform the initial fetch.
-        updatePredicate([ReadStateFilter(states: [readState])])
+        updatePredicate([ReadStateFilter(states: selectedSegment.toReadStates)])
         resultsController.delegate = self
         try! resultsController.performFetch()
         
@@ -79,11 +80,15 @@ class BookTable: UITableViewController {
         // as the starting scroll positions for each of the modes.
         if viewHasJustLoaded {
         let startingOffset = tableView.contentOffset
-            tableViewScrollPositions[.Reading] = startingOffset
             tableViewScrollPositions[.ToRead] = startingOffset
             tableViewScrollPositions[.Finished] = startingOffset
         }
         viewHasJustLoaded = false
+        
+        // Deselect selected rows, so they don't stay highlighted
+        if let selectedIndexPath = self.tableView.indexPathForSelectedRow {
+            self.tableView.deselectRowAtIndexPath(selectedIndexPath, animated: true)
+        }
         
         super.viewDidAppear(animated)
     }
@@ -92,8 +97,23 @@ class BookTable: UITableViewController {
         resultsController.fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: filters.map{ $0.ToPredicate() })
     }
     
+    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return self.resultsController.sections?.count ?? 1
+    }
+    
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.resultsController.sections![section].numberOfObjects
+        return self.resultsController.sections?[section].numberOfObjects ?? 0
+    }
+    
+    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if selectedSegment == .Finished {
+            // We don't need a section title for this segment
+            return nil
+        }
+        
+        // Otherwise, turn the section name into a BookReadState and use its description property
+        let sectionAsInt = Int32(self.resultsController.sections![section].name)!
+        return BookReadState(rawValue: sectionAsInt)!.description
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -101,11 +121,6 @@ class BookTable: UITableViewController {
         let cell = tableView.dequeueReusableCellWithIdentifier(String(BookTableViewCell), forIndexPath: indexPath) as! BookTableViewCell
         cell.configureFromBook(resultsController.objectAtIndexPath(indexPath) as? Book)
         return cell
-    }
-    
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        // Deselect selected rows, so they don't stay highlighted
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
     
     override func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
@@ -120,7 +135,18 @@ class BookTable: UITableViewController {
                 let selectedBook = self.resultsController.objectAtIndexPath(index) as! Book
                 appDelegate.booksStore.DeleteBookAndDeindex(selectedBook)
                 self.tableView.editing = false
-                tableView.deleteRowsAtIndexPaths([index], withRowAnimation: .Automatic)
+                if tableView.numberOfRowsInSection(index.section) == 1 {
+                    tableView.deleteSections(NSIndexSet(index: index.section), withRowAnimation: .Automatic)
+                }
+                else {
+                    tableView.deleteRowsAtIndexPaths([index], withRowAnimation: .Automatic)
+                }
+                
+                // TODO: This doesn't work
+                if let splitView = self.presentingViewController as? SplitViewController{
+                    splitView.clearDetailView()
+                }
+                
             }
             optionMenu.addAction(deleteAction)
             optionMenu.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
@@ -155,7 +181,7 @@ class BookTable: UITableViewController {
         if let identifier = activity.userInfo?[CSSearchableItemActivityIdentifier] as! String? {
             if let selectedBook = appDelegate.booksStore.GetBook(NSURL(string: identifier)!) {
                 // Update the selected segment and table on display
-                segmentControl.selectedSegmentIndex = readStateToSegment(selectedBook.readState)
+                segmentControl.selectedSegmentIndex = TableSegmentOption.fromReadState(selectedBook.readState).rawValue
                 selectedSegmentChanged(self)
                 
                 // Show the book
@@ -166,16 +192,16 @@ class BookTable: UITableViewController {
     
     @IBAction func selectedSegmentChanged(sender: AnyObject) {
         // Store the scroll position for the current read state
-        tableViewScrollPositions[readState] = tableView.contentOffset
+        tableViewScrollPositions[selectedSegment] = tableView.contentOffset
         
         // Update the read state to the selected read state
-        readState = segmentToReadState(segmentControl.selectedSegmentIndex)
+        selectedSegment = TableSegmentOption(rawValue: segmentControl.selectedSegmentIndex)!
         
         // Load the previously stored scroll position
-        tableView.setContentOffset(tableViewScrollPositions[readState]!, animated: false)
+        tableView.setContentOffset(tableViewScrollPositions[selectedSegment]!, animated: false)
         
         // Load the data
-        updatePredicate([ReadStateFilter(states: [readState])])
+        updatePredicate([ReadStateFilter(states: selectedSegment.toReadStates)])
         try! resultsController.performFetch()
         tableView.reloadData()
     }
@@ -183,7 +209,7 @@ class BookTable: UITableViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "addBook" {
             let navigationController = segue.destinationViewController as! NavWithReadState
-            navigationController.readState = readState
+            navigationController.readState = selectedSegment.toReadStates.first
         }
         else if segue.identifier == "showDetail" {
             var selectedBook: Book!
@@ -235,12 +261,12 @@ extension BookTable: NSFetchedResultsControllerDelegate {
                 cell.configureFromBook(resultsController.objectAtIndexPath(indexPath!) as? Book)
             }
         case .Insert:
-            tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .None)
+            tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Left)
         case .Move:
-            tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .None)
-            tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .None)
+            tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Top)
+            tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Bottom)
         case .Delete:
-            tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .None)
+            tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Left)
         }
     }
 }
@@ -262,7 +288,7 @@ extension BookTable: UISearchResultsUpdating {
     }
     
     func updateSearchResultsForSearchController(searchController: UISearchController) {
-        updatePredicate([ReadStateFilter(states: [readState]), TitleFilter(comparison: .Contains, text: searchController.searchBar.text!)])
+        updatePredicate([ReadStateFilter(states: selectedSegment.toReadStates), TitleFilter(comparison: .Contains, text: searchController.searchBar.text!)])
         try! resultsController.performFetch()
         tableView.reloadData()
     }
@@ -299,11 +325,9 @@ extension BookTable : DZNEmptyDataSetSource {
         if IsShowingSearchResults() {
             return NSAttributedString(string: "No results", attributes: attrs)
         }
-        switch self.readState{
+        switch self.selectedSegment{
         case .ToRead:
-            return NSAttributedString(string: "You are not planning on reading any books!", attributes: attrs)
-        case .Reading:
-            return NSAttributedString(string: "You are not currently reading anything...", attributes: attrs)
+            return NSAttributedString(string: "You are not reading any books!", attributes: attrs)
         case .Finished:
             return NSAttributedString(string: "You haven't yet finished a book. Get going!", attributes: attrs)
         }

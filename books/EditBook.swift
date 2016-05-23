@@ -86,7 +86,9 @@ class EditBook: FormViewController {
             appDelegate.booksStore.DeleteBookAndDeindex(self.book)
             
             // Pop the detail view, so that the table view is ready for us
-            ((self.presentingViewController as! SplitViewController).viewControllers[0] as! UINavigationController).popViewControllerAnimated(false)
+            let splitView = self.presentingViewController as! SplitViewController
+            splitView.clearDetailView()
+            splitView.masterNavigationController.popViewControllerAnimated(false)
             
             // Now dismiss *this* modal view, showing the table view.
             self.dismissViewControllerAnimated(true, completion: nil)

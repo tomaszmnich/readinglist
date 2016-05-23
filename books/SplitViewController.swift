@@ -18,4 +18,18 @@ class SplitViewController: UISplitViewController, UISplitViewControllerDelegate 
     func splitViewController(splitViewController: UISplitViewController, collapseSecondaryViewController secondaryViewController: UIViewController, ontoPrimaryViewController primaryViewController: UIViewController) -> Bool {
         return true
     }
+    
+    var masterNavigationController: UINavigationController {
+        return self.viewControllers[0] as! UINavigationController
+    }
+    
+    var detailNavigationController: UINavigationController {
+        return self.viewControllers[1] as! UINavigationController
+    }
+    
+    func clearDetailView() {
+        let bookDetails = detailNavigationController.viewControllers.first as! BookDetails
+        bookDetails.book = nil
+        bookDetails.updateUi()
+    }
 }
