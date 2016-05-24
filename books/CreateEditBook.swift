@@ -47,6 +47,8 @@ class CreateEditBook: FormViewController {
         })
         pagePublicationSection.append(TextAreaRow("description"){
             $0.placeholder = "Description"
+        }.cellSetup{
+            $0.cell.height = {return 200}
         })
         form.append(pagePublicationSection)
         
