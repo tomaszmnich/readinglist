@@ -21,7 +21,7 @@ class CreateEditBook: FormViewController {
         super.viewDidLoad()
         
         // Title and Author
-        let titleAuthorSection = Section("Book Information")
+        let titleAuthorSection = Section()
         titleAuthorSection.append(SegmentedRow<BookReadState>("book-read-state") {
             $0.options = [.Reading, .ToRead, .Finished]
         })
@@ -38,12 +38,12 @@ class CreateEditBook: FormViewController {
         form.append(titleAuthorSection)
         
         // Page count and Publication date
-        let pagePublicationSection = Section("Book Details")
+        let pagePublicationSection = Section()
         pagePublicationSection.append(IntRow("page-count") {
-            $0.title = "Pages"
+            $0.title = "Number of Pages"
         })
         pagePublicationSection.append(DateRow("publication-date") {
-            $0.title = "Published"
+            $0.title = "Publication Date"
         })
         pagePublicationSection.append(TextAreaRow("description"){
             $0.placeholder = "Description"
@@ -65,7 +65,7 @@ class CreateEditBook: FormViewController {
         }
     }
     
-    func setValues(bookMetadata: BookMetadata) {
+    private func setValues(bookMetadata: BookMetadata) {
         form.setValues([
             "book-read-state": bookMetadata.readState,
             "title": bookMetadata.title,
@@ -75,7 +75,7 @@ class CreateEditBook: FormViewController {
             "description": bookMetadata.bookDescription])
     }
     
-    func getValues() -> BookMetadata {
+    private func getValues() -> BookMetadata {
         let formValues = form.values()
         let currentValues = BookMetadata()
         currentValues.readState = formValues["book-read-state"] as? BookReadState
@@ -103,7 +103,7 @@ class CreateEditBook: FormViewController {
         setStateOfDoneButton()
     }
     
-    func presentDeleteAlert(){
+    private func presentDeleteAlert(){
         // We are going to show an action sheet
         let confirmDeleteAlert = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
         
@@ -144,7 +144,7 @@ class CreateEditBook: FormViewController {
         self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
     }
     
-    func setStateOfDoneButton() {
+    private func setStateOfDoneButton() {
         let formValues = form.values()
         
         if (formValues["title"] as? String)?.isEmpty ?? true {
