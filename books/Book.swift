@@ -34,9 +34,24 @@ class Book: NSManagedObject {
         pageCount = metadata.pageCount
         publishedDate = metadata.publishedDate
         bookDescription = metadata.bookDescription
-        startedReading = metadata.startedReading
-        finishedReading = metadata.finishedReading
-        coverImage = metadata.coverImage
+        startedReading = metadata.startedReading ?? startedReading
+        finishedReading = metadata.finishedReading ?? finishedReading
+        coverImage = metadata.coverImage ?? coverImage
+    }
+    
+    func RetrieveMetadata() -> BookMetadata {
+        let metadata = BookMetadata()
+        metadata.title = title
+        metadata.authorList = authorList
+        metadata.isbn13 = isbn13
+        metadata.pageCount = pageCount
+        metadata.publishedDate = publishedDate
+        metadata.bookDescription = bookDescription
+        metadata.coverImage = coverImage
+        metadata.readState = readState
+        metadata.startedReading = startedReading
+        metadata.finishedReading = finishedReading
+        return metadata
     }
 }
 

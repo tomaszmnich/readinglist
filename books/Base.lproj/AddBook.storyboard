@@ -37,7 +37,7 @@
         <!--Add Manually-->
         <scene sceneID="25v-fZ-xbG">
             <objects>
-                <viewController id="yLX-6o-qN7" customClass="CreateBook" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="yLX-6o-qN7" customClass="CreateEditBook" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="u4K-nk-gaa"/>
                         <viewControllerLayoutGuide type="bottom" id="FY2-vS-ice"/>
@@ -50,17 +50,17 @@
                     <navigationItem key="navigationItem" title="Add Manually" id="8EQ-Fj-MgA">
                         <barButtonItem key="rightBarButtonItem" systemItem="done" id="XsD-I0-xq4">
                             <connections>
-                                <action selector="doneWasPressed:" destination="yLX-6o-qN7" id="i2p-tG-f0C"/>
+                                <action selector="doneButtonWasPressed:" destination="yLX-6o-qN7" id="kfY-3S-NwL"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="doneButton" destination="XsD-I0-xq4" id="mPj-CH-CO7"/>
+                        <outlet property="doneButton" destination="XsD-I0-xq4" id="Fkz-sB-l8G"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ano-2E-9eJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-991" y="400"/>
+            <point key="canvasLocation" x="-991" y="362"/>
         </scene>
         <!--Search By Isbn-->
         <scene sceneID="eFJ-kC-eB4">

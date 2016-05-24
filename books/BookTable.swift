@@ -98,7 +98,7 @@ class BookTable: UITableViewController {
     }
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return self.resultsController.sections?.count ?? 1
+        return self.resultsController.sections?.count ?? 0
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -131,16 +131,8 @@ class BookTable: UITableViewController {
             let optionMenu = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
             let deleteAction = UIAlertAction(title: "Delete", style: .Destructive){
                 _ in
-                self.tableView.editing = true
                 let selectedBook = self.resultsController.objectAtIndexPath(index) as! Book
                 appDelegate.booksStore.DeleteBookAndDeindex(selectedBook)
-                self.tableView.editing = false
-                if tableView.numberOfRowsInSection(index.section) == 1 {
-                    tableView.deleteSections(NSIndexSet(index: index.section), withRowAnimation: .Automatic)
-                }
-                else {
-                    tableView.deleteRowsAtIndexPaths([index], withRowAnimation: .Automatic)
-                }
                 
                 // TODO: This doesn't work
                 if let splitView = self.presentingViewController as? SplitViewController{
@@ -234,39 +226,39 @@ class BookTable: UITableViewController {
 extension BookTable: NSFetchedResultsControllerDelegate {
     
     func controllerWillChangeContent(controller: NSFetchedResultsController) {
-        if tableView.editing {
-            return
-        }
         tableView.beginUpdates()
     }
     
     func controllerDidChangeContent(controller: NSFetchedResultsController) {
-        if tableView.editing {
-            return
-        }
         try! controller.performFetch()
         tableView.reloadData()
         tableView.endUpdates()
     }
     
     func controller(controller: NSFetchedResultsController, didChangeObject object: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
-        if tableView.editing {
-            // If the user is editing stuff directly in the table, 
-            // don't worry about trying to keep it up to date here too.
-            return
-        }
         switch type {
         case .Update:
             if let cell = tableView.cellForRowAtIndexPath(indexPath!) as? BookTableViewCell {
                 cell.configureFromBook(resultsController.objectAtIndexPath(indexPath!) as? Book)
             }
         case .Insert:
-            tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Left)
+            tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Fade)
         case .Move:
-            tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Top)
-            tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Bottom)
+            tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
+            tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Fade)
         case .Delete:
-            tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Left)
+            tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
+        }
+    }
+    
+    func controller(controller: NSFetchedResultsController, didChangeSection sectionInfo: NSFetchedResultsSectionInfo, atIndex sectionIndex: Int, forChangeType type: NSFetchedResultsChangeType) {
+        switch type {
+        case .Insert:
+            self.tableView.insertSections(NSIndexSet(index: sectionIndex), withRowAnimation: .Fade)
+        case .Delete:
+            self.tableView.deleteSections(NSIndexSet(index: sectionIndex), withRowAnimation: .Fade)
+        default:
+            return
         }
     }
 }

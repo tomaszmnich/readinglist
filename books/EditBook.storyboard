@@ -7,7 +7,7 @@
         <!--Edit Book-->
         <scene sceneID="Ko7-yo-BH0">
             <objects>
-                <viewController id="gP2-fQ-9M2" customClass="EditBook" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="gP2-fQ-9M2" customClass="CreateEditBook" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="f9C-6w-24f"/>
                         <viewControllerLayoutGuide type="bottom" id="khP-od-Jju"/>
