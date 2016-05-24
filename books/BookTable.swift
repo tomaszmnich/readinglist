@@ -11,6 +11,29 @@ import DZNEmptyDataSet
 import CoreData
 import CoreSpotlight
 
+enum TableSegmentOption: Int {
+    case ToRead = 0
+    case Finished = 1
+    
+    var toReadStates: [BookReadState] {
+        switch self {
+        case .ToRead:
+            return [.ToRead, .Reading]
+        case .Finished:
+            return [.Finished]
+        }
+    }
+    
+    static func fromReadState(state: BookReadState) -> TableSegmentOption{
+        switch state{
+        case .Finished:
+            return .Finished
+        default:
+            return .ToRead
+        }
+    }
+}
+
 class BookTable: UITableViewController {
 
     @IBOutlet weak var segmentControl: UISegmentedControl!
@@ -19,29 +42,6 @@ class BookTable: UITableViewController {
     
     /// The controller to get the results to display in this view
     var resultsController = appDelegate.booksStore.FetchedBooksController()
-    
-    enum TableSegmentOption: Int {
-        case ToRead = 0
-        case Finished = 1
-        
-        var toReadStates: [BookReadState] {
-            switch self {
-            case .ToRead:
-                return [.ToRead, .Reading]
-            case .Finished:
-                return [.Finished]
-            }
-        }
-
-        static func fromReadState(state: BookReadState) -> TableSegmentOption{
-            switch state{
-            case .Finished:
-                return .Finished
-            default:
-                return .ToRead
-            }
-        }
-    }
 
     /// The currently selected segment
     var selectedSegment = TableSegmentOption.ToRead
@@ -126,41 +126,16 @@ class BookTable: UITableViewController {
     override func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
     
         let delete = UITableViewRowAction(style: .Destructive, title: "Delete") {
-            action, index in
-        
-            let optionMenu = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
-            let deleteAction = UIAlertAction(title: "Delete", style: .Destructive){
-                _ in
-                let selectedBook = self.resultsController.objectAtIndexPath(index) as! Book
+            _, index in
+
+            // If there is a book at this index, delete it
+            if let selectedBook = self.resultsController.objectAtIndexPath(index) as? Book {
                 appDelegate.booksStore.DeleteBookAndDeindex(selectedBook)
-                
-                // TODO: This doesn't work
-                if let splitView = self.presentingViewController as? SplitViewController{
-                    splitView.clearDetailView()
-                }
-                
-            }
-            optionMenu.addAction(deleteAction)
-            optionMenu.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
-            
-            // Configure the popover if necessary (i.e. if iPad)
-            if let popoverPresentation = optionMenu.popoverPresentationController {
-                popoverPresentation.permittedArrowDirections = [.Up, .Down]
-                
-                let cell = tableView.cellForRowAtIndexPath(indexPath)!
-                popoverPresentation.sourceView = cell
-                
-                // Set the source of the popover to be roughly on top of the accessory view.
-                // I.e., set the origin of the source to be the top-RIGHT of the cell, give it the same
-                // height as the cell, and guess a width.
-                let cellPosition = cell.bounds
-                popoverPresentation.sourceRect = CGRect(x: Int(cellPosition.maxX), y: Int(cellPosition.minY), width: 64, height: Int(cellPosition.height))
             }
             
-            self.presentViewController(optionMenu, animated: true, completion: nil)
+            // TODO: Clear the detail view if the deleted book is being displayed
         }
         delete.backgroundColor = UIColor.redColor()
-        
         return [delete]
     }
     
