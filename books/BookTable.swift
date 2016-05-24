@@ -34,14 +34,22 @@ enum TableSegmentOption: Int {
     }
 }
 
-class BookTable: UITableViewController {
+class BookTable: FetchedResultsTable {
 
     @IBOutlet weak var segmentControl: UISegmentedControl!
     
     var viewHasJustLoaded = true
     
-    /// The controller to get the results to display in this view
-    var resultsController = appDelegate.booksStore.FetchedBooksController()
+    private var _resultsController = appDelegate.booksStore.FetchedBooksController()
+    private var _cellIdentifier = String(BookTableViewCell)
+    
+    override var resultsController: NSFetchedResultsController! {
+        get { return _resultsController }
+    }
+    
+    override var cellIdentifier: String {
+        get { return _cellIdentifier }
+    }
 
     /// The currently selected segment
     var selectedSegment = TableSegmentOption.ToRead
@@ -53,8 +61,8 @@ class BookTable: UITableViewController {
     
     override func viewDidLoad() {
         // Attach this controller as a delegate on for the results controller, and perform the initial fetch.
-        updatePredicate([ReadStateFilter(states: selectedSegment.toReadStates)])
         resultsController.delegate = self
+        updatePredicate(ReadStateFilter(states: selectedSegment.toReadStates).ToPredicate())
         try! resultsController.performFetch()
         
         // Hacky way of getting some test data. This will be remove in due course.
@@ -92,19 +100,7 @@ class BookTable: UITableViewController {
         
         super.viewDidAppear(animated)
     }
-    
-    private func updatePredicate(filters: [BookFilter]){
-        resultsController.fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: filters.map{ $0.ToPredicate() })
-    }
-    
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return self.resultsController.sections?.count ?? 0
-    }
-    
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.resultsController.sections?[section].numberOfObjects ?? 0
-    }
-    
+
     override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         if selectedSegment == .Finished {
             // We don't need a section title for this segment
@@ -116,11 +112,8 @@ class BookTable: UITableViewController {
         return BookReadState(rawValue: sectionAsInt)!.description
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        // Get a spare cell, configure the cell for the specified index path and return it
-        let cell = tableView.dequeueReusableCellWithIdentifier(String(BookTableViewCell), forIndexPath: indexPath) as! BookTableViewCell
-        cell.configureFromBook(resultsController.objectAtIndexPath(indexPath) as? Book)
-        return cell
+    override func configureCell(cell: UITableViewCell, fromObject object: AnyObject) {
+        (cell as! BookTableViewCell).configureFromBook(object as? Book)
     }
     
     override func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
@@ -168,7 +161,7 @@ class BookTable: UITableViewController {
         tableView.setContentOffset(tableViewScrollPositions[selectedSegment]!, animated: false)
         
         // Load the data
-        updatePredicate([ReadStateFilter(states: selectedSegment.toReadStates)])
+        updatePredicate(ReadStateFilter(states: selectedSegment.toReadStates).ToPredicate())
         try! resultsController.performFetch()
         tableView.reloadData()
     }
@@ -194,50 +187,6 @@ class BookTable: UITableViewController {
     }
 }
 
-
-/**
- The handling of updates from the fetched results controller.
-*/
-extension BookTable: NSFetchedResultsControllerDelegate {
-    
-    func controllerWillChangeContent(controller: NSFetchedResultsController) {
-        tableView.beginUpdates()
-    }
-    
-    func controllerDidChangeContent(controller: NSFetchedResultsController) {
-        try! controller.performFetch()
-        tableView.reloadData()
-        tableView.endUpdates()
-    }
-    
-    func controller(controller: NSFetchedResultsController, didChangeObject object: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
-        switch type {
-        case .Update:
-            if let cell = tableView.cellForRowAtIndexPath(indexPath!) as? BookTableViewCell {
-                cell.configureFromBook(resultsController.objectAtIndexPath(indexPath!) as? Book)
-            }
-        case .Insert:
-            tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Fade)
-        case .Move:
-            tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
-            tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Fade)
-        case .Delete:
-            tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
-        }
-    }
-    
-    func controller(controller: NSFetchedResultsController, didChangeSection sectionInfo: NSFetchedResultsSectionInfo, atIndex sectionIndex: Int, forChangeType type: NSFetchedResultsChangeType) {
-        switch type {
-        case .Insert:
-            self.tableView.insertSections(NSIndexSet(index: sectionIndex), withRowAnimation: .Fade)
-        case .Delete:
-            self.tableView.deleteSections(NSIndexSet(index: sectionIndex), withRowAnimation: .Fade)
-        default:
-            return
-        }
-    }
-}
-
 /**
  Controls for the Search capabilities of the table.
  */
@@ -255,7 +204,8 @@ extension BookTable: UISearchResultsUpdating {
     }
     
     func updateSearchResultsForSearchController(searchController: UISearchController) {
-        updatePredicate([ReadStateFilter(states: selectedSegment.toReadStates), TitleFilter(comparison: .Contains, text: searchController.searchBar.text!)])
+        ReadStateFilter(states: selectedSegment.toReadStates).ToPredicate()
+        updatePredicate(NSCompoundPredicate(andPredicateWithSubpredicates: [ReadStateFilter(states: selectedSegment.toReadStates).ToPredicate(), TitleFilter(comparison: .Contains, text: searchController.searchBar.text!).ToPredicate()]))
         try! resultsController.performFetch()
         tableView.reloadData()
     }

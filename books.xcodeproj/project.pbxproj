@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4905D85E1C135AB500F57B3C /* books.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4905D85C1C135AB500F57B3C /* books.xcdatamodeld */; };
+		491C84261CF4E2C400894313 /* FetchedResultsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491C84251CF4E2C400894313 /* FetchedResultsTable.swift */; };
 		491F14621C02228C0052B355 /* ScanBarcode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491F14611C02228C0052B355 /* ScanBarcode.swift */; };
 		492141291C05B2030048E647 /* GoogleBooksParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 492141281C05B2030048E647 /* GoogleBooksParser.swift */; };
 		492500781C0B1B0000C149B5 /* BooksStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 492500771C0B1B0000C149B5 /* BooksStore.swift */; };
@@ -64,6 +65,7 @@
 
 /* Begin PBXFileReference section */
 		4905D85D1C135AB500F57B3C /* books.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = books.xcdatamodel; sourceTree = "<group>"; };
+		491C84251CF4E2C400894313 /* FetchedResultsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchedResultsTable.swift; sourceTree = "<group>"; };
 		491F14611C02228C0052B355 /* ScanBarcode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScanBarcode.swift; sourceTree = "<group>"; };
 		492141281C05B2030048E647 /* GoogleBooksParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleBooksParser.swift; sourceTree = "<group>"; };
 		492500771C0B1B0000C149B5 /* BooksStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BooksStore.swift; sourceTree = "<group>"; };
@@ -244,6 +246,7 @@
 				49BDCC6E1CD6173100F20AAE /* Main */,
 				49BDCC6D1CD614E600F20AAE /* AddBook */,
 				49BDCC6B1CD6120400F20AAE /* NavWithReadState.swift */,
+				491C84251CF4E2C400894313 /* FetchedResultsTable.swift */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -515,6 +518,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				492141291C05B2030048E647 /* GoogleBooksParser.swift in Sources */,
+				491C84261CF4E2C400894313 /* FetchedResultsTable.swift in Sources */,
 				494C61D21C0BAF8C00F64105 /* SearchByIsbn.swift in Sources */,
 				49BDCC6A1CD4EADF00F20AAE /* AddBookOptions.swift in Sources */,
 				49812BB41CA95F0600A49EBA /* BookFilteringSorting.swift in Sources */,
