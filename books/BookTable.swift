@@ -60,6 +60,8 @@ class BookTable: FetchedResultsTable {
     var tableViewScrollPositions = [TableSegmentOption: CGPoint]()
     
     override func viewDidLoad() {
+        self.clearsSelectionOnViewWillAppear = false
+        
         // Attach this controller as a delegate on for the results controller, and perform the initial fetch.
         resultsController.delegate = self
         updatePredicate(ReadStateFilter(states: selectedSegment.toReadStates).ToPredicate())
@@ -95,7 +97,7 @@ class BookTable: FetchedResultsTable {
         
         // Deselect selected rows, so they don't stay highlighted
         if let selectedIndexPath = self.tableView.indexPathForSelectedRow {
-            self.tableView.deselectRowAtIndexPath(selectedIndexPath, animated: true)
+            self.tableView.deselectRowAtIndexPath(selectedIndexPath, animated: animated)
         }
         
         super.viewDidAppear(animated)
