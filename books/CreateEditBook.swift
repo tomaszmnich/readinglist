@@ -112,12 +112,13 @@ class CreateEditBook: FormViewController {
         confirmDeleteAlert.addAction(UIAlertAction(title: "Delete", style: .Destructive) { _ in
             appDelegate.booksStore.DeleteBookAndDeindex(self.bookToEdit!)
             
-            // Pop the detail view, so that the table view is ready for us
-            let splitView = self.presentingViewController as! SplitViewController
-            splitView.clearDetailView()
+            // If the detail view is present, clear it.
+            // Otherwise, pop it.
+            let splitView = appDelegate.window!.rootViewController as! SplitViewController
+            splitView.clearDetailViewIfBookDisplayed(nil)
             splitView.masterNavigationController.popViewControllerAnimated(false)
             
-            // Now dismiss *this* modal view, showing the table view.
+            // Now dismiss *this* modal view
             self.dismissViewControllerAnimated(true, completion: nil)
         })
         self.presentViewController(confirmDeleteAlert, animated: true, completion: nil)

@@ -23,13 +23,19 @@ class SplitViewController: UISplitViewController, UISplitViewControllerDelegate 
         return self.viewControllers[0] as! UINavigationController
     }
     
-    var detailNavigationController: UINavigationController {
-        return self.viewControllers[1] as! UINavigationController
+    private var detailNavigationControllerIfSplit: UINavigationController? {
+        if self.viewControllers.count >= 2 {
+            return self.viewControllers[1] as? UINavigationController
+        }
+        return nil
     }
     
-    func clearDetailView() {
-        let bookDetails = detailNavigationController.viewControllers.first as! BookDetails
-        bookDetails.book = nil
-        bookDetails.updateUi()
+    func clearDetailViewIfBookDisplayed(book: Book?) {
+        if let bookDetails = detailNavigationControllerIfSplit?.viewControllers.first as? BookDetails {
+            if book == nil || bookDetails.book == book {
+                bookDetails.book = nil
+                bookDetails.updateUi()
+            }
+        }
     }
 }

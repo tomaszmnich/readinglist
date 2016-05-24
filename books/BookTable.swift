@@ -126,9 +126,9 @@ class BookTable: FetchedResultsTable {
             // If there is a book at this index, delete it
             if let selectedBook = self.resultsController.objectAtIndexPath(index) as? Book {
                 appDelegate.booksStore.DeleteBookAndDeindex(selectedBook)
+                let splitView = appDelegate.window!.rootViewController as! SplitViewController
+                splitView.clearDetailViewIfBookDisplayed(selectedBook)
             }
-            
-            // TODO: Clear the detail view if the deleted book is being displayed
         }
         delete.backgroundColor = UIColor.redColor()
         return [delete]
