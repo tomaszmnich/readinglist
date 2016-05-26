@@ -19,20 +19,25 @@ class CreateReadState: ChangeReadState {
         super.viewDidLoad()
         
         // Load the existing values on to the form when it's about to appear
-        setValues(ReadStatePageInputs(readState: bookMetadata.readState, dateStarted: bookMetadata.startedReading, dateFinished: bookMetadata.finishedReading))
+        ReadState = bookMetadata.readState
+        StartedReading = bookMetadata.startedReading
+        FinishedReading = bookMetadata.finishedReading
     }
     
     @IBAction func doneWasPressed(sender: UIBarButtonItem) {
         self.view.endEditing(true)
         
         // Update the book metadata object and create a book from it
-        let formValues = getValues()
-        bookMetadata.readState = formValues.readState
-        bookMetadata.startedReading = formValues.dateStarted
-        bookMetadata.finishedReading = formValues.dateFinished
+        bookMetadata.readState = ReadState
+        bookMetadata.startedReading = ReadState == .ToRead ? nil : StartedReading
+        bookMetadata.finishedReading = ReadState != .Finished ? nil : FinishedReading
         appDelegate.booksStore.CreateBook(bookMetadata)
         appDelegate.booksStore.Save()
         
         self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    override func OnChange() {
+        doneButton.enabled = IsValid()
     }
 }

@@ -9,32 +9,28 @@
 import Eureka
 import UIKit
 
-struct ReadStatePageInputs {
-    var readState: BookReadState!
-    var dateStarted: NSDate?
-    var dateFinished: NSDate?
-}
-
 class ChangeReadState: FormViewController {
 
     let readStateKey = "book-read-state"
     let dateStartedKey = "date-started"
     let dateFinishedKey = "date-finished"
     
-    var previousReadStateValue: BookReadState?
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        // READ STATE
         let readStateSection = Section()
         readStateSection.append(SegmentedRow<BookReadState>(readStateKey) {
             $0.title = "Read State"
             $0.options = [.ToRead, .Reading, .Finished]
-        }.onChange{
-            self.onReadStateChange($0)
+            // Set a value here so we can be sure that the read state option is *never* null.
+            $0.value = .ToRead
+        }.onChange{_ in
+            self.OnChange()
         })
         form.append(readStateSection)
         
+        // STARTED READING
         let startedReadingSection = Section() {
             $0.hidden = Condition.Function([readStateKey]) {
                 let readStateRow: SegmentedRow<BookReadState> = $0.rowByTag(self.readStateKey)!
@@ -43,9 +39,15 @@ class ChangeReadState: FormViewController {
         }
         startedReadingSection.append(DateRow(dateStartedKey){
             $0.title = "Started Reading"
+        }.onChange{_ in
+            self.OnChange()
+        }
+        .cellUpdate{ _, _ in
+            self.OnChange()
         })
         form.append(startedReadingSection)
         
+        // FINISHED READING
         let finishedReadingSection = Section() {
             $0.hidden = Condition.Function([self.readStateKey]) {
                 let readStateRow: SegmentedRow<BookReadState> = $0.rowByTag(self.readStateKey)!
@@ -54,50 +56,43 @@ class ChangeReadState: FormViewController {
         }
         finishedReadingSection.append(DateRow(dateFinishedKey){
             $0.title = "Finished Reading"
+        }.onChange{_ in
+            self.OnChange()
+        }
+        .cellUpdate{ _, _ in
+            self.OnChange()
         })
         form.append(finishedReadingSection)
     }
     
-    func onReadStateChange(row: SegmentedRow<BookReadState>) {
-        // If we were on a different read state to now, and it is more "progressed", add a default value for the dates
-        let formValues = self.getValues()
-        if formValues.readState?.rawValue > previousReadStateValue?.rawValue {
-            if formValues.readState == .ToRead {
-                form.setValues([dateStartedKey: NSDate()])
-            }
-            else if formValues.readState == .Finished {
-                form.setValues([dateFinishedKey: NSDate()])
-            }
-        }
-        previousReadStateValue = formValues.readState
-    }
-
-    func setValues(inputs: ReadStatePageInputs) {
-        previousReadStateValue = getValues().readState
-        form.setValues([
-            readStateKey: inputs.readState,
-            dateStartedKey: inputs.dateStarted,
-            dateFinishedKey: inputs.dateFinished])
+    func OnChange() {
+        // Should be overriden
     }
     
-    func getValues() -> ReadStatePageInputs {
-        let formValues = form.values()
-        return ReadStatePageInputs(readState: formValues[readStateKey] as? BookReadState, dateStarted: formValues[dateStartedKey] as? NSDate, dateFinished: formValues[dateFinishedKey] as? NSDate)
+    var ReadState: BookReadState {
+        get { return form.values()[readStateKey] as! BookReadState }
+        set { form.setValues([readStateKey: newValue]) }
     }
     
-    func isValid() -> Bool {
-        let formValues = getValues()
-        
-        guard let readState = formValues.readState else {
-            return false
-        }
-        switch readState {
+    var StartedReading: NSDate? {
+        get { return form.values()[dateStartedKey] as? NSDate }
+        set { form.setValues([dateStartedKey: newValue]) }
+    }
+    
+    var FinishedReading: NSDate? {
+        get { return form.values()[dateFinishedKey] as? NSDate }
+        set { form.setValues([dateFinishedKey: newValue]) }
+    }
+    
+    func IsValid() -> Bool {
+        // Check that the relevant dates have been set.
+        switch ReadState {
         case .ToRead:
             return true
         case .Reading:
-            return formValues.dateStarted != nil
+            return StartedReading != nil
         case .Finished:
-            return formValues.dateStarted != nil && formValues.dateFinished != nil // TODO: check date order?
+            return StartedReading != nil && FinishedReading != nil && StartedReading!.compare(FinishedReading!) != .OrderedDescending
         }
     }
 }

@@ -21,21 +21,22 @@ class EditReadState: ChangeReadState {
         navigationItem.title = bookToEdit.title
         
         // Load the existing values on to the form when it's about to appear
-        setValues(ReadStatePageInputs(readState: bookToEdit.readState, dateStarted: bookToEdit.startedReading, dateFinished: bookToEdit.finishedReading))
+        ReadState = bookToEdit.readState
+        StartedReading = bookToEdit.startedReading
+        FinishedReading = bookToEdit.finishedReading
+    }
+    
+    override func OnChange() {
+        doneButton.enabled = IsValid()
     }
     
     @IBAction func doneWasPressed(sender: UIBarButtonItem) {
         self.view.endEditing(true)
         
         // Update the book metadata object and create a book from it
-        let formValues = getValues()
-        bookToEdit.readState = formValues.readState!
-        if bookToEdit.readState != .ToRead {
-            bookToEdit.startedReading = formValues.dateStarted
-        }
-        if bookToEdit.readState == .Finished {
-            bookToEdit.finishedReading = formValues.dateFinished
-        }
+        bookToEdit.readState = ReadState
+        bookToEdit.startedReading = ReadState == .ToRead ? nil : StartedReading
+        bookToEdit.finishedReading = ReadState != .Finished ? nil : FinishedReading
         appDelegate.booksStore.UpdateSpotlightIndex(bookToEdit)
         appDelegate.booksStore.Save()
         
