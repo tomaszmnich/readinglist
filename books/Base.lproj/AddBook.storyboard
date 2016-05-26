@@ -37,7 +37,7 @@
         <!--Add Manually-->
         <scene sceneID="25v-fZ-xbG">
             <objects>
-                <viewController id="yLX-6o-qN7" customClass="CreateEditBook" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="yLX-6o-qN7" customClass="CreateBook" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="u4K-nk-gaa"/>
                         <viewControllerLayoutGuide type="bottom" id="FY2-vS-ice"/>
@@ -48,9 +48,10 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" title="Add Manually" id="8EQ-Fj-MgA">
-                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="XsD-I0-xq4">
+                        <barButtonItem key="rightBarButtonItem" title="Next" id="XsD-I0-xq4" userLabel="Next Button">
                             <connections>
                                 <action selector="doneButtonWasPressed:" destination="yLX-6o-qN7" id="kfY-3S-NwL"/>
+                                <segue destination="bN9-Cz-0Ly" kind="show" identifier="addManuallyNextSegue" id="IXB-Is-KKL"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -102,6 +103,34 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7gT-5z-qMi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-268" y="-391"/>
+        </scene>
+        <!--Set Read State-->
+        <scene sceneID="Akp-v3-3aF">
+            <objects>
+                <viewController id="bN9-Cz-0Ly" customClass="CreateReadState" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="exa-sP-IHI"/>
+                        <viewControllerLayoutGuide type="bottom" id="Vw1-CO-cLc"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Nnl-Sp-Pts">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Set Read State" id="vfW-LJ-HsF">
+                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="VYD-1D-UjJ">
+                            <connections>
+                                <action selector="doneWasPressed:" destination="bN9-Cz-0Ly" id="1BR-sZ-c2C"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="doneButton" destination="VYD-1D-UjJ" id="2mQ-OO-OIN"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="mJ1-SA-xV9" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-246" y="362"/>
         </scene>
         <!--Nav With Read State-->
         <scene sceneID="D1O-n3-5lh">

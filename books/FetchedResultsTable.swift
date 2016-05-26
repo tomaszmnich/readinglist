@@ -6,12 +6,8 @@
 //  Copyright © 2016 Andrew Bennet. All rights reserved.
 //
 
-import Foundation
 import UIKit
-import DZNEmptyDataSet
 import CoreData
-import CoreSpotlight
-
 
 class FetchedResultsTable: UITableViewController {
     

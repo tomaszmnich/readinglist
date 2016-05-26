@@ -29,8 +29,13 @@ class BookDetails: UIViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "editBookSegue" {
             let navController = segue.destinationViewController as! UINavigationController
-            let editBookController = navController.viewControllers.first as! CreateEditBook
+            let editBookController = navController.viewControllers.first as! EditBook
             editBookController.bookToEdit = self.book
+        }
+        else if segue.identifier == "editReadStateSegue" {
+            let navController = segue.destinationViewController as! UINavigationController
+            let changeReadState = navController.viewControllers.first as! EditReadState
+            changeReadState.bookToEdit = self.book
         }
     }
     

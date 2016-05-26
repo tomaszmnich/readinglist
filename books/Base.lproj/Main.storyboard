@@ -3,6 +3,7 @@
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
     </dependencies>
     <scenes>
         <!--Book Details-->
@@ -112,11 +113,18 @@
                     </view>
                     <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
                     <navigationItem key="navigationItem" id="YRx-69-dRa">
-                        <barButtonItem key="rightBarButtonItem" systemItem="edit" id="AXa-H3-O12">
-                            <connections>
-                                <segue destination="hSG-hA-aNk" kind="presentation" identifier="editBookSegue" modalPresentationStyle="formSheet" id="bfD-cG-YZ2"/>
-                            </connections>
-                        </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem systemItem="edit" id="AXa-H3-O12">
+                                <connections>
+                                    <segue destination="hSG-hA-aNk" kind="presentation" identifier="editBookSegue" modalPresentationStyle="formSheet" id="bfD-cG-YZ2"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem systemItem="bookmarks" id="COZ-4N-Rqo">
+                                <connections>
+                                    <segue destination="I2A-UO-0Si" kind="presentation" identifier="editReadStateSegue" modalPresentationStyle="formSheet" id="yZJ-t8-f8y"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
                     </navigationItem>
                     <connections>
                         <outlet property="authorLabel" destination="k7j-D0-s2o" id="3pU-LR-uQp"/>
@@ -279,6 +287,14 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="32B-vE-unn" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-2671.5" y="772"/>
+        </scene>
+        <!--Change-->
+        <scene sceneID="7XF-3J-9h5">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Change" id="I2A-UO-0Si" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="JUN-qt-IhT" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2675.5" y="711"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>

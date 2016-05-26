@@ -175,7 +175,7 @@ class BookTable: FetchedResultsTable {
         }
         else if segue.identifier == "showDetail" {
             var selectedBook: Book!
-            if let bookSender = sender as? Book{
+            if let bookSender = sender as? Book {
                 selectedBook = bookSender
             }
             else if let cellSender = sender as? UITableViewCell {

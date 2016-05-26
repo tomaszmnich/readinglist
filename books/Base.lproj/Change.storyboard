@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="1El-ev-t5d">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+    </dependencies>
+    <scenes>
+        <!--Navigation Controller-->
+        <scene sceneID="yXX-xi-ugJ">
+            <objects>
+                <navigationController id="1El-ev-t5d" sceneMemberID="viewController">
+                    <nil key="simulatedStatusBarMetrics"/>
+                    <modalFormSheetSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="XS7-j2-82p">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="ljF-ha-bUY" kind="relationship" relationship="rootViewController" id="rmr-DX-zDu"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="De5-61-jwU" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2527" y="307"/>
+        </scene>
+        <!--Edit Read State-->
+        <scene sceneID="SP6-BY-2te">
+            <objects>
+                <viewController id="ljF-ha-bUY" customClass="EditReadState" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Vyf-Qx-YF3"/>
+                        <viewControllerLayoutGuide type="bottom" id="d3p-nd-VGc"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="4fi-w6-gYM">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="Ywe-yr-vcG">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="klf-ef-YqY">
+                            <connections>
+                                <action selector="cancelWasPressed:" destination="ljF-ha-bUY" id="aTM-ef-fyZ"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="hvk-ZG-HYY">
+                            <connections>
+                                <action selector="doneWasPressed:" destination="ljF-ha-bUY" id="3qW-if-lFT"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="doneButton" destination="hvk-ZG-HYY" id="2za-VO-1fd"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="cYD-yM-W9E" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1747" y="314"/>
+        </scene>
+    </scenes>
+</document>

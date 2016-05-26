@@ -6,7 +6,6 @@
 //  Copyright © 2016 Andrew Bennet. All rights reserved.
 //
 
-import Foundation
 import UIKit
 
 class NavWithReadState: UINavigationController {
