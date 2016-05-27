@@ -6,9 +6,7 @@
 //  Copyright © 2015 Andrew Bennet. All rights reserved.
 //
 
-import Foundation
 import UIKit
-import CoreData
 
 class BookDetails: UIViewController {
     
@@ -39,40 +37,14 @@ class BookDetails: UIViewController {
         }
     }
     
-    func switchState(newState: BookReadState) {
-        if let book = book {
-            book.readState = newState
-            appDelegate.booksStore.UpdateSpotlightIndex(book)
-            appDelegate.booksStore.Save()
-            self.navigationController?.popViewControllerAnimated(true)
-        }
-    }
-
-    func delete(){
-        if let book = book {
-            appDelegate.booksStore.DeleteBookAndDeindex(book)
-            self.navigationController?.popViewControllerAnimated(true)
-        }
-    }
-    
     func updateUi(){
         titleLabel.text = book?.title
         subtitleLabel.text = book?.subtitle
         authorLabel.text = book?.authorList
         descriptionLabel.text = book?.bookDescription
+        pagesLabel.text = book?.pageCount != nil ? "\(book!.pageCount!) pages" : nil
+        imageView.image = book?.coverImage != nil ? UIImage(data: book!.coverImage!) : nil
         
-        if let pageCount = book?.pageCount{
-            pagesLabel.text = "\(pageCount) pages"
-        }
-        else {
-            pagesLabel.text = nil
-        }
-        if let coverImg = book?.coverImage {
-            imageView.image = UIImage(data: coverImg)
-        }
-        else {
-            imageView.image = nil
-        }
         if let publicationDate = book?.publishedDate {
             let formatter = NSDateFormatter()
             formatter.dateStyle = NSDateFormatterStyle.LongStyle
