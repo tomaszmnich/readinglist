@@ -21,7 +21,7 @@ class BookDetails: UIViewController {
     @IBOutlet weak var pagesLabel: UILabel!
     
     override func viewWillAppear(animated: Bool) {
-        updateUi()
+        UpdateUi()
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -37,22 +37,40 @@ class BookDetails: UIViewController {
         }
     }
     
-    func updateUi(){
-        titleLabel.text = book?.title
-        subtitleLabel.text = book?.subtitle
-        authorLabel.text = book?.authorList
-        descriptionLabel.text = book?.bookDescription
-        pagesLabel.text = book?.pageCount != nil ? "\(book!.pageCount!) pages" : nil
-        imageView.image = book?.coverImage != nil ? UIImage(data: book!.coverImage!) : nil
+    func UpdateUi() {
+        func formatPublicationDate(date: NSDate?) -> String? {
+            if let date = date {
+                let formatter = NSDateFormatter()
+                formatter.dateStyle = NSDateFormatterStyle.LongStyle
+                formatter.timeStyle = .NoStyle
+                return "Published: \(formatter.stringFromDate(date))"
+            }
+            else {
+                return nil
+            }
+        }
         
-        if let publicationDate = book?.publishedDate {
-            let formatter = NSDateFormatter()
-            formatter.dateStyle = NSDateFormatterStyle.LongStyle
-            formatter.timeStyle = .NoStyle
-            publishedWhenLabel.text = "Published: \(formatter.stringFromDate(publicationDate))"
+        if let book = book {
+            titleLabel.text = book.title
+            subtitleLabel.text = book.subtitle
+            authorLabel.text = book.authorList
+            descriptionLabel.text = book.bookDescription
+            pagesLabel.text = book.pageCount != nil ? "\(book.pageCount!) pages" : nil
+            imageView.image = book.coverImage != nil ? UIImage(data: book.coverImage!) : nil
+            publishedWhenLabel.text = formatPublicationDate(book.publishedDate)
         }
         else {
-            publishedWhenLabel.text = nil
+            ClearUI()
         }
+    }
+    
+    func ClearUI() {
+        titleLabel.text = nil
+        subtitleLabel.text = nil
+        authorLabel.text = nil
+        descriptionLabel.text = nil
+        pagesLabel.text = nil
+        imageView.image = nil
+        publishedWhenLabel.text = nil
     }
 }

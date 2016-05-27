@@ -30,12 +30,24 @@ class SplitViewController: UISplitViewController, UISplitViewControllerDelegate 
         return nil
     }
     
-    func clearDetailViewIfBookDisplayed(book: Book?) {
+    /** 
+        Clears the detail view - if it is displayed in split view - if the given book
+        is currently displayed.
+    */
+    func clearDetailViewIfBookDisplayedInSplitView(book: Book) {
         if let bookDetails = detailNavigationControllerIfSplit?.viewControllers.first as? BookDetails {
-            if book == nil || bookDetails.book == book {
-                bookDetails.book = nil
-                bookDetails.updateUi()
+            if bookDetails.book == book {
+                bookDetails.ClearUI()
             }
+        }
+    }
+    
+    /**
+        Clears the detail view - if it is displayed in split view.
+    */
+    func clearDetailViewIfSplitView() {
+        if let bookDetails = detailNavigationControllerIfSplit?.viewControllers.first as? BookDetails {
+            bookDetails.ClearUI()
         }
     }
 }

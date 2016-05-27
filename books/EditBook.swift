@@ -50,7 +50,7 @@ class EditBook: ChangeBook {
             // If the detail view is present, clear it.
             // Otherwise, pop it.
             let splitView = appDelegate.window!.rootViewController as! SplitViewController
-            splitView.clearDetailViewIfBookDisplayed(nil)
+            splitView.clearDetailViewIfSplitView()
             splitView.masterNavigationController.popViewControllerAnimated(false)
             
             // Now dismiss *this* modal view
