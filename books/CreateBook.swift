@@ -46,7 +46,7 @@ class CreateBook: ChangeBook {
         if segue.identifier == "addManuallyNextSegue" {
             let createReadState = segue.destinationViewController as! CreateReadState
             
-            let finalBookMetadata = BookMetadata()
+            let finalBookMetadata = initialBookMetadata ?? BookMetadata()
             finalBookMetadata.title = TitleField!
             finalBookMetadata.authorList = AuthorList
             finalBookMetadata.bookDescription = Description

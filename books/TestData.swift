@@ -22,7 +22,7 @@ class TestData {
                 ("9780007532766", .Finished, NSDate(dateString: "2015-08-26"), NSDate(dateString: "2015-10-25")), //Purity
                 ("9780857059994", .Finished, NSDate(dateString: "2016-01-12"), NSDate(dateString: "2016-02-23")), //The Girl in the Spider's web
                 ("9781476781105", .Reading, NSDate(dateString: "2016-05-14"), nil), //Shards of Honor
-                ("978751549256", .ToRead, nil, nil) //The Cuckoo's Calling
+                ("9780751549256", .ToRead, nil, nil) //The Cuckoo's Calling
             ]
             
             for bookToAdd in booksToAdd {
