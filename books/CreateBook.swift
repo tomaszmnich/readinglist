@@ -12,7 +12,7 @@ class CreateBook: ChangeBook {
     
     var initialBookMetadata: BookMetadata?
     
-    @IBOutlet weak var doneButton: UIBarButtonItem!
+    @IBOutlet weak var nextButton: UIBarButtonItem!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,7 +34,7 @@ class CreateBook: ChangeBook {
     }
     
     override func OnChange() {
-        doneButton.enabled = IsValid()
+        nextButton.enabled = IsValid()
     }
     
     @IBAction func cancelButtonWasPressed(sender: AnyObject) {

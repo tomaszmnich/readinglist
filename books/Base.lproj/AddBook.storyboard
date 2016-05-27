@@ -56,7 +56,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="doneButton" destination="XsD-I0-xq4" id="Fkz-sB-l8G"/>
+                        <outlet property="nextButton" destination="XsD-I0-xq4" id="1el-Kt-2Xy"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ano-2E-9eJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
