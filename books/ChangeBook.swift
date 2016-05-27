@@ -9,42 +9,40 @@
 import Eureka
 import UIKit
 
-struct BookPageInputs {
-    var title: String?
-    var author: String?
-    var pageCount: Int?
-    var publicationDate: NSDate?
-    var description: String?
-}
-
 class ChangeBook: FormViewController {
+    
+    let titleKey = "title"
+    let authorListKey = "author"
+    let pageCountKey = "page-count"
+    let publicationDateKey = "publication-date"
+    let descriptionKey = "description"
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // Title and Author
         let titleAuthorSection = Section()
-        titleAuthorSection.append(TextRow("title") {
+        titleAuthorSection.append(TextRow(titleKey) {
             $0.placeholder = "Title"
         }.onChange{_ in
-            self.onChange()
+            self.OnChange()
         })
-        titleAuthorSection.append(TextRow("author") {
+        titleAuthorSection.append(TextRow(authorListKey) {
             $0.placeholder = "Author"
         }.onChange{ _ in
-            self.onChange()
+            self.OnChange()
         })
         form.append(titleAuthorSection)
         
         // Page count and Publication date
         let pagePublicationSection = Section()
-        pagePublicationSection.append(IntRow("page-count") {
+        pagePublicationSection.append(IntRow(pageCountKey) {
             $0.title = "Number of Pages"
         })
-        pagePublicationSection.append(DateRow("publication-date") {
+        pagePublicationSection.append(DateRow(publicationDateKey) {
             $0.title = "Publication Date"
         })
-        pagePublicationSection.append(TextAreaRow("description"){
+        pagePublicationSection.append(TextAreaRow(descriptionKey){
             $0.placeholder = "Description"
         }.cellSetup{
             $0.cell.height = {return 200}
@@ -52,36 +50,40 @@ class ChangeBook: FormViewController {
         form.append(pagePublicationSection)
     }
     
-    func setValues(inputs: BookPageInputs) {
-        form.setValues([
-            "title": inputs.title,
-            "author": inputs.author,
-            "page-count": inputs.pageCount,
-            "publication-date": inputs.publicationDate,
-            "description": inputs.description])
+    var TitleField: String? {
+        get { return form.values()[titleKey] as? String }
+        set { form.setValues([titleKey: newValue]) }
     }
     
-    func getValues() -> BookPageInputs {
-        let formValues = form.values()
-        let currentValues = BookPageInputs(title: formValues["title"] as? String,
-                                           author: formValues["author"] as? String,
-                                           pageCount: formValues["page-count"] as? Int,
-                                           publicationDate: formValues["publication-date"] as? NSDate,
-                                           description: formValues["description"] as? String)
-        return currentValues
+    var AuthorList: String? {
+        get { return form.values()[authorListKey] as? String }
+        set { form.setValues([authorListKey: newValue]) }
     }
     
-    func onChange() {
+    var PageCount: Int? {
+        get { return form.values()[pageCountKey] as? Int }
+        set { form.setValues([pageCountKey: newValue]) }
+    }
+    
+    var PublicationDate: NSDate? {
+        get { return form.values()[publicationDateKey] as? NSDate }
+        set { form.setValues([publicationDateKey: newValue]) }
+    }
+    
+    var Description: String? {
+        get { return form.values()[descriptionKey] as? String }
+        set { form.setValues([descriptionKey: newValue]) }
+    }
+    
+    func OnChange() {
         // Should be overriden
     }
     
-    func isValid() -> Bool {
-        let formValues = getValues()
-        
-        if formValues.title?.isEmpty ?? true {
+    func IsValid() -> Bool {
+        if TitleField?.isEmpty ?? true {
             return false
         }
-        if formValues.author?.isEmpty ?? true {
+        if AuthorList?.isEmpty ?? true {
             return false
         }
         return true

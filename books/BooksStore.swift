@@ -76,9 +76,9 @@ class BooksStore {
      Creates a new Book object, populates with the provided metadata, saves the
      object context, and adds the book to the Spotlight index.
     */
-    func CreateBook(metadata: BookMetadata) {
+    func CreateBook(metadata: BookMetadata, readingInformation: BookReadingInformation) {
         let book = CreateBook()
-        book.UpdateFromMetadata(metadata)
+        book.Populate(metadata, readingInformation: readingInformation)
         Save()
         UpdateSpotlightIndex(book)
     }

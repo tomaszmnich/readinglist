@@ -12,26 +12,31 @@ import UIKit
 class CreateReadState: ChangeReadState {
 
     var bookMetadata: BookMetadata!
+    var bookReadingInformation = BookReadingInformation()
     
     @IBOutlet weak var doneButton: UIBarButtonItem!
     
     override func viewDidLoad() {
+        // Set the read state on the info
+        bookReadingInformation.readState = (self.navigationController as! NavWithReadState).readState
+        
         super.viewDidLoad()
         
-        // Load the existing values on to the form when it's about to appear
-        ReadState = bookMetadata.readState
-        StartedReading = bookMetadata.startedReading
-        FinishedReading = bookMetadata.finishedReading
+        // Set the read state on the form; add some default form values for the dates
+        ReadState = bookReadingInformation.readState
+        StartedReading = NSDate()
+        FinishedReading = NSDate()
     }
     
     @IBAction func doneWasPressed(sender: UIBarButtonItem) {
         self.view.endEditing(true)
         
-        // Update the book metadata object and create a book from it
-        bookMetadata.readState = ReadState
-        bookMetadata.startedReading = ReadState == .ToRead ? nil : StartedReading
-        bookMetadata.finishedReading = ReadState != .Finished ? nil : FinishedReading
-        appDelegate.booksStore.CreateBook(bookMetadata)
+        // Update the book metadata object and create a book from it.
+        // Ignore the dates which are not relevant.
+        bookReadingInformation.readState = ReadState
+        bookReadingInformation.startedReading = ReadState == .ToRead ? nil : StartedReading
+        bookReadingInformation.finishedReading = ReadState != .Finished ? nil : FinishedReading
+        appDelegate.booksStore.CreateBook(bookMetadata, readingInformation: bookReadingInformation)
         appDelegate.booksStore.Save()
         
         self.navigationController?.dismissViewControllerAnimated(true, completion: nil)

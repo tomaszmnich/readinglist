@@ -15,6 +15,7 @@ class SearchByIsbn: UIViewController {
     
     /// This must be populated by any controller segueing to this one
     var isbn13: String!
+    var foundMetadata: BookMetadata?
     
     override func viewDidLoad() {
         spinner.startAnimating()
@@ -25,10 +26,7 @@ class SearchByIsbn: UIViewController {
     
     func searchCompletionHandler(metadata: BookMetadata?) {
         if let metadata = metadata {
-            metadata.isbn13 = isbn13
-            metadata.readState = (self.navigationController as! NavWithReadState).readState
-            
-            appDelegate.booksStore.CreateBook(metadata)
+            foundMetadata = metadata
             StopSpinnerAndExit()
         }
         else {
@@ -36,10 +34,17 @@ class SearchByIsbn: UIViewController {
         }
     }
     
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "showIsbnSearchResultSegue" {
+            let createBookController = segue.destinationViewController as! CreateBook
+            createBookController.initialBookMetadata = foundMetadata
+        }
+    }
+    
     /// Stops the spinner and dismisses this view controller.
     func StopSpinnerAndExit() {
         spinner.stopAnimating()
-        self.navigationController!.dismissViewControllerAnimated(true, completion: nil)
+        self.performSegueWithIdentifier("showIsbnSearchResultSegue", sender: self)
     }
     
     /// Presents a popup alerting the use to the fact that there were no results.

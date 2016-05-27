@@ -24,34 +24,17 @@ class Book: NSManagedObject {
     @NSManaged var startedReading: NSDate?
     @NSManaged var finishedReading: NSDate?
     
-    var coverUrl: String?
-    
-    func UpdateFromMetadata(metadata: BookMetadata){
+    func Populate(metadata: BookMetadata, readingInformation: BookReadingInformation) {
         title = metadata.title
-        readState = metadata.readState
         authorList = metadata.authorList
         isbn13 = metadata.isbn13
         pageCount = metadata.pageCount
         publishedDate = metadata.publishedDate
         bookDescription = metadata.bookDescription
-        startedReading = metadata.startedReading ?? startedReading
-        finishedReading = metadata.finishedReading ?? finishedReading
-        coverImage = metadata.coverImage ?? coverImage
-    }
-    
-    func RetrieveMetadata() -> BookMetadata {
-        let metadata = BookMetadata()
-        metadata.title = title
-        metadata.authorList = authorList
-        metadata.isbn13 = isbn13
-        metadata.pageCount = pageCount
-        metadata.publishedDate = publishedDate
-        metadata.bookDescription = bookDescription
-        metadata.coverImage = coverImage
-        metadata.readState = readState
-        metadata.startedReading = startedReading
-        metadata.finishedReading = finishedReading
-        return metadata
+        coverImage = metadata.coverImage
+        readState = readingInformation.readState
+        startedReading = readingInformation.startedReading
+        finishedReading = readingInformation.finishedReading
     }
 }
 
@@ -59,19 +42,21 @@ class Book: NSManagedObject {
 /// Useful for maintaining in-creation books, or books being edited.
 class BookMetadata {
     var title: String!
-    var readState: BookReadState!
     var subtitle: String?
     var isbn13: String?
     var authorList: String?
     var pageCount: NSNumber?
     var publishedDate: NSDate?
     var bookDescription: String?
-    var startedReading: NSDate?
-    var finishedReading: NSDate?
     var coverUrl: String?
     var coverImage: NSData?
 }
 
+class BookReadingInformation {
+    var readState: BookReadState!
+    var startedReading: NSDate?
+    var finishedReading: NSDate?
+}
 
 /// The availale reading progress states
 @objc enum BookReadState : Int32, CustomStringConvertible {

@@ -296,8 +296,9 @@ extension BookTable {
                 OnlineBookClient<GoogleBooksParser>.TryGetBookMetadata(GoogleBooksRequest.Search(bookToAdd.isbn).url, completionHandler: {
                     if let bookMetadata = $0 {
                         bookMetadata.isbn13 = bookToAdd.isbn
-                        bookMetadata.readState = bookToAdd.readState
-                        appDelegate.booksStore.CreateBook(bookMetadata)
+                        let readingInfo = BookReadingInformation()
+                        readingInfo.readState = bookToAdd.readState
+                        appDelegate.booksStore.CreateBook(bookMetadata, readingInformation: readingInfo)
                         self.tableView.reloadData()
                     }
                 })

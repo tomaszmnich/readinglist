@@ -31,7 +31,11 @@ class EditBook: ChangeBook {
         form.append(deleteSection)
         
         // Initialise the form with the book values
-        setValues(BookPageInputs(title: bookToEdit.title, author: bookToEdit.authorList, pageCount: bookToEdit.pageCount as Int?, publicationDate: bookToEdit.publishedDate, description: bookToEdit.bookDescription))
+        TitleField = bookToEdit.title
+        AuthorList = bookToEdit.authorList
+        PageCount = bookToEdit.pageCount != nil ? Int(bookToEdit.pageCount!) : nil
+        PublicationDate = bookToEdit.publishedDate
+        Description = bookToEdit.bookDescription
     }
     
     func presentDeleteAlert(){
@@ -55,8 +59,8 @@ class EditBook: ChangeBook {
         self.presentViewController(confirmDeleteAlert, animated: true, completion: nil)
     }
     
-    override func onChange() {
-        doneButton.enabled = isValid()
+    override func OnChange() {
+        doneButton.enabled = IsValid()
     }
     
     @IBAction func cancelButtonWasPressed(sender: AnyObject) {
@@ -65,19 +69,22 @@ class EditBook: ChangeBook {
     }
     
     @IBAction func doneButtonWasPressed(sender: AnyObject) {
-        self.view.endEditing(true)
+        // Check the title field is not nil
+        guard let TitleField = TitleField else { return }
         
         // Update the book object from the form values
-        let formValues = getValues()
-        bookToEdit.title = formValues.title!
-        bookToEdit.authorList = formValues.author!
-        bookToEdit.bookDescription = formValues.description
-        bookToEdit.pageCount = formValues.pageCount
-        bookToEdit.publishedDate = formValues.publicationDate
+        self.view.endEditing(true)
+
+        bookToEdit.title = TitleField
+        bookToEdit.authorList = AuthorList
+        bookToEdit.bookDescription = Description
+        bookToEdit.pageCount = PageCount
+        bookToEdit.publishedDate = PublicationDate
         
-        // Save the book and dismiss this view.
+        // Save the book
         appDelegate.booksStore.UpdateSpotlightIndex(bookToEdit)
         appDelegate.booksStore.Save()
+
         self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
     }
 }

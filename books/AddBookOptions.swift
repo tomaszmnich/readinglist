@@ -34,13 +34,4 @@ class AddBookOptions: FormViewController {
         self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "addBookManuallySegue" {
-            let createBook = segue.destinationViewController as! CreateBook
-            let newMetadata = BookMetadata()
-            newMetadata.readState = (self.navigationController as! NavWithReadState).readState
-            createBook.bookMetadata = newMetadata
-        }
-    }
-    
 }
