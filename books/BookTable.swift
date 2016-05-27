@@ -39,17 +39,6 @@ class BookTable: FetchedResultsTable {
     @IBOutlet weak var segmentControl: UISegmentedControl!
     
     var viewHasJustLoaded = true
-    
-    private var _resultsController = appDelegate.booksStore.FetchedBooksController()
-    private var _cellIdentifier = String(BookTableViewCell)
-    
-    override var resultsController: NSFetchedResultsController! {
-        get { return _resultsController }
-    }
-    
-    override var cellIdentifier: String {
-        get { return _cellIdentifier }
-    }
 
     /// The currently selected segment
     var selectedSegment = TableSegmentOption.ToRead
@@ -60,6 +49,9 @@ class BookTable: FetchedResultsTable {
     var tableViewScrollPositions = [TableSegmentOption: CGPoint]()
     
     override func viewDidLoad() {
+        resultsController = appDelegate.booksStore.FetchedBooksController()
+        cellIdentifier = String(BookTableViewCell)
+        
         self.clearsSelectionOnViewWillAppear = false
         
         // Attach this controller as a delegate on for the results controller, and perform the initial fetch.

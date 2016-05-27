@@ -12,22 +12,17 @@ import CoreData
 class FetchedResultsTable: UITableViewController {
     
     /// The controller to get the results to display in this view
-    var resultsController: NSFetchedResultsController! {
-        get {
-            // Must be overriden
-            return nil
-        }
-    }
+    var resultsController: NSFetchedResultsController!
+    
+    /// The string to use for the cell reuse identifier
+    var cellIdentifier: String!
     
     func configureCell(cell: UITableViewCell, fromObject object: AnyObject) {
-        // Must be overriden
+        // Should be overriden by inheriting classes
     }
     
-    var cellIdentifier: String! {
-        get {
-            // Must be overriden
-            return nil
-        }
+    func updatePredicate(newPredicate: NSPredicate) {
+        resultsController.fetchRequest.predicate = newPredicate
     }
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -43,10 +38,6 @@ class FetchedResultsTable: UITableViewController {
         let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath)
         configureCell(cell, fromObject: resultsController.objectAtIndexPath(indexPath))
         return cell
-    }
-    
-    func updatePredicate(newPredicate: NSPredicate) {
-        resultsController.fetchRequest.predicate = newPredicate
     }
 }
 
