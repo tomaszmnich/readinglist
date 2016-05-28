@@ -121,6 +121,9 @@ class BookTable: FetchedResultsTable {
             identifierUrl = NSURL(string: identifier),
             selectedBook = appDelegate.booksStore.GetBook(identifierUrl) {
             
+            // Dismiss any modal controllers (e.g. Add)
+            self.dismissViewControllerAnimated(false, completion: nil)
+            
             // Update the selected segment, which will reload the table
             selectedSegment = TableSegmentOption.fromReadState(selectedBook.readState)
             
@@ -131,12 +134,15 @@ class BookTable: FetchedResultsTable {
                 self.tableView.scrollToRowAtIndexPath(indexPathOfSelectedBook, atScrollPosition: .None, animated: false)
                 self.tableView.selectRowAtIndexPath(indexPathOfSelectedBook, animated: false, scrollPosition: .None)
                 
-                // If the BookDetails controller is already displayed, update the book. Otherwise, segue to it.
+                // If the BookDetails controller is already displayed, update the book.
                 if let bookDetails = appDelegate.splitViewController.detailNavigationController?.topViewController as? BookDetails {
+                    // Dismiss any modal controllers (e.g. Edit)
+                    bookDetails.dismissViewControllerAnimated(false, completion: nil)
                     bookDetails.book = selectedBook
                     bookDetails.UpdateUi()
                 }
                 else {
+                    // Otherwise, segue to it.
                     performSegueWithIdentifier("showDetail", sender: selectedBook)
                 }
             }
@@ -158,8 +164,7 @@ class BookTable: FetchedResultsTable {
         
         // If there is a Book currently displaying on the split Detail view, select the corresponding row if possible
         if let currentlyShowingBook = appDelegate.splitViewController.bookDetailsControllerIfSplit?.book
-            where selectedSegment.toReadStates.contains(currentlyShowingBook.readState)
-        {
+            where selectedSegment.toReadStates.contains(currentlyShowingBook.readState) {
             tableView.selectRowAtIndexPath(self.resultsController.indexPathForObject(currentlyShowingBook), animated: false, scrollPosition: .None)
         }
     }
