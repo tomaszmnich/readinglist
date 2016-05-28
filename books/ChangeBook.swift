@@ -79,6 +79,11 @@ class ChangeBook: FormViewController {
         // Should be overriden
     }
     
+    func Dismiss() {
+        self.view.endEditing(true)
+        self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
     func IsValid() -> Bool {
         return TitleField?.isEmpty == false && AuthorList?.isEmpty == false
     }

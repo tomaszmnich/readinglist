@@ -38,8 +38,7 @@ class CreateBook: ChangeBook {
     }
     
     @IBAction func cancelButtonWasPressed(sender: AnyObject) {
-        self.view.endEditing(true)
-        self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
+        Dismiss()
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
