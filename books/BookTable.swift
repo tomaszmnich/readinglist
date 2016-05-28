@@ -37,8 +37,6 @@ enum TableSegmentOption: Int {
 class BookTable: FetchedResultsTable {
 
     @IBOutlet weak var segmentControl: UISegmentedControl!
-    
-    var viewHasJustLoaded = true
 
     /// The currently selected segment
     var selectedSegment = TableSegmentOption.ToRead
@@ -46,21 +44,22 @@ class BookTable: FetchedResultsTable {
     /// The UISearchController to which this UITableViewController is connected.
     var searchController = UISearchController(searchResultsController: nil)
     
+    var viewHasJustLoaded = true
     var tableViewScrollPositions = [TableSegmentOption: CGPoint]()
     
     override func viewDidLoad() {
         resultsController = appDelegate.booksStore.FetchedBooksController()
         cellIdentifier = String(BookTableViewCell)
         
+        // We will manage the clearing of selections ourselves
         self.clearsSelectionOnViewWillAppear = false
-        
-        // Attach this controller as a delegate on for the results controller, and perform the initial fetch.
-        resultsController.delegate = self
-        updatePredicate(ReadStateFilter(states: selectedSegment.toReadStates).ToPredicate())
-        try! resultsController.performFetch()
         
         // Setup the search bar.
         configureSearchBar()
+        
+        // Attach this controller as a delegate on for the results controller, and set the initial predicate
+        resultsController.delegate = self
+        updatePredicate(ReadStateFilter(states: selectedSegment.toReadStates).ToPredicate())
         
         // Set the view of the NavigationController to be white, so that glimpses
         // of dark colours are not seen through the translucent bar when segueing from this view.
@@ -78,7 +77,7 @@ class BookTable: FetchedResultsTable {
         // Now that the view has appeared, store the current table view offset
         // as the starting scroll positions for each of the modes.
         if viewHasJustLoaded {
-        let startingOffset = tableView.contentOffset
+            let startingOffset = tableView.contentOffset
             tableViewScrollPositions[.ToRead] = startingOffset
             tableViewScrollPositions[.Finished] = startingOffset
         }
@@ -112,11 +111,14 @@ class BookTable: FetchedResultsTable {
         let delete = UITableViewRowAction(style: .Destructive, title: "Delete") {
             _, index in
 
-            // If there is a book at this index, delete it
             if let selectedBook = self.resultsController.objectAtIndexPath(index) as? Book {
+                // If there is a book at this index, delete it
                 appDelegate.booksStore.DeleteBookAndDeindex(selectedBook)
-                let splitView = appDelegate.window!.rootViewController as! SplitViewController
-                splitView.clearDetailViewIfBookDisplayedInSplitView(selectedBook)
+                
+                // If it is being displayed, clear it
+                if let bookDetails = appDelegate.splitViewController.bookDetailsControllerIfSplit where bookDetails.book == selectedBook {
+                    bookDetails.ClearUI()
+                }
             }
         }
         delete.backgroundColor = UIColor.redColor()
@@ -129,13 +131,20 @@ class BookTable: FetchedResultsTable {
     }
     
     override func restoreUserActivityState(activity: NSUserActivity) {
-        if let identifier = activity.userInfo?[CSSearchableItemActivityIdentifier] as! String? {
-            if let selectedBook = appDelegate.booksStore.GetBook(NSURL(string: identifier)!) {
-                // Update the selected segment and table on display
-                segmentControl.selectedSegmentIndex = TableSegmentOption.fromReadState(selectedBook.readState).rawValue
-                selectedSegmentChanged(self)
-                
-                // Show the book
+        if let identifier = activity.userInfo?[CSSearchableItemActivityIdentifier] as? String,
+            identifierUrl = NSURL(string: identifier),
+            selectedBook = appDelegate.booksStore.GetBook(identifierUrl) {
+            
+            // Update the selected segment and table on display
+            segmentControl.selectedSegmentIndex = TableSegmentOption.fromReadState(selectedBook.readState).rawValue
+            //selectedSegmentChanged(self)
+
+            // Show the book
+            if let bookDetails = appDelegate.splitViewController.detailNavigationController?.topViewController as? BookDetails {
+                bookDetails.book = selectedBook
+                bookDetails.UpdateUi()
+            }
+            else {
                 performSegueWithIdentifier("showDetail", sender: selectedBook)
             }
         }
@@ -153,8 +162,6 @@ class BookTable: FetchedResultsTable {
         
         // Load the data
         updatePredicate(ReadStateFilter(states: selectedSegment.toReadStates).ToPredicate())
-        try! resultsController.performFetch()
-        tableView.reloadData()
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -163,17 +170,16 @@ class BookTable: FetchedResultsTable {
             navigationController.readState = selectedSegment.toReadStates.first
         }
         else if segue.identifier == "showDetail" {
-            var selectedBook: Book!
+            let destinationViewController = (segue.destinationViewController as! UINavigationController).topViewController as! BookDetails
+
+            // The sender is a Book if we are restoring state
             if let bookSender = sender as? Book {
-                selectedBook = bookSender
+                destinationViewController.book = bookSender
             }
-            else if let cellSender = sender as? UITableViewCell {
-                let selectedIndex = self.tableView.indexPathForCell(cellSender)
-                selectedBook = self.resultsController.objectAtIndexPath(selectedIndex!) as! Book
+            else if let cellSender = sender as? UITableViewCell,
+                selectedIndex = self.tableView.indexPathForCell(cellSender) {
+                destinationViewController.book = self.resultsController.objectAtIndexPath(selectedIndex) as? Book
             }
-            let destinationNavController = segue.destinationViewController as! UINavigationController
-            let destinationViewController = destinationNavController.topViewController as! BookDetails
-            destinationViewController.book = selectedBook
         }
     }
 }
@@ -182,7 +188,7 @@ class BookTable: FetchedResultsTable {
  Controls for the Search capabilities of the table.
  */
 extension BookTable: UISearchResultsUpdating {
-    func configureSearchBar(){
+    func configureSearchBar() {
         self.searchController.searchResultsUpdater = self
         self.searchController.dimsBackgroundDuringPresentation = false
         searchController.searchBar.returnKeyType = .Done
@@ -197,8 +203,6 @@ extension BookTable: UISearchResultsUpdating {
     func updateSearchResultsForSearchController(searchController: UISearchController) {
         ReadStateFilter(states: selectedSegment.toReadStates).ToPredicate()
         updatePredicate(NSCompoundPredicate(andPredicateWithSubpredicates: [ReadStateFilter(states: selectedSegment.toReadStates).ToPredicate(), TitleFilter(comparison: .Contains, text: searchController.searchBar.text!).ToPredicate()]))
-        try! resultsController.performFetch()
-        tableView.reloadData()
     }
 }
 
@@ -209,16 +213,7 @@ extension BookTable: UISearchResultsUpdating {
 extension BookTable : DZNEmptyDataSetSource {
     
     private func IsShowingSearchResults() -> Bool {
-        if !searchController.active {
-            // If the search controller is not active, we are definitely not searching
-            return false
-        }
-        
-        if let searchText = searchController.searchBar.text{
-            // If there is some search text, we are searching if that text is not empty
-            return !searchText.isEmpty
-        }
-        return false
+        return searchController.active && searchController.searchBar.text?.isEmpty == false
     }
     
     func imageForEmptyDataSet(scrollView: UIScrollView!) -> UIImage! {
@@ -244,7 +239,7 @@ extension BookTable : DZNEmptyDataSetSource {
     func descriptionForEmptyDataSet(scrollView: UIScrollView!) -> NSAttributedString! {
         let attrs = [NSFontAttributeName: UIFont.preferredFontForTextStyle(UIFontTextStyleBody)]
         if IsShowingSearchResults() {
-            return NSAttributedString(string: "Try changing your search, or add a new book with the + button above.", attributes: attrs)
+            return NSAttributedString(string: "Try changing your search.", attributes: attrs)
         }
         return NSAttributedString(string: "Add a book by clicking the + button above.", attributes: attrs)
     }

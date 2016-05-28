@@ -23,31 +23,19 @@ class SplitViewController: UISplitViewController, UISplitViewControllerDelegate 
         return self.viewControllers[0] as! UINavigationController
     }
     
-    private var detailNavigationControllerIfSplit: UINavigationController? {
-        if self.viewControllers.count >= 2 {
-            return self.viewControllers[1] as? UINavigationController
-        }
-        return nil
+    var bookTableController: BookTable {
+        return masterNavigationController.viewControllers[0] as! BookTable
     }
     
-    /** 
-        Clears the detail view - if it is displayed in split view - if the given book
-        is currently displayed.
-    */
-    func clearDetailViewIfBookDisplayedInSplitView(book: Book) {
-        if let bookDetails = detailNavigationControllerIfSplit?.viewControllers.first as? BookDetails {
-            if bookDetails.book == book {
-                bookDetails.ClearUI()
-            }
-        }
+    var detailNavigationControllerIfSplit: UINavigationController? {
+        return self.viewControllers[safe: 1] as? UINavigationController
     }
     
-    /**
-        Clears the detail view - if it is displayed in split view.
-    */
-    func clearDetailViewIfSplitView() {
-        if let bookDetails = detailNavigationControllerIfSplit?.viewControllers.first as? BookDetails {
-            bookDetails.ClearUI()
-        }
+    var detailNavigationController: UINavigationController? {
+        return detailNavigationControllerIfSplit ?? masterNavigationController.topViewController as? UINavigationController
+    }
+    
+    var bookDetailsControllerIfSplit: BookDetails? {
+        return detailNavigationControllerIfSplit?.viewControllers.first as? BookDetails
     }
 }

@@ -16,8 +16,13 @@ var appDelegate: AppDelegate {
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-    lazy var booksStore = BooksStore()
     var window: UIWindow?
+    
+    lazy var booksStore = BooksStore()
+    
+    var splitViewController: SplitViewController {
+        return window!.rootViewController as! SplitViewController
+    }
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         TestData.loadDefaultDataIfFirstLaunch()
@@ -47,15 +52,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(application: UIApplication, continueUserActivity userActivity: NSUserActivity, restorationHandler: ([AnyObject]?) -> Void) -> Bool {
-        if userActivity.activityType == CSSearchableItemActionType {
-            if let _ = userActivity.userInfo?[CSSearchableItemActivityIdentifier] as? String {
-                let splitViewController = self.window!.rootViewController as! UISplitViewController
-                let navigationController = splitViewController.viewControllers.first as! UINavigationController
-                let tableViewController = navigationController.viewControllers[0] as! BookTable
-                tableViewController.restoreUserActivityState(userActivity)
-            }
+        if userActivity.activityType == CSSearchableItemActionType && userActivity.userInfo?[CSSearchableItemActivityIdentifier] is String {
+            splitViewController.bookTableController.restoreUserActivityState(userActivity)
+            return true
         }
-        return true
+        return false
+    }
+    
+    func application(application: UIApplication, willContinueUserActivityWithType userActivityType: String) -> Bool {
+        return userActivityType == CSSearchableItemActionType
     }
 }
 

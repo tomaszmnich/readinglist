@@ -50,8 +50,7 @@ class SearchByIsbn: UIViewController {
     /// Presents a popup alerting the use to the fact that there were no results.
     func PresentNoResultsAlert() {
         let alert = UIAlertController(title: "No Results", message: "No matching books found online.", preferredStyle: UIAlertControllerStyle.Alert)
-        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: {
-            alertAction in
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: { _ in
             self.StopSpinnerAndExit();
         }))
         self.presentViewController(alert, animated: true, completion: nil)

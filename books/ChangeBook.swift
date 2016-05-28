@@ -80,12 +80,6 @@ class ChangeBook: FormViewController {
     }
     
     func IsValid() -> Bool {
-        if TitleField?.isEmpty ?? true {
-            return false
-        }
-        if AuthorList?.isEmpty ?? true {
-            return false
-        }
-        return true
+        return TitleField?.isEmpty == false && AuthorList?.isEmpty == false
     }
 }

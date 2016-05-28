@@ -21,8 +21,11 @@ class FetchedResultsTable: UITableViewController {
         // Should be overriden by inheriting classes
     }
     
+    /// Updates the predicate, performs a fetch and reloads the table view data.
     func updatePredicate(newPredicate: NSPredicate) {
         resultsController.fetchRequest.predicate = newPredicate
+        try! resultsController.performFetch()
+        tableView.reloadData()
     }
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
