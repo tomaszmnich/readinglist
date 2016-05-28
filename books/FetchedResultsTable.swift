@@ -12,7 +12,12 @@ import CoreData
 class FetchedResultsTable: UITableViewController {
     
     /// The controller to get the results to display in this view
-    var resultsController: NSFetchedResultsController!
+    var resultsController: NSFetchedResultsController! {
+        didSet {
+            // Attach this controller as a delegate on for the results controller, and set the initial predicate
+            resultsController.delegate = self
+        }
+    }
     
     /// The string to use for the cell reuse identifier
     var cellIdentifier: String!
