@@ -124,19 +124,21 @@ class BookTable: FetchedResultsTable {
             // Update the selected segment, which will reload the table
             selectedSegment = TableSegmentOption.fromReadState(selectedBook.readState)
             
-            // If we have an index path of the book (which we fully expect to), select that row and scroll it in to view.
+            // We fully expect to have an index path of the book
             if let indexPathOfSelectedBook = resultsController.indexPathForObject(selectedBook) {
+                
+                // Select that row and scroll it in to view.
                 self.tableView.scrollToRowAtIndexPath(indexPathOfSelectedBook, atScrollPosition: .None, animated: false)
                 self.tableView.selectRowAtIndexPath(indexPathOfSelectedBook, animated: false, scrollPosition: .None)
-            }
-            
-            // Show the book
-            if let bookDetails = appDelegate.splitViewController.detailNavigationController?.topViewController as? BookDetails {
-                bookDetails.book = selectedBook
-                bookDetails.UpdateUi()
-            }
-            else {
-                performSegueWithIdentifier("showDetail", sender: selectedBook)
+                
+                // If the BookDetails controller is already displayed, update the book. Otherwise, segue to it.
+                if let bookDetails = appDelegate.splitViewController.detailNavigationController?.topViewController as? BookDetails {
+                    bookDetails.book = selectedBook
+                    bookDetails.UpdateUi()
+                }
+                else {
+                    performSegueWithIdentifier("showDetail", sender: selectedBook)
+                }
             }
         }
     }
@@ -153,6 +155,13 @@ class BookTable: FetchedResultsTable {
         
         // Update the read state to the selected read state
         selectedSegment = newSegment
+        
+        // If there is a Book currently displaying on the split Detail view, select the corresponding row if possible
+        if let currentlyShowingBook = appDelegate.splitViewController.bookDetailsControllerIfSplit?.book
+            where selectedSegment.toReadStates.contains(currentlyShowingBook.readState)
+        {
+            tableView.selectRowAtIndexPath(self.resultsController.indexPathForObject(currentlyShowingBook), animated: false, scrollPosition: .None)
+        }
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
