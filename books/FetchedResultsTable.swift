@@ -26,6 +26,24 @@ class FetchedResultsTable: UITableViewController {
         // Should be overriden by inheriting classes
     }
     
+    override func viewDidLoad() {
+        // Set the view of the NavigationController to be white, so that glimpses
+        // of dark colours are not seen through the translucent bar when segueing from this view.
+        // Also, we will manage the clearing of selections ourselves. Setting the table footer removes the cell separators
+        self.navigationController!.view.backgroundColor = UIColor.whiteColor()
+        self.clearsSelectionOnViewWillAppear = false
+        tableView.tableFooterView = UIView()
+        
+        super.viewDidLoad()
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        // Deselect selected rows, so they don't stay highlighted
+        if let selectedIndexPath = self.tableView.indexPathForSelectedRow {
+            self.tableView.deselectRowAtIndexPath(selectedIndexPath, animated: animated)
+        }
+    }
+    
     /// Updates the predicate, performs a fetch and reloads the table view data.
     func updatePredicate(newPredicate: NSPredicate) {
         resultsController.fetchRequest.predicate = newPredicate

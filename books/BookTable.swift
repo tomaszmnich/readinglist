@@ -53,13 +53,6 @@ class BookTable: FetchedResultsTable {
         
         // Setup the search bar.
         configureSearchBar()
-        
-        // Set the view of the NavigationController to be white, so that glimpses
-        // of dark colours are not seen through the translucent bar when segueing from this view.
-        // Also, we will manage the clearing of selections ourselves. Setting the table footer removes the cell separators
-        self.navigationController!.view.backgroundColor = UIColor.whiteColor()
-        self.clearsSelectionOnViewWillAppear = false
-        tableView.tableFooterView = UIView()
 
         // Set the DZN data set source
         tableView.emptyDataSetSource = self
@@ -71,11 +64,6 @@ class BookTable: FetchedResultsTable {
     }
     
     override func viewDidAppear(animated: Bool) {
-        // Deselect selected rows, so they don't stay highlighted
-        if let selectedIndexPath = self.tableView.indexPathForSelectedRow {
-            self.tableView.deselectRowAtIndexPath(selectedIndexPath, animated: animated)
-        }
-        
         // If we haven't initialised the scroll positions dictionary, do so now, for all
         // tabs, with the current scroll position (which will be the starting position).
         if tableViewScrollPositions == nil {
