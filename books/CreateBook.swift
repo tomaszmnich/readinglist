@@ -27,10 +27,10 @@ class CreateBook: ChangeBook {
             PageCount = initialBookMetadata.pageCount != nil ? Int(initialBookMetadata.pageCount!) : nil
             PublicationDate = initialBookMetadata.publishedDate
             Description = initialBookMetadata.bookDescription
-            
-            // Trigger a validation update
-            OnChange()
         }
+        
+        // Trigger a validation update
+        OnChange()
     }
     
     override func OnChange() {

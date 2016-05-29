@@ -42,7 +42,7 @@ class BookTable: FetchedResultsTable {
     }
     
     /// The stored scroll positions to allow our single table to function like two tables
-    var tableViewScrollPositions = [TableSegmentOption: CGPoint]()
+    var tableViewScrollPositions: [TableSegmentOption: CGPoint]?
     
     /// The UISearchController to which this UITableViewController is connected.
     var searchController = UISearchController(searchResultsController: nil)
@@ -74,6 +74,12 @@ class BookTable: FetchedResultsTable {
         // Deselect selected rows, so they don't stay highlighted
         if let selectedIndexPath = self.tableView.indexPathForSelectedRow {
             self.tableView.deselectRowAtIndexPath(selectedIndexPath, animated: animated)
+        }
+        
+        // If we haven't initialised the scroll positions dictionary, do so now, for all
+        // tabs, with the current scroll position (which will be the starting position).
+        if tableViewScrollPositions == nil {
+            tableViewScrollPositions = [.ToRead: tableView.contentOffset, .Finished: tableView.contentOffset]
         }
         
         super.viewDidAppear(animated)
@@ -151,11 +157,11 @@ class BookTable: FetchedResultsTable {
     
     @IBAction func selectedSegmentChanged(sender: AnyObject) {
         // Store the scroll position for the old read state
-        tableViewScrollPositions[selectedSegment] = tableView.contentOffset
+        tableViewScrollPositions![selectedSegment] = tableView.contentOffset
         
         // If we have a position in the dictionary for the new segment state, scroll to that
         let newSegment = TableSegmentOption(rawValue: segmentControl.selectedSegmentIndex)!
-        if let newPosition = tableViewScrollPositions[newSegment] {
+        if let newPosition = tableViewScrollPositions![newSegment] {
             tableView.setContentOffset(newPosition, animated: false)
         }
         
