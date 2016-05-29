@@ -24,7 +24,7 @@ enum TableSegmentOption: Int {
     }
 }
 
-class BookTable: FetchedResultsTable {
+class BookTable: SearchableFetchedResultsTable {
 
     @IBOutlet weak var segmentControl: UISegmentedControl!
 
@@ -44,15 +44,9 @@ class BookTable: FetchedResultsTable {
     /// The stored scroll positions to allow our single table to function like two tables
     var tableViewScrollPositions: [TableSegmentOption: CGPoint]?
     
-    /// The UISearchController to which this UITableViewController is connected.
-    var searchController = UISearchController(searchResultsController: nil)
-    
     override func viewDidLoad() {
         resultsController = appDelegate.booksStore.FetchedBooksController()
         cellIdentifier = String(BookTableViewCell)
-        
-        // Setup the search bar.
-        configureSearchBar()
 
         // Set the DZN data set source
         tableView.emptyDataSetSource = self
@@ -180,28 +174,12 @@ class BookTable: FetchedResultsTable {
             }
         }
     }
-}
-
-/**
- Controls for the Search capabilities of the table.
- */
-extension BookTable: UISearchResultsUpdating {
-    func configureSearchBar() {
-        self.searchController.searchResultsUpdater = self
-        self.searchController.dimsBackgroundDuringPresentation = false
-        searchController.searchBar.returnKeyType = .Done
-        self.tableView.tableHeaderView = searchController.searchBar
-        
-        // Offset by the height of the search bar, so as to hide it on load.
-        // However, the contentOffset values will change before the view appears,
-        // due to the adjusted scroll view inset from the navigation bar.
-        self.tableView.setContentOffset(CGPointMake(0, searchController.searchBar.frame.height), animated: false)
+    
+    override func predicateForSearchText(searchText: String?) -> NSPredicate? {
+        let readStatePredicate = ReadStateFilter(states: selectedSegment.toReadStates).ToPredicate()
+        return NSCompoundPredicate(andPredicateWithSubpredicates: [readStatePredicate, TitleFilter(comparison: .Contains, text: searchText!).ToPredicate()])
     }
     
-    func updateSearchResultsForSearchController(searchController: UISearchController) {
-        ReadStateFilter(states: selectedSegment.toReadStates).ToPredicate()
-        updatePredicate(NSCompoundPredicate(andPredicateWithSubpredicates: [ReadStateFilter(states: selectedSegment.toReadStates).ToPredicate(), TitleFilter(comparison: .Contains, text: searchController.searchBar.text!).ToPredicate()]))
-    }
 }
 
 

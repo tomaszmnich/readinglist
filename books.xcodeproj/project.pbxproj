@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4905D85E1C135AB500F57B3C /* books.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4905D85C1C135AB500F57B3C /* books.xcdatamodeld */; };
+		49097BA81CFB102B001AF1F9 /* SearchableFetchedResultsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49097BA71CFB102B001AF1F9 /* SearchableFetchedResultsTable.swift */; };
 		491C84261CF4E2C400894313 /* FetchedResultsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491C84251CF4E2C400894313 /* FetchedResultsTable.swift */; };
 		491C84281CF5027800894313 /* ChangeReadState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491C84271CF5027800894313 /* ChangeReadState.swift */; };
 		491C842B1CF5055D00894313 /* EditReadState.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 491C84291CF5055D00894313 /* EditReadState.storyboard */; };
@@ -73,6 +74,7 @@
 
 /* Begin PBXFileReference section */
 		4905D85D1C135AB500F57B3C /* books.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = books.xcdatamodel; sourceTree = "<group>"; };
+		49097BA71CFB102B001AF1F9 /* SearchableFetchedResultsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchableFetchedResultsTable.swift; sourceTree = "<group>"; };
 		491C84251CF4E2C400894313 /* FetchedResultsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchedResultsTable.swift; sourceTree = "<group>"; };
 		491C84271CF5027800894313 /* ChangeReadState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeReadState.swift; sourceTree = "<group>"; };
 		491C842A1CF5055D00894313 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/EditReadState.storyboard; sourceTree = "<group>"; };
@@ -191,6 +193,7 @@
 				491C84271CF5027800894313 /* ChangeReadState.swift */,
 				491C84251CF4E2C400894313 /* FetchedResultsTable.swift */,
 				49BDCC6B1CD6120400F20AAE /* NavWithReadState.swift */,
+				49097BA71CFB102B001AF1F9 /* SearchableFetchedResultsTable.swift */,
 			);
 			name = Common;
 			sourceTree = "<group>";
@@ -579,6 +582,7 @@
 				495FDC311CF8C760006DCF2E /* TestData.swift in Sources */,
 				4905D85E1C135AB500F57B3C /* books.xcdatamodeld in Sources */,
 				495879651BF7E76200000131 /* CoreDataStack.swift in Sources */,
+				49097BA81CFB102B001AF1F9 /* SearchableFetchedResultsTable.swift in Sources */,
 				495C5D411BF1423900E00C07 /* Book.swift in Sources */,
 				49D93AA51CAB16F800AE6611 /* CoreSpotlightStack.swift in Sources */,
 				49C451801C35578A00F431DB /* BookTableViewCell.swift in Sources */,
