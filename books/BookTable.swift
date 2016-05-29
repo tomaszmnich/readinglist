@@ -83,15 +83,17 @@ class BookTable: SearchableFetchedResultsTable {
     }
     
     override func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
+        
+        // For safety check that there is a Book here
+        guard let selectedBook = self.resultsController.objectAtIndexPath(indexPath) as? Book else { return nil }
+        
         let delete = UITableViewRowAction(style: .Destructive, title: "Delete") { _, index in
-            if let selectedBook = self.resultsController.objectAtIndexPath(index) as? Book {
-                // If there is a book at this index, delete it
-                appDelegate.booksStore.DeleteBookAndDeindex(selectedBook)
-                
-                // If it is being displayed, clear it
-                if let bookDetails = appDelegate.splitViewController.bookDetailsControllerIfSplit where bookDetails.book == selectedBook {
-                    bookDetails.ClearUI()
-                }
+            // If there is a book at this index, delete it
+            appDelegate.booksStore.DeleteBookAndDeindex(selectedBook)
+            
+            // If it is being displayed, clear it
+            if let bookDetails = appDelegate.splitViewController.bookDetailsControllerIfSplit where bookDetails.book == selectedBook {
+                bookDetails.ClearUI()
             }
         }
         delete.backgroundColor = UIColor.redColor()
@@ -99,41 +101,39 @@ class BookTable: SearchableFetchedResultsTable {
     }
     
     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // All cells are "editable"
-        return true
+        // All cells are "editable"; just for safety check that there is a Book there
+        return self.resultsController.objectAtIndexPath(indexPath) is Book
     }
     
     override func restoreUserActivityState(activity: NSUserActivity) {
-        // Check that the user activity corresponds to a book we have
-        if let identifier = activity.userInfo?[CSSearchableItemActivityIdentifier] as? String,
+        // Check that the user activity corresponds to a book which we have a row for
+        guard let identifier = activity.userInfo?[CSSearchableItemActivityIdentifier] as? String,
             identifierUrl = NSURL(string: identifier),
-            selectedBook = appDelegate.booksStore.GetBook(identifierUrl) {
+            selectedBook = appDelegate.booksStore.GetBook(identifierUrl),
+            indexPathOfSelectedBook = resultsController.indexPathForObject(selectedBook) else { return }
             
-            // Dismiss any modal controllers (e.g. Add)
-            self.dismissViewControllerAnimated(false, completion: nil)
-            
-            // Update the selected segment, which will reload the table
-            selectedSegment = TableSegmentOption.fromReadState(selectedBook.readState)
-            
-            // We fully expect to have an index path of the book
-            if let indexPathOfSelectedBook = resultsController.indexPathForObject(selectedBook) {
+        // Dismiss any modal controllers (e.g. Add)
+        self.dismissViewControllerAnimated(false, completion: nil)
+        
+        // Update the selected segment, which will reload the table
+        selectedSegment = TableSegmentOption.fromReadState(selectedBook.readState)
                 
-                // Select that row and scroll it in to view.
-                self.tableView.scrollToRowAtIndexPath(indexPathOfSelectedBook, atScrollPosition: .None, animated: false)
-                self.tableView.selectRowAtIndexPath(indexPathOfSelectedBook, animated: false, scrollPosition: .None)
+        // Select that row and scroll it in to view.
+        self.tableView.scrollToRowAtIndexPath(indexPathOfSelectedBook, atScrollPosition: .None, animated: false)
+        self.tableView.selectRowAtIndexPath(indexPathOfSelectedBook, animated: false, scrollPosition: .None)
                 
-                // If the BookDetails controller is already displayed, update the book.
-                if let bookDetails = appDelegate.splitViewController.detailNavigationController?.topViewController as? BookDetails {
-                    // Dismiss any modal controllers (e.g. Edit)
-                    bookDetails.dismissViewControllerAnimated(false, completion: nil)
-                    bookDetails.book = selectedBook
-                    bookDetails.UpdateUi()
-                }
-                else {
-                    // Otherwise, segue to it.
-                    performSegueWithIdentifier("showDetail", sender: selectedBook)
-                }
-            }
+        // Check whether the BookDetails controller is already displayed
+        if let bookDetails = appDelegate.splitViewController.detailNavigationController?.topViewController as? BookDetails {
+            // Dismiss any modal controllers (e.g. Edit)
+            bookDetails.dismissViewControllerAnimated(false, completion: nil)
+            
+            // Update the displayed book
+            bookDetails.book = selectedBook
+            bookDetails.UpdateUi()
+        }
+        else {
+            // Otherwise, segue to the details view
+            performSegueWithIdentifier("showDetail", sender: selectedBook)
         }
     }
     
@@ -176,10 +176,10 @@ class BookTable: SearchableFetchedResultsTable {
     }
     
     override func predicateForSearchText(searchText: String?) -> NSPredicate? {
+        // AND the read state predicate and the Title filter
         let readStatePredicate = ReadStateFilter(states: selectedSegment.toReadStates).ToPredicate()
         return NSCompoundPredicate(andPredicateWithSubpredicates: [readStatePredicate, TitleFilter(comparison: .Contains, text: searchText!).ToPredicate()])
-    }
-    
+    }    
 }
 
 
