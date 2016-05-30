@@ -82,16 +82,12 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
             switch UIDevice.currentDevice().orientation {
             case .LandscapeRight:
                 connection.videoOrientation = AVCaptureVideoOrientation.LandscapeLeft
-                break
             case .LandscapeLeft:
                 connection.videoOrientation = AVCaptureVideoOrientation.LandscapeRight
-                break
             case .PortraitUpsideDown:
                 connection.videoOrientation = AVCaptureVideoOrientation.PortraitUpsideDown
-                break
             default:
                 connection.videoOrientation = AVCaptureVideoOrientation.Portrait
-                break
             }
         }
         

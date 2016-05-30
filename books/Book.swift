@@ -38,6 +38,8 @@ class Book: NSManagedObject {
     }
 }
 
+
+
 /// A mutable, non-persistent representation of a Book object.
 /// Useful for maintaining in-creation books, or books being edited.
 class BookMetadata {
@@ -45,7 +47,7 @@ class BookMetadata {
     var subtitle: String?
     var isbn13: String?
     var authorList: String?
-    var pageCount: NSNumber?
+    var pageCount: Int?
     var publishedDate: NSDate?
     var bookDescription: String?
     var coverUrl: String?

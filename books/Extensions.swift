@@ -66,6 +66,13 @@ extension String {
     func withTextStyle(textStyle: String) -> NSAttributedString {
         return self.toAttributedStringWithFont(UIFont.preferredFontForTextStyle(textStyle))
     }
+    
+    func toDateViaFormat(format: String) -> NSDate? {
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = format
+        dateFormatter.locale = NSLocale.currentLocale()
+        return dateFormatter.dateFromString(self)
+    }
 }
 
 extension NSMutableAttributedString {

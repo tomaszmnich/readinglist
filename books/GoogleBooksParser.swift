@@ -8,7 +8,6 @@
 
 import SwiftyJSON
 
-
 /// Builds a request to perform an operation on the GoogleBooks API.
 enum GoogleBooksRequest {
     
@@ -28,19 +27,8 @@ enum GoogleBooksRequest {
     }
 }
 
-protocol BookParser {
-    static func ParseJsonResponse(jResponse: JSON) -> BookMetadata?
-}
-
 /// Deals with parsing the JSON returned by GoogleBook's API into object representations.
 class GoogleBooksParser: BookParser {
-    
-    static var dateFormatter: NSDateFormatter {
-        let dateFormatter = NSDateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        dateFormatter.locale = NSLocale.currentLocale()
-        return dateFormatter
-    }
     
     static func ParseJsonResponse(jResponse: JSON) -> BookMetadata? {
         
@@ -48,9 +36,7 @@ class GoogleBooksParser: BookParser {
         let volumeInfo = jResponse["items"][0]["volumeInfo"]
         
         // Books with no title are useless
-        guard let title = volumeInfo["title"].string else {
-            return nil
-        }
+        guard let title = volumeInfo["title"].string else { return nil }
         
         // Build the metadata
         let book = BookMetadata()
@@ -59,10 +45,7 @@ class GoogleBooksParser: BookParser {
         book.pageCount = volumeInfo["pageCount"].int
         book.bookDescription = volumeInfo["description"].string
         book.authorList = volumeInfo["authors"].map{$1.rawString()!}.joinWithSeparator(", ")
-        
-        if let publishedDate = volumeInfo["publishedDate"].string{
-            book.publishedDate = dateFormatter.dateFromString(publishedDate)
-        }
+        book.publishedDate = volumeInfo["publishedDate"].string?.toDateViaFormat("yyyy-MM-dd")
         
         // Add a link at which a front cover image can be found.
         // The link seems to be equally accessible at https, and iOS apps don't seem to like

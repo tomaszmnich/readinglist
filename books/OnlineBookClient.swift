@@ -9,6 +9,10 @@
 import Foundation
 import SwiftyJSON
 
+protocol BookParser {
+    static func ParseJsonResponse(jResponse: JSON) -> BookMetadata?
+}
+
 class OnlineBookClient<TParser: BookParser>{
     
     static func TryGetBookMetadata(searchUrl: String, completionHandler: (BookMetadata? -> Void)) {
@@ -16,11 +20,7 @@ class OnlineBookClient<TParser: BookParser>{
         func SearchResultCallback(result: JSON?) {
             
             // First check there is a JSON result, and it can be parsed.
-            guard let result = result else {
-                completionHandler(nil)
-                return
-            }
-            guard let bookMetadata = TParser.ParseJsonResponse(result) else {
+            guard let result = result, let bookMetadata = TParser.ParseJsonResponse(result) else {
                 completionHandler(nil)
                 return
             }
