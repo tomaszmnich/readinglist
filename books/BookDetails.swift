@@ -13,12 +13,8 @@ class BookDetails: UIViewController {
     var book: Book?
     
     @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var subtitleLabel: UILabel!
-    @IBOutlet weak var authorLabel: UILabel!
-    @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var descriptionLabel: UILabel!
-    @IBOutlet weak var publishedWhenLabel: UILabel!
-    @IBOutlet weak var pagesLabel: UILabel!
+    @IBOutlet weak var imageView: UIImageView!
     
     override func viewWillAppear(animated: Bool) {
         UpdateUi()
@@ -38,39 +34,32 @@ class BookDetails: UIViewController {
     }
     
     func UpdateUi() {
-        func formatPublicationDate(date: NSDate?) -> String? {
-            if let date = date {
-                let formatter = NSDateFormatter()
-                formatter.dateStyle = NSDateFormatterStyle.LongStyle
-                formatter.timeStyle = .NoStyle
-                return "Published: \(formatter.stringFromDate(date))"
-            }
-            else {
-                return nil
-            }
-        }
         
-        if let book = book {
-            titleLabel.text = book.title
-            subtitleLabel.text = book.subtitle
-            authorLabel.text = book.authorList
-            descriptionLabel.text = book.bookDescription
-            pagesLabel.text = book.pageCount != nil ? "\(book.pageCount!) pages" : nil
-            imageView.image = book.coverImage != nil ? UIImage(data: book.coverImage!) : nil
-            publishedWhenLabel.text = formatPublicationDate(book.publishedDate)
-        }
-        else {
+        // Check the book exists
+        guard let book = book else {
             ClearUI()
+            return
         }
+
+        // Setup the title label
+        titleLabel.attributedText = NSMutableAttributedString.byConcatenating(withNewline: true,
+            book.title.withTextStyle(UIFontTextStyleTitle1),
+            book.subtitle?.withTextStyle(UIFontTextStyleSubheadline),
+            book.authorList?.withTextStyle(UIFontTextStyleSubheadline))
+        
+        // Setup the description label
+        let pageCountText: NSAttributedString? = book.pageCount == nil ? nil : "\(book.pageCount!) pages".withTextStyle(UIFontTextStyleCallout)
+        let publishedWhenText: NSAttributedString? = book.publishedDate == nil ? nil : "Published \(book.publishedDate!.toLongStyleString())".withTextStyle(UIFontTextStyleCallout)
+        descriptionLabel.attributedText = NSMutableAttributedString.byConcatenating(withNewline: true,
+            pageCountText, publishedWhenText, book.bookDescription?.withTextStyle(UIFontTextStyleCallout))
+        
+        // Setup the image
+        imageView.image = UIImage(optionalData: book.coverImage)
     }
     
     func ClearUI() {
-        titleLabel.text = nil
-        subtitleLabel.text = nil
-        authorLabel.text = nil
-        descriptionLabel.text = nil
-        pagesLabel.text = nil
+        titleLabel.attributedText = nil
+        descriptionLabel.attributedText = nil
         imageView.image = nil
-        publishedWhenLabel.text = nil
     }
 }
