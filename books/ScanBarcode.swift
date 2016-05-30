@@ -30,30 +30,25 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         session.stopRunning()
     }
     
-    private func setupAvSession(){
-        // Setup the input
-        let input: AVCaptureDeviceInput!
-        do {
-            // The default device with Video media type is the camera
-            input = try AVCaptureDeviceInput(device: AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeVideo))
-            self.session.addInput(input)
-        }
-        catch {
-            // TODO: Handle this error properly
+    private func setupAvSession() {
+        guard let input = try? AVCaptureDeviceInput(device: AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeVideo)) else {
+            // TODO: User error message and pop?
             print("AVCaptureDeviceInput failed to initialise.")
             return
         }
+        self.session.addInput(input)
         
         // Prepare the metadata output and add to the session
         let output = AVCaptureMetadataOutput()
         output.setMetadataObjectsDelegate(self, queue: dispatch_get_main_queue())
-        self.session.addOutput(output)
         output.metadataObjectTypes = output.availableMetadataObjectTypes
+        self.session.addOutput(output)
         
         // We want to view what the camera is seeing
         previewLayer = AVCaptureVideoPreviewLayer(session: self.session)
         previewLayer!.frame = self.cameraPreviewPlaceholder.frame
         previewLayer!.videoGravity = AVLayerVideoGravityResize
+        
         dispatch_async(dispatch_get_main_queue()) {
             self.view.layer.addSublayer(self.previewLayer!)
         }
@@ -69,7 +64,7 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         // Filter out everything which is not a EAN13 code.
         let ean13MetadataObjects = metadataObjects.filter { return $0.type == AVMetadataObjectTypeEAN13Code }
         
-        if let avMetadata = ean13MetadataObjects.first as? AVMetadataMachineReadableCodeObject{
+        if let avMetadata = ean13MetadataObjects.first as? AVMetadataMachineReadableCodeObject {
             // Store the detected value of the barcode
             detectedIsbn13 = avMetadata.stringValue
             
