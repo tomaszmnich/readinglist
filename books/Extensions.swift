@@ -107,10 +107,42 @@ extension NSPredicate {
     @nonobjc static var TruePredicate = NSPredicate(format: "TRUEPREDICATE")
     
     convenience init(fieldName: String, equalTo: String) {
-        self.init(format: "\(fieldName) == \(equalTo)")
+        self.init(format: "\(fieldName) == \"\(equalTo)\"")
     }
     
     convenience init(fieldName: String, containsSubstring: String) {
-        self.init(format: "\(fieldName) CONTAINS[cd] \(containsSubstring)")
+        // Special case for "contains empty string": should return TRUE
+        if containsSubstring.isEmpty {
+            self.init(format: "TRUEPREDICATE")
+        }
+        else {
+            self.init(format: "\(fieldName) CONTAINS[cd] \"\(containsSubstring)\"")
+        }
+    }
+    
+    static func Or(orPredicates: NSPredicate...) -> NSPredicate {
+        // Splatted version
+        return Or(orPredicates)
+    }
+    
+    static func Or(orPredicates: [NSPredicate]) -> NSPredicate {
+        return NSCompoundPredicate(orPredicateWithSubpredicates: orPredicates)
+    }
+    
+    static func And(andPredicates: NSPredicate...) -> NSPredicate {
+        // Splatted version
+        return And(andPredicates)
+    }
+    
+    static func And(andPredicates: [NSPredicate]) -> NSPredicate {
+        return NSCompoundPredicate(andPredicateWithSubpredicates: andPredicates)
+    }
+    
+    func Or(orPredicate: NSPredicate) -> NSPredicate {
+        return NSPredicate.Or(self, orPredicate)
+    }
+    
+    func And(andPredicate: NSPredicate) -> NSPredicate {
+        return NSPredicate.And(self, andPredicate)
     }
 }

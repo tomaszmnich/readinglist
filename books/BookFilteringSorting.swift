@@ -8,59 +8,24 @@
 
 import Foundation
 
-private let titleFieldName = "title"
-private let readStateFieldName = "readState"
-
-protocol BookFilter{
-    func ToPredicate() -> NSPredicate
-}
-
-enum ComparisonType{
-    case Equals
-    case Contains
-}
-
-class TitleFilter: BookFilter {
-    var titleText: String!
-    var comparisonType: ComparisonType!
+class BookPredicate {
     
-    init(comparison: ComparisonType, text: String){
-        comparisonType = comparison
-        titleText = text
+    static let titleFieldName = "title"
+    static let readStateFieldName = "readState"
+    
+    static func readStateEqual(readState: BookReadState) -> NSPredicate {
+        return NSPredicate(fieldName: readStateFieldName, equalTo: String(readState.rawValue))
     }
     
-    func ToPredicate() -> NSPredicate {
-        // Special case for "contains empty string": should return TRUE
-        if comparisonType == .Contains && titleText.isEmpty {
-            return NSPredicate(format: "TRUEPREDICATE")
-        }
-        return NSPredicate(format: "\(titleFieldName) \(comparisonType == .Equals ? "==" : "CONTAINS[cd]") \"\(titleText)\"")
-    }
-}
-
-class ReadStateFilter: BookFilter{
-    var readStates: [BookReadState]!
-    
-    init(states: [BookReadState]){
-        readStates = states
+    static func titleContains(substring: String) -> NSPredicate {
+        return NSPredicate(fieldName: titleFieldName, containsSubstring: substring)
     }
     
-    func ToPredicate() -> NSPredicate{
-        return NSPredicate(format: readStates.map{"(\(readStateFieldName) == \($0.rawValue))"}.joinWithSeparator(" OR "))
-    }
-}
-
-enum BookSortOrder {
-    case Title
-    
-    var fieldName: String{
-        switch self{
-        case .Title:
-            return titleFieldName
-        }
+    static func titleSort(ascending: Bool) -> NSSortDescriptor {
+        return NSSortDescriptor(key: titleFieldName, ascending: ascending)
     }
     
-    func ToSortDescriptor() -> NSSortDescriptor{
-        return NSSortDescriptor(key: fieldName, ascending: true)
+    static func readStateSort(ascending: Bool) -> NSSortDescriptor {
+        return NSSortDescriptor(key: readStateFieldName, ascending: ascending)
     }
 }

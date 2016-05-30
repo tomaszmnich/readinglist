@@ -30,10 +30,10 @@ class BooksStore {
     */
     func FetchedBooksController() -> NSFetchedResultsController {
         let fetchRequest = NSFetchRequest(entityName: bookEntityName)
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "readState", ascending: true), BookSortOrder.Title.ToSortDescriptor()]
+        fetchRequest.sortDescriptors = [BookPredicate.readStateSort(true), BookPredicate.titleSort(true)]
         return NSFetchedResultsController(fetchRequest: fetchRequest,
             managedObjectContext: self.coreDataStack.managedObjectContext,
-            sectionNameKeyPath: "readState",
+            sectionNameKeyPath: BookPredicate.readStateFieldName,
             cacheName: nil)
     }
     
@@ -43,16 +43,6 @@ class BooksStore {
     func GetBook(objectIdUrl: NSURL) -> Book? {
         let bookObjectUrl = coreDataStack.managedObjectContext.persistentStoreCoordinator!.managedObjectIDForURIRepresentation(objectIdUrl)!
         return coreDataStack.managedObjectContext.objectWithID(bookObjectUrl) as? Book
-    }
-    
-    /**
-     Creates a new Book object.
-     Does not save the managedObjectContent; does not add the item to the index.
-    */
-    private func CreateBook() -> Book {
-        let newBook: Book = coreDataStack.createNewItem(bookEntityName)
-        print("New book created with id \(newBook.objectID.URIRepresentation())")
-        return newBook
     }
     
     /**
@@ -77,7 +67,7 @@ class BooksStore {
      object context, and adds the book to the Spotlight index.
     */
     func CreateBook(metadata: BookMetadata, readingInformation: BookReadingInformation) {
-        let book = CreateBook()
+        let book: Book = coreDataStack.createNewItem(bookEntityName)
         book.Populate(metadata, readingInformation: readingInformation)
         Save()
         UpdateSpotlightIndex(book)

@@ -15,8 +15,12 @@ enum TableSegmentOption: Int {
     case ToRead = 0
     case Finished = 1
     
-    var toReadStates: [BookReadState] {
+    var readStates: [BookReadState] {
         return self == .ToRead ? [.ToRead, .Reading] : [.Finished]
+    }
+    
+    func toPredicate() -> NSPredicate {
+        return NSPredicate.Or(self.readStates.map{BookPredicate.readStateEqual($0)})
     }
     
     static func fromReadState(state: BookReadState) -> TableSegmentOption{
@@ -36,7 +40,7 @@ class BookTable: SearchableFetchedResultsTable {
             
             // Load the data if we have changed segement and the previously stored scroll position
             if selectedSegment != oldValue {
-                updatePredicate(ReadStateFilter(states: selectedSegment.toReadStates).ToPredicate())
+                updatePredicate(selectedSegment.toPredicate())
             }
         }
     }
@@ -162,14 +166,14 @@ class BookTable: SearchableFetchedResultsTable {
         
         // If there is a Book currently displaying on the split Detail view, select the corresponding row if possible
         if let currentlyShowingBook = appDelegate.splitViewController.bookDetailsControllerIfSplit?.book
-            where selectedSegment.toReadStates.contains(currentlyShowingBook.readState) {
+            where selectedSegment.readStates.contains(currentlyShowingBook.readState) {
             tableView.selectRowAtIndexPath(self.resultsController.indexPathForObject(currentlyShowingBook), animated: false, scrollPosition: .None)
         }
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "addBook" {
-            (segue.destinationViewController as! NavWithReadState).readState = selectedSegment.toReadStates.first
+            (segue.destinationViewController as! NavWithReadState).readState = selectedSegment.readStates.first
         }
         else if segue.identifier == "showDetail" {
             let destinationViewController = (segue.destinationViewController as! UINavigationController).topViewController as! BookDetails
@@ -187,8 +191,7 @@ class BookTable: SearchableFetchedResultsTable {
     
     override func predicateForSearchText(searchText: String) -> NSPredicate {
         // AND the read state predicate and the Title filter
-        let readStatePredicate = ReadStateFilter(states: selectedSegment.toReadStates).ToPredicate()
-        return NSCompoundPredicate(andPredicateWithSubpredicates: [readStatePredicate, TitleFilter(comparison: .Contains, text: searchText).ToPredicate()])
+        return NSPredicate.And(selectedSegment.toPredicate(), BookPredicate.titleContains(searchText))
     }
 }
 
