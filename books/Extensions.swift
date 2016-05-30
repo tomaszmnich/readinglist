@@ -107,7 +107,7 @@ extension NSPredicate {
     @nonobjc static var TruePredicate = NSPredicate(format: "TRUEPREDICATE")
     
     convenience init(fieldName: String, equalTo: String) {
-        self.init(format: "\(fieldName) == \"\(equalTo)\"")
+        self.init(format: "\(fieldName) == %@", equalTo)
     }
     
     convenience init(fieldName: String, containsSubstring: String) {
@@ -116,8 +116,12 @@ extension NSPredicate {
             self.init(format: "TRUEPREDICATE")
         }
         else {
-            self.init(format: "\(fieldName) CONTAINS[cd] \"\(containsSubstring)\"")
+            self.init(format: "\(fieldName) CONTAINS[cd] %@", containsSubstring)
         }
+    }
+    
+    static func searchWithinField(fieldName: String, substring: String) -> NSPredicate {
+        return NSPredicate.And(substring.componentsSeparatedByCharactersInSet(NSCharacterSet.whitespaceCharacterSet()).map{NSPredicate(fieldName: fieldName, containsSubstring: $0)})
     }
     
     static func Or(orPredicates: NSPredicate...) -> NSPredicate {

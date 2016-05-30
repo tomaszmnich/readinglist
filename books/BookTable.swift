@@ -190,8 +190,8 @@ class BookTable: SearchableFetchedResultsTable {
     }
     
     override func predicateForSearchText(searchText: String) -> NSPredicate {
-        // AND the read state predicate and the Title filter
-        return NSPredicate.And(selectedSegment.toPredicate(), BookPredicate.titleContains(searchText))
+        // AND the read state predicate with the result of ORing the title containing the search text and the authors containing the search text
+        return NSPredicate.And(selectedSegment.toPredicate(), BookPredicate.titleContains(searchText).Or(BookPredicate.authorContains(searchText)))
     }
 }
 
