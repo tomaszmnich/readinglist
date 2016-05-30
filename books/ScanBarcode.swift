@@ -67,9 +67,7 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         
         // The scanner is capable of capturing multiple 2-dimensional barcodes in one scan.
         // Filter out everything which is not a EAN13 code.
-        let ean13MetadataObjects = metadataObjects.filter {
-            return $0.type == AVMetadataObjectTypeEAN13Code
-        }
+        let ean13MetadataObjects = metadataObjects.filter { return $0.type == AVMetadataObjectTypeEAN13Code }
         
         if let avMetadata = ean13MetadataObjects.first as? AVMetadataMachineReadableCodeObject{
             // Store the detected value of the barcode
@@ -85,22 +83,20 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         // Accomodate for device rotation.
         // This is kind of annoyingly juddery, but I can't find a simple way to stop that.
         
-        if let connection = self.previewLayer?.connection {
-            if connection.supportsVideoOrientation {
-                switch UIDevice.currentDevice().orientation {
-                case .LandscapeRight:
-                    connection.videoOrientation = AVCaptureVideoOrientation.LandscapeLeft
-                    break
-                case .LandscapeLeft:
-                    connection.videoOrientation = AVCaptureVideoOrientation.LandscapeRight
-                    break
-                case .PortraitUpsideDown:
-                    connection.videoOrientation = AVCaptureVideoOrientation.PortraitUpsideDown
-                    break
-                default:
-                    connection.videoOrientation = AVCaptureVideoOrientation.Portrait
-                    break
-                }
+        if let connection = self.previewLayer?.connection where connection.supportsVideoOrientation {
+            switch UIDevice.currentDevice().orientation {
+            case .LandscapeRight:
+                connection.videoOrientation = AVCaptureVideoOrientation.LandscapeLeft
+                break
+            case .LandscapeLeft:
+                connection.videoOrientation = AVCaptureVideoOrientation.LandscapeRight
+                break
+            case .PortraitUpsideDown:
+                connection.videoOrientation = AVCaptureVideoOrientation.PortraitUpsideDown
+                break
+            default:
+                connection.videoOrientation = AVCaptureVideoOrientation.Portrait
+                break
             }
         }
         

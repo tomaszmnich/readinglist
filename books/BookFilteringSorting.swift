@@ -31,7 +31,7 @@ class TitleFilter: BookFilter {
     
     func ToPredicate() -> NSPredicate {
         // Special case for "contains empty string": should return TRUE
-        if comparisonType == .Contains && titleText.isEmpty{
+        if comparisonType == .Contains && titleText.isEmpty {
             return NSPredicate(format: "TRUEPREDICATE")
         }
         return NSPredicate(format: "\(titleFieldName) \(comparisonType == .Equals ? "==" : "CONTAINS[cd]") \"\(titleText)\"")

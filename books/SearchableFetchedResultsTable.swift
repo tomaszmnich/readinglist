@@ -27,13 +27,17 @@ class SearchableFetchedResultsTable: FetchedResultsTable, UISearchResultsUpdatin
     }
     
     func updateSearchResultsForSearchController(searchController: UISearchController) {
-        if let predicate = predicateForSearchText(searchController.searchBar.text) {
-            updatePredicate(predicate)
+        if let searchText = searchController.searchBar.text {
+            updatePredicate(predicateForSearchText(searchText))
         }
     }
     
-    func predicateForSearchText(searchText: String?) -> NSPredicate? {
+    func predicateForSearchText(searchText: String) -> NSPredicate {
         // Should be overriden
-        return nil
+        return NSPredicate.TruePredicate
+    }
+    
+    func isShowingSearchResults() -> Bool {
+        return searchController.active && searchController.searchBar.text?.isEmpty == false
     }
 }

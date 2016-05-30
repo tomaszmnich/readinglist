@@ -109,19 +109,20 @@ class BookTable: SearchableFetchedResultsTable {
         // Check that the user activity corresponds to a book which we have a row for
         guard let identifier = activity.userInfo?[CSSearchableItemActivityIdentifier] as? String,
             identifierUrl = NSURL(string: identifier),
-            selectedBook = appDelegate.booksStore.GetBook(identifierUrl),
-            indexPathOfSelectedBook = resultsController.indexPathForObject(selectedBook) else { return }
+            selectedBook = appDelegate.booksStore.GetBook(identifierUrl) else { return }
             
-        // Dismiss any modal controllers (e.g. Add)
-        self.dismissViewControllerAnimated(false, completion: nil)
-        
         // Update the selected segment, which will reload the table
         selectedSegment = TableSegmentOption.fromReadState(selectedBook.readState)
-                
-        // Select that row and scroll it in to view.
-        self.tableView.scrollToRowAtIndexPath(indexPathOfSelectedBook, atScrollPosition: .None, animated: false)
-        self.tableView.selectRowAtIndexPath(indexPathOfSelectedBook, animated: false, scrollPosition: .None)
-                
+        
+        // Dismiss any modal controllers (e.g. Add)
+        self.dismissViewControllerAnimated(false, completion: nil)
+
+        // Select the corresponding row and scroll it in to view.
+        if let indexPathOfSelectedBook = resultsController.indexPathForObject(selectedBook) {
+            self.tableView.scrollToRowAtIndexPath(indexPathOfSelectedBook, atScrollPosition: .None, animated: false)
+            self.tableView.selectRowAtIndexPath(indexPathOfSelectedBook, animated: false, scrollPosition: .None)
+        }
+        
         // Check whether the BookDetails controller is already displayed
         if let bookDetails = appDelegate.splitViewController.detailNavigationController?.topViewController as? BookDetails {
             // Dismiss any modal controllers (e.g. Edit)
@@ -175,11 +176,11 @@ class BookTable: SearchableFetchedResultsTable {
         }
     }
     
-    override func predicateForSearchText(searchText: String?) -> NSPredicate? {
+    override func predicateForSearchText(searchText: String) -> NSPredicate {
         // AND the read state predicate and the Title filter
         let readStatePredicate = ReadStateFilter(states: selectedSegment.toReadStates).ToPredicate()
-        return NSCompoundPredicate(andPredicateWithSubpredicates: [readStatePredicate, TitleFilter(comparison: .Contains, text: searchText!).ToPredicate()])
-    }    
+        return NSCompoundPredicate(andPredicateWithSubpredicates: [readStatePredicate, TitleFilter(comparison: .Contains, text: searchText).ToPredicate()])
+    }
 }
 
 
@@ -188,35 +189,25 @@ class BookTable: SearchableFetchedResultsTable {
  */
 extension BookTable : DZNEmptyDataSetSource {
     
-    private func IsShowingSearchResults() -> Bool {
-        return searchController.active && searchController.searchBar.text?.isEmpty == false
-    }
-    
     func imageForEmptyDataSet(scrollView: UIScrollView!) -> UIImage! {
-        if IsShowingSearchResults() {
-            return UIImage(named: "fa-search")
-        }
-        return UIImage(named: "fa-book")
+        return UIImage(named: isShowingSearchResults() ? "fa-search" : "fa-book")
     }
     
     func titleForEmptyDataSet(scrollView: UIScrollView!) -> NSAttributedString! {
-        let attrs = [NSFontAttributeName: UIFont.preferredFontForTextStyle(UIFontTextStyleHeadline)]
-        if IsShowingSearchResults() {
-            return NSAttributedString(string: "No results", attributes: attrs)
+        let titleText: String!
+        if isShowingSearchResults() {
+            titleText = "No results"
         }
-        switch self.selectedSegment! {
-        case .ToRead:
-            return NSAttributedString(string: "You are not reading any books!", attributes: attrs)
-        case .Finished:
-            return NSAttributedString(string: "You haven't yet finished a book. Get going!", attributes: attrs)
+        else {
+            titleText = self.selectedSegment! == .ToRead ? "You are not reading any books!" : "You haven't yet finished a book. Get going!"
         }
+        
+        return NSAttributedString(string: titleText, attributes: [NSFontAttributeName: UIFont.preferredFontForTextStyle(UIFontTextStyleHeadline)])
     }
     
     func descriptionForEmptyDataSet(scrollView: UIScrollView!) -> NSAttributedString! {
-        let attrs = [NSFontAttributeName: UIFont.preferredFontForTextStyle(UIFontTextStyleBody)]
-        if IsShowingSearchResults() {
-            return NSAttributedString(string: "Try changing your search.", attributes: attrs)
-        }
-        return NSAttributedString(string: "Add a book by clicking the + button above.", attributes: attrs)
+        let descriptionText = isShowingSearchResults() ? "Try changing your search." : "Add a book by clicking the + button above."
+        
+        return NSAttributedString(string: descriptionText, attributes: [NSFontAttributeName: UIFont.preferredFontForTextStyle(UIFontTextStyleBody)])
     }
 }

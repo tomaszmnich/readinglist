@@ -9,7 +9,7 @@
 import Foundation
 
 extension NSDate {
-    convenience init(dateString:String) {
+    convenience init(dateString: String) {
         let dateStringFormatter = NSDateFormatter()
         dateStringFormatter.dateFormat = "yyyy-MM-dd"
         dateStringFormatter.locale = NSLocale(localeIdentifier: "en_US_POSIX")
@@ -34,5 +34,17 @@ extension String {
     /// Removes all whitespace characters from the beginning and the end of the string.
     func trim() -> String {
         return self.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+    }
+}
+
+extension NSPredicate {
+    @nonobjc static var TruePredicate = NSPredicate(format: "TRUEPREDICATE")
+    
+    convenience init(fieldName: String, equalTo: String) {
+        self.init(format: "\(fieldName) == \(equalTo)")
+    }
+    
+    convenience init(fieldName: String, containsSubstring: String) {
+        self.init(format: "\(fieldName) CONTAINS[cd] \(containsSubstring)")
     }
 }
