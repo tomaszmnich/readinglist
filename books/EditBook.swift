@@ -9,7 +9,7 @@
 import UIKit
 import Eureka
 
-class EditBook: ChangeBook {
+class EditBook: BookMetadataForm {
     
     var bookToEdit: Book!
     

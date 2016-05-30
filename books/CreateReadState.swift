@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class CreateReadState: ChangeReadState {
+class CreateReadState: ReadStateForm {
 
     var bookMetadata: BookMetadata!
     var bookReadingInformation = BookReadingInformation()

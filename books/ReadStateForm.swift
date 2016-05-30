@@ -9,7 +9,7 @@
 import Eureka
 import UIKit
 
-class ChangeReadState: FormViewController {
+class ReadStateForm: FormViewController {
 
     let readStateKey = "book-read-state"
     let dateStartedKey = "date-started"

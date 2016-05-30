@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class EditReadState: ChangeReadState {
+class EditReadState: ReadStateForm {
     
     var bookToEdit: Book!
     

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CreateBook: ChangeBook {
+class CreateBook: BookMetadataForm {
     
     var initialBookMetadata: BookMetadata?
     

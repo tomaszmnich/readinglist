@@ -9,7 +9,7 @@
 import Eureka
 import UIKit
 
-class ChangeBook: FormViewController {
+class BookMetadataForm: FormViewController {
     
     let titleKey = "title"
     let authorListKey = "author"
