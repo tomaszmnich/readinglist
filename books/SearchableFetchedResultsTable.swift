@@ -13,9 +13,10 @@ class SearchableFetchedResultsTable: FetchedResultsTable, UISearchResultsUpdatin
     var searchController = UISearchController(searchResultsController: nil)
     
     override func viewDidLoad() {
+        self.definesPresentationContext = true
         self.searchController.searchResultsUpdater = self
         self.searchController.dimsBackgroundDuringPresentation = false
-        searchController.searchBar.returnKeyType = .Done
+        self.searchController.searchBar.returnKeyType = .Done
         self.tableView.tableHeaderView = searchController.searchBar
         
         // Offset by the height of the search bar, so as to hide it on load.
@@ -39,5 +40,11 @@ class SearchableFetchedResultsTable: FetchedResultsTable, UISearchResultsUpdatin
     
     func isShowingSearchResults() -> Bool {
         return searchController.active && searchController.searchBar.text?.isEmpty == false
+    }
+    
+    func dismissSearch() {
+        self.searchController.active = false
+        self.searchController.searchBar.showsCancelButton = false
+        self.updateSearchResultsForSearchController(self.searchController)
     }
 }

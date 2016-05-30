@@ -110,31 +110,40 @@ class BookTable: SearchableFetchedResultsTable {
         guard let identifier = activity.userInfo?[CSSearchableItemActivityIdentifier] as? String,
             identifierUrl = NSURL(string: identifier),
             selectedBook = appDelegate.booksStore.GetBook(identifierUrl) else { return }
-            
-        // Update the selected segment, which will reload the table
-        selectedSegment = TableSegmentOption.fromReadState(selectedBook.readState)
         
-        // Dismiss any modal controllers (e.g. Add)
-        self.dismissViewControllerAnimated(false, completion: nil)
-
-        // Select the corresponding row and scroll it in to view.
-        if let indexPathOfSelectedBook = resultsController.indexPathForObject(selectedBook) {
-            self.tableView.scrollToRowAtIndexPath(indexPathOfSelectedBook, atScrollPosition: .None, animated: false)
-            self.tableView.selectRowAtIndexPath(indexPathOfSelectedBook, animated: false, scrollPosition: .None)
+        // Dismiss any modal controllers on this table view
+        self.presentedViewController?.dismissViewControllerAnimated(false, completion: nil)
+        
+        // Simulate the selection of the book
+        simulateBookSelection(selectedBook)
+    }
+    
+    func simulateBookSelection(book: Book) {
+        // Update the selected segment, which will reload the table, and dismiss the search if there is one
+        selectedSegment = TableSegmentOption.fromReadState(book.readState)
+        if self.searchController.active {
+            dismissSearch()
         }
         
-        // Check whether the BookDetails controller is already displayed
+        // Check whether the detail view is already displayed
         if let bookDetails = appDelegate.splitViewController.detailNavigationController?.topViewController as? BookDetails {
-            // Dismiss any modal controllers (e.g. Edit)
+            
+            // Dismiss any modal controllers on the detail view (e.g. Edit)
             bookDetails.dismissViewControllerAnimated(false, completion: nil)
             
             // Update the displayed book
-            bookDetails.book = selectedBook
+            bookDetails.book = book
             bookDetails.UpdateUi()
         }
         else {
             // Otherwise, segue to the details view
-            performSegueWithIdentifier("showDetail", sender: selectedBook)
+            self.performSegueWithIdentifier("showDetail", sender: book)
+        }
+        
+        // Select the corresponding row and scroll it in to view.
+        if let indexPathOfSelectedBook = self.resultsController.indexPathForObject(book) {
+            self.tableView.scrollToRowAtIndexPath(indexPathOfSelectedBook, atScrollPosition: .None, animated: false)
+            self.tableView.selectRowAtIndexPath(indexPathOfSelectedBook, animated: false, scrollPosition: .None)
         }
     }
     

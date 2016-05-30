@@ -25,7 +25,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="600" height="215"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Book title" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bmm-uv-eym">
-                                                <rect key="frame" x="134" y="16" width="434" height="157"/>
+                                                <rect key="frame" x="134" y="16" width="434" height="32.5"/>
                                                 <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -55,7 +55,7 @@
                                             <constraint firstItem="Bmm-uv-eym" firstAttribute="top" secondItem="HXj-zH-Neb" secondAttribute="top" id="e4J-gM-J1H"/>
                                             <constraint firstItem="cfS-jr-URE" firstAttribute="top" secondItem="HXj-zH-Neb" secondAttribute="bottom" constant="8" id="fcW-bN-rOM"/>
                                             <constraint firstItem="HXj-zH-Neb" firstAttribute="leading" secondItem="Qxc-PW-YFe" secondAttribute="leadingMargin" constant="8" id="jNT-06-oTQ"/>
-                                            <constraint firstItem="Bmm-uv-eym" firstAttribute="height" secondItem="HXj-zH-Neb" secondAttribute="height" id="lpW-ey-CLW"/>
+                                            <constraint firstItem="Bmm-uv-eym" firstAttribute="height" relation="lessThanOrEqual" secondItem="HXj-zH-Neb" secondAttribute="height" id="lpW-ey-CLW"/>
                                         </constraints>
                                     </view>
                                 </subviews>
@@ -146,12 +146,6 @@
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="91.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Authors" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h5E-hf-HM6">
-                                            <rect key="frame" x="72" y="27" width="520" height="13.5"/>
-                                            <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
-                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j4t-DS-san">
                                             <rect key="frame" x="72" y="8" width="520" height="19.5"/>
                                             <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
@@ -167,18 +161,14 @@
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="j4t-DS-san" firstAttribute="trailing" secondItem="N7c-k9-dzi" secondAttribute="trailingMargin" id="4yn-vQ-FSq"/>
-                                        <constraint firstItem="h5E-hf-HM6" firstAttribute="top" secondItem="j4t-DS-san" secondAttribute="bottom" id="DGZ-xs-qsA"/>
-                                        <constraint firstItem="h5E-hf-HM6" firstAttribute="trailing" secondItem="N7c-k9-dzi" secondAttribute="trailingMargin" id="RRD-o7-F2k"/>
                                         <constraint firstItem="Gpt-3n-dBG" firstAttribute="top" secondItem="N7c-k9-dzi" secondAttribute="top" constant="4" id="V1Q-6a-fPQ"/>
                                         <constraint firstItem="j4t-DS-san" firstAttribute="top" secondItem="N7c-k9-dzi" secondAttribute="topMargin" id="cR5-IN-CIy"/>
                                         <constraint firstItem="Gpt-3n-dBG" firstAttribute="leading" secondItem="N7c-k9-dzi" secondAttribute="leading" constant="4" id="jfJ-RT-upY"/>
-                                        <constraint firstItem="h5E-hf-HM6" firstAttribute="width" secondItem="j4t-DS-san" secondAttribute="width" id="oJ5-mO-WeF"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="Gpt-3n-dBG" secondAttribute="bottomMargin" constant="4" id="pJS-fW-B0B"/>
                                         <constraint firstItem="j4t-DS-san" firstAttribute="leading" secondItem="Gpt-3n-dBG" secondAttribute="trailing" constant="8" id="tb0-uA-5sP"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="authorsLabel" destination="h5E-hf-HM6" id="RcB-YI-HZq"/>
                                     <outlet property="bookCover" destination="Gpt-3n-dBG" id="umR-g4-0Vd"/>
                                     <outlet property="titleLabel" destination="j4t-DS-san" id="UBn-Ra-1zm"/>
                                     <segue destination="xOz-rG-HY1" kind="showDetail" identifier="showDetail" id="Iwj-ak-QQE"/>
