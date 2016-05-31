@@ -116,18 +116,23 @@ class BookTable: SearchableFetchedResultsTable {
             selectedBook = appDelegate.booksStore.GetBook(identifierUrl) else { return }
         
         // Dismiss any modal controllers on this table view
-        self.presentedViewController?.dismissViewControllerAnimated(false, completion: nil)
+        self.presentedViewController?.dismissViewControllerAnimated(false) {
         
-        // Simulate the selection of the book
+            // Simulate the selection of the book after dismissing the modal
+            // views; doing them simultaneously can lead to an error and the 
+            // push segue not occuring.
+            self.simulateBookSelection(selectedBook)
+            return
+        }
+        
+        // If there were no presented view controllers, just simulate the book selection
         simulateBookSelection(selectedBook)
     }
     
     func simulateBookSelection(book: Book) {
         // Update the selected segment, which will reload the table, and dismiss the search if there is one
         selectedSegment = TableSegmentOption.fromReadState(book.readState)
-        if self.searchController.active {
-            dismissSearch()
-        }
+        dismissSearch()
         
         // Check whether the detail view is already displayed
         if let bookDetails = appDelegate.splitViewController.detailNavigationController?.topViewController as? BookDetails {
@@ -190,8 +195,8 @@ class BookTable: SearchableFetchedResultsTable {
     }
     
     override func predicateForSearchText(searchText: String) -> NSPredicate {
-        // AND the read state predicate with the result of ORing the title containing the search text and the authors containing the search text
-        return NSPredicate.And(selectedSegment.toPredicate(), BookPredicate.titleContains(searchText).Or(BookPredicate.authorContains(searchText)))
+        // AND the read state predicate with a search in the title and author fields
+        return NSPredicate.And(selectedSegment.toPredicate(), BookPredicate.searchInTitleOrAuthor(searchText))
     }
 }
 

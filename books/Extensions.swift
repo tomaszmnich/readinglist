@@ -120,8 +120,14 @@ extension NSPredicate {
         }
     }
     
-    static func searchWithinField(fieldName: String, substring: String) -> NSPredicate {
-        return NSPredicate.And(substring.componentsSeparatedByCharactersInSet(NSCharacterSet.whitespaceCharacterSet()).map{NSPredicate(fieldName: fieldName, containsSubstring: $0)})
+    static func searchWithinFields(searchString: String, fieldNames: String...) -> NSPredicate {
+        let searchStringComponents = searchString.componentsSeparatedByCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+        // AND each component, where each component is OR'd over each of the fields
+        return NSPredicate.And(searchStringComponents.map{ searchStringComponent in
+            NSPredicate.Or(fieldNames.map{ fieldName in
+                NSPredicate(fieldName: fieldName, containsSubstring: searchStringComponent)
+            })
+        })
     }
     
     static func Or(orPredicates: NSPredicate...) -> NSPredicate {

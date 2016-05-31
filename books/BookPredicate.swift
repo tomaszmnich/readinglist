@@ -18,12 +18,8 @@ class BookPredicate {
         return NSPredicate(fieldName: readStateFieldName, equalTo: String(readState.rawValue))
     }
     
-    static func titleContains(substring: String) -> NSPredicate {
-        return NSPredicate.searchWithinField(titleFieldName, substring: substring)
-    }
-    
-    static func authorContains(substring: String) -> NSPredicate {
-        return NSPredicate.searchWithinField(authorFieldName, substring: substring)
+    static func searchInTitleOrAuthor(searchString: String) -> NSPredicate {
+        return NSPredicate.searchWithinFields(searchString, fieldNames: titleFieldName, authorFieldName)
     }
     
     static func titleSort(ascending: Bool) -> NSSortDescriptor {
