@@ -41,8 +41,8 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         // Prepare the metadata output and add to the session
         let output = AVCaptureMetadataOutput()
         output.setMetadataObjectsDelegate(self, queue: dispatch_get_main_queue())
-        output.metadataObjectTypes = output.availableMetadataObjectTypes
         self.session.addOutput(output)
+        output.metadataObjectTypes = output.availableMetadataObjectTypes
         
         // We want to view what the camera is seeing
         previewLayer = AVCaptureVideoPreviewLayer(session: self.session)
