@@ -28,9 +28,10 @@ class BooksStore {
     /**
      Creates a NSFetchedResultsController to retrieve books in the given state.
     */
-    func FetchedBooksController() -> NSFetchedResultsController {
+    func FetchedBooksController(initialPredicate: NSPredicate?, initialSortDescriptors: [NSSortDescriptor]?) -> NSFetchedResultsController {
         let fetchRequest = NSFetchRequest(entityName: bookEntityName)
-        fetchRequest.sortDescriptors = [BookPredicate.readStateSort(true), BookPredicate.titleSort(true)]
+        fetchRequest.predicate = initialPredicate
+        fetchRequest.sortDescriptors = initialSortDescriptors
         return NSFetchedResultsController(fetchRequest: fetchRequest,
             managedObjectContext: self.coreDataStack.managedObjectContext,
             sectionNameKeyPath: BookPredicate.readStateFieldName,

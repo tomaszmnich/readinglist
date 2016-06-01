@@ -106,6 +106,8 @@ extension NSMutableAttributedString {
 extension NSPredicate {
     @nonobjc static var TruePredicate = NSPredicate(format: "TRUEPREDICATE")
     
+    @nonobjc static var FalsePredicate = NSPredicate(format: "FALSEPREDICATE")
+    
     convenience init(fieldName: String, equalTo: String) {
         self.init(format: "\(fieldName) == %@", equalTo)
     }
@@ -121,7 +123,9 @@ extension NSPredicate {
     }
     
     static func searchWithinFields(searchString: String, fieldNames: String...) -> NSPredicate {
-        let searchStringComponents = searchString.componentsSeparatedByCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+        // Split on whitespace and remove empty elements
+        let searchStringComponents = searchString.componentsSeparatedByCharactersInSet(NSCharacterSet.whitespaceCharacterSet()).filter{!$0.isEmpty}
+        
         // AND each component, where each component is OR'd over each of the fields
         return NSPredicate.And(searchStringComponents.map{ searchStringComponent in
             NSPredicate.Or(fieldNames.map{ fieldName in
@@ -148,10 +152,12 @@ extension NSPredicate {
         return NSCompoundPredicate(andPredicateWithSubpredicates: andPredicates)
     }
     
+    @warn_unused_result
     func Or(orPredicate: NSPredicate) -> NSPredicate {
         return NSPredicate.Or(self, orPredicate)
     }
     
+    @warn_unused_result
     func And(andPredicate: NSPredicate) -> NSPredicate {
         return NSPredicate.And(self, andPredicate)
     }

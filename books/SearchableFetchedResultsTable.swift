@@ -28,14 +28,16 @@ class SearchableFetchedResultsTable: FetchedResultsTable, UISearchResultsUpdatin
     }
     
     func updateSearchResultsForSearchController(searchController: UISearchController) {
+        // We have to update the predicate even if the search text is empty, as the user
+        // may have arrived at this state by deleting text from an existing search.
         if let searchText = searchController.searchBar.text {
-            updatePredicate(predicateForSearchText(searchText))
+            updatePredicateAndReloadTable(predicateForSearchText(searchText))
         }
     }
     
     func predicateForSearchText(searchText: String) -> NSPredicate {
         // Should be overriden
-        return NSPredicate.TruePredicate
+        return NSPredicate.FalsePredicate
     }
     
     func isShowingSearchResults() -> Bool {

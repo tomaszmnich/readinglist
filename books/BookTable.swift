@@ -33,14 +33,14 @@ class BookTable: SearchableFetchedResultsTable {
     @IBOutlet weak var segmentControl: UISegmentedControl!
 
     /// The currently selected segment
-    var selectedSegment: TableSegmentOption! {
+    var selectedSegment = TableSegmentOption.ToRead {
         didSet {
             // Update the selected segment index. This may have already been done, but never mind.
             segmentControl.selectedSegmentIndex = selectedSegment.rawValue
             
-            // Load the data if we have changed segement and the previously stored scroll position
+            // Update the predicate if we have changed 
             if selectedSegment != oldValue {
-                updatePredicate(selectedSegment.toPredicate())
+                updatePredicateAndReloadTable(selectedSegment.toPredicate())
             }
         }
     }
@@ -49,14 +49,11 @@ class BookTable: SearchableFetchedResultsTable {
     var tableViewScrollPositions: [TableSegmentOption: CGPoint]?
     
     override func viewDidLoad() {
-        resultsController = appDelegate.booksStore.FetchedBooksController()
+        resultsController = appDelegate.booksStore.FetchedBooksController(selectedSegment.toPredicate(), initialSortDescriptors: [BookPredicate.readStateSort(true), BookPredicate.titleSort(true)])
         cellIdentifier = String(BookTableViewCell)
 
         // Set the DZN data set source
         tableView.emptyDataSetSource = self
-        
-        // Select the ToRead tab
-        selectedSegment = .ToRead
         
         super.viewDidLoad()
     }
@@ -116,17 +113,19 @@ class BookTable: SearchableFetchedResultsTable {
             selectedBook = appDelegate.booksStore.GetBook(identifierUrl) else { return }
         
         // Dismiss any modal controllers on this table view
-        self.presentedViewController?.dismissViewControllerAnimated(false) {
-        
+        if let presentedController = self.presentedViewController {
+            
             // Simulate the selection of the book after dismissing the modal
-            // views; doing them simultaneously can lead to an error and the 
+            // views; doing them simultaneously can lead to an error and the
             // push segue not occuring.
-            self.simulateBookSelection(selectedBook)
-            return
+            presentedController.dismissViewControllerAnimated(false) {
+                self.simulateBookSelection(selectedBook)
+            }
         }
-        
-        // If there were no presented view controllers, just simulate the book selection
-        simulateBookSelection(selectedBook)
+        else {
+            // If there were no presented view controllers, just simulate the book selection
+            simulateBookSelection(selectedBook)
+        }
     }
     
     func simulateBookSelection(book: Book) {
@@ -195,8 +194,13 @@ class BookTable: SearchableFetchedResultsTable {
     }
     
     override func predicateForSearchText(searchText: String) -> NSPredicate {
-        // AND the read state predicate with a search in the title and author fields
-        return NSPredicate.And(selectedSegment.toPredicate(), BookPredicate.searchInTitleOrAuthor(searchText))
+        var predicate = selectedSegment.toPredicate()
+        if !searchText.isEmptyOrWhitespace() {
+            // AND the read state predicate with a search in the title and author fields
+            predicate = predicate.And(BookPredicate.searchInTitleOrAuthor(searchText))
+            
+        }
+        return predicate
     }
 }
 
@@ -216,7 +220,7 @@ extension BookTable : DZNEmptyDataSetSource {
             titleText = "No results"
         }
         else {
-            titleText = self.selectedSegment! == .ToRead ? "You are not reading any books!" : "You haven't yet finished a book. Get going!"
+            titleText = self.selectedSegment == .ToRead ? "You are not reading any books!" : "You haven't yet finished a book. Get going!"
         }
         
         return NSAttributedString(string: titleText, attributes: [NSFontAttributeName: UIFont.preferredFontForTextStyle(UIFontTextStyleHeadline)])

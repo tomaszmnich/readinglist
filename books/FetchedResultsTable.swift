@@ -37,6 +37,12 @@ class FetchedResultsTable: UITableViewController {
         super.viewDidLoad()
     }
     
+    override func viewWillAppear(animated: Bool) {
+        refetchAndReloadTable()
+        
+        super.viewWillAppear(animated)
+    }
+    
     override func viewDidAppear(animated: Bool) {
         // Deselect selected rows, so they don't stay highlighted
         if let selectedIndexPath = self.tableView.indexPathForSelectedRow {
@@ -45,10 +51,11 @@ class FetchedResultsTable: UITableViewController {
     }
     
     /// Updates the predicate, performs a fetch and reloads the table view data.
-    func updatePredicate(newPredicate: NSPredicate) {
-        resultsController.fetchRequest.predicate = newPredicate
-        try! resultsController.performFetch()
-        tableView.reloadData()
+    func updatePredicateAndReloadTable(newPredicate: NSPredicate) {
+        if resultsController.fetchRequest.predicate != newPredicate {
+            resultsController.fetchRequest.predicate = newPredicate
+            refetchAndReloadTable()
+        }
     }
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -65,8 +72,13 @@ class FetchedResultsTable: UITableViewController {
         configureCell(cell, fromObject: resultsController.objectAtIndexPath(indexPath))
         return cell
     }
+    
+    func refetchAndReloadTable() {
+        print("resultsController performing fetch with predicate: \(resultsController.fetchRequest.predicate)")
+        let _ = try? resultsController.performFetch()
+        tableView.reloadData()
+    }
 }
-
 
 /**
  The handling of updates from the fetched results controller.
@@ -78,17 +90,13 @@ extension FetchedResultsTable: NSFetchedResultsControllerDelegate {
     }
     
     func controllerDidChangeContent(controller: NSFetchedResultsController) {
-        try! controller.performFetch()
-        tableView.reloadData()
         tableView.endUpdates()
     }
     
     func controller(controller: NSFetchedResultsController, didChangeObject object: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
         switch type {
         case .Update:
-            if let cell = tableView.cellForRowAtIndexPath(indexPath!) as? BookTableViewCell {
-                cell.configureFromBook(resultsController.objectAtIndexPath(indexPath!) as? Book)
-            }
+            configureCell(tableView.cellForRowAtIndexPath(indexPath!)!, fromObject: object)
         case .Insert:
             tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Fade)
         case .Move:
@@ -106,6 +114,7 @@ extension FetchedResultsTable: NSFetchedResultsControllerDelegate {
         case .Delete:
             self.tableView.deleteSections(NSIndexSet(index: sectionIndex), withRowAnimation: .Fade)
         default:
+            // Move and Updates should in theory not occur for sections
             return
         }
     }
