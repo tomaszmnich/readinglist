@@ -34,13 +34,9 @@ class FetchedResultsTable: UITableViewController {
         self.clearsSelectionOnViewWillAppear = false
         tableView.tableFooterView = UIView()
         
-        super.viewDidLoad()
-    }
-    
-    override func viewWillAppear(animated: Bool) {
         refetchAndReloadTable()
         
-        super.viewWillAppear(animated)
+        super.viewDidLoad()
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -96,23 +92,23 @@ extension FetchedResultsTable: NSFetchedResultsControllerDelegate {
     func controller(controller: NSFetchedResultsController, didChangeObject object: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
         switch type {
         case .Update:
-            configureCell(tableView.cellForRowAtIndexPath(indexPath!)!, fromObject: object)
+            tableView.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
         case .Insert:
-            tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Fade)
+            tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Automatic)
         case .Move:
-            tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
-            tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Fade)
+            tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
+            tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Automatic)
         case .Delete:
-            tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
+            tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
         }
     }
     
     func controller(controller: NSFetchedResultsController, didChangeSection sectionInfo: NSFetchedResultsSectionInfo, atIndex sectionIndex: Int, forChangeType type: NSFetchedResultsChangeType) {
         switch type {
         case .Insert:
-            self.tableView.insertSections(NSIndexSet(index: sectionIndex), withRowAnimation: .Fade)
+            self.tableView.insertSections(NSIndexSet(index: sectionIndex), withRowAnimation: .Automatic)
         case .Delete:
-            self.tableView.deleteSections(NSIndexSet(index: sectionIndex), withRowAnimation: .Fade)
+            self.tableView.deleteSections(NSIndexSet(index: sectionIndex), withRowAnimation: .Automatic)
         default:
             // Move and Updates should in theory not occur for sections
             return

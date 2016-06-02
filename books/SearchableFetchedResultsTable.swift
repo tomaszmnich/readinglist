@@ -37,7 +37,7 @@ class SearchableFetchedResultsTable: FetchedResultsTable, UISearchResultsUpdatin
     
     func predicateForSearchText(searchText: String) -> NSPredicate {
         // Should be overriden
-        return NSPredicate.FalsePredicate
+        return NSPredicate(format: "FALSEPREDICATE")
     }
     
     func isShowingSearchResults() -> Bool {

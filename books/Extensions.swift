@@ -103,13 +103,10 @@ extension NSMutableAttributedString {
     }
 }
 
-extension NSPredicate {
-    @nonobjc static var TruePredicate = NSPredicate(format: "TRUEPREDICATE")
+extension NSPredicate {    
     
-    @nonobjc static var FalsePredicate = NSPredicate(format: "FALSEPREDICATE")
-    
-    convenience init(fieldName: String, equalTo: String) {
-        self.init(format: "\(fieldName) == %@", equalTo)
+    convenience init(fieldName: String, equalToInt: Int) {
+        self.init(format: "\(fieldName) == %d", equalToInt)
     }
     
     convenience init(fieldName: String, containsSubstring: String) {
@@ -134,18 +131,8 @@ extension NSPredicate {
         })
     }
     
-    static func Or(orPredicates: NSPredicate...) -> NSPredicate {
-        // Splatted version
-        return Or(orPredicates)
-    }
-    
     static func Or(orPredicates: [NSPredicate]) -> NSPredicate {
         return NSCompoundPredicate(orPredicateWithSubpredicates: orPredicates)
-    }
-    
-    static func And(andPredicates: NSPredicate...) -> NSPredicate {
-        // Splatted version
-        return And(andPredicates)
     }
     
     static func And(andPredicates: [NSPredicate]) -> NSPredicate {
@@ -154,11 +141,11 @@ extension NSPredicate {
     
     @warn_unused_result
     func Or(orPredicate: NSPredicate) -> NSPredicate {
-        return NSPredicate.Or(self, orPredicate)
+        return NSPredicate.Or([self, orPredicate])
     }
     
     @warn_unused_result
     func And(andPredicate: NSPredicate) -> NSPredicate {
-        return NSPredicate.And(self, andPredicate)
+        return NSPredicate.And([self, andPredicate])
     }
 }

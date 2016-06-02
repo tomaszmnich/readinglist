@@ -15,7 +15,7 @@ class BookPredicate {
     static let readStateFieldName = "readState"
     
     static func readStateEqual(readState: BookReadState) -> NSPredicate {
-        return NSPredicate(fieldName: readStateFieldName, equalTo: String(readState.rawValue))
+        return NSPredicate(fieldName: readStateFieldName, equalToInt: Int(readState.rawValue))
     }
     
     static func searchInTitleOrAuthor(searchString: String) -> NSPredicate {
