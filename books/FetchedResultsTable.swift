@@ -70,7 +70,7 @@ class FetchedResultsTable: UITableViewController {
     }
     
     func refetchAndReloadTable() {
-        print("resultsController performing fetch with predicate: \(resultsController.fetchRequest.predicate)")
+        debugPrint("resultsController performing fetch with predicate: \(resultsController.fetchRequest.predicate)")
         let _ = try? resultsController.performFetch()
         tableView.reloadData()
     }
@@ -90,14 +90,22 @@ extension FetchedResultsTable: NSFetchedResultsControllerDelegate {
     }
     
     func controller(controller: NSFetchedResultsController, didChangeObject object: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
+        debugPrint("controller delegate received \(type) change notification.")
         switch type {
         case .Update:
             tableView.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
         case .Insert:
             tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Automatic)
         case .Move:
-            tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
-            tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Automatic)
+            // For some weird reason, updates sometimes get notified as a move from
+            // and to the same index path. Handle this nicely.
+            if indexPath == newIndexPath {
+                tableView.reloadRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Automatic)
+            }
+            else {
+                tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
+                tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Automatic)
+            }
         case .Delete:
             tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
         }
