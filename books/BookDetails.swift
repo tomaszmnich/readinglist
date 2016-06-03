@@ -19,7 +19,7 @@ class BookDetails: UIViewController {
     
     override func viewDidLoad() {
         // Keep an eye on changes to the book store
-        appDelegate.booksStore.AddSaveObserver(self, callback: #selector(bookChanged(_:)))
+        appDelegate.booksStore.AddSaveObserver(self, callbackSelector: #selector(bookChanged(_:)))
         UpdateUi()
     }
     
