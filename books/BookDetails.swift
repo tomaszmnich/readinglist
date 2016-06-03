@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import CoreSpotlight
 
 class BookDetails: UIViewController {
     
@@ -23,8 +24,29 @@ class BookDetails: UIViewController {
         UpdateUi()
     }
     
-    func bookChanged(notification: NSNotification) {
-        // We don't care if we are not showing a book currenly, or if this notification doesn't have a userInfo
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        let navController = segue.destinationViewController as! UINavigationController
+        if segue.identifier == "editBookSegue" {
+            let editBookController = navController.viewControllers.first as! EditBook
+            editBookController.bookToEdit = self.book
+        }
+        else if segue.identifier == "editReadStateSegue" {
+            let changeReadState = navController.viewControllers.first as! EditReadState
+            changeReadState.bookToEdit = self.book
+        }
+    }
+    
+    override func restoreUserActivityState(activity: NSUserActivity) {
+        guard let identifier = activity.userInfo?[CSSearchableItemActivityIdentifier] as? String,
+            identifierUrl = NSURL(string: identifier),
+            selectedBook = appDelegate.booksStore.GetBook(identifierUrl) else { return }
+        
+        book = selectedBook
+        UpdateUi()
+        self.dismissViewControllerAnimated(false, completion: nil)
+    }
+    
+    @objc private func bookChanged(notification: NSNotification) {
         guard let book = book, let userInfo = notification.userInfo else { return }
         
         if let updatedObjects = userInfo[NSUpdatedObjectsKey] as? NSSet where updatedObjects.containsObject(book) {
@@ -38,21 +60,7 @@ class BookDetails: UIViewController {
         }
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        let navController = segue.destinationViewController as! UINavigationController
-        if segue.identifier == "editBookSegue" {
-            let editBookController = navController.viewControllers.first as! EditBook
-            editBookController.bookToEdit = self.book
-        }
-        else if segue.identifier == "editReadStateSegue" {
-            let changeReadState = navController.viewControllers.first as! EditReadState
-            changeReadState.bookToEdit = self.book
-        }
-    }
-    
-    func UpdateUi() {
-        
-        // Check the book exists
+    private func UpdateUi() {
         guard let book = book else { ClearUi(); return }
 
         // Setup the title label
@@ -71,7 +79,7 @@ class BookDetails: UIViewController {
         imageView.image = UIImage(optionalData: book.coverImage)
     }
     
-    func ClearUi() {
+    private func ClearUi() {
         titleLabel.attributedText = nil
         descriptionLabel.attributedText = nil
         imageView.image = nil

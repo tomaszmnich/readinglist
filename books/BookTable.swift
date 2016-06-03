@@ -23,7 +23,7 @@ enum TableSegmentOption: Int {
         return NSPredicate.Or(self.readStates.map{BookPredicate.readStateEqual($0)})
     }
     
-    static func fromReadState(state: BookReadState) -> TableSegmentOption{
+    static func fromReadState(state: BookReadState) -> TableSegmentOption {
         return state == .Finished ? .Finished : .ToRead
     }
 }
@@ -35,13 +35,21 @@ class BookTable: SearchableFetchedResultsTable {
     /// The currently selected segment
     var selectedSegment = TableSegmentOption.ToRead {
         didSet {
+            guard selectedSegment != oldValue else { return }
+            
+            // Store the scroll position for the old read state
+            tableViewScrollPositions![oldValue] = tableView.contentOffset
+            
+            // If we have a position in the dictionary for the new segment state, scroll to that
+            if let newPosition = tableViewScrollPositions![selectedSegment] {
+                tableView.setContentOffset(newPosition, animated: false)
+            }
+            
             // Update the selected segment index. This may have already been done, but never mind.
             segmentControl.selectedSegmentIndex = selectedSegment.rawValue
             
-            // Update the predicate if we have changed 
-            if selectedSegment != oldValue {
-                updatePredicateAndReloadTable(selectedSegment.toPredicate())
-            }
+            // Update the predicate
+            updatePredicateAndReloadTable(selectedSegment.toPredicate())
         }
     }
     
@@ -67,12 +75,13 @@ class BookTable: SearchableFetchedResultsTable {
         
         super.viewDidAppear(animated)
     }
+    
+    override func viewWillDisappear(animated: Bool) {
+        tableViewScrollPositions![selectedSegment] = tableView.contentOffset
+    }
 
     override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if selectedSegment == .Finished {
-            // We don't need a section title for this segment
-            return nil
-        }
+        if selectedSegment == .Finished { return nil }
         
         // Otherwise, turn the section name into a BookReadState and use its description property
         let sectionAsInt = Int32(self.resultsController.sections![section].name)!
@@ -106,66 +115,37 @@ class BookTable: SearchableFetchedResultsTable {
         guard let identifier = activity.userInfo?[CSSearchableItemActivityIdentifier] as? String,
             identifierUrl = NSURL(string: identifier),
             selectedBook = appDelegate.booksStore.GetBook(identifierUrl) else { return }
-        
-        // Dismiss any modal controllers on this table view
-        if let presentedController = self.presentedViewController {
-            
-            // Simulate the selection of the book after dismissing the modal
-            // views; doing them simultaneously can lead to an error and the
-            // push segue not occuring.
-            presentedController.dismissViewControllerAnimated(false) {
-                self.simulateBookSelection(selectedBook)
-            }
-        }
-        else {
-            // If there were no presented view controllers, just simulate the book selection
-            simulateBookSelection(selectedBook)
-        }
-    }
-    
-    func simulateBookSelection(book: Book) {
+
         // Update the selected segment, which will reload the table, and dismiss the search if there is one
-        selectedSegment = TableSegmentOption.fromReadState(book.readState)
+        selectedSegment = TableSegmentOption.fromReadState(selectedBook.readState)
         dismissSearch()
         
-        // Check whether the detail view is already displayed
-        if let bookDetails = appDelegate.splitViewController.detailNavigationController?.topViewController as? BookDetails {
-            
-            // Dismiss any modal controllers on the detail view (e.g. Edit)
-            bookDetails.dismissViewControllerAnimated(false, completion: nil)
-            
-            // Update the displayed book
-            bookDetails.book = book
-            bookDetails.UpdateUi()
-        }
-        else {
-            // Otherwise, segue to the details view
-            self.performSegueWithIdentifier("showDetail", sender: book)
-        }
-        
         // Select the corresponding row and scroll it in to view.
-        if let indexPathOfSelectedBook = self.resultsController.indexPathForObject(book) {
+        if let indexPathOfSelectedBook = self.resultsController.indexPathForObject(selectedBook) {
             self.tableView.scrollToRowAtIndexPath(indexPathOfSelectedBook, atScrollPosition: .None, animated: false)
             self.tableView.selectRowAtIndexPath(indexPathOfSelectedBook, animated: false, scrollPosition: .None)
         }
+        
+        // Check whether the detail view is already displayed
+        if let bookDetails = appDelegate.splitViewController.detailNavigationController?.topViewController as? BookDetails {
+            bookDetails.restoreUserActivityState(activity)
+        }
+        else {
+            // Otherwise, segue to the details view
+            self.performSegueWithIdentifier("showDetail", sender: selectedBook)
+        }
+        
+        self.presentedViewController?.dismissViewControllerAnimated(false, completion: nil)
     }
     
     @IBAction func selectedSegmentChanged(sender: AnyObject) {
-        // Store the scroll position for the old read state
-        tableViewScrollPositions![selectedSegment] = tableView.contentOffset
-        
-        // If we have a position in the dictionary for the new segment state, scroll to that
-        let newSegment = TableSegmentOption(rawValue: segmentControl.selectedSegmentIndex)!
-        if let newPosition = tableViewScrollPositions![newSegment] {
-            tableView.setContentOffset(newPosition, animated: false)
-        }
         
         // Update the read state to the selected read state
-        selectedSegment = newSegment
+        selectedSegment = TableSegmentOption(rawValue: segmentControl.selectedSegmentIndex)!
         
         // If there is a Book currently displaying on the split Detail view, select the corresponding row if possible
-        if let currentlyShowingBook = appDelegate.splitViewController.bookDetailsControllerIfSplit?.book
-            where selectedSegment.readStates.contains(currentlyShowingBook.readState) {
+        if let currentlyShowingBook = appDelegate.splitViewController.bookDetailsControllerIfSplit?.book where selectedSegment.readStates.contains(currentlyShowingBook.readState) {
+            
             tableView.selectRowAtIndexPath(self.resultsController.indexPathForObject(currentlyShowingBook), animated: false, scrollPosition: .None)
         }
     }
@@ -191,9 +171,7 @@ class BookTable: SearchableFetchedResultsTable {
     override func predicateForSearchText(searchText: String) -> NSPredicate {
         var predicate = selectedSegment.toPredicate()
         if !searchText.isEmptyOrWhitespace() {
-            // AND the read state predicate with a search in the title and author fields
             predicate = predicate.And(BookPredicate.searchInTitleOrAuthor(searchText))
-            
         }
         return predicate
     }

@@ -45,11 +45,12 @@ class EditBook: BookMetadataForm {
         // Bring up the action sheet)
         confirmDeleteAlert.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
         confirmDeleteAlert.addAction(UIAlertAction(title: "Delete", style: .Destructive) { _ in
-            appDelegate.booksStore.DeleteBookAndDeindex(self.bookToEdit!)
             
-            // Dismiss *this* modal view
-            self.dismissViewControllerAnimated(true, completion: nil)
-            })
+            // Dismiss this modal view and then delete the book
+            self.dismissViewControllerAnimated(true) {
+                appDelegate.booksStore.DeleteBookAndDeindex(self.bookToEdit!)
+            }
+        })
         self.presentViewController(confirmDeleteAlert, animated: true, completion: nil)
     }
     
@@ -66,8 +67,6 @@ class EditBook: BookMetadataForm {
         guard let TitleField = TitleField else { return }
         
         // Update the book object from the form values
-        self.view.endEditing(true)
-
         bookToEdit.title = TitleField
         bookToEdit.authorList = AuthorList
         bookToEdit.bookDescription = Description
@@ -78,6 +77,6 @@ class EditBook: BookMetadataForm {
         appDelegate.booksStore.UpdateSpotlightIndex(bookToEdit)
         appDelegate.booksStore.Save()
 
-        self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
+        Dismiss()
     }
 }

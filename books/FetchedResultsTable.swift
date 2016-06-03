@@ -44,14 +44,17 @@ class FetchedResultsTable: UITableViewController {
         if let selectedIndexPath = self.tableView.indexPathForSelectedRow {
             self.tableView.deselectRowAtIndexPath(selectedIndexPath, animated: animated)
         }
+        
+        super.viewDidAppear(animated)
     }
     
     /// Updates the predicate, performs a fetch and reloads the table view data.
     func updatePredicateAndReloadTable(newPredicate: NSPredicate) {
-        if resultsController.fetchRequest.predicate != newPredicate {
-            resultsController.fetchRequest.predicate = newPredicate
-            refetchAndReloadTable()
-        }
+        // We shouldn't need to do anything if the predicate is the same, given that we are tracking changes.
+        guard resultsController.fetchRequest.predicate != newPredicate else { return }
+        
+        resultsController.fetchRequest.predicate = newPredicate
+        refetchAndReloadTable()
     }
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
