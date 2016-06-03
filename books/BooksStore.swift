@@ -78,11 +78,15 @@ class BooksStore {
      Saves the managedObjectContext and suppresses any errors.
     */
     func Save(){
-        do {
-            try coreDataStack.managedObjectContext.save()
-        }
-        catch {
+        if let error = try? coreDataStack.managedObjectContext.save() {
             print("Error saving context: \(error)")
         }
+    }
+    
+    /**
+     Adds the specified object as an observer of saves to the managed object context.
+    */
+    func AddSaveObserver(observer: AnyObject, callbackSelector: Selector) {
+        NSNotificationCenter.defaultCenter().addObserver(observer, selector: #selector(BookDetails.bookChanged(_:)), name: NSManagedObjectContextDidSaveNotification, object: coreDataStack.managedObjectContext)
     }
 }

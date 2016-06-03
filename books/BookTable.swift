@@ -88,14 +88,9 @@ class BookTable: SearchableFetchedResultsTable {
         // For safety check that there is a Book here
         guard let selectedBook = self.resultsController.objectAtIndexPath(indexPath) as? Book else { return nil }
         
-        let delete = UITableViewRowAction(style: .Destructive, title: "Delete") { _, index in
+        let delete = UITableViewRowAction(style: .Destructive, title: "Delete") { _, _ in
             // If there is a book at this index, delete it
             appDelegate.booksStore.DeleteBookAndDeindex(selectedBook)
-            
-            // If it is being displayed, clear it
-            if let bookDetails = appDelegate.splitViewController.bookDetailsControllerIfSplit where bookDetails.book == selectedBook {
-                bookDetails.ClearUI()
-            }
         }
         delete.backgroundColor = UIColor.redColor()
         return [delete]

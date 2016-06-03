@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class BookDetails: UIViewController {
     
@@ -16,18 +17,34 @@ class BookDetails: UIViewController {
     @IBOutlet weak var descriptionLabel: UILabel!
     @IBOutlet weak var imageView: UIImageView!
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewDidLoad() {
+        // Keep an eye on changes to the book store
+        appDelegate.booksStore.AddSaveObserver(self, callback: #selector(bookChanged(_:)))
         UpdateUi()
     }
     
+    func bookChanged(notification: NSNotification) {
+        // We don't care if we are not showing a book currenly, or if this notification doesn't have a userInfo
+        guard let book = book, let userInfo = notification.userInfo else { return }
+        
+        if let updatedObjects = userInfo[NSUpdatedObjectsKey] as? NSSet where updatedObjects.containsObject(book) {
+            // If the book was updated, update this page
+            UpdateUi()
+        }
+        else if let deletedObjects = userInfo[NSDeletedObjectsKey] as? NSSet where deletedObjects.containsObject(book) {
+            // If the book was deleted, clear this page, and pop back if necessary
+            ClearUi()
+            appDelegate.splitViewController.masterNavigationController.popToRootViewControllerAnimated(false)
+        }
+    }
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        let navController = segue.destinationViewController as! UINavigationController
         if segue.identifier == "editBookSegue" {
-            let navController = segue.destinationViewController as! UINavigationController
             let editBookController = navController.viewControllers.first as! EditBook
             editBookController.bookToEdit = self.book
         }
         else if segue.identifier == "editReadStateSegue" {
-            let navController = segue.destinationViewController as! UINavigationController
             let changeReadState = navController.viewControllers.first as! EditReadState
             changeReadState.bookToEdit = self.book
         }
@@ -36,10 +53,7 @@ class BookDetails: UIViewController {
     func UpdateUi() {
         
         // Check the book exists
-        guard let book = book else {
-            ClearUI()
-            return
-        }
+        guard let book = book else { ClearUi(); return }
 
         // Setup the title label
         titleLabel.attributedText = NSMutableAttributedString.byConcatenating(withNewline: true,
@@ -57,7 +71,7 @@ class BookDetails: UIViewController {
         imageView.image = UIImage(optionalData: book.coverImage)
     }
     
-    func ClearUI() {
+    func ClearUi() {
         titleLabel.attributedText = nil
         descriptionLabel.attributedText = nil
         imageView.image = nil

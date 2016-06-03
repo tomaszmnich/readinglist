@@ -9,7 +9,7 @@
 import CoreSpotlight
 import MobileCoreServices
 
-class CoreSpotlightStack{
+class CoreSpotlightStack {
     
     var domainIdentifier: String
     var indexingAvailable: Bool
@@ -22,12 +22,12 @@ class CoreSpotlightStack{
     /**
      Adds the items to the Spotlight index.
      */
-    func IndexItems(items: [SpotlightItem]){
-        if indexingAvailable {
-            CSSearchableIndex.defaultSearchableIndex().indexSearchableItems(items.map{CreateSearchableItem($0)}) {
-                if $0 != nil {
-                    print("Error indexing items: \($0!.localizedDescription)")
-                }
+    func IndexItems(items: [SpotlightItem]) {
+        guard indexingAvailable else { return }
+        
+        CSSearchableIndex.defaultSearchableIndex().indexSearchableItems(items.map{CreateSearchableItem($0)}) {
+            if $0 != nil {
+                print("Error indexing items: \($0!.localizedDescription)")
             }
         }
     }
@@ -43,11 +43,11 @@ class CoreSpotlightStack{
      Removes the items from the Spotlight index.
      */
     func DeindexItems(identifiers: [String]){
-        if indexingAvailable {
-            CSSearchableIndex.defaultSearchableIndex().deleteSearchableItemsWithIdentifiers(identifiers) {
-                if $0 != nil {
-                    print("Error deindexing items: \($0!.localizedDescription)")
-                }
+        guard indexingAvailable else { return }
+        
+        CSSearchableIndex.defaultSearchableIndex().deleteSearchableItemsWithIdentifiers(identifiers) {
+            if $0 != nil {
+                print("Error deindexing items: \($0!.localizedDescription)")
             }
         }
     }

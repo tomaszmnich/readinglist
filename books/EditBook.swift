@@ -47,12 +47,7 @@ class EditBook: BookMetadataForm {
         confirmDeleteAlert.addAction(UIAlertAction(title: "Delete", style: .Destructive) { _ in
             appDelegate.booksStore.DeleteBookAndDeindex(self.bookToEdit!)
             
-            // If the detail view is present, clear it.
-            // Otherwise, pop it.
-            appDelegate.splitViewController.bookDetailsControllerIfSplit?.ClearUI()
-            appDelegate.splitViewController.masterNavigationController.popToRootViewControllerAnimated(false)
-            
-            // Now dismiss *this* modal view
+            // Dismiss *this* modal view
             self.dismissViewControllerAnimated(true, completion: nil)
             })
         self.presentViewController(confirmDeleteAlert, animated: true, completion: nil)
