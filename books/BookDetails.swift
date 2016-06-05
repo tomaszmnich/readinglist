@@ -36,12 +36,8 @@ class BookDetails: UIViewController {
         }
     }
     
-    override func restoreUserActivityState(activity: NSUserActivity) {
-        guard let identifier = activity.userInfo?[CSSearchableItemActivityIdentifier] as? String,
-            identifierUrl = NSURL(string: identifier),
-            selectedBook = appDelegate.booksStore.GetBook(identifierUrl) else { return }
-        
-        book = selectedBook
+    func updateDisplayedBook(newBook: Book) {
+        book = newBook
         UpdateUi()
         self.dismissViewControllerAnimated(false, completion: nil)
     }

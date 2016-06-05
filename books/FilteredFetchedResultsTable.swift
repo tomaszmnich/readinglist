@@ -1,5 +1,5 @@
 //
-//  SearchableFetchedResultsTable.swift
+//  FilteredFetchedResultsTable.swift
 //  books
 //
 //  Created by Andrew Bennet on 29/05/2016.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SearchableFetchedResultsTable: FetchedResultsTable, UISearchResultsUpdating {
+class FilteredFetchedResultsTable: FetchedResultsTable, UISearchResultsUpdating {
     /// The UISearchController to which this UITableViewController is connected.
     var searchController = UISearchController(searchResultsController: nil)
     
@@ -20,8 +20,6 @@ class SearchableFetchedResultsTable: FetchedResultsTable, UISearchResultsUpdatin
         self.tableView.tableHeaderView = searchController.searchBar
         
         // Offset by the height of the search bar, so as to hide it on load.
-        // However, the contentOffset values will change before the view appears,
-        // due to the adjusted scroll view inset from the navigation bar.
         self.tableView.setContentOffset(CGPointMake(0, searchController.searchBar.frame.height), animated: false)
         
         super.viewDidLoad()

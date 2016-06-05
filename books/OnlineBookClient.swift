@@ -20,19 +20,16 @@ class OnlineBookClient<TParser: BookParser>{
         func SearchResultCallback(result: JSON?) {
             
             // First check there is a JSON result, and it can be parsed.
-            guard let result = result, let bookMetadata = TParser.ParseJsonResponse(result) else {
-                completionHandler(nil)
-                return
-            }
+            guard let result = result,
+                let bookMetadata = TParser.ParseJsonResponse(result)
+                else { completionHandler(nil); return }
             
-            // Then, if there was an image URL in the result, request that too
-            if let dataUrl = bookMetadata.coverUrl {
-                HttpClient.GetData(dataUrl) {
-                    bookMetadata.coverImage = $0
-                    completionHandler(bookMetadata)
-                }
-            }
-            else {
+            // Then check whether there was a book cover image URL.
+            guard let bookCoverUrl = bookMetadata.coverUrl else { completionHandler(bookMetadata); return }
+            
+            // Request the book cover image too, and call the completion handler
+            HttpClient.GetData(bookCoverUrl) {
+                bookMetadata.coverImage = $0
                 completionHandler(bookMetadata)
             }
         }

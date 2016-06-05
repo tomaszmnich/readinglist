@@ -28,7 +28,7 @@ enum TableSegmentOption: Int {
     }
 }
 
-class BookTable: SearchableFetchedResultsTable {
+class BookTable: FilteredFetchedResultsTable {
 
     @IBOutlet weak var segmentControl: UISegmentedControl!
 
@@ -37,12 +37,16 @@ class BookTable: SearchableFetchedResultsTable {
         didSet {
             guard selectedSegment != oldValue else { return }
             
-            // Store the scroll position for the old read state
-            tableViewScrollPositions![oldValue] = tableView.contentOffset
+            // If the view is visible, save the scroll position
+            if self.view.window != nil {
+                
+                // Store the scroll position for the old read state
+                tableViewScrollPositions![oldValue] = tableView.contentOffset
             
-            // If we have a position in the dictionary for the new segment state, scroll to that
-            if let newPosition = tableViewScrollPositions![selectedSegment] {
-                tableView.setContentOffset(newPosition, animated: false)
+                // If we have a position in the dictionary for the new segment state, scroll to that
+                if let newPosition = tableViewScrollPositions![selectedSegment] {
+                    tableView.setContentOffset(newPosition, animated: false)
+                }
             }
             
             // Update the selected segment index. This may have already been done, but never mind.
@@ -138,12 +142,13 @@ class BookTable: SearchableFetchedResultsTable {
             self.tableView.selectRowAtIndexPath(indexPathOfSelectedBook, animated: false, scrollPosition: .None)
         }
         
-        // Check whether the detail view is already displayed
+        // Check whether the detail view is already displayed, and update the book it is showing.
         if let bookDetails = appDelegate.splitViewController.detailNavigationController?.topViewController as? BookDetails {
-            bookDetails.restoreUserActivityState(activity)
+            bookDetails.updateDisplayedBook(selectedBook)
         }
         else {
-            // Otherwise, segue to the details view
+            // Otherwise, segue to the details view. This will be the case when, in compact width,
+            // this table is at the top of the navigation stack.
             self.performSegueWithIdentifier("showDetail", sender: selectedBook)
         }
         
