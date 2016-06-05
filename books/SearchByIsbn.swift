@@ -36,8 +36,8 @@ class SearchByIsbn: UIViewController {
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "showIsbnSearchResultSegue" {
-            let createBookController = segue.destinationViewController as! CreateBook
-            createBookController.initialBookMetadata = foundMetadata
+            let createReadStateController = segue.destinationViewController as! CreateReadState
+            createReadStateController.bookMetadata = foundMetadata
         }
     }
     

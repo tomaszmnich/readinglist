@@ -119,6 +119,14 @@ extension NSPredicate {
         }
     }
     
+    static func Or(orPredicates: [NSPredicate]) -> NSPredicate {
+        return NSCompoundPredicate(orPredicateWithSubpredicates: orPredicates)
+    }
+    
+    static func And(andPredicates: [NSPredicate]) -> NSPredicate {
+        return NSCompoundPredicate(andPredicateWithSubpredicates: andPredicates)
+    }
+    
     static func searchWithinFields(searchString: String, fieldNames: String...) -> NSPredicate {
         // Split on whitespace and remove empty elements
         let searchStringComponents = searchString.componentsSeparatedByCharactersInSet(NSCharacterSet.whitespaceCharacterSet()).filter{!$0.isEmpty}
@@ -129,14 +137,6 @@ extension NSPredicate {
                 NSPredicate(fieldName: fieldName, containsSubstring: searchStringComponent)
             })
         })
-    }
-    
-    static func Or(orPredicates: [NSPredicate]) -> NSPredicate {
-        return NSCompoundPredicate(orPredicateWithSubpredicates: orPredicates)
-    }
-    
-    static func And(andPredicates: [NSPredicate]) -> NSPredicate {
-        return NSCompoundPredicate(andPredicateWithSubpredicates: andPredicates)
     }
     
     @warn_unused_result
