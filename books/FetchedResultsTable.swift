@@ -27,25 +27,8 @@ class FetchedResultsTable: UITableViewController {
     }
     
     override func viewDidLoad() {
-        // Set the view of the NavigationController to be white, so that glimpses
-        // of dark colours are not seen through the translucent bar when segueing from this view.
-        // Also, we will manage the clearing of selections ourselves. Setting the table footer removes the cell separators
-        self.navigationController!.view.backgroundColor = UIColor.whiteColor()
-        self.clearsSelectionOnViewWillAppear = false
-        tableView.tableFooterView = UIView()
-        
         refetchAndReloadTable()
-        
         super.viewDidLoad()
-    }
-    
-    override func viewDidAppear(animated: Bool) {
-        // Deselect selected rows, so they don't stay highlighted
-        if let selectedIndexPath = self.tableView.indexPathForSelectedRow {
-            self.tableView.deselectRowAtIndexPath(selectedIndexPath, animated: animated)
-        }
-        
-        super.viewDidAppear(animated)
     }
     
     /// Updates the predicate, performs a fetch and reloads the table view data.
@@ -73,9 +56,13 @@ class FetchedResultsTable: UITableViewController {
     }
     
     func refetchAndReloadTable() {
-        debugPrint("resultsController performing fetch with predicate: \(resultsController.fetchRequest.predicate)")
-        let _ = try? resultsController.performFetch()
-        tableView.reloadData()
+        do {
+            try resultsController.performFetch()
+            tableView.reloadData()
+        }
+        catch {
+            print("Error performing fetch: \(error)")
+        }
     }
 }
 
@@ -93,7 +80,6 @@ extension FetchedResultsTable: NSFetchedResultsControllerDelegate {
     }
     
     func controller(controller: NSFetchedResultsController, didChangeObject object: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
-        debugPrint("controller delegate received \(type) change notification.")
         switch type {
         case .Update:
             tableView.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)

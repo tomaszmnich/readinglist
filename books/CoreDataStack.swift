@@ -37,15 +37,18 @@ class CoreDataStack {
     }()
     
     /// Creates a new item of the specified type with the provided entity name.
-    func createNewItem<T>(entityName: String) -> T {
-        return NSEntityDescription.insertNewObjectForEntityForName(entityName, inManagedObjectContext: managedObjectContext) as! T
+    func createNewItem<T where T: NSManagedObject>(entityName: String) -> T {
+        let newItem = NSEntityDescription.insertNewObjectForEntityForName(entityName, inManagedObjectContext: managedObjectContext) as! T
+        print("Created new object with ID \(newItem.objectID.URIRepresentation().absoluteString)")
+        return newItem
     }
     
     private lazy var persistentStoreCoordinator: NSPersistentStoreCoordinator = {
         let coordinator = NSPersistentStoreCoordinator(managedObjectModel: self.managedObjectModel)
         do {
             try coordinator.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: self.sqliteStoreUrl, options: nil)
-        } catch {
+        }
+        catch {
             print("Unresolved error adding persistent store: \(error)")
         }
         return coordinator

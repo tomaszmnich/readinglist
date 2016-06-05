@@ -63,6 +63,13 @@ class BookTable: SearchableFetchedResultsTable {
         // Set the DZN data set source
         tableView.emptyDataSetSource = self
         
+        // Set the view of the NavigationController to be white, so that glimpses
+        // of dark colours are not seen through the translucent bar when segueing from this view.
+        // Also, we will manage the clearing of selections ourselves. Setting the table footer removes the cell separators
+        self.navigationController!.view.backgroundColor = UIColor.whiteColor()
+        self.clearsSelectionOnViewWillAppear = false
+        tableView.tableFooterView = UIView()
+        
         super.viewDidLoad()
     }
     
@@ -71,6 +78,11 @@ class BookTable: SearchableFetchedResultsTable {
         // tabs, with the current scroll position (which will be the starting position).
         if tableViewScrollPositions == nil {
             tableViewScrollPositions = [.ToRead: tableView.contentOffset, .Finished: tableView.contentOffset]
+        }
+        
+        // Deselect selected rows, so they don't stay highlighted
+        if let selectedIndexPath = self.tableView.indexPathForSelectedRow {
+            self.tableView.deselectRowAtIndexPath(selectedIndexPath, animated: animated)
         }
         
         super.viewDidAppear(animated)

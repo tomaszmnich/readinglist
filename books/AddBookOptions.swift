@@ -28,10 +28,22 @@ class AddBookOptions: FormViewController {
             self.performSegueWithIdentifier("addBookManuallySegue", sender: self)
         })
         form.append(addManuallySection)
+        
+        // A button for loading test data, when in Debug mode
+        #if DEBUG
+            let addTestDataSection = Section()
+            addTestDataSection.append(ButtonRow(){
+                $0.title = "Add Test Data"
+                }.onCellSelection{ _ in
+                    TestData.loadTestData()
+                    self.navigationController!.dismissViewControllerAnimated(true, completion: nil)
+                })
+            form.append(addTestDataSection)
+        #endif
     }
     
     @IBAction func cancelWasPressed(sender: AnyObject) {
-        self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
+        self.navigationController!.dismissViewControllerAnimated(true, completion: nil)
     }
     
 }

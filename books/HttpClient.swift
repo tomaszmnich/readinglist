@@ -33,7 +33,6 @@ class HttpClient{
             
             // Callback on the main thread
             dispatch_async(dispatch_get_main_queue()) {
-                print("Executing GetJson callback")
                 callback(jsonResponse: jsonResponse)
             }
         }

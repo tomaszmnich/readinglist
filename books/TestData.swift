@@ -24,12 +24,7 @@ class TestData {
         ("9780006546061", .ToRead, nil, nil) //Fahrenheit 451
     ]
     
-    static func loadDefaultDataIfFirstLaunch() {
-        
-        // Only load the data if we haven't launched before
-        let key = "hasLaunchedBefore"
-        guard NSUserDefaults.standardUserDefaults().boolForKey(key) == false else { return }
-        NSUserDefaults.standardUserDefaults().setBool(true, forKey: key)
+    static func loadTestData() {
         
         // Search for each book and add the result
         for bookToAdd in booksToAdd {
