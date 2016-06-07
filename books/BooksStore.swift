@@ -54,6 +54,28 @@ class BooksStore {
     }
     
     /**
+     Gets the current maximum sort index in the books store
+    */
+    func GetMaxSort() -> Int32? {
+        let fetchRequest = NSFetchRequest(entityName: bookEntityName)
+        fetchRequest.fetchLimit = 1
+        fetchRequest.resultType = .DictionaryResultType
+
+        let expression = NSExpressionDescription()
+        expression.name = "maxSort"
+        expression.expression = NSExpression(forFunction: "max:", arguments: [NSExpression(forKeyPath: "sort")])
+        expression.expressionResultType = NSAttributeType.Integer32AttributeType
+        fetchRequest.propertiesToFetch = [expression]
+
+        if let results = try? coreDataStack.managedObjectContext.executeFetchRequest(fetchRequest) {
+            return results.first as? Int32
+        }
+        else {
+            return nil
+        }
+    }
+    
+    /**
      Deletes the given book from the managed object context.
      Deindexes from Spotlight if necessary.
     */
@@ -70,6 +92,10 @@ class BooksStore {
     func CreateBook(metadata: BookMetadata, readingInformation: BookReadingInformation) {
         let book: Book = coreDataStack.createNewItem(bookEntityName)
         book.Populate(metadata, readingInformation: readingInformation)
+        if readingInformation.readState == .ToRead {
+            let maxSort = GetMaxSort()
+            book.sort = Int32((maxSort ?? 0) + 1)
+        }
         Save()
         UpdateSpotlightIndex(book)
     }

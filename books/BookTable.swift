@@ -29,7 +29,7 @@ enum TableSegmentOption: Int {
 }
 
 class BookTable: FilteredFetchedResultsTable {
-
+    
     @IBOutlet weak var segmentControl: UISegmentedControl!
 
     /// The currently selected segment
@@ -61,7 +61,8 @@ class BookTable: FilteredFetchedResultsTable {
     var tableViewScrollPositions: [TableSegmentOption: CGPoint]?
     
     override func viewDidLoad() {
-        resultsController = appDelegate.booksStore.FetchedBooksController(selectedSegment.toPredicate(), initialSortDescriptors: [BookPredicate.readStateSort(true), BookPredicate.titleSort(true)])
+        
+        resultsController = appDelegate.booksStore.FetchedBooksController(selectedSegment.toPredicate(), initialSortDescriptors: [BookPredicate.readStateSort, NSSortDescriptor(key: "sort", ascending: true)])
         cellIdentifier = String(BookTableViewCell)
 
         // Set the DZN data set source
@@ -74,6 +75,7 @@ class BookTable: FilteredFetchedResultsTable {
         self.clearsSelectionOnViewWillAppear = false
         tableView.tableFooterView = UIView()
         
+        navigationItem.leftBarButtonItem = editButtonItem()
         super.viewDidLoad()
     }
     
@@ -106,24 +108,6 @@ class BookTable: FilteredFetchedResultsTable {
     
     override func configureCell(cell: UITableViewCell, fromObject object: AnyObject) {
         (cell as! BookTableViewCell).configureFromBook(object as? Book)
-    }
-    
-    override func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
-        
-        // For safety check that there is a Book here
-        guard let selectedBook = self.resultsController.objectAtIndexPath(indexPath) as? Book else { return nil }
-        
-        let delete = UITableViewRowAction(style: .Destructive, title: "Delete") { _, _ in
-            // If there is a book at this index, delete it
-            appDelegate.booksStore.DeleteBookAndDeindex(selectedBook)
-        }
-        delete.backgroundColor = UIColor.redColor()
-        return [delete]
-    }
-    
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // All cells are "editable"; just for safety check that there is a Book there
-        return self.resultsController.objectAtIndexPath(indexPath) is Book
     }
     
     override func restoreUserActivityState(activity: NSUserActivity) {
@@ -191,6 +175,65 @@ class BookTable: FilteredFetchedResultsTable {
             predicate = predicate.And(BookPredicate.searchInTitleOrAuthor(searchText))
         }
         return predicate
+    }
+}
+
+/// Editing logic.
+extension BookTable {
+
+    override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        // We can reorder the "ToRead" books
+        return selectedSegment == .ToRead && indexPath.section == 1
+    }
+    
+    override func tableView(tableView: UITableView, targetIndexPathForMoveFromRowAtIndexPath sourceIndexPath: NSIndexPath, toProposedIndexPath proposedDestinationIndexPath: NSIndexPath) -> NSIndexPath {
+        if sourceIndexPath.section == proposedDestinationIndexPath.section {
+            return proposedDestinationIndexPath
+        }
+        else {
+            return NSIndexPath(forRow: 0, inSection: 1)
+        }
+    }
+    
+    override func tableView(tableView: UITableView, moveRowAtIndexPath sourceIndexPath: NSIndexPath, toIndexPath destinationIndexPath: NSIndexPath) {
+        
+        // We should only have movement in section 1. We also ignore moves which have no effect
+        guard sourceIndexPath.section == 1 && destinationIndexPath.section == 1 else { return }
+        guard sourceIndexPath.row != destinationIndexPath.row else { return }
+        
+        // Calculate the ordering of the two rows involved
+        let itemMovedDown = sourceIndexPath.row < destinationIndexPath.row
+        let firstRow = itemMovedDown ? sourceIndexPath.row : destinationIndexPath.row
+        let lastRow = itemMovedDown ? destinationIndexPath.row : sourceIndexPath.row
+        
+        // Move the objects to reflect the rows
+        var objectsInSection = resultsController.sections![1].objects!
+        let movedObj = objectsInSection.removeAtIndex(sourceIndexPath.row)
+        objectsInSection.insert(movedObj, atIndex: destinationIndexPath.row)
+        
+        // Update the model to reflect the objects's positions
+        for rowNumber in firstRow...lastRow {
+            (objectsInSection[rowNumber] as! Book).sort = Int32(rowNumber)
+        }
+        
+        // Turn off updates while we save the object context
+        toggleUpdates(on: false)
+        
+        appDelegate.booksStore.Save()
+        refetch(reloadTable: false)
+        
+        toggleUpdates(on: true)
+    }
+    
+    override func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
+        return UITableViewCellEditingStyle.Delete
+    }
+    
+    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        if editingStyle == .Delete {
+            appDelegate.booksStore.DeleteBookAndDeindex(resultsController.objectAtIndexPath(indexPath) as! Book)
+            appDelegate.booksStore.Save()
+        }
     }
 }
 

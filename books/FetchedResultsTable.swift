@@ -27,8 +27,13 @@ class FetchedResultsTable: UITableViewController {
     }
     
     override func viewDidLoad() {
-        refetchAndReloadTable()
+        refetch(reloadTable: true)
         super.viewDidLoad()
+    }
+    
+    /// Enables or disables the fetched results controller delegate
+    func toggleUpdates(on on: Bool) {
+        resultsController.delegate = on ? self : nil
     }
     
     /// Updates the predicate, performs a fetch and reloads the table view data.
@@ -37,7 +42,7 @@ class FetchedResultsTable: UITableViewController {
         guard resultsController.fetchRequest.predicate != newPredicate else { return }
         
         resultsController.fetchRequest.predicate = newPredicate
-        refetchAndReloadTable()
+        refetch(reloadTable: true)
     }
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -55,10 +60,12 @@ class FetchedResultsTable: UITableViewController {
         return cell
     }
     
-    func refetchAndReloadTable() {
+    func refetch(reloadTable reloadTable: Bool) {
         do {
             try resultsController.performFetch()
-            tableView.reloadData()
+            if reloadTable {
+                tableView.reloadData()
+            }
         }
         catch {
             print("Error performing fetch: \(error)")
@@ -92,8 +99,7 @@ extension FetchedResultsTable: NSFetchedResultsControllerDelegate {
                 tableView.reloadRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Automatic)
             }
             else {
-                tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
-                tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Automatic)
+                tableView.moveRowAtIndexPath(indexPath!, toIndexPath: newIndexPath!)
             }
         case .Delete:
             tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)

@@ -10,8 +10,12 @@ import Foundation
 
 class BookPredicate {
     
-    static let titleFieldName = "title"
-    static let authorFieldName = "authorList"
+    private static let titleFieldName = "title"
+    private static let authorFieldName = "authorList"
+    private static let sortFieldName = "sort"
+    private static let startedReadingFieldName = "startedReading"
+    private static let finishedReadingFieldName = "finishedReading"
+    
     static let readStateFieldName = "readState"
     
     static func readStateEqual(readState: BookReadState) -> NSPredicate {
@@ -22,11 +26,9 @@ class BookPredicate {
         return NSPredicate.searchWithinFields(searchString, fieldNames: titleFieldName, authorFieldName)
     }
     
-    static func titleSort(ascending: Bool) -> NSSortDescriptor {
-        return NSSortDescriptor(key: titleFieldName, ascending: ascending)
-    }
-    
-    static func readStateSort(ascending: Bool) -> NSSortDescriptor {
-        return NSSortDescriptor(key: readStateFieldName, ascending: ascending)
-    }
+    static let titleSort = NSSortDescriptor(key: titleFieldName, ascending: true)
+    static let startedReadingSort = NSSortDescriptor(key: startedReadingFieldName, ascending: true)
+    static let finishedReadingSort = NSSortDescriptor(key: finishedReadingFieldName, ascending: true)
+    static let readStateSort = NSSortDescriptor(key: readStateFieldName, ascending: true)
+    static let sortIndexSort = NSSortDescriptor(key: sortFieldName, ascending: true)
 }

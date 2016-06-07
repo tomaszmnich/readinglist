@@ -182,6 +182,7 @@
                     </tableView>
                     <navigationItem key="navigationItem" id="eyk-RF-sbt">
                         <nil key="title"/>
+                        <barButtonItem key="leftBarButtonItem" systemItem="edit" id="L7V-Sm-lfL"/>
                         <segmentedControl key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="gD4-Hg-VY5">
                             <rect key="frame" x="180" y="7" width="240" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>

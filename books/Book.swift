@@ -24,6 +24,8 @@ class Book: NSManagedObject {
     @NSManaged var startedReading: NSDate?
     @NSManaged var finishedReading: NSDate?
     
+    @NSManaged var sort: Int32
+    
     func Populate(metadata: BookMetadata, readingInformation: BookReadingInformation) {
         title = metadata.title
         authorList = metadata.authorList
