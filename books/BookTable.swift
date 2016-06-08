@@ -62,7 +62,7 @@ class BookTable: FilteredFetchedResultsTable {
     
     override func viewDidLoad() {
         
-        resultsController = appDelegate.booksStore.FetchedBooksController(selectedSegment.toPredicate(), initialSortDescriptors: [BookPredicate.readStateSort, NSSortDescriptor(key: "sort", ascending: true)])
+        resultsController = appDelegate.booksStore.FetchedBooksController(selectedSegment.toPredicate(), initialSortDescriptors: [BookPredicate.readStateSort, NSSortDescriptor(key: "sort", ascending: true), NSSortDescriptor(key: "startedReading", ascending: true), NSSortDescriptor(key: "finishedReading", ascending: true)])
         cellIdentifier = String(BookTableViewCell)
 
         // Set the DZN data set source

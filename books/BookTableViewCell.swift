@@ -14,10 +14,11 @@ class BookTableViewCell: UITableViewCell {
     @IBOutlet weak var bookCover: UIImageView!
     
     func configureFromBook(book: Book?) {
-        titleLabel.attributedText = NSMutableAttributedString.byConcatenating(withNewline: true,
+        titleLabel.attributedText = NSMutableAttributedString.byConcatenating(
+            withNewline: true,
             book?.title.withTextStyle(UIFontTextStyleBody),
-            book?.authorList?.withTextStyle(UIFontTextStyleCaption1),
-            String(book!.sort).withTextStyle(UIFontTextStyleCaption1))
+            book?.authorList?.withTextStyle(UIFontTextStyleCaption1))
+        
         bookCover.image = UIImage(optionalData: book?.coverImage)
     }
 }
