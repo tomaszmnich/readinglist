@@ -66,14 +66,18 @@ class EditBook: BookMetadataForm {
         // Check the title field is not nil
         guard let TitleField = TitleField else { return }
         
-        // Update the book object from the form values
-        bookToEdit.title = TitleField
-        bookToEdit.authorList = AuthorList
-        bookToEdit.bookDescription = Description
-        bookToEdit.pageCount = PageCount
-        bookToEdit.publishedDate = PublicationDate
+        // Load the book metadata into an object from the form values
+        let newMetadata = BookMetadata()
+        newMetadata.title = TitleField
+        newMetadata.authorList = AuthorList
+        newMetadata.bookDescription = Description
+        newMetadata.pageCount = PageCount
+        newMetadata.publishedDate = PublicationDate
+        // TODO: Deal with cover images at some point. Currently, copy it across
+        newMetadata.coverImage = bookToEdit.coverImage
         
-        // Save the book
+        // Update and save the book
+        bookToEdit.Populate(newMetadata)
         appDelegate.booksStore.UpdateSpotlightIndex(bookToEdit)
         appDelegate.booksStore.Save()
 

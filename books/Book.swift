@@ -11,22 +11,25 @@ import CoreData
 
 @objc(Book)
 class Book: NSManagedObject {
-    @NSManaged var title: String
-    @NSManaged var subtitle: String?
-    @NSManaged var authorList: String?
-    @NSManaged var isbn13: String?
-    @NSManaged var pageCount: NSNumber?
-    @NSManaged var publishedDate: NSDate?
-    @NSManaged var bookDescription: String? // 'description' would be a better name but the data model does not support using that term for an attribute
-    @NSManaged var coverImage: NSData?
-    @NSManaged var readState: BookReadState
+    // Book Metadata
+    @NSManaged private(set) var title: String
+    @NSManaged private(set) var subtitle: String?
+    @NSManaged private(set) var authorList: String?
+    @NSManaged private(set) var isbn13: String?
+    @NSManaged private(set) var pageCount: NSNumber?
+    @NSManaged private(set) var publishedDate: NSDate?
+    @NSManaged private(set) var bookDescription: String?
+    @NSManaged private(set) var coverImage: NSData?
     
-    @NSManaged var startedReading: NSDate?
-    @NSManaged var finishedReading: NSDate?
+    // Reading Information
+    @NSManaged private(set) var readState: BookReadState
+    @NSManaged private(set) var startedReading: NSDate?
+    @NSManaged private(set) var finishedReading: NSDate?
     
-    @NSManaged var sort: Int32
+    // Other Metadata
+    @NSManaged var sort: NSNumber?
     
-    func Populate(metadata: BookMetadata, readingInformation: BookReadingInformation) {
+    func Populate(metadata: BookMetadata) {
         title = metadata.title
         authorList = metadata.authorList
         isbn13 = metadata.isbn13
@@ -34,9 +37,16 @@ class Book: NSManagedObject {
         publishedDate = metadata.publishedDate
         bookDescription = metadata.bookDescription
         coverImage = metadata.coverImage
+    }
+    
+    func Populate(readingInformation: BookReadingInformation) {
         readState = readingInformation.readState
         startedReading = readingInformation.startedReading
         finishedReading = readingInformation.finishedReading
+        // Wipe out the sort if we have moved out of this section
+        if readState != .ToRead {
+            sort = nil
+        }
     }
 }
 

@@ -56,21 +56,25 @@ class BooksStore {
     /**
      Gets the current maximum sort index in the books store
     */
-    func GetMaxSort() -> Int32? {
-        let fetchRequest = NSFetchRequest(entityName: bookEntityName)
-        fetchRequest.fetchLimit = 1
-        fetchRequest.resultType = .DictionaryResultType
-
+    func GetMaxSort() -> NSNumber? {
+        // Build an expression for the maximum value of the 'sort' attribute
         let expression = NSExpressionDescription()
         expression.name = "maxSort"
         expression.expression = NSExpression(forFunction: "max:", arguments: [NSExpression(forKeyPath: "sort")])
         expression.expressionResultType = NSAttributeType.Integer32AttributeType
+        
+        // Build a fetch request for the above expression
+        let fetchRequest = NSFetchRequest(entityName: bookEntityName)
+        fetchRequest.fetchLimit = 1
+        fetchRequest.resultType = .DictionaryResultType
         fetchRequest.propertiesToFetch = [expression]
 
-        if let results = try? coreDataStack.managedObjectContext.executeFetchRequest(fetchRequest) {
-            return results.first as? Int32
+        // Execute it. Return nil if an error occurs.
+        do {
+            return try coreDataStack.managedObjectContext.executeFetchRequest(fetchRequest).first?.valueForKey("maxSort") as? NSNumber
         }
-        else {
+        catch {
+            print("Error fetching maximum sort index: \(error)")
             return nil
         }
     }
@@ -91,11 +95,14 @@ class BooksStore {
     */
     func CreateBook(metadata: BookMetadata, readingInformation: BookReadingInformation) {
         let book: Book = coreDataStack.createNewItem(bookEntityName)
-        book.Populate(metadata, readingInformation: readingInformation)
+        book.Populate(metadata)
+        book.Populate(readingInformation)
+        
+        // The sort index should be 1 more than our maximum, and only if this book is in the ToRead state
         if readingInformation.readState == .ToRead {
-            let maxSort = GetMaxSort()
-            book.sort = Int32((maxSort ?? 0) + 1)
+            book.sort = NSNumber(int: (GetMaxSort()?.intValue ?? -1) + 1)
         }
+        
         Save()
         UpdateSpotlightIndex(book)
     }

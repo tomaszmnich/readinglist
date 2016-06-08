@@ -213,7 +213,7 @@ extension BookTable {
         
         // Update the model to reflect the objects's positions
         for rowNumber in firstRow...lastRow {
-            (objectsInSection[rowNumber] as! Book).sort = Int32(rowNumber)
+            (objectsInSection[rowNumber] as! Book).sort = rowNumber
         }
         
         // Turn off updates while we save the object context

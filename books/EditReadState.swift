@@ -33,10 +33,14 @@ class EditReadState: ReadStateForm {
     @IBAction func doneWasPressed(sender: UIBarButtonItem) {
         self.view.endEditing(true)
         
-        // Update the book metadata object and create a book from it
-        bookToEdit.readState = ReadState
-        bookToEdit.startedReading = ReadState == .ToRead ? nil : StartedReading
-        bookToEdit.finishedReading = ReadState != .Finished ? nil : FinishedReading
+        // Create an object representation of the form values
+        let newReadStateInfo = BookReadingInformation()
+        newReadStateInfo.readState = ReadState
+        newReadStateInfo.startedReading = StartedReading
+        newReadStateInfo.finishedReading = FinishedReading
+        
+        // Update and save the book
+        bookToEdit.Populate(newReadStateInfo)
         appDelegate.booksStore.UpdateSpotlightIndex(bookToEdit)
         appDelegate.booksStore.Save()
         
