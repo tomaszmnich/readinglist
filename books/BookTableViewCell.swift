@@ -13,12 +13,22 @@ class BookTableViewCell: UITableViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var bookCover: UIImageView!
     
-    func configureFromBook(book: Book?) {
-        titleLabel.attributedText = NSMutableAttributedString.byConcatenating(
+    func configureFromBook(book: Book) {
+        let titleAndAuthor = NSMutableAttributedString.byConcatenating(
             withNewline: true,
-            book?.title.withTextStyle(UIFontTextStyleBody),
-            book?.authorList?.withTextStyle(UIFontTextStyleCaption1))
+            book.title.withTextStyle(UIFontTextStyleBody),
+            book.authorList?.withTextStyle(UIFontTextStyleCaption1))!
         
-        bookCover.image = UIImage(optionalData: book?.coverImage)
+        if book.readState == .Reading {
+            titleAndAuthor.appendNewline()
+            titleAndAuthor.appendAttributedString("Started: \(book.startedReading!.toLongStyleString())".withTextStyle(UIFontTextStyleCaption1))
+        }
+        else if book.readState == .Finished {
+            titleAndAuthor.appendNewline()
+            titleAndAuthor.appendAttributedString("\(book.startedReading!.toLongStyleString()) - \(book.finishedReading!.toLongStyleString())".withTextStyle(UIFontTextStyleCaption1))
+        }
+        
+        titleLabel.attributedText = titleAndAuthor
+        bookCover.image = UIImage(optionalData: book.coverImage)
     }
 }

@@ -89,16 +89,14 @@ extension FetchedResultsTable: NSFetchedResultsControllerDelegate {
     func controller(controller: NSFetchedResultsController, didChangeObject object: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
         switch type {
         case .Update:
-            tableView.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
+            configureCell(tableView.cellForRowAtIndexPath(indexPath!)!, fromObject: object);
         case .Insert:
             tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Automatic)
         case .Move:
+            configureCell(tableView.cellForRowAtIndexPath(indexPath!)!, fromObject: object);
             // For some weird reason, updates sometimes get notified as a move from
-            // and to the same index path. Handle this nicely.
-            if indexPath == newIndexPath {
-                tableView.reloadRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Automatic)
-            }
-            else {
+            // and to the same index path. Don't bother moving the cell in this case.
+            if indexPath != newIndexPath {
                 tableView.moveRowAtIndexPath(indexPath!, toIndexPath: newIndexPath!)
             }
         case .Delete:

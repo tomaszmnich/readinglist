@@ -107,7 +107,7 @@ class BookTable: FilteredFetchedResultsTable {
     }
     
     override func configureCell(cell: UITableViewCell, fromObject object: AnyObject) {
-        (cell as! BookTableViewCell).configureFromBook(object as? Book)
+        (cell as! BookTableViewCell).configureFromBook(object as! Book)
     }
     
     override func restoreUserActivityState(activity: NSUserActivity) {
@@ -181,6 +181,43 @@ class BookTable: FilteredFetchedResultsTable {
 /// Editing logic.
 extension BookTable {
 
+    override func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
+        
+        // For safety check that there is a Book here
+        guard let selectedBook = self.resultsController.objectAtIndexPath(indexPath) as? Book else { return nil }
+        
+        let delete = UITableViewRowAction(style: .Destructive, title: "Delete") { _, _ in
+            // If there is a book at this index, delete it
+            appDelegate.booksStore.DeleteBookAndDeindex(selectedBook)
+        }
+        delete.backgroundColor = UIColor.redColor()
+        var editActions = [delete]
+        
+        if selectedBook.readState == .ToRead {
+            editActions.append(UITableViewRowAction(style: .Normal, title: "Start") { _, _ in
+                selectedBook.readState = .Reading
+                selectedBook.startedReading = NSDate()
+                appDelegate.booksStore.UpdateSpotlightIndex(selectedBook)
+                self.tableView.setEditing(false, animated: true)
+            })
+        }
+        if selectedBook.readState == .Reading {
+            editActions.append(UITableViewRowAction(style: .Normal, title: "Finish") { _, _ in
+                selectedBook.readState = .Finished
+                selectedBook.finishedReading = NSDate()
+                appDelegate.booksStore.UpdateSpotlightIndex(selectedBook)
+                self.tableView.setEditing(false, animated: true)
+            })
+        }
+        
+        return editActions
+    }
+    
+    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        // All cells are "editable"; just for safety check that there is a Book there
+        return self.resultsController.objectAtIndexPath(indexPath) is Book
+    }
+    
     override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         // We can reorder the "ToRead" books
         return selectedSegment == .ToRead && indexPath.section == 1

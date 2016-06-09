@@ -22,9 +22,9 @@ class Book: NSManagedObject {
     @NSManaged private(set) var coverImage: NSData?
     
     // Reading Information
-    @NSManaged private(set) var readState: BookReadState
-    @NSManaged private(set) var startedReading: NSDate?
-    @NSManaged private(set) var finishedReading: NSDate?
+    @NSManaged var readState: BookReadState
+    @NSManaged var startedReading: NSDate?
+    @NSManaged var finishedReading: NSDate?
     
     // Other Metadata
     @NSManaged var sort: NSNumber?
