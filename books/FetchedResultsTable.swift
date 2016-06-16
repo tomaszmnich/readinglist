@@ -93,12 +93,8 @@ extension FetchedResultsTable: NSFetchedResultsControllerDelegate {
         case .Insert:
             tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Automatic)
         case .Move:
-            configureCell(tableView.cellForRowAtIndexPath(indexPath!)!, fromObject: object);
-            // For some weird reason, updates sometimes get notified as a move from
-            // and to the same index path. Don't bother moving the cell in this case.
-            if indexPath != newIndexPath {
-                tableView.moveRowAtIndexPath(indexPath!, toIndexPath: newIndexPath!)
-            }
+            tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
+            tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Automatic)
         case .Delete:
             tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
         }
