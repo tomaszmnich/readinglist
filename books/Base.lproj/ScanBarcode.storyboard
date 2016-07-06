@@ -1,68 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="IA5-Oq-XRy">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="rYQ-41-cfc">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
-        <!--Add Book-->
-        <scene sceneID="l50-vl-9lD">
-            <objects>
-                <viewController id="2iF-zn-joO" customClass="AddBookOptions" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="2Dg-Xu-Yai"/>
-                        <viewControllerLayoutGuide type="bottom" id="Avk-lG-xJS"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="dV4-18-NPL">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <navigationItem key="navigationItem" title="Add Book" id="bxB-Ag-GeZ">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="AZ3-wB-6Id">
-                            <connections>
-                                <action selector="cancelWasPressed:" destination="2iF-zn-joO" id="MhP-ku-4jb"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
-                    <connections>
-                        <segue destination="yLX-6o-qN7" kind="show" identifier="addBookManuallySegue" id="Uc7-Hp-KcT"/>
-                        <segue destination="MGK-ee-YjP" kind="show" identifier="scanBarcodeSegue" id="1qA-nS-fF5"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="zp6-iV-lhi" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-1943" y="-11"/>
-        </scene>
-        <!--Add Manually-->
-        <scene sceneID="25v-fZ-xbG">
-            <objects>
-                <viewController id="yLX-6o-qN7" customClass="CreateBook" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="u4K-nk-gaa"/>
-                        <viewControllerLayoutGuide type="bottom" id="FY2-vS-ice"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="oqw-3f-s80">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <navigationItem key="navigationItem" title="Add Manually" id="8EQ-Fj-MgA">
-                        <barButtonItem key="rightBarButtonItem" title="Next" id="XsD-I0-xq4" userLabel="Next Button">
-                            <connections>
-                                <action selector="doneButtonWasPressed:" destination="yLX-6o-qN7" id="kfY-3S-NwL"/>
-                                <segue destination="bN9-Cz-0Ly" kind="show" identifier="addManuallyNextSegue" id="IXB-Is-KKL"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
-                    <connections>
-                        <outlet property="nextButton" destination="XsD-I0-xq4" id="1el-Kt-2Xy"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Ano-2E-9eJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-635" y="382"/>
-        </scene>
         <!--Search By Isbn-->
         <scene sceneID="eFJ-kC-eB4">
             <objects>
@@ -103,7 +45,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7gT-5z-qMi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-268" y="-391"/>
+            <point key="canvasLocation" x="-242" y="-428"/>
         </scene>
         <!--Set Read State-->
         <scene sceneID="Akp-v3-3aF">
@@ -131,25 +73,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mJ1-SA-xV9" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="598" y="-11"/>
-        </scene>
-        <!--Nav With Read State-->
-        <scene sceneID="D1O-n3-5lh">
-            <objects>
-                <navigationController definesPresentationContext="YES" id="IA5-Oq-XRy" customClass="NavWithReadState" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
-                    <nil key="simulatedStatusBarMetrics"/>
-                    <modalFormSheetSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="IbE-W0-H7w">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <connections>
-                        <segue destination="2iF-zn-joO" kind="relationship" relationship="rootViewController" id="bCm-ia-f7V"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="yh0-5m-Yqk" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-2658" y="-11"/>
+            <point key="canvasLocation" x="526" y="-399"/>
         </scene>
         <!--Scan Barcode-->
         <scene sceneID="b2c-9w-e3P">
@@ -164,20 +88,26 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pEt-SH-GKe">
-                                <rect key="frame" x="0.0" y="44" width="600" height="556"/>
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="pEt-SH-GKe" firstAttribute="top" secondItem="8uf-ya-Hu9" secondAttribute="bottom" id="ILv-3t-B85"/>
+                            <constraint firstItem="pEt-SH-GKe" firstAttribute="top" secondItem="Li1-Bc-Q61" secondAttribute="topMargin" id="8hf-Y9-qgL"/>
                             <constraint firstItem="za8-pr-DLM" firstAttribute="top" secondItem="pEt-SH-GKe" secondAttribute="bottom" id="KvY-GZ-7e3"/>
                             <constraint firstAttribute="trailing" secondItem="pEt-SH-GKe" secondAttribute="trailing" id="eOQ-ru-KNI"/>
                             <constraint firstItem="pEt-SH-GKe" firstAttribute="leading" secondItem="Li1-Bc-Q61" secondAttribute="leading" id="hjg-LJ-wbA"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Item" id="C92-un-dfo"/>
-                    <navigationItem key="navigationItem" title="Scan Barcode" id="UpE-wp-wNv"/>
+                    <navigationItem key="navigationItem" title="Scan Barcode" id="UpE-wp-wNv">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="MuG-PG-sW7">
+                            <connections>
+                                <action selector="cancelWasPressed:" destination="MGK-ee-YjP" id="DTh-jk-3Uy"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="cameraPreviewPlaceholder" destination="pEt-SH-GKe" id="iAc-8o-ged"/>
                         <segue destination="eTM-OJ-MME" kind="show" identifier="isbnDetectedSegue" id="AvE-Bh-e7Y">
@@ -187,10 +117,23 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="akl-GW-6eJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-991" y="-391"/>
+            <point key="canvasLocation" x="-991" y="-428"/>
+        </scene>
+        <!--Nav With Read State-->
+        <scene sceneID="YJu-cP-9jM">
+            <objects>
+                <navigationController id="rYQ-41-cfc" customClass="NavWithReadState" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="rHe-eY-Zk8">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="MGK-ee-YjP" kind="relationship" relationship="rootViewController" id="aEg-yz-cz7"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="LGP-mQ-oFJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1877" y="-391"/>
         </scene>
     </scenes>
-    <inferredMetricsTieBreakers>
-        <segue reference="IXB-Is-KKL"/>
-    </inferredMetricsTieBreakers>
 </document>

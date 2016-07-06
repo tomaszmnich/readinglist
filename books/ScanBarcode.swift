@@ -26,6 +26,10 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         }
     }
     
+    @IBAction func cancelWasPressed(sender: AnyObject) {
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
     override func viewWillDisappear(animated: Bool) {
         session.stopRunning()
     }

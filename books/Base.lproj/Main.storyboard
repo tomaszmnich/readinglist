@@ -196,17 +196,19 @@
                         </segmentedControl>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="ZXY-qd-kDE">
                             <connections>
-                                <segue destination="14e-go-fQY" kind="presentation" identifier="addBook" modalPresentationStyle="formSheet" id="pnq-JL-b7O"/>
+                                <action selector="addWasPressed:" destination="FON-og-WdI" id="1Je-8v-QGY"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="segmentControl" destination="gD4-Hg-VY5" id="hfq-l9-bDd"/>
+                        <segue destination="MoR-st-owh" kind="presentation" identifier="scanBarcodeSegue" id="Qcd-L8-NyS"/>
+                        <segue destination="Mfc-92-vqK" kind="presentation" identifier="addManuallySegue" id="PtV-8Y-ubq"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="g3f-d3-nU4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-3466" y="-11"/>
+            <point key="canvasLocation" x="-3450" y="-81"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="BSt-Nr-8Po">
@@ -224,14 +226,6 @@
             </objects>
             <point key="canvasLocation" x="-4185" y="-11"/>
         </scene>
-        <!--AddBook-->
-        <scene sceneID="QRP-V7-GcC">
-            <objects>
-                <viewControllerPlaceholder storyboardName="AddBook" id="14e-go-fQY" sceneMemberID="viewController"/>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="jhl-YH-8RB" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-2880.5" y="-11"/>
-        </scene>
         <!--EditBook-->
         <scene sceneID="DkH-3o-pb3">
             <objects>
@@ -247,6 +241,22 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JUN-qt-IhT" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-2675.5" y="711"/>
+        </scene>
+        <!--ScanBarcode-->
+        <scene sceneID="Tqo-m5-JKU">
+            <objects>
+                <viewControllerPlaceholder storyboardName="ScanBarcode" id="MoR-st-owh" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="nEo-eW-fdL" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2820" y="-133"/>
+        </scene>
+        <!--AddManually-->
+        <scene sceneID="M2Z-UZ-dyI">
+            <objects>
+                <viewControllerPlaceholder storyboardName="AddManually" id="Mfc-92-vqK" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="xi8-sU-oQg" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2792" y="-29"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>

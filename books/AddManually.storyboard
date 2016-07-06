@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="xds-k5-GLF">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+    </dependencies>
+    <scenes>
+        <!--Nav With Read State-->
+        <scene sceneID="Qfq-zR-BEZ">
+            <objects>
+                <navigationController id="xds-k5-GLF" customClass="NavWithReadState" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="9VJ-8V-b5Y">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="rUB-7G-Ab3" kind="relationship" relationship="rootViewController" id="7vV-s4-UIc"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="sMi-e0-vey" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1687" y="994"/>
+        </scene>
+        <!--Add Manually-->
+        <scene sceneID="xVW-to-FAj">
+            <objects>
+                <viewController id="rUB-7G-Ab3" customClass="CreateBook" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="gOA-NW-Oa2"/>
+                        <viewControllerLayoutGuide type="bottom" id="aAd-Ap-PIo"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="FnG-ul-ELW">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Add Manually" id="nor-8A-rvp">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="c2i-Fh-44q">
+                            <connections>
+                                <action selector="cancelButtonWasPressed:" destination="rUB-7G-Ab3" id="ko5-Sr-qpL"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Next" id="QTN-8Z-LoW" userLabel="Next Button">
+                            <connections>
+                                <action selector="doneButtonWasPressed:" destination="rUB-7G-Ab3" id="Cyw-3T-aEs"/>
+                                <segue destination="0jr-ny-ULh" kind="show" identifier="addManuallyNextSegue" id="QzB-np-CwK">
+                                    <nil key="action"/>
+                                </segue>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="nextButton" destination="QTN-8Z-LoW" id="Nbz-zA-L0t"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gmG-Zu-fQn" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-839" y="994"/>
+        </scene>
+        <!--Set Read State-->
+        <scene sceneID="fLx-e9-dAn">
+            <objects>
+                <viewController id="0jr-ny-ULh" customClass="CreateReadState" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="qJx-4a-fKf"/>
+                        <viewControllerLayoutGuide type="bottom" id="mCj-I8-Zma"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="qkC-RO-KHh">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Set Read State" id="88K-ED-NKw">
+                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="lxS-Lr-3Jk">
+                            <connections>
+                                <action selector="doneWasPressed:" destination="0jr-ny-ULh" id="ONw-0u-fsi"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="doneButton" destination="lxS-Lr-3Jk" id="hY4-19-brk"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="5yp-ht-5Ct" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="38" y="994"/>
+        </scene>
+    </scenes>
+</document>

@@ -19,6 +19,7 @@
 		491F14621C02228C0052B355 /* ScanBarcode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491F14611C02228C0052B355 /* ScanBarcode.swift */; };
 		492141291C05B2030048E647 /* GoogleBooksParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 492141281C05B2030048E647 /* GoogleBooksParser.swift */; };
 		492500781C0B1B0000C149B5 /* BooksStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 492500771C0B1B0000C149B5 /* BooksStore.swift */; };
+		4936B5841D2C3A2C00600562 /* AddManually.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4936B5831D2C3A2C00600562 /* AddManually.storyboard */; };
 		494C61D21C0BAF8C00F64105 /* SearchByIsbn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494C61D11C0BAF8C00F64105 /* SearchByIsbn.swift */; };
 		494F9D6F1CA98CFB00A9816F /* OnlineBookClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494F9D6E1CA98CFB00A9816F /* OnlineBookClient.swift */; };
 		495879651BF7E76200000131 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 495879641BF7E76200000131 /* CoreDataStack.swift */; };
@@ -35,9 +36,8 @@
 		49812BB41CA95F0600A49EBA /* BookPredicate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49812BB31CA95F0600A49EBA /* BookPredicate.swift */; };
 		498B4D4D1CB1AB7A00C5F38B /* SplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 498B4D4C1CB1AB7A00C5F38B /* SplitViewController.swift */; };
 		49BDCC631CD2A00F00F20AAE /* BookMetadataForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BDCC621CD2A00F00F20AAE /* BookMetadataForm.swift */; };
-		49BDCC661CD4E6FA00F20AAE /* AddBook.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 49BDCC641CD4E6FA00F20AAE /* AddBook.storyboard */; };
+		49BDCC661CD4E6FA00F20AAE /* ScanBarcode.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 49BDCC641CD4E6FA00F20AAE /* ScanBarcode.storyboard */; };
 		49BDCC681CD4E72400F20AAE /* EditBook.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 49BDCC671CD4E72400F20AAE /* EditBook.storyboard */; };
-		49BDCC6A1CD4EADF00F20AAE /* AddBookOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BDCC691CD4EADF00F20AAE /* AddBookOptions.swift */; };
 		49BDCC6C1CD6120400F20AAE /* NavWithReadState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BDCC6B1CD6120400F20AAE /* NavWithReadState.swift */; };
 		49C451801C35578A00F431DB /* BookTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C4517F1C35578A00F431DB /* BookTableViewCell.swift */; };
 		49D93AA51CAB16F800AE6611 /* CoreSpotlightStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49D93AA41CAB16F800AE6611 /* CoreSpotlightStack.swift */; };
@@ -58,6 +58,7 @@
 		491F14611C02228C0052B355 /* ScanBarcode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScanBarcode.swift; sourceTree = "<group>"; };
 		492141281C05B2030048E647 /* GoogleBooksParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleBooksParser.swift; sourceTree = "<group>"; };
 		492500771C0B1B0000C149B5 /* BooksStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BooksStore.swift; sourceTree = "<group>"; };
+		4936B5831D2C3A2C00600562 /* AddManually.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = AddManually.storyboard; sourceTree = "<group>"; };
 		494C61D11C0BAF8C00F64105 /* SearchByIsbn.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchByIsbn.swift; sourceTree = "<group>"; };
 		494F9D6E1CA98CFB00A9816F /* OnlineBookClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnlineBookClient.swift; sourceTree = "<group>"; };
 		495879641BF7E76200000131 /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
@@ -76,9 +77,8 @@
 		49812BB31CA95F0600A49EBA /* BookPredicate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookPredicate.swift; sourceTree = "<group>"; };
 		498B4D4C1CB1AB7A00C5F38B /* SplitViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplitViewController.swift; sourceTree = "<group>"; };
 		49BDCC621CD2A00F00F20AAE /* BookMetadataForm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookMetadataForm.swift; sourceTree = "<group>"; };
-		49BDCC651CD4E6FA00F20AAE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/AddBook.storyboard; sourceTree = "<group>"; };
+		49BDCC651CD4E6FA00F20AAE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/ScanBarcode.storyboard; sourceTree = "<group>"; };
 		49BDCC671CD4E72400F20AAE /* EditBook.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = EditBook.storyboard; sourceTree = "<group>"; };
-		49BDCC691CD4EADF00F20AAE /* AddBookOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddBookOptions.swift; sourceTree = "<group>"; };
 		49BDCC6B1CD6120400F20AAE /* NavWithReadState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavWithReadState.swift; sourceTree = "<group>"; };
 		49C4517F1C35578A00F431DB /* BookTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookTableViewCell.swift; sourceTree = "<group>"; };
 		49D93AA41CAB16F800AE6611 /* CoreSpotlightStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreSpotlightStack.swift; sourceTree = "<group>"; };
@@ -185,7 +185,8 @@
 				495C5D131BF1404D00E00C07 /* Main.storyboard */,
 				491C84291CF5055D00894313 /* EditReadState.storyboard */,
 				49BDCC671CD4E72400F20AAE /* EditBook.storyboard */,
-				49BDCC641CD4E6FA00F20AAE /* AddBook.storyboard */,
+				49BDCC641CD4E6FA00F20AAE /* ScanBarcode.storyboard */,
+				4936B5831D2C3A2C00600562 /* AddManually.storyboard */,
 				4968A2B11CB3E0BF00CBF3F0 /* LaunchScreen.storyboard */,
 				495C5D161BF1404D00E00C07 /* Assets.xcassets */,
 				495C5D1B1BF1404D00E00C07 /* Info.plist */,
@@ -233,7 +234,6 @@
 		49BDCC6D1CD614E600F20AAE /* AddBook */ = {
 			isa = PBXGroup;
 			children = (
-				49BDCC691CD4EADF00F20AAE /* AddBookOptions.swift */,
 				491F14611C02228C0052B355 /* ScanBarcode.swift */,
 				494C61D11C0BAF8C00F64105 /* SearchByIsbn.swift */,
 				491C842C1CF6268900894313 /* CreateReadState.swift */,
@@ -316,9 +316,10 @@
 			files = (
 				491C842B1CF5055D00894313 /* EditReadState.storyboard in Resources */,
 				495C5D171BF1404D00E00C07 /* Assets.xcassets in Resources */,
-				49BDCC661CD4E6FA00F20AAE /* AddBook.storyboard in Resources */,
+				49BDCC661CD4E6FA00F20AAE /* ScanBarcode.storyboard in Resources */,
 				495C5D151BF1404D00E00C07 /* Main.storyboard in Resources */,
 				49BDCC681CD4E72400F20AAE /* EditBook.storyboard in Resources */,
+				4936B5841D2C3A2C00600562 /* AddManually.storyboard in Resources */,
 				4968A2B21CB3E0BF00CBF3F0 /* LaunchScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -384,7 +385,6 @@
 				491C84261CF4E2C400894313 /* FetchedResultsTable.swift in Sources */,
 				495FDC2E1CF8C676006DCF2E /* Extensions.swift in Sources */,
 				494C61D21C0BAF8C00F64105 /* SearchByIsbn.swift in Sources */,
-				49BDCC6A1CD4EADF00F20AAE /* AddBookOptions.swift in Sources */,
 				49812BB41CA95F0600A49EBA /* BookPredicate.swift in Sources */,
 				495C5D3F1BF1412600E00C07 /* BookTable.swift in Sources */,
 				491C842F1CF6281B00894313 /* EditReadState.swift in Sources */,
@@ -429,12 +429,12 @@
 			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
-		49BDCC641CD4E6FA00F20AAE /* AddBook.storyboard */ = {
+		49BDCC641CD4E6FA00F20AAE /* ScanBarcode.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				49BDCC651CD4E6FA00F20AAE /* Base */,
 			);
-			name = AddBook.storyboard;
+			name = ScanBarcode.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

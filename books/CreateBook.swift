@@ -42,18 +42,17 @@ class CreateBook: BookMetadataForm {
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "addManuallyNextSegue" {
-            let createReadState = segue.destinationViewController as! CreateReadState
-            
-            let finalBookMetadata = initialBookMetadata ?? BookMetadata()
-            finalBookMetadata.title = TitleField!
-            finalBookMetadata.authorList = AuthorList
-            finalBookMetadata.bookDescription = Description
-            finalBookMetadata.publishedDate = PublicationDate
-            finalBookMetadata.pageCount = PageCount
-            
-            createReadState.bookMetadata = finalBookMetadata
-        }
+        guard segue.identifier == "addManuallyNextSegue" else { return }
         
+        let createReadState = segue.destinationViewController as! CreateReadState
+            
+        let finalBookMetadata = initialBookMetadata ?? BookMetadata()
+        finalBookMetadata.title = TitleField!
+        finalBookMetadata.authorList = AuthorList
+        finalBookMetadata.bookDescription = Description
+        finalBookMetadata.publishedDate = PublicationDate
+        finalBookMetadata.pageCount = PageCount
+            
+        createReadState.bookMetadata = finalBookMetadata
     }
 }

@@ -32,6 +32,28 @@ class BookTable: FilteredFetchedResultsTable {
     
     @IBOutlet weak var segmentControl: UISegmentedControl!
 
+    @IBAction func addWasPressed(sender: AnyObject) {
+        // We are going to show an action sheet
+        let optionsAlert = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
+        optionsAlert.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
+        optionsAlert.addAction(UIAlertAction(title: "Enter Manually", style: .Default) {
+            _ in
+            self.performSegueWithIdentifier("addManuallySegue", sender: self)
+        })
+        optionsAlert.addAction(UIAlertAction(title: "Scan Barcode", style: .Default){
+            _ in
+            self.performSegueWithIdentifier("scanBarcodeSegue", sender: self)
+        })
+        #if DEBUG
+            optionsAlert.addAction(UIAlertAction(title: "Add Test Data", style: .Default){
+                _ in
+                TestData.loadTestData()
+            })
+        #endif
+        
+        self.presentViewController(optionsAlert, animated: true, completion: nil)
+    }
+    
     /// The currently selected segment
     var selectedSegment = TableSegmentOption.ToRead {
         didSet {
@@ -152,10 +174,7 @@ class BookTable: FilteredFetchedResultsTable {
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "addBook" {
-            (segue.destinationViewController as! NavWithReadState).readState = selectedSegment.readStates.first
-        }
-        else if segue.identifier == "showDetail" {
+        if segue.identifier == "showDetail" {
             let destinationViewController = (segue.destinationViewController as! UINavigationController).topViewController as! BookDetails
 
             // The sender is a Book if we are restoring state
@@ -166,6 +185,9 @@ class BookTable: FilteredFetchedResultsTable {
                 selectedIndex = self.tableView.indexPathForCell(cellSender) {
                 destinationViewController.book = self.resultsController.objectAtIndexPath(selectedIndex) as? Book
             }
+        }
+        else if segue.identifier == "scanBarcodeSegue" || segue.identifier == "addManuallySegue" {
+            (segue.destinationViewController as! NavWithReadState).readState = selectedSegment.readStates.first
         }
     }
     
