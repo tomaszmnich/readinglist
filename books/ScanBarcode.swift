@@ -35,6 +35,18 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     }
     
     private func setupAvSession() {
+        #if DEBUG
+            let alert = UIAlertController(title: "Enter ISBN", message: nil, preferredStyle: .Alert)
+            alert.addTextFieldWithConfigurationHandler(nil)
+            alert.addAction(UIAlertAction(title: "OK", style: .Default) {
+                _ in
+                self.detectedIsbn13 = (alert.textFields![0] as UITextField).text
+                self.performSegueWithIdentifier("isbnDetectedSegue", sender: self)
+            })
+            self.presentViewController(alert, animated: true, completion: nil)
+            return
+        #endif
+        
         guard let input = try? AVCaptureDeviceInput(device: AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeVideo)) else {
             // TODO: User error message and pop?
             print("AVCaptureDeviceInput failed to initialise.")
