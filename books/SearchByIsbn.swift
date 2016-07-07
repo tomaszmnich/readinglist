@@ -27,7 +27,8 @@ class SearchByIsbn: UIViewController {
     func searchCompletionHandler(metadata: BookMetadata?) {
         if let metadata = metadata {
             foundMetadata = metadata
-            StopSpinnerAndExit()
+            spinner.stopAnimating()
+            self.performSegueWithIdentifier("showIsbnSearchResultSegue", sender: self)
         }
         else {
             PresentNoResultsAlert()
@@ -41,17 +42,12 @@ class SearchByIsbn: UIViewController {
         }
     }
     
-    /// Stops the spinner and dismisses this view controller.
-    func StopSpinnerAndExit() {
-        spinner.stopAnimating()
-        self.performSegueWithIdentifier("showIsbnSearchResultSegue", sender: self)
-    }
-    
     /// Presents a popup alerting the use to the fact that there were no results.
     func PresentNoResultsAlert() {
         let alert = UIAlertController(title: "No Results", message: "No matching books found online.", preferredStyle: UIAlertControllerStyle.Alert)
-        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: { _ in
-            self.StopSpinnerAndExit();
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: { _ in
+                self.spinner.stopAnimating()
+                self.dismissViewControllerAnimated(true, completion: nil)
         }))
         self.presentViewController(alert, animated: true, completion: nil)
     }
