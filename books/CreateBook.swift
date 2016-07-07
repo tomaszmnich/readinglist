@@ -52,6 +52,7 @@ class CreateBook: BookMetadataForm {
         finalBookMetadata.bookDescription = Description
         finalBookMetadata.publishedDate = PublicationDate
         finalBookMetadata.pageCount = PageCount
+        finalBookMetadata.coverImage = Image == nil ? nil : UIImagePNGRepresentation(Image!)
             
         createReadState.bookMetadata = finalBookMetadata
     }

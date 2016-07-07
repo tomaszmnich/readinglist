@@ -16,6 +16,7 @@ class BookMetadataForm: FormViewController {
     let pageCountKey = "page-count"
     let publicationDateKey = "publication-date"
     let descriptionKey = "description"
+    let imageKey = "image"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,6 +48,10 @@ class BookMetadataForm: FormViewController {
         }.cellSetup{
             $0.cell.height = {return 200}
         })
+        pagePublicationSection.append(ImageRow(imageKey){
+            $0.title = "Cover Image"
+            $0.cell.height = {return 100}
+        })
         form.append(pagePublicationSection)
     }
     
@@ -73,6 +78,11 @@ class BookMetadataForm: FormViewController {
     var Description: String? {
         get { return form.values()[descriptionKey] as? String }
         set { form.setValues([descriptionKey: newValue]) }
+    }
+    
+    var Image: UIImage? {
+        get { return form.values()[imageKey] as? UIImage }
+        set { form.setValues([imageKey: newValue]) }
     }
     
     func OnChange() {
