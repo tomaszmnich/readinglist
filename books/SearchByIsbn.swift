@@ -24,15 +24,28 @@ class SearchByIsbn: UIViewController {
         OnlineBookClient<GoogleBooksParser>.TryGetBookMetadata(GoogleBooksRequest.GetIsbn(isbn13).url, completionHandler: searchCompletionHandler)
     }
     
-    func searchCompletionHandler(metadata: BookMetadata?) {
-        if let metadata = metadata {
-            foundMetadata = metadata
+    func searchCompletionHandler(metadata: BookMetadata?, error: NSError?) {
+        guard error == nil else {
             spinner.stopAnimating()
-            self.performSegueWithIdentifier("showIsbnSearchResultSegue", sender: self)
+            let message: String!
+            switch error!.code {
+            case NSURLErrorNotConnectedToInternet:
+                message = "No internet connection."
+            default:
+                message = "An error occurred."
+            }
+            PresentInfoAlert(title: "Error", message: message)
+            return
         }
-        else {
-            PresentNoResultsAlert()
+        guard let metadata = metadata else {
+            spinner.stopAnimating()
+            PresentInfoAlert(title: "No Results", message: "No matching books found online")
+            return
         }
+        
+        foundMetadata = metadata
+        spinner.stopAnimating()
+        self.performSegueWithIdentifier("showIsbnSearchResultSegue", sender: self)
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -43,8 +56,8 @@ class SearchByIsbn: UIViewController {
     }
     
     /// Presents a popup alerting the use to the fact that there were no results.
-    func PresentNoResultsAlert() {
-        let alert = UIAlertController(title: "No Results", message: "No matching books found online.", preferredStyle: UIAlertControllerStyle.Alert)
+    func PresentInfoAlert(title title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
             alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: { _ in
                 self.spinner.stopAnimating()
                 self.dismissViewControllerAnimated(true, completion: nil)

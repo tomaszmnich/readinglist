@@ -15,22 +15,24 @@ protocol BookParser {
 
 class OnlineBookClient<TParser: BookParser>{
     
-    static func TryGetBookMetadata(searchUrl: String, completionHandler: (BookMetadata? -> Void)) {
+    static func TryGetBookMetadata(searchUrl: String, completionHandler: ((BookMetadata?, NSError?) -> Void)) {
         
-        func SearchResultCallback(result: JSON?) {
+        func SearchResultCallback(result: JSON?, error: NSError?) {
+            
+            // Guard against errors
+            guard error == nil else { completionHandler(nil, error); return }
             
             // First check there is a JSON result, and it can be parsed.
             guard let result = result,
-                let bookMetadata = TParser.ParseJsonResponse(result)
-                else { completionHandler(nil); return }
+                let bookMetadata = TParser.ParseJsonResponse(result) else { completionHandler(nil, nil); return }
             
             // Then check whether there was a book cover image URL.
-            guard let bookCoverUrl = bookMetadata.coverUrl else { completionHandler(bookMetadata); return }
+            guard let bookCoverUrl = bookMetadata.coverUrl else { completionHandler(bookMetadata, nil); return }
             
             // Request the book cover image too, and call the completion handler
             HttpClient.GetData(bookCoverUrl) {
-                bookMetadata.coverImage = $0
-                completionHandler(bookMetadata)
+                bookMetadata.coverImage = $0.0
+                completionHandler(bookMetadata, nil)
             }
         }
         

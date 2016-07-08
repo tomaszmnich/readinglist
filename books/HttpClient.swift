@@ -15,7 +15,7 @@ class HttpClient{
     /**
      Gets the content of a given URL, casted to JSON, and executes the provided callback on the main thread.
      */
-    static func GetJson(fromUrl: String, callback: (jsonResponse: JSON?) -> Void) {
+    static func GetJson(fromUrl: String, callback: (JSON?, NSError?) -> Void) {
         
         print("Requesting \(fromUrl)")
         
@@ -28,12 +28,12 @@ class HttpClient{
                 }
             }
             else{
-                LogError($0)
+                callback(nil, $0.result.error)
             }
             
             // Callback on the main thread
             dispatch_async(dispatch_get_main_queue()) {
-                callback(jsonResponse: jsonResponse)
+                callback(jsonResponse, nil)
             }
         }
     }
@@ -41,17 +41,21 @@ class HttpClient{
     /**
      Requests the data from the url, and passes the NSData into the callback.
      */
-    static func GetData(fromUrl: String, callback: (dataResponse: NSData?) -> Void){
+    static func GetData(fromUrl: String, callback: (NSData?, NSError?) -> Void){
         print("Requesting \(fromUrl)")
         
         // Make a request for the data
         Alamofire.request(.GET, fromUrl).response {
-            (_, _, data, _) in
+            (_, _, data, error) in
             
             let nsData = data as NSData?
-            
             dispatch_async(dispatch_get_main_queue()) {
-                callback(dataResponse: nsData)
+                if error != nil {
+                    callback(nil, error)
+                }
+                else {
+                    callback(nsData, nil)
+                }
             }
         }
     }

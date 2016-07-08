@@ -36,6 +36,7 @@ class EditBook: BookMetadataForm {
         PageCount = bookToEdit.pageCount != nil ? Int(bookToEdit.pageCount!) : nil
         PublicationDate = bookToEdit.publishedDate
         Description = bookToEdit.bookDescription
+        Image = UIImage(optionalData: bookToEdit.coverImage)
     }
     
     func presentDeleteAlert(){
