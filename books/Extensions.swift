@@ -44,6 +44,12 @@ extension UIImage {
     }
 }
 
+extension NSCharacterSet {
+    static func nonAlphanumeric() -> NSCharacterSet {
+        return NSCharacterSet.alphanumericCharacterSet().invertedSet
+    }
+}
+
 extension String {
     /// Return whether the string contains any characters which are not whitespace.
     func isEmptyOrWhitespace() -> Bool {
@@ -129,7 +135,9 @@ extension NSPredicate {
     
     static func searchWithinFields(searchString: String, fieldNames: String...) -> NSPredicate {
         // Split on whitespace and remove empty elements
-        let searchStringComponents = searchString.componentsSeparatedByCharactersInSet(NSCharacterSet.whitespaceCharacterSet()).filter{!$0.isEmpty}
+        let searchStringComponents = searchString.componentsSeparatedByCharactersInSet(NSCharacterSet.nonAlphanumeric()).filter{
+            !$0.isEmpty
+        }
         
         // AND each component, where each component is OR'd over each of the fields
         return NSPredicate.And(searchStringComponents.map{ searchStringComponent in

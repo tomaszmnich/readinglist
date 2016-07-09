@@ -171,7 +171,6 @@
                                 <connections>
                                     <outlet property="bookCover" destination="Gpt-3n-dBG" id="umR-g4-0Vd"/>
                                     <outlet property="titleLabel" destination="j4t-DS-san" id="UBn-Ra-1zm"/>
-                                    <segue destination="xOz-rG-HY1" kind="showDetail" identifier="showDetail" id="Iwj-ak-QQE"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -204,6 +203,7 @@
                         <outlet property="segmentControl" destination="gD4-Hg-VY5" id="hfq-l9-bDd"/>
                         <segue destination="MoR-st-owh" kind="presentation" identifier="scanBarcodeSegue" id="Qcd-L8-NyS"/>
                         <segue destination="Mfc-92-vqK" kind="presentation" identifier="addManuallySegue" id="PtV-8Y-ubq"/>
+                        <segue destination="xOz-rG-HY1" kind="showDetail" identifier="showDetail" id="43w-HF-ugB"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="g3f-d3-nU4" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -260,6 +260,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="Iwj-ak-QQE"/>
+        <segue reference="43w-HF-ugB"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -29,7 +29,8 @@ class SearchByIsbn: UIViewController {
             spinner.stopAnimating()
             let message: String!
             switch error!.code {
-            case NSURLErrorNotConnectedToInternet:
+            case NSURLErrorNotConnectedToInternet,
+                 NSURLErrorNetworkConnectionLost:
                 message = "No internet connection."
             default:
                 message = "An error occurred."

@@ -30,6 +30,44 @@ enum TableSegmentOption: Int {
 
 class BookTable: FilteredFetchedResultsTable {
     
+    override func viewDidLoad() {
+        resultsController = appDelegate.booksStore.FetchedBooksController(selectedSegment.toPredicate(), initialSortDescriptors: [BookPredicate.readStateSort, NSSortDescriptor(key: "sort", ascending: true), NSSortDescriptor(key: "startedReading", ascending: true), NSSortDescriptor(key: "finishedReading", ascending: true)])
+        cellIdentifier = String(BookTableViewCell)
+        
+        // Set the DZN data set source
+        tableView.emptyDataSetSource = self
+        
+        // Set the view of the NavigationController to be white, so that glimpses
+        // of dark colours are not seen through the translucent bar when segueing from this view.
+        // Also, we will manage the clearing of selections ourselves. Setting the table footer removes the cell separators
+        self.navigationController!.view.backgroundColor = UIColor.whiteColor()
+        self.clearsSelectionOnViewWillAppear = false
+        tableView.tableFooterView = UIView()
+        
+        navigationItem.leftBarButtonItem = editButtonItem()
+        tableView.allowsMultipleSelectionDuringEditing = true
+        super.viewDidLoad()
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        // If we haven't initialised the scroll positions dictionary, do so now, for all
+        // tabs, with the current scroll position (which will be the starting position).
+        if tableViewScrollPositions == nil {
+            tableViewScrollPositions = [.ToRead: tableView.contentOffset, .Finished: tableView.contentOffset]
+        }
+        
+        // Deselect selected rows, so they don't stay highlighted
+        if let selectedIndexPath = self.tableView.indexPathForSelectedRow {
+            self.tableView.deselectRowAtIndexPath(selectedIndexPath, animated: animated)
+        }
+        
+        super.viewDidAppear(animated)
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        tableViewScrollPositions![selectedSegment] = tableView.contentOffset
+    }
+    
     @IBOutlet weak var segmentControl: UISegmentedControl!
 
     @IBAction func addWasPressed(sender: AnyObject) {
@@ -81,44 +119,6 @@ class BookTable: FilteredFetchedResultsTable {
     
     /// The stored scroll positions to allow our single table to function like two tables
     var tableViewScrollPositions: [TableSegmentOption: CGPoint]?
-    
-    override func viewDidLoad() {
-        
-        resultsController = appDelegate.booksStore.FetchedBooksController(selectedSegment.toPredicate(), initialSortDescriptors: [BookPredicate.readStateSort, NSSortDescriptor(key: "sort", ascending: true), NSSortDescriptor(key: "startedReading", ascending: true), NSSortDescriptor(key: "finishedReading", ascending: true)])
-        cellIdentifier = String(BookTableViewCell)
-
-        // Set the DZN data set source
-        tableView.emptyDataSetSource = self
-        
-        // Set the view of the NavigationController to be white, so that glimpses
-        // of dark colours are not seen through the translucent bar when segueing from this view.
-        // Also, we will manage the clearing of selections ourselves. Setting the table footer removes the cell separators
-        self.navigationController!.view.backgroundColor = UIColor.whiteColor()
-        self.clearsSelectionOnViewWillAppear = false
-        tableView.tableFooterView = UIView()
-        
-        navigationItem.leftBarButtonItem = editButtonItem()
-        super.viewDidLoad()
-    }
-    
-    override func viewDidAppear(animated: Bool) {
-        // If we haven't initialised the scroll positions dictionary, do so now, for all
-        // tabs, with the current scroll position (which will be the starting position).
-        if tableViewScrollPositions == nil {
-            tableViewScrollPositions = [.ToRead: tableView.contentOffset, .Finished: tableView.contentOffset]
-        }
-        
-        // Deselect selected rows, so they don't stay highlighted
-        if let selectedIndexPath = self.tableView.indexPathForSelectedRow {
-            self.tableView.deselectRowAtIndexPath(selectedIndexPath, animated: animated)
-        }
-        
-        super.viewDidAppear(animated)
-    }
-    
-    override func viewWillDisappear(animated: Bool) {
-        tableViewScrollPositions![selectedSegment] = tableView.contentOffset
-    }
 
     override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         if selectedSegment == .Finished { return nil }
@@ -173,6 +173,12 @@ class BookTable: FilteredFetchedResultsTable {
         }
     }
     
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        if !tableView.editing {
+            performSegueWithIdentifier("showDetail", sender: self.resultsController.objectAtIndexPath(indexPath) as? Book)
+        }
+    }
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "showDetail" {
             let destinationViewController = (segue.destinationViewController as! UINavigationController).topViewController as! BookDetails
@@ -193,7 +199,7 @@ class BookTable: FilteredFetchedResultsTable {
     
     override func predicateForSearchText(searchText: String) -> NSPredicate {
         var predicate = selectedSegment.toPredicate()
-        if !searchText.isEmptyOrWhitespace() {
+        if !searchText.isEmptyOrWhitespace() && searchText.trim().characters.count >= 2 {
             predicate = predicate.And(BookPredicate.searchInTitleOrAuthor(searchText))
         }
         return predicate
