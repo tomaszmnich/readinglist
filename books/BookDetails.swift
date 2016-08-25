@@ -67,7 +67,7 @@ class BookDetails: UIViewController {
         
         // Setup the description label
         let pageCountText: NSAttributedString? = book.pageCount == nil ? nil : "\(book.pageCount!) pages.".withTextStyle(UIFontTextStyleCallout)
-        let publishedWhenText: NSAttributedString? = book.publishedDate == nil ? nil : "Published \(book.publishedDate!.toLongStyleString())".withTextStyle(UIFontTextStyleCallout)
+        let publishedWhenText: NSAttributedString? = book.publishedDate == nil ? nil : "Published \(book.publishedDate!.toString(withDateStyle: NSDateFormatterStyle.LongStyle))".withTextStyle(UIFontTextStyleCallout)
         descriptionLabel.attributedText = NSMutableAttributedString.byConcatenating(withNewline: true,
             pageCountText, publishedWhenText, book.bookDescription?.withTextStyle(UIFontTextStyleCallout))
         

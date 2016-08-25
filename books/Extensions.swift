@@ -18,11 +18,46 @@ extension NSDate {
         self.init(timeInterval: 0, sinceDate: date)
     }
     
-    func toLongStyleString() -> String {
+    func toString(withDateStyle dateStyle: NSDateFormatterStyle) -> String {
         let formatter = NSDateFormatter()
-        formatter.dateStyle = NSDateFormatterStyle.LongStyle
+        formatter.dateStyle = dateStyle
         formatter.timeStyle = .NoStyle
         return formatter.stringFromDate(self)
+    }
+    
+    func toString(withDateFormat dateFormat: String) -> String {
+        let formatter = NSDateFormatter()
+        formatter.dateFormat = dateFormat
+        return formatter.stringFromDate(self)
+    }
+    
+    func toHumanisedString() -> String {
+        let today = NSDate()
+        
+        // If we are in the future, fully specify the date
+        if self.laterDate(today) == self {
+            return self.toString(withDateFormat: "d MMM yyyy")
+        }
+        
+        // Otherwise split the dates into components
+        let theseComponents = NSCalendar.currentCalendar().components([.Day, .Month, .Year], fromDate: self)
+        let todayComponents = NSCalendar.currentCalendar().components([.Day, .Month, .Year], fromDate: today)
+        
+        
+        // more than 5 days ago
+        if theseComponents.year != todayComponents.year || todayComponents.month != theseComponents.month || todayComponents.day - theseComponents.day >= 5 {
+            return self.toString(withDateFormat: "d MMM yyyy")
+        }
+        else if todayComponents.day - theseComponents.day >= 2 {
+            // between 2 and 5 days ago
+            return self.toString(withDateFormat: "EEEE")
+        }
+        else if todayComponents.day - theseComponents.day == 1 {
+            return "Yesterday"
+        }
+        else {
+            return "Today"
+        }
     }
 }
 
