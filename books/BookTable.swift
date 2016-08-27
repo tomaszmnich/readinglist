@@ -78,6 +78,10 @@ class BookTable: FilteredFetchedResultsTable {
             _ in
             self.performSegueWithIdentifier("addManuallySegue", sender: self)
         })
+        optionsAlert.addAction(UIAlertAction(title: "Search Online", style: .Default) {
+            _ in
+            self.performSegueWithIdentifier("searchByTextSegue", sender: self)
+        })
         optionsAlert.addAction(UIAlertAction(title: "Scan Barcode", style: .Default){
             _ in
             self.performSegueWithIdentifier("scanBarcodeSegue", sender: self)

@@ -99,7 +99,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="i9A-VS-Eof" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-3275" y="772"/>
+            <point key="canvasLocation" x="-3299" y="788"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="zdk-AE-L8G">
@@ -204,11 +204,12 @@
                         <segue destination="MoR-st-owh" kind="presentation" identifier="scanBarcodeSegue" id="Qcd-L8-NyS"/>
                         <segue destination="Mfc-92-vqK" kind="presentation" identifier="addManuallySegue" id="PtV-8Y-ubq"/>
                         <segue destination="xOz-rG-HY1" kind="showDetail" identifier="showDetail" id="43w-HF-ugB"/>
+                        <segue destination="ciW-Jd-Gs4" kind="presentation" identifier="searchByTextSegue" id="zeo-7j-yVE"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="g3f-d3-nU4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-3450" y="-81"/>
+            <point key="canvasLocation" x="-3426" y="-105"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="BSt-Nr-8Po">
@@ -257,6 +258,14 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xi8-sU-oQg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-2792" y="-29"/>
+        </scene>
+        <!--SearchByText-->
+        <scene sceneID="JUq-IZ-EpW">
+            <objects>
+                <viewControllerPlaceholder storyboardName="SearchByText" id="ciW-Jd-Gs4" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="9UH-iZ-rNO" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2802" y="-85"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
