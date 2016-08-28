@@ -21,14 +21,31 @@ class SearchByText: UIViewController, UISearchBarDelegate {
         searchBar.becomeFirstResponder()
     }
     
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        searchBar.becomeFirstResponder()
+    }
+    
+    override func viewDidDisappear(animated: Bool) {
+        spinner.stopAnimating()
+    }
+    
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
         spinner.startAnimating()
-        OnlineBookClient<GoogleBooksParser>.TryGetBookMetadata(GoogleBooksRequest.Search(searchBar.text!).url, completionHandler: self.searchResultsReceived)
+
+        //OnlineBookClient<GoogleBooksParser>.TryGetBookMetadata(GoogleBooksRequest.Search(searchBar.text!).url, completionHandler: self.searchResultsReceived)
+        searchResultsReceived(BookMetadata(), error: nil)
     }
     
-    func searchResultsReceived(results: BookMetadata?, error: NSError?){
-        
+    func searchResultsReceived(results: BookMetadata?, error: NSError?) {
+        performSegueWithIdentifier("showTextSearchResultsSegue", sender: self)
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if(segue.identifier == "showTextSearchResultsSegue"){
+            (segue.destinationViewController as! SearchResults).searchResults = [BookMetadata]()
+        }
     }
     
     

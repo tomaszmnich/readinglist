@@ -62,7 +62,7 @@ class BookMetadata {
     var pageCount: Int?
     var publishedDate: NSDate?
     var bookDescription: String?
-    var coverUrl: String?
+    var coverUrl: NSURL?
     var coverImage: NSData?
 }
 

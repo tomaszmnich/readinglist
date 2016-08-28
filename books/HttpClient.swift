@@ -15,25 +15,23 @@ class HttpClient{
     /**
      Gets the content of a given URL, casted to JSON, and executes the provided callback on the main thread.
      */
-    static func GetJson(fromUrl: String, callback: (JSON?, NSError?) -> Void) {
+    static func GetJson(from: NSURL, onError: (NSError -> Void), onSuccess: (JSON? -> Void)) {
+        print("Requesting \(from.absoluteString)")
         
-        print("Requesting \(fromUrl)")
-        
-        Alamofire.request(.GET, fromUrl).responseJSON {
-            var jsonResponse: JSON?
-            
+        Alamofire.request(.GET, from).responseJSON {
             if $0.result.isSuccess {
                 if let responseData = $0.result.value {
-                    jsonResponse = JSON(responseData)
+                    // Callback on the main thread
+                    dispatch_async(dispatch_get_main_queue()) {
+                        onSuccess(JSON(responseData))
+                    }
                 }
             }
-            else{
-                callback(nil, $0.result.error)
-            }
-            
-            // Callback on the main thread
-            dispatch_async(dispatch_get_main_queue()) {
-                callback(jsonResponse, nil)
+            else if let error = $0.result.error {
+                // Callback on the main thread
+                dispatch_async(dispatch_get_main_queue()) {
+                    onError(error)
+                }
             }
         }
     }
@@ -41,20 +39,22 @@ class HttpClient{
     /**
      Requests the data from the url, and passes the NSData into the callback.
      */
-    static func GetData(fromUrl: String, callback: (NSData?, NSError?) -> Void){
-        print("Requesting \(fromUrl)")
+    static func GetData(from: NSURL, onError: (NSError -> Void), onSuccess: (NSData? -> Void)) {
+        print("Requesting \(from.absoluteString)")
         
         // Make a request for the data
-        Alamofire.request(.GET, fromUrl).response {
+        Alamofire.request(.GET, from).response {
             (_, _, data, error) in
             
-            let nsData = data as NSData?
-            dispatch_async(dispatch_get_main_queue()) {
-                if error != nil {
-                    callback(nil, error)
+            if let error = error {
+                dispatch_async(dispatch_get_main_queue()){
+                    onError(error)
                 }
-                else {
-                    callback(nsData, nil)
+            }
+            else {
+                let nsData = data as NSData?
+                dispatch_async(dispatch_get_main_queue()) {
+                    onSuccess(nsData)
                 }
             }
         }

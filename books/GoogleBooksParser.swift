@@ -15,14 +15,14 @@ enum GoogleBooksRequest {
     case GetIsbn(String)
     
     // The base URL for GoogleBooks API v1 requests
-    static let baseURLString = "https://www.googleapis.com/books/v1"
+    static let baseUrl = NSURL(string: "https://www.googleapis.com")!
     
-    var url: String {
+    var url: NSURL {
         switch self{
         case let Search(query):
-            return "\(GoogleBooksRequest.baseURLString)/volumes?q=\(query)"
+            return NSURL(string: "/books/v1/volumes?q=\(query)", relativeToURL: GoogleBooksRequest.baseUrl)!
         case let GetIsbn(isbn):
-            return "\(GoogleBooksRequest.baseURLString)/volumes?q=isbn:\(isbn)"
+            return NSURL(string: "/books/v1/volumes?q=isbn:\(isbn)", relativeToURL: GoogleBooksRequest.baseUrl)!
         }
     }
 }
@@ -50,7 +50,9 @@ class GoogleBooksParser: BookParser {
         // Add a link at which a front cover image can be found.
         // The link seems to be equally accessible at https, and iOS apps don't seem to like
         // accessing http addresses, so adjust the provided url.
-        book.coverUrl = volumeInfo["imageLinks"]["thumbnail"].string?.stringByReplacingOccurrencesOfString("http://", withString: "https://")
+        if let url = volumeInfo["imageLinks"]["thumbnail"].string?.stringByReplacingOccurrencesOfString("http://", withString: "https://"){
+            book.coverUrl = NSURL(string: url)
+        }
         
         return book
     }

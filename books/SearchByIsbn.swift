@@ -21,23 +21,27 @@ class SearchByIsbn: UIViewController {
         spinner.startAnimating()
         
         // We've found an ISBN-13. Let's search for it online.
-        OnlineBookClient<GoogleBooksParser>.TryGetBookMetadata(GoogleBooksRequest.GetIsbn(isbn13).url, completionHandler: searchCompletionHandler)
+        OnlineBookClient<GoogleBooksParser>.TryGetBookMetadata(from: GoogleBooksRequest.GetIsbn(isbn13).url, onError: errorHandler, onSuccess: searchCompletionHandler)
     }
     
-    func searchCompletionHandler(metadata: BookMetadata?, error: NSError?) {
-        guard error == nil else {
-            spinner.stopAnimating()
-            let message: String!
-            switch error!.code {
-            case NSURLErrorNotConnectedToInternet,
-                 NSURLErrorNetworkConnectionLost:
-                message = "No internet connection."
-            default:
-                message = "An error occurred."
+    func errorHandler(error: NSError?) {
+        spinner.stopAnimating()
+        var message = "An error occurred."
+        
+        if let error = error {
+            switch error.code {
+                case NSURLErrorNotConnectedToInternet,
+                     NSURLErrorNetworkConnectionLost:
+                    message = "No internet connection."
+                default:
+                    break
             }
-            PresentInfoAlert(title: "Error", message: message)
-            return
         }
+        PresentInfoAlert(title: "Error", message: message)
+        return
+    }
+    
+    func searchCompletionHandler(metadata: BookMetadata?) {
         guard let metadata = metadata else {
             spinner.stopAnimating()
             PresentInfoAlert(title: "No Results", message: "No matching books found online")

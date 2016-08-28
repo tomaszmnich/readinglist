@@ -40,7 +40,9 @@ class OpenLibraryParser: BookParser {
         book.publishedDate = jResponse["publish_date"].string?.toDateViaFormat("yyyy-MM-dd")
         
         // Add a link at which a front cover image can be found.
-        book.coverUrl = jResponse["cover"]["medium"].string
+        if let coverUrlString = jResponse["cover"]["medium"].string {
+            book.coverUrl = NSURL(string: coverUrlString)
+        }
         
         return book
     }

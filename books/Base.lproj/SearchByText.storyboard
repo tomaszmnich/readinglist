@@ -70,10 +70,10 @@
             </objects>
             <point key="canvasLocation" x="-1619" y="-83"/>
         </scene>
-        <!--Table View Controller-->
+        <!--Search Results-->
         <scene sceneID="S6X-y4-YFT">
             <objects>
-                <tableViewController id="qpw-8b-qzr" sceneMemberID="viewController">
+                <tableViewController id="qpw-8b-qzr" customClass="SearchResults" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="QyB-9y-boJ">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
