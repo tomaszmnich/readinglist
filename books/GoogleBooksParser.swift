@@ -20,7 +20,8 @@ enum GoogleBooksRequest {
     var url: NSURL {
         switch self{
         case let Search(query):
-            return NSURL(string: "/books/v1/volumes?q=\(query)", relativeToURL: GoogleBooksRequest.baseUrl)!
+            let encodedQuery = query.stringByAddingPercentEncodingWithAllowedCharacters(.URLHostAllowedCharacterSet())!
+            return NSURL(string: "/books/v1/volumes?q=\(encodedQuery)", relativeToURL: GoogleBooksRequest.baseUrl)!
         case let GetIsbn(isbn):
             return NSURL(string: "/books/v1/volumes?q=isbn:\(isbn)", relativeToURL: GoogleBooksRequest.baseUrl)!
         }
@@ -30,10 +31,25 @@ enum GoogleBooksRequest {
 /// Deals with parsing the JSON returned by GoogleBook's API into object representations.
 class GoogleBooksParser: BookParser {
     
-    static func ParseJsonResponse(jResponse: JSON) -> BookMetadata? {
+    static func ParseJsonResponse(jResponse: JSON, maxResultCount: Int) -> [BookMetadata] {
+        var results = [BookMetadata]()
         
         // The information we seek is in the volumneInfo element.
-        let volumeInfo = jResponse["items"][0]["volumeInfo"]
+        let items = jResponse["items"]
+        for item in items {
+            if let result = ParseItem(item.1) {
+                results.append(result)
+            }
+            if results.count >= maxResultCount {
+                break
+            }
+        }
+        
+        return results
+    }
+    
+    private static func ParseItem(item: JSON) -> BookMetadata? {
+        let volumeInfo = item["volumeInfo"]
         
         // Books with no title are useless
         guard let title = volumeInfo["title"].string else { return nil }
@@ -53,7 +69,6 @@ class GoogleBooksParser: BookParser {
         if let url = volumeInfo["imageLinks"]["thumbnail"].string?.stringByReplacingOccurrencesOfString("http://", withString: "https://"){
             book.coverUrl = NSURL(string: url)
         }
-        
         return book
     }
 }

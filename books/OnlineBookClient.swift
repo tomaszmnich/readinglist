@@ -10,28 +10,34 @@ import Foundation
 import SwiftyJSON
 
 protocol BookParser {
-    static func ParseJsonResponse(jResponse: JSON) -> BookMetadata?
+    static func ParseJsonResponse(jResponse: JSON, maxResultCount: Int) -> [BookMetadata]
 }
 
 class OnlineBookClient<TParser: BookParser>{
     
-    static func TryGetBookMetadata(from url: NSURL, onError: (NSError -> Void), onSuccess: (BookMetadata? -> Void)) {
+    static func TryGetBookMetadata(from url: NSURL, maxResults: Int, onError: (NSError -> Void), onSuccess: ([BookMetadata] -> Void)) {
         
         func SuccessCallback(result: JSON?) {
-            // First check there is a JSON result, and it can be parsed.
-            guard let result = result,
-                let bookMetadata = TParser.ParseJsonResponse(result) else { onSuccess(nil); return }
+            guard let result = result else { onSuccess([BookMetadata]()); return }
             
-            // Then check whether there was a book cover image URL.
-            if let bookCoverUrl = bookMetadata.coverUrl {
+            let results = TParser.ParseJsonResponse(result, maxResultCount: maxResults)
+            
+            let resultsWithCoverUrl = results.filter{ $0.coverUrl != nil }
+            var extraCallsReturned = 0
+            
+            for result in resultsWithCoverUrl {
                 // Request the book cover image too, and call the completion handler
-                HttpClient.GetData(bookCoverUrl, onError: onError) {
-                    bookMetadata.coverImage = $0
-                    onSuccess(bookMetadata)
+                HttpClient.GetData(result.coverUrl!, onError: onError) {
+                    result.coverImage = $0
+                    extraCallsReturned += 1
+                    if extraCallsReturned == resultsWithCoverUrl.count {
+                        onSuccess(results)
+                    }
                 }
             }
-            else {
-                onSuccess(bookMetadata)
+            
+            if resultsWithCoverUrl.count == 0 {
+                onSuccess(results)
             }
         }
         

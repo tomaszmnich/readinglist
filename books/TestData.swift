@@ -29,9 +29,11 @@ class TestData {
         // Search for each book and add the result
         for bookToAdd in booksToAdd {
             OnlineBookClient<GoogleBooksParser>.TryGetBookMetadata(from: GoogleBooksRequest.GetIsbn(bookToAdd.isbn).url,
+                                                                   maxResults: 1,
                                                                    onError: {print($0)},
                                                                    onSuccess: {
-                guard let bookMetadata = $0 else { return }
+                guard $0.count == 1 else { return }
+                let bookMetadata = $0[0]
                 bookMetadata.isbn13 = bookToAdd.isbn
                 let readingInfo = BookReadingInformation()
                 readingInfo.readState = bookToAdd.readState

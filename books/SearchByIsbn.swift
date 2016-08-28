@@ -21,7 +21,7 @@ class SearchByIsbn: UIViewController {
         spinner.startAnimating()
         
         // We've found an ISBN-13. Let's search for it online.
-        OnlineBookClient<GoogleBooksParser>.TryGetBookMetadata(from: GoogleBooksRequest.GetIsbn(isbn13).url, onError: errorHandler, onSuccess: searchCompletionHandler)
+        OnlineBookClient<GoogleBooksParser>.TryGetBookMetadata(from: GoogleBooksRequest.GetIsbn(isbn13).url, maxResults: 1, onError: errorHandler, onSuccess: searchCompletionHandler)
     }
     
     func errorHandler(error: NSError?) {
@@ -41,14 +41,14 @@ class SearchByIsbn: UIViewController {
         return
     }
     
-    func searchCompletionHandler(metadata: BookMetadata?) {
-        guard let metadata = metadata else {
+    func searchCompletionHandler(metadata: [BookMetadata]) {
+        guard metadata.count == 1 else {
             spinner.stopAnimating()
             PresentInfoAlert(title: "No Results", message: "No matching books found online")
             return
         }
         
-        foundMetadata = metadata
+        foundMetadata = metadata[0]
         spinner.stopAnimating()
         self.performSegueWithIdentifier("showIsbnSearchResultSegue", sender: self)
     }

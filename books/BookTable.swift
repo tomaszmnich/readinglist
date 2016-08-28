@@ -196,8 +196,8 @@ class BookTable: FilteredFetchedResultsTable {
                 destinationViewController.book = self.resultsController.objectAtIndexPath(selectedIndex) as? Book
             }
         }
-        else if segue.identifier == "scanBarcodeSegue" || segue.identifier == "addManuallySegue" {
-            (segue.destinationViewController as! NavWithReadState).readState = selectedSegment.readStates.first
+        else if let navWithReadState = segue.destinationViewController as? NavWithReadState {
+            navWithReadState.readState = selectedSegment.readStates.first
         }
     }
     

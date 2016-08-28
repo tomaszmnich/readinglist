@@ -13,6 +13,16 @@ class BookTableViewCell: UITableViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var bookCover: UIImageView!
     
+    func configureFrom(book: BookMetadata) {
+        let titleAndAuthor = NSMutableAttributedString.byConcatenating(
+            withNewline: true,
+            book.title.withTextStyle(UIFontTextStyleSubheadline),
+            book.authorList?.withTextStyle(UIFontTextStyleCaption1))!
+        
+        titleLabel.attributedText = titleAndAuthor
+        bookCover.image = UIImage(optionalData: book.coverImage)
+    }
+    
     func configureFromBook(book: Book) {
         let titleAndAuthor = NSMutableAttributedString.byConcatenating(
             withNewline: true,
