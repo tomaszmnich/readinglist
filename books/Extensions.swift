@@ -9,6 +9,12 @@
 import Foundation
 import UIKit
 
+extension UIColor {
+    convenience init(fromHex: UInt32){
+        self.init(colorLiteralRed: Float(((fromHex & 0xFF0000) >> 16))/255.0, green: Float(((fromHex & 0x00FF00) >> 8))/255.0, blue: Float(((fromHex & 0x0000FF) >> 0))/255.0, alpha: 1.0)
+    }
+}
+
 extension NSDate {
     convenience init(dateString: String) {
         let dateStringFormatter = NSDateFormatter()

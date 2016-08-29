@@ -93,6 +93,12 @@ class BookTable: FilteredFetchedResultsTable {
             })
         #endif
         
+        // For iPad, set the popover presentation controller's source
+        if let popPresenter = optionsAlert.popoverPresentationController {
+            popPresenter.sourceView = sender.view
+            popPresenter.sourceRect = sender.view.bounds
+        }
+        
         self.presentViewController(optionsAlert, animated: true, completion: nil)
     }
     
@@ -222,24 +228,28 @@ extension BookTable {
             // If there is a book at this index, delete it
             appDelegate.booksStore.DeleteBookAndDeindex(selectedBook)
         }
-        delete.backgroundColor = UIColor.redColor()
+        delete.backgroundColor = UIColor(fromHex: 0xe74c3c)
         var editActions = [delete]
         
         if selectedBook.readState == .ToRead {
-            editActions.append(UITableViewRowAction(style: .Normal, title: "Start") { _, _ in
+            let startedAction = UITableViewRowAction(style: .Normal, title: "Started") { _, _ in
                 selectedBook.readState = .Reading
                 selectedBook.startedReading = NSDate()
                 appDelegate.booksStore.UpdateSpotlightIndex(selectedBook)
                 self.tableView.setEditing(false, animated: true)
-            })
+            }
+            startedAction.backgroundColor = UIColor(fromHex: 0x3498db)
+            editActions.append(startedAction)
         }
         if selectedBook.readState == .Reading {
-            editActions.append(UITableViewRowAction(style: .Normal, title: "Finish") { _, _ in
+            let finishedAction = UITableViewRowAction(style: .Normal, title: "Finished") { _, _ in
                 selectedBook.readState = .Finished
                 selectedBook.finishedReading = NSDate()
                 appDelegate.booksStore.UpdateSpotlightIndex(selectedBook)
                 self.tableView.setEditing(false, animated: true)
-            })
+            }
+            finishedAction.backgroundColor = UIColor(fromHex: 0x2ecc71)
+            editActions.append(finishedAction)
         }
         
         return editActions

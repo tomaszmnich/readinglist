@@ -37,20 +37,6 @@ class SearchByText: UIViewController, UITableViewDelegate, UITableViewDataSource
         searchBar.becomeFirstResponder()
     }
     
-    func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
-        searchBar.setShowsCancelButton(true, animated: true)
-    }
-    
-    func searchBarCancelButtonClicked(searchBar: UISearchBar) {
-        searchBar.setShowsCancelButton(false, animated: true)
-        searchBar.resignFirstResponder()
-    }
-    
-    func searchBarShouldBeginEditing(searchBar: UISearchBar) -> Bool {
-        searchBar.setShowsCancelButton(false, animated: true)
-        return true
-    }
-    
     func numberOfSectionsInTableView(tableView: UITableView) -> Int { return 1 }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
