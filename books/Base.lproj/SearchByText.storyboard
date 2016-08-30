@@ -14,12 +14,12 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="coT-wT-mpQ" kind="relationship" relationship="rootViewController" id="Xlt-rc-n8l"/>
+                        <segue destination="coT-wT-mpQ" kind="relationship" relationship="rootViewController" id="m8M-0g-sLS"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Qkf-nI-8ex" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2363" y="-83"/>
+            <point key="canvasLocation" x="-2207" y="-91"/>
         </scene>
         <!--Search Online-->
         <scene sceneID="X5e-4E-ore">
@@ -73,7 +73,7 @@
                                         <connections>
                                             <outlet property="bookCover" destination="OSF-rz-cGC" id="Gcp-XA-o0G"/>
                                             <outlet property="titleLabel" destination="9zc-xW-GG6" id="GLe-qC-Md9"/>
-                                            <segue destination="7vF-2L-Pie" kind="show" identifier="createReadStateSegue" id="xME-hs-aON"/>
+                                            <segue destination="j5V-0X-LwU" kind="show" id="lCb-xN-8Qg"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -105,7 +105,35 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lTx-wk-0NZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1480" y="-83"/>
+            <point key="canvasLocation" x="-1480" y="-91"/>
+        </scene>
+        <!--Create Book-->
+        <scene sceneID="F2Z-o4-0eZ">
+            <objects>
+                <viewController id="j5V-0X-LwU" customClass="CreateBook" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="i0S-ah-foW"/>
+                        <viewControllerLayoutGuide type="bottom" id="l3L-JJ-gwS"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="wkC-Zy-TfH">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="cZV-vH-wus">
+                        <barButtonItem key="rightBarButtonItem" title="Next" id="Syx-tj-MBR">
+                            <connections>
+                                <segue destination="7vF-2L-Pie" kind="show" identifier="addManuallyNextSegue" id="uaK-Gj-wdH"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="nextButton" destination="Syx-tj-MBR" id="k6B-Ew-Psf"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Nv8-iT-nez" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-791" y="-91"/>
         </scene>
         <!--Create Read State-->
         <scene sceneID="54O-N4-cSB">
@@ -128,12 +156,12 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="doneButton" destination="Z0U-W0-Vs9" id="faB-rX-LwL"/>
+                        <outlet property="doneButton" destination="Z0U-W0-Vs9" id="coN-XC-MIT"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="W7s-u5-f7w" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-757" y="-83"/>
+            <point key="canvasLocation" x="-97" y="-91"/>
         </scene>
     </scenes>
 </document>

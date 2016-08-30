@@ -27,6 +27,9 @@ class CreateBook: BookMetadataForm {
             PageCount = initialBookMetadata.pageCount != nil ? Int(initialBookMetadata.pageCount!) : nil
             PublicationDate = initialBookMetadata.publishedDate
             Description = initialBookMetadata.bookDescription
+            if let data = initialBookMetadata.coverImage {
+                Image = UIImage(data: data)
+            }
         }
         
         // Trigger a validation update
@@ -42,18 +45,17 @@ class CreateBook: BookMetadataForm {
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        guard segue.identifier == "addManuallyNextSegue" else { return }
-        
-        let createReadState = segue.destinationViewController as! CreateReadState
+        if let createReadState = segue.destinationViewController as? CreateReadState {
             
-        let finalBookMetadata = initialBookMetadata ?? BookMetadata()
-        finalBookMetadata.title = TitleField!
-        finalBookMetadata.authorList = AuthorList
-        finalBookMetadata.bookDescription = Description
-        finalBookMetadata.publishedDate = PublicationDate
-        finalBookMetadata.pageCount = PageCount
-        finalBookMetadata.coverImage = Image == nil ? nil : UIImagePNGRepresentation(Image!)
+            let finalBookMetadata = initialBookMetadata ?? BookMetadata()
+            finalBookMetadata.title = TitleField!
+            finalBookMetadata.authorList = AuthorList
+            finalBookMetadata.bookDescription = Description
+            finalBookMetadata.publishedDate = PublicationDate
+            finalBookMetadata.pageCount = PageCount
+            finalBookMetadata.coverImage = Image == nil ? nil : UIImagePNGRepresentation(Image!)
             
-        createReadState.bookMetadata = finalBookMetadata
+            createReadState.bookMetadata = finalBookMetadata
+        }
     }
 }

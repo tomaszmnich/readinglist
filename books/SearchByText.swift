@@ -28,7 +28,7 @@ class SearchByText: UIViewController, UITableViewDelegate, UITableViewDataSource
         spinner = UIActivityIndicatorView(frame: CGRectMake(0, 0, 40, 40))
         spinner.activityIndicatorViewStyle = .Gray
         spinner.hidesWhenStopped = true
-        spinner.center = self.view.center
+        spinner.center = self.mainTableView.center
         mainTableView.addSubview(spinner)
     }
     
@@ -40,7 +40,10 @@ class SearchByText: UIViewController, UITableViewDelegate, UITableViewDataSource
     func numberOfSectionsInTableView(tableView: UITableView) -> Int { return 1 }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return section != 0 ? 0 : (results?.count ?? 0)
+        if section != 0 {
+            return 0
+        }
+        return results?.count ?? 0
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -54,6 +57,7 @@ class SearchByText: UIViewController, UITableViewDelegate, UITableViewDataSource
     
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
         results?.removeAll(keepCapacity: false)
+        mainTableView.reloadData()
         spinner.startAnimating()
         searchBar.resignFirstResponder()
         
@@ -65,11 +69,11 @@ class SearchByText: UIViewController, UITableViewDelegate, UITableViewDataSource
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        guard segue.identifier == "createReadStateSegue" else { return }
-        
-        let selectedCellPath = mainTableView.indexPathForCell(sender as! UITableViewCell)!
-        let selectedBook = results?[selectedCellPath.row]
-        (segue.destinationViewController as! CreateReadState).bookMetadata = selectedBook
+        if let createBook = segue.destinationViewController as? CreateBook {
+            let selectedCellPath = mainTableView.indexPathForCell(sender as! UITableViewCell)!
+            let selectedBook = results?[selectedCellPath.row]
+            createBook.initialBookMetadata = selectedBook
+        }
     }
     
     @IBAction func cancelWasPressed(sender: AnyObject) {

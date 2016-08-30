@@ -190,8 +190,10 @@ class BookTable: FilteredFetchedResultsTable {
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "showDetail" {
-            let destinationViewController = (segue.destinationViewController as! UINavigationController).topViewController as! BookDetails
+        if let navWithReadState = segue.destinationViewController as? NavWithReadState {
+            navWithReadState.readState = selectedSegment.readStates.first
+        }
+        else if let destinationViewController = (segue.destinationViewController as? UINavigationController)?.topViewController as? BookDetails {
 
             // The sender is a Book if we are restoring state
             if let bookSender = sender as? Book {
@@ -201,9 +203,6 @@ class BookTable: FilteredFetchedResultsTable {
                 selectedIndex = self.tableView.indexPathForCell(cellSender) {
                 destinationViewController.book = self.resultsController.objectAtIndexPath(selectedIndex) as? Book
             }
-        }
-        else if let navWithReadState = segue.destinationViewController as? NavWithReadState {
-            navWithReadState.readState = selectedSegment.readStates.first
         }
     }
     

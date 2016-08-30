@@ -36,16 +36,6 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     
     private func setupAvSession() {
         guard let input = try? AVCaptureDeviceInput(device: AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeVideo)) else {
-            #if DEBUG
-                let alert = UIAlertController(title: "Enter ISBN", message: nil, preferredStyle: .Alert)
-                alert.addTextFieldWithConfigurationHandler(nil)
-                alert.addAction(UIAlertAction(title: "OK", style: .Default) {
-                    _ in
-                    self.detectedIsbn13 = (alert.textFields![0] as UITextField).text
-                    self.performSegueWithIdentifier("isbnDetectedSegue", sender: self)
-                    })
-                self.presentViewController(alert, animated: true, completion: nil)
-            #endif
             return
         }
         self.session.addInput(input)
@@ -107,8 +97,7 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "isbnDetectedSegue" {
-            let searchResultsController = segue.destinationViewController as! SearchByIsbn
+        if let searchResultsController = segue.destinationViewController as? SearchByIsbn {
             searchResultsController.isbn13 = detectedIsbn13!
         }
     }
