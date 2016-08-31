@@ -1,7 +1,7 @@
 PODS:
-  - Alamofire (3.4.0)
+  - Alamofire (3.4.2)
   - DZNEmptyDataSet (1.8.1)
-  - Eureka (1.6.0)
+  - Eureka (1.7.0)
   - SwiftyJSON (2.3.2)
 
 DEPENDENCIES:
@@ -11,9 +11,9 @@ DEPENDENCIES:
   - SwiftyJSON (~> 2.3.2)
 
 SPEC CHECKSUMS:
-  Alamofire: c19a627cefd6a95f840401c49ab1f124e07f54ee
+  Alamofire: 6aa33201d20d069e1598891cf928883ff1888c7a
   DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
-  Eureka: ef5b9ac93aedeecfe50d98b1ac7678bf09a1fc62
+  Eureka: 2020d9faeef7b7e9adeb9e3d8af779e5931c1897
   SwiftyJSON: 04ccea08915aa0109039157c7974cf0298da292a
 
 COCOAPODS: 0.39.0
