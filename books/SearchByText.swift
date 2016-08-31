@@ -13,23 +13,50 @@ class SearchByText: UIViewController, UITableViewDelegate, UITableViewDataSource
     
     @IBOutlet weak var searchBar: UISearchBar!
     
-    @IBOutlet weak var mainTableView: UITableView!
+    @IBOutlet weak var tableView: UITableView!
+    
     var results: [BookMetadata]?
-    var spinner: UIActivityIndicatorView!
+    
+    private var spinner = UIActivityIndicatorView()
+    private var loadingLabel = UILabel()
+    private var loadingView = UIView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        mainTableView.delegate = self
-        mainTableView.dataSource = self
-        mainTableView.tableFooterView = UIView()
+        
+        // Set up the table. This controller is not a UITableViewController so that we can have more
+        // controller over the search bar.
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.tableFooterView = UIView()
+        
+        
         searchBar.delegate = self
         searchBar.becomeFirstResponder()
         
-        spinner = UIActivityIndicatorView(frame: CGRectMake(0, 0, 40, 40))
+        
+        // Setup loading screen
+        let width: CGFloat = 120
+        let height: CGFloat = 30
+        let x = (self.tableView.frame.width - width)/2
+        let y = (self.tableView.frame.height - height)/2 - self.navigationController!.navigationBar.frame.height
+        loadingView.center = self.tableView.center
+        CGRectMake(x, y, width, height)
+
+        loadingLabel.textColor = UIColor.grayColor()
+        loadingLabel.textAlignment = NSTextAlignment.Center
+        loadingLabel.text = "Loading..."
+        loadingLabel.hidden = true
+        //loadingLabel.frame = CGRectMake(0, 0, 140, 30)
+        
         spinner.activityIndicatorViewStyle = .Gray
+        //spinner.frame = CGRectMake(0, 0, 30, 30)
         spinner.hidesWhenStopped = true
-        spinner.center = self.mainTableView.center
-        mainTableView.addSubview(spinner)
+        
+        loadingView.addSubview(spinner)
+        loadingView.addSubview(loadingLabel)
+        
+        tableView.addSubview(loadingView)
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -57,20 +84,22 @@ class SearchByText: UIViewController, UITableViewDelegate, UITableViewDataSource
     
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
         results?.removeAll(keepCapacity: false)
-        mainTableView.reloadData()
+        tableView.reloadData()
+        loadingLabel.hidden = false
         spinner.startAnimating()
         searchBar.resignFirstResponder()
         
         OnlineBookClient<GoogleBooksParser>.TryGetBookMetadata(from: GoogleBooksRequest.Search(searchBar.text!).url, maxResults: 10, onError: {_ in}) {
             self.spinner.stopAnimating()
+            self.loadingLabel.hidden = true
             self.results = $0
-            self.mainTableView.reloadData()
+            self.tableView.reloadData()
         }
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if let createBook = segue.destinationViewController as? CreateBook {
-            let selectedCellPath = mainTableView.indexPathForCell(sender as! UITableViewCell)!
+            let selectedCellPath = tableView.indexPathForCell(sender as! UITableViewCell)!
             let selectedBook = results?[selectedCellPath.row]
             createBook.initialBookMetadata = selectedBook
         }

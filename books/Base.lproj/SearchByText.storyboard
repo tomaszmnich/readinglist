@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="o9x-cb-ys2">
     <dependencies>
+        <development version="7000" identifier="xcode"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
@@ -39,7 +40,7 @@
                             </searchBar>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="92" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="1nj-su-2IL">
                                 <rect key="frame" x="0.0" y="108" width="600" height="492"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="0.0" reuseIdentifier="BookTableViewCell" rowHeight="92" id="cbl-0B-qL9" customClass="BookTableViewCell" customModule="Reading_List" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="18" width="600" height="92"/>
@@ -48,8 +49,8 @@
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="91.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9zc-xW-GG6">
-                                                    <rect key="frame" x="72" y="8" width="520" height="19.5"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9zc-xW-GG6">
+                                                    <rect key="frame" x="72" y="8" width="295" height="20.5"/>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -79,7 +80,7 @@
                                 </prototypes>
                             </tableView>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="1nj-su-2IL" firstAttribute="leading" secondItem="Mt5-Jg-rxH" secondAttribute="leading" id="OH0-wr-DNv"/>
                             <constraint firstAttribute="trailing" secondItem="1nj-su-2IL" secondAttribute="trailing" id="QbK-d5-1Zq"/>
@@ -99,8 +100,8 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="mainTableView" destination="1nj-su-2IL" id="HlX-Ol-1Qp"/>
                         <outlet property="searchBar" destination="Vde-59-8Z3" id="f8O-QL-6gH"/>
+                        <outlet property="tableView" destination="1nj-su-2IL" id="Azl-kN-kZM"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lTx-wk-0NZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -118,7 +119,7 @@
                     <view key="view" contentMode="scaleToFill" id="wkC-Zy-TfH">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
                     <navigationItem key="navigationItem" id="cZV-vH-wus">
                         <barButtonItem key="rightBarButtonItem" title="Next" id="Syx-tj-MBR">
@@ -146,7 +147,7 @@
                     <view key="view" contentMode="scaleToFill" id="uNI-Dk-vwH">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
                     <navigationItem key="navigationItem" id="rf4-kT-NHt">
                         <barButtonItem key="rightBarButtonItem" systemItem="done" id="Z0U-W0-Vs9">
