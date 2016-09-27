@@ -1,19 +1,29 @@
 PODS:
-  - Alamofire (3.4.2)
+  - Alamofire (3.5.0)
   - DZNEmptyDataSet (1.8.1)
   - Eureka (1.7.0)
-  - SwiftyJSON (2.3.2)
+  - SwiftyJSON (2.4.0)
 
 DEPENDENCIES:
   - Alamofire (~> 3.4)
   - DZNEmptyDataSet (~> 1.8.1)
-  - Eureka (~> 1.6)
-  - SwiftyJSON (~> 2.3.2)
+  - Eureka (from `https://github.com/xmartlabs/Eureka`, branch `swift2.3`)
+  - SwiftyJSON (~> 2.4)
+
+EXTERNAL SOURCES:
+  Eureka:
+    :branch: swift2.3
+    :git: https://github.com/xmartlabs/Eureka
+
+CHECKOUT OPTIONS:
+  Eureka:
+    :commit: 29e73c3a2196732de0acac136e911143290390cf
+    :git: https://github.com/xmartlabs/Eureka
 
 SPEC CHECKSUMS:
-  Alamofire: 6aa33201d20d069e1598891cf928883ff1888c7a
+  Alamofire: b70a7352335f8ea5babd0a923eb7e8eacc67b877
   DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
   Eureka: 2020d9faeef7b7e9adeb9e3d8af779e5931c1897
-  SwiftyJSON: 04ccea08915aa0109039157c7974cf0298da292a
+  SwiftyJSON: 96918c1bf505efa50c4f72957018dd3452090c9c
 
 COCOAPODS: 0.39.0

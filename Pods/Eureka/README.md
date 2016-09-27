@@ -5,7 +5,7 @@
 <img src="https://img.shields.io/badge/platform-iOS-blue.svg?style=flat" alt="Platform iOS" />
 <a href="https://developer.apple.com/swift"><img src="https://img.shields.io/badge/swift2-compatible-4BC51D.svg?style=flat" alt="Swift 2 compatible" /></a>
 <a href="https://github.com/Carthage/Carthage"><img src="https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat" alt="Carthage compatible" /></a>
-<a href="https://cocoapods.org/pods/Eureka"><img src="https://img.shields.io/badge/pod-1.6.0-blue.svg" alt="CocoaPods compatible" /></a>
+<a href="https://cocoapods.org/pods/Eureka"><img src="https://img.shields.io/badge/pod-1.7.0-blue.svg" alt="CocoaPods compatible" /></a>
 <a href="https://raw.githubusercontent.com/xmartlabs/Eureka/master/LICENSE"><img src="http://img.shields.io/badge/license-MIT-blue.svg?style=flat" alt="License: MIT" /></a>
 <a href="https://codebeat.co/projects/github-com-xmartlabs-eureka"><img alt="codebeat badge" src="https://codebeat.co/badges/16f29afb-f072-4633-9497-333c6eb71263" /></a>
 </p>
@@ -298,7 +298,7 @@ public enum Condition {
 }
 ```
 
-  #### Hidding using an NSPredicate
+#### Hiding using an NSPredicate
 
 The `hidden` variable can also be set with a NSPredicate. In the predicate string you can reference values of other rows by their tags to determine if a row should be hidden or visible.
 This will only work if the values of the rows the predicate has to check are NSObjects (String and Int will work as they are bridged to their ObjC counterparts, but enums won't work).
@@ -372,9 +372,11 @@ To easily get the selected row/s of a `SelectableSection` there are two methods:
 
 ## Custom rows
 
+It is very common that you need a row that is different from those included in Eureka. If this is the case you will have to create your own row but this should not be difficult. You can read [this tutorial on how to create custom rows](https://blog.xmartlabs.com/2016/09/06/Eureka-custom-row-tutorial/) to get started. You might also want to have a look at [EurekaCommunity] which includes some extra rows ready to be added to Eureka.
+
 ### Basic custom rows
 
-To create a row with custom behavior and appearance you'll probably want to create subclasses of `Row` and `Cell`.
+To create a row with custom behaviour and appearance you'll probably want to create subclasses of `Row` and `Cell`.
 
 Remember that `Row` is the abstraction Eureka uses, while the `Cell` is the actual `UITableViewCell` in charge of the view.
 As the `Row` contains the `Cell`, both `Row` and `Cell` must be defined for the same **value** type.
@@ -465,20 +467,20 @@ The onPresentCallback will be called when the row is about to present another vi
 The `presentationMode` is what defines how the controller is presented and which controller is presented. This presentation can be using a Segue identifier, a segue class, presenting a controller modally or pushing to a specific view controller. For example a CustomPushRow can be defined like this:
 
 ```swift
-public final class CustomPushRow<T: Equatable> : SelectorRow<T, SelectorViewController<T>>, RowType {
-
+public final class CustomPushRow<T: Equatable> : SelectorRow<T, PushSelectorCell<T>, SelectorViewController<T>>, RowType {
+    
     public required init(tag: String?) {
         super.init(tag: tag)
         presentationMode = .Show(controllerProvider: ControllerProvider.Callback {
-        	return SelectorViewController<T>(){ _ in }
-        }, completionCallback: { vc in
-        	vc.navigationController?.popViewControllerAnimated(true)
+            return SelectorViewController<T>(){ _ in }
+            }, completionCallback: { vc in
+                vc.navigationController?.popViewControllerAnimated(true)
         })
     }
 }
 ```
 
-You can place your own UIViewController instead of SelectorViewController<T>.
+You can place your own UIViewController instead of `SelectorViewController<T>` and your own cell instead of `PushSelectorCell<T>`.
 
 ## Row catalog
 
@@ -556,15 +558,17 @@ These rows have a textfield on the right side of the cell. The difference betwee
 <tr>
 </table>
 
-Typically we want to show a field row value using a formatter, for instance a currency formatter. To do so the previous rows have a formatter property that can be used to set up any formatter. useFormatterDuringInput determines if the formatter also should be used during row editing, this means, when the row's textfield is the first responder. The main challenge of using the formatting when the row is being edited is keeping updated the cursor position accordingly. Eureka provides the following protocol that your formatter should conform to in order to handle cursor position.
+All of the `FieldRow` subtypes above have a `formatter` property of type <a href="https://developer.apple.com/library/mac/documentation/Cocoa/Reference/Foundation/Classes/NSFormatter_Class/">`NSFormatter`</a> which can be set to determine how that row's value should be displayed. A custom formatter for numbers with two digits after the decimal mark is included with Eureka (`DecimalFormatter`). The Example project also contains a `CurrencyFormatter` which displays a number as currency according to the user's locale.
 
-For more information take a look at DecimalFormatter and CurrencyFormatter in the Example project.
+By default, setting a row's `formatter` only affects how a value is displayed when it is not being edited. To also format the value while the row is being edited, set `useFormatterDuringInput` to `true` when initializing the row. Formatting the value as it is being edited may require updating the cursor position and Eureka provides the following protocol that your formatter should conform to in order to handle cursor position:
 
 ```swift
 public protocol FormatterProtocol {
     func getNewPosition(forPosition forPosition: UITextPosition, inTextInput textInput: UITextInput, oldValue: String?, newValue: String?) -> UITextPosition
 }
 ```
+
+Additionally, `FieldRow` subtypes have a `useFormatterOnDidBeginEditing` property. When using a `DecimalRow` with a formatter that allows decimal values and conforms to the user's locale (e.g. `DecimalFormatter`), if `useFormatterDuringInput` is `false`, `useFormatterOnDidBeginEditing` must be set to `true` so that the decimal mark in the value being edited matches the decimal mark on the keyboard.
 
 ### Date Rows
 
@@ -688,7 +692,7 @@ source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '8.0'
 use_frameworks!
 
-pod 'Eureka', '~> 1.6'
+pod 'Eureka', '~> 1.7'
 ```
 
 Then run the following command:
@@ -704,7 +708,7 @@ $ pod install
 Specify Eureka into your project's `Cartfile`:
 
 ```ogdl
-github "xmartlabs/Eureka" ~> 1.6
+github "xmartlabs/Eureka" ~> 1.7
 ```
 
 #### Manually as Embedded Framework
@@ -918,11 +922,12 @@ It's up to you to decide if you want to use Eureka custom operators or not.
 [FormViewController]: Example/Source/Controllers.swift
 
 <!--- External -->
-[XLForm]: http://github.com/xmartlabs/XLForm
+[XLForm]: https://github.com/xmartlabs/XLForm
 [DSL]: https://en.wikipedia.org/wiki/Domain-specific_language
 [StackOverflow]: http://stackoverflow.com/questions/tagged/eureka-forms
 [our blog post]: http://blog.xmartlabs.com/2015/09/29/Introducing-Eureka-iOS-form-library-written-in-pure-Swift/
 [twitter]: https://twitter.com/xmartlabs
+[EurekaCommunity]: https://github.com/EurekaCommunity
 
 # Change Log
 

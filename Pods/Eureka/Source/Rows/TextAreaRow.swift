@@ -120,7 +120,7 @@ public class _TextAreaCell<T where T: Equatable, T: InputTypeInitiable> : Cell<T
     private func displayValue(useFormatter useFormatter: Bool) -> String? {
         guard let v = row.value else { return nil }
         if let formatter = (row as? FormatterConformance)?.formatter where useFormatter {
-            return textView.isFirstResponder() ? formatter.editingStringForObjectValue(v as! AnyObject) : formatter.stringForObjectValue(v as! AnyObject)
+            return textView.isFirstResponder() ? formatter.editingStringForObjectValue(v as! AnyObject) : formatter.stringForObjectValue(v as? AnyObject)
         }
         return String(v)
     }
@@ -173,7 +173,7 @@ public class _TextAreaCell<T where T: Equatable, T: InputTypeInitiable> : Cell<T
                 guard var selStartPos = textView.selectedTextRange?.start else { return }
                 let oldVal = textView.text
                 textView.text = row.displayValueFor?(row.value)
-                selStartPos = (formatter as? FormatterProtocol)?.getNewPosition(forPosition: selStartPos, inTextInput: textView, oldValue: oldVal, newValue: textView.text) ?? selStartPos
+                selStartPos = (formatter as? FormatterProtocol)?.getNewPosition(selStartPos, inTextInput: textView, oldValue: oldVal, newValue: textView.text) ?? selStartPos
                 textView.selectedTextRange = textView.textRangeFromPosition(selStartPos, toPosition: selStartPos)
                 return
             }
@@ -217,8 +217,8 @@ public class _TextAreaCell<T where T: Equatable, T: InputTypeInitiable> : Cell<T
         }
         if let imageView = imageView, let _ = imageView.image {
             views["imageView"] = imageView
-            dynamicConstraints.appendContentsOf(NSLayoutConstraint.constraintsWithVisualFormat("H:[imageView]-[textView]-|", options: [], metrics: nil, views: views))
-            dynamicConstraints.appendContentsOf(NSLayoutConstraint.constraintsWithVisualFormat("H:[imageView]-[label]-|", options: [], metrics: nil, views: views))
+            dynamicConstraints.appendContentsOf(NSLayoutConstraint.constraintsWithVisualFormat("H:[imageView]-(15)-[textView]-|", options: [], metrics: nil, views: views))
+            dynamicConstraints.appendContentsOf(NSLayoutConstraint.constraintsWithVisualFormat("H:[imageView]-(15)-[label]-|", options: [], metrics: nil, views: views))
         }
         else {
             dynamicConstraints.appendContentsOf(NSLayoutConstraint.constraintsWithVisualFormat("H:|-[textView]-|", options: [], metrics: nil, views: views))

@@ -9,6 +9,6 @@ source 'https://github.com/SwiftyJSON/SwiftyJSON.git'
 target 'books' do
   pod 'DZNEmptyDataSet', '~> 1.8.1'
   pod 'Alamofire', '~> 3.4'
-  pod 'SwiftyJSON', '~> 2.3.2'
-  pod 'Eureka', '~> 1.6'
+  pod 'SwiftyJSON', '~> 2.4'
+  pod 'Eureka', :git => 'https://github.com/xmartlabs/Eureka', :branch => 'swift2.3'
 end
