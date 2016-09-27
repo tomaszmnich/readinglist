@@ -22,10 +22,10 @@ class CoreSpotlightStack {
     /**
      Adds the items to the Spotlight index.
      */
-    func IndexItems(items: [SpotlightItem]) {
+    func IndexItems(_ items: [SpotlightItem]) {
         guard indexingAvailable else { return }
         
-        CSSearchableIndex.defaultSearchableIndex().indexSearchableItems(items.map{CreateSearchableItem($0)}) {
+        CSSearchableIndex.default().indexSearchableItems(items.map{CreateSearchableItem($0)}) {
             if $0 != nil {
                 print("Error indexing items: \($0!.localizedDescription)")
             }
@@ -35,17 +35,17 @@ class CoreSpotlightStack {
     /**
      Removes the items from the Spotlight index.
     */
-    func DeindexItems(items: [SpotlightItem]){
+    func DeindexItems(_ items: [SpotlightItem]){
         DeindexItems(items.map{$0.uniqueIdentifier})
     }
 
     /**
      Removes the items from the Spotlight index.
      */
-    func DeindexItems(identifiers: [String]){
+    func DeindexItems(_ identifiers: [String]){
         guard indexingAvailable else { return }
         
-        CSSearchableIndex.defaultSearchableIndex().deleteSearchableItemsWithIdentifiers(identifiers) {
+        CSSearchableIndex.default().deleteSearchableItems(withIdentifiers: identifiers) {
             if $0 != nil {
                 print("Error deindexing items: \($0!.localizedDescription)")
             }
@@ -55,12 +55,12 @@ class CoreSpotlightStack {
     /**
      Updates the items' entries in the Spotlight index.
     */
-    func UpdateItems(items: [SpotlightItem]){
+    func UpdateItems(_ items: [SpotlightItem]){
         DeindexItems(items)
         IndexItems(items)
     }
     
-    private func CreateSearchableItem(spotlightItem: SpotlightItem) -> CSSearchableItem {
+    fileprivate func CreateSearchableItem(_ spotlightItem: SpotlightItem) -> CSSearchableItem {
         // Create an attribute set from the spotlight item
         let attributeSet = CSSearchableItemAttributeSet(itemContentType: kUTTypeText as String)
         attributeSet.title = spotlightItem.title
@@ -69,7 +69,7 @@ class CoreSpotlightStack {
         
         // Create the searchable item from the spotlight item, and set the expiry to be never
         let searchableItem = CSSearchableItem(uniqueIdentifier: spotlightItem.uniqueIdentifier, domainIdentifier: self.domainIdentifier, attributeSet: attributeSet)
-        searchableItem.expirationDate = NSDate.distantFuture()
+        searchableItem.expirationDate = Date.distantFuture
         return searchableItem
     }
 }
@@ -77,10 +77,10 @@ class CoreSpotlightStack {
 class SpotlightItem {
     var title: String
     var description: String?
-    var thumbnailImageData: NSData?
+    var thumbnailImageData: Data?
     var uniqueIdentifier: String
     
-    init(uniqueIdentifier: String, title: String, description: String?, thumbnailImageData: NSData?){
+    init(uniqueIdentifier: String, title: String, description: String?, thumbnailImageData: Data?){
         self.uniqueIdentifier = uniqueIdentifier
         self.title = title
         self.description = description

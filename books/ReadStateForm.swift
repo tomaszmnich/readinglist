@@ -22,9 +22,9 @@ class ReadStateForm: FormViewController {
         let readStateSection = Section()
         readStateSection.append(SegmentedRow<BookReadState>(readStateKey) {
             $0.title = "Read State"
-            $0.options = [.ToRead, .Reading, .Finished]
+            $0.options = [.toRead, .reading, .finished]
             // Set a value here so we can be sure that the read state option is *never* null.
-            $0.value = .ToRead
+            $0.value = .toRead
         }.onChange{_ in
             self.OnChange()
         })
@@ -32,9 +32,9 @@ class ReadStateForm: FormViewController {
         
         // STARTED READING
         let startedReadingSection = Section() {
-            $0.hidden = Condition.Function([readStateKey]) {
-                let readStateRow: SegmentedRow<BookReadState> = $0.rowByTag(self.readStateKey)!
-                return readStateRow.value == .ToRead
+            $0.hidden = Condition.function([readStateKey]) {
+                let readStateRow: SegmentedRow<BookReadState> = $0.rowBy(tag: self.readStateKey)!
+                return readStateRow.value == .toRead
             }
         }
         startedReadingSection.append(DateRow(dateStartedKey){
@@ -49,9 +49,9 @@ class ReadStateForm: FormViewController {
         
         // FINISHED READING
         let finishedReadingSection = Section() {
-            $0.hidden = Condition.Function([self.readStateKey]) {
-                let readStateRow: SegmentedRow<BookReadState> = $0.rowByTag(self.readStateKey)!
-                return readStateRow.value != .Finished
+            $0.hidden = Condition.function([self.readStateKey]) {
+                let readStateRow: SegmentedRow<BookReadState> = $0.rowBy(tag: self.readStateKey)!
+                return readStateRow.value != .finished
             }
         }
         finishedReadingSection.append(DateRow(dateFinishedKey){
@@ -74,25 +74,25 @@ class ReadStateForm: FormViewController {
         set { form.setValues([readStateKey: newValue]) }
     }
     
-    var StartedReading: NSDate? {
-        get { return form.values()[dateStartedKey] as? NSDate }
+    var StartedReading: Date? {
+        get { return form.values()[dateStartedKey] as? Date }
         set { form.setValues([dateStartedKey: newValue]) }
     }
     
-    var FinishedReading: NSDate? {
-        get { return form.values()[dateFinishedKey] as? NSDate }
+    var FinishedReading: Date? {
+        get { return form.values()[dateFinishedKey] as? Date }
         set { form.setValues([dateFinishedKey: newValue]) }
     }
     
     func IsValid() -> Bool {
         // Check that the relevant dates have been set.
         switch ReadState {
-        case .ToRead:
+        case .toRead:
             return true
-        case .Reading:
+        case .reading:
             return StartedReading != nil
-        case .Finished:
-            return StartedReading != nil && FinishedReading != nil && StartedReading!.compare(FinishedReading!) != .OrderedDescending
+        case .finished:
+            return StartedReading != nil && FinishedReading != nil && StartedReading!.compare(FinishedReading!) != .orderedDescending
         }
     }
 }

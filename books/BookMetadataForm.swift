@@ -46,12 +46,13 @@ class BookMetadataForm: FormViewController {
         pagePublicationSection.append(TextAreaRow(descriptionKey){
             $0.placeholder = "Description"
         }.cellSetup{
-            $0.cell.height = {return 200}
+            $0.0.height = {return 200}
         })
+        /*
         pagePublicationSection.append(ImageRow(imageKey){
             $0.title = "Cover Image"
             $0.cell.height = {return 100}
-        })
+        })*/
         form.append(pagePublicationSection)
     }
     
@@ -70,8 +71,8 @@ class BookMetadataForm: FormViewController {
         set { form.setValues([pageCountKey: newValue]) }
     }
     
-    var PublicationDate: NSDate? {
-        get { return form.values()[publicationDateKey] as? NSDate }
+    var PublicationDate: Date? {
+        get { return form.values()[publicationDateKey] as? Date }
         set { form.setValues([publicationDateKey: newValue]) }
     }
     
@@ -91,7 +92,7 @@ class BookMetadataForm: FormViewController {
     
     func Dismiss() {
         self.view.endEditing(true)
-        self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
+        self.navigationController?.dismiss(animated: true, completion: nil)
     }
     
     func IsValid() -> Bool {

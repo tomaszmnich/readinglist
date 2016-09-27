@@ -12,39 +12,39 @@ import CoreData
 @objc(Book)
 class Book: NSManagedObject {
     // Book Metadata
-    @NSManaged private(set) var title: String
-    @NSManaged private(set) var subtitle: String?
-    @NSManaged private(set) var authorList: String?
-    @NSManaged private(set) var isbn13: String?
-    @NSManaged private(set) var pageCount: NSNumber?
-    @NSManaged private(set) var publishedDate: NSDate?
-    @NSManaged private(set) var bookDescription: String?
-    @NSManaged private(set) var coverImage: NSData?
+    @NSManaged fileprivate(set) var title: String
+    @NSManaged fileprivate(set) var subtitle: String?
+    @NSManaged fileprivate(set) var authorList: String?
+    @NSManaged fileprivate(set) var isbn13: String?
+    @NSManaged fileprivate(set) var pageCount: NSNumber?
+    @NSManaged fileprivate(set) var publishedDate: Date?
+    @NSManaged fileprivate(set) var bookDescription: String?
+    @NSManaged fileprivate(set) var coverImage: Data?
     
     // Reading Information
     @NSManaged var readState: BookReadState
-    @NSManaged var startedReading: NSDate?
-    @NSManaged var finishedReading: NSDate?
+    @NSManaged var startedReading: Date?
+    @NSManaged var finishedReading: Date?
     
     // Other Metadata
     @NSManaged var sort: NSNumber?
     
-    func Populate(metadata: BookMetadata) {
+    func Populate(_ metadata: BookMetadata) {
         title = metadata.title
         authorList = metadata.authorList
         isbn13 = metadata.isbn13
-        pageCount = metadata.pageCount
+        pageCount = metadata.pageCount as NSNumber?
         publishedDate = metadata.publishedDate
         bookDescription = metadata.bookDescription
         coverImage = metadata.coverImage
     }
     
-    func Populate(readingInformation: BookReadingInformation) {
+    func Populate(_ readingInformation: BookReadingInformation) {
         readState = readingInformation.readState
         startedReading = readingInformation.startedReading
         finishedReading = readingInformation.finishedReading
         // Wipe out the sort if we have moved out of this section
-        if readState != .ToRead {
+        if readState != .toRead {
             sort = nil
         }
     }
@@ -60,31 +60,31 @@ class BookMetadata {
     var isbn13: String?
     var authorList: String?
     var pageCount: Int?
-    var publishedDate: NSDate?
+    var publishedDate: Date?
     var bookDescription: String?
-    var coverUrl: NSURL?
-    var coverImage: NSData?
+    var coverUrl: URL?
+    var coverImage: Data?
 }
 
 class BookReadingInformation {
     var readState: BookReadState!
-    var startedReading: NSDate?
-    var finishedReading: NSDate?
+    var startedReading: Date?
+    var finishedReading: Date?
 }
 
 /// The availale reading progress states
 @objc enum BookReadState : Int32, CustomStringConvertible {
-    case Reading = 1
-    case ToRead = 2
-    case Finished = 3
+    case reading = 1
+    case toRead = 2
+    case finished = 3
     
     var description: String {
         switch self{
-        case .Reading:
+        case .reading:
             return "Reading"
-        case .ToRead:
+        case .toRead:
             return "To Read"
-        case .Finished:
+        case .finished:
             return "Finished"
         }
     }

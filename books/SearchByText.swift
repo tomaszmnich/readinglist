@@ -17,9 +17,9 @@ class SearchByText: UIViewController, UITableViewDelegate, UITableViewDataSource
     
     var results: [BookMetadata]?
     
-    private var spinner = UIActivityIndicatorView()
-    private var loadingLabel = UILabel()
-    private var loadingView = UIView()
+    fileprivate var spinner = UIActivityIndicatorView()
+    fileprivate var loadingLabel = UILabel()
+    fileprivate var loadingView = UIView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,15 +41,15 @@ class SearchByText: UIViewController, UITableViewDelegate, UITableViewDataSource
         let x = (self.tableView.frame.width - width)/2
         let y = (self.tableView.frame.height - height)/2 - self.navigationController!.navigationBar.frame.height
         loadingView.center = self.tableView.center
-        CGRectMake(x, y, width, height)
+        CGRect(x: x, y: y, width: width, height: height)
 
-        loadingLabel.textColor = UIColor.grayColor()
-        loadingLabel.textAlignment = NSTextAlignment.Center
+        loadingLabel.textColor = UIColor.gray
+        loadingLabel.textAlignment = NSTextAlignment.center
         loadingLabel.text = "Loading..."
-        loadingLabel.hidden = true
+        loadingLabel.isHidden = true
         //loadingLabel.frame = CGRectMake(0, 0, 140, 30)
         
-        spinner.activityIndicatorViewStyle = .Gray
+        spinner.activityIndicatorViewStyle = .gray
         //spinner.frame = CGRectMake(0, 0, 30, 30)
         spinner.hidesWhenStopped = true
         
@@ -59,54 +59,54 @@ class SearchByText: UIViewController, UITableViewDelegate, UITableViewDataSource
         tableView.addSubview(loadingView)
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         searchBar.becomeFirstResponder()
     }
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int { return 1 }
+    func numberOfSections(in tableView: UITableView) -> Int { return 1 }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section != 0 {
             return 0
         }
         return results?.count ?? 0
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(String(BookTableViewCell)) as! BookTableViewCell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: BookTableViewCell.self)) as! BookTableViewCell
 
-        if let book = results?[indexPath.row] {
+        if let book = results?[(indexPath as NSIndexPath).row] {
             cell.configureFrom(book)
         }
         return cell
     }
     
-    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
-        results?.removeAll(keepCapacity: false)
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        results?.removeAll(keepingCapacity: false)
         tableView.reloadData()
-        loadingLabel.hidden = false
+        loadingLabel.isHidden = false
         spinner.startAnimating()
         searchBar.resignFirstResponder()
         
-        OnlineBookClient<GoogleBooksParser>.TryGetBookMetadata(from: GoogleBooksRequest.Search(searchBar.text!).url, maxResults: 10, onError: {_ in}) {
+        OnlineBookClient<GoogleBooksParser>.TryGetBookMetadata(from: GoogleBooksRequest.search(searchBar.text!).url, maxResults: 10, onError: {_ in}) {
             self.spinner.stopAnimating()
-            self.loadingLabel.hidden = true
+            self.loadingLabel.isHidden = true
             self.results = $0
             self.tableView.reloadData()
         }
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if let createBook = segue.destinationViewController as? CreateBook {
-            let selectedCellPath = tableView.indexPathForCell(sender as! UITableViewCell)!
-            let selectedBook = results?[selectedCellPath.row]
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let createBook = segue.destination as? CreateBook {
+            let selectedCellPath = tableView.indexPath(for: sender as! UITableViewCell)!
+            let selectedBook = results?[(selectedCellPath as NSIndexPath).row]
             createBook.initialBookMetadata = selectedBook
         }
     }
     
-    @IBAction func cancelWasPressed(sender: AnyObject) {
+    @IBAction func cancelWasPressed(_ sender: AnyObject) {
         searchBar.resignFirstResponder()
-        self.dismissViewControllerAnimated(true, completion: nil)
+        self.dismiss(animated: true, completion: nil)
     }
 }

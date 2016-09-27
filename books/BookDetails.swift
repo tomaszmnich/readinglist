@@ -24,8 +24,8 @@ class BookDetails: UIViewController {
         UpdateUi()
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        let navController = segue.destinationViewController as! UINavigationController
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let navController = segue.destination as! UINavigationController
         if let editBookController = navController.viewControllers.first as? EditBook {
             editBookController.bookToEdit = self.book
         }
@@ -34,46 +34,46 @@ class BookDetails: UIViewController {
         }
     }
     
-    func updateDisplayedBook(newBook: Book) {
+    func updateDisplayedBook(_ newBook: Book) {
         book = newBook
         UpdateUi()
-        self.dismissViewControllerAnimated(false, completion: nil)
+        self.dismiss(animated: false, completion: nil)
     }
     
-    @objc private func bookChanged(notification: NSNotification) {
-        guard let book = book, let userInfo = notification.userInfo else { return }
+    @objc fileprivate func bookChanged(_ notification: Notification) {
+        guard let book = book, let userInfo = (notification as NSNotification).userInfo else { return }
         
-        if let updatedObjects = userInfo[NSUpdatedObjectsKey] as? NSSet where updatedObjects.containsObject(book) {
+        if let updatedObjects = userInfo[NSUpdatedObjectsKey] as? NSSet , updatedObjects.contains(book) {
             // If the book was updated, update this page
             UpdateUi()
         }
-        else if let deletedObjects = userInfo[NSDeletedObjectsKey] as? NSSet where deletedObjects.containsObject(book) {
+        else if let deletedObjects = userInfo[NSDeletedObjectsKey] as? NSSet , deletedObjects.contains(book) {
             // If the book was deleted, clear this page, and pop back if necessary
             ClearUi()
-            appDelegate.splitViewController.masterNavigationController.popToRootViewControllerAnimated(false)
+            appDelegate.splitViewController.masterNavigationController.popToRootViewController(animated: false)
         }
     }
     
-    private func UpdateUi() {
+    fileprivate func UpdateUi() {
         guard let book = book else { ClearUi(); return }
 
         // Setup the title label
         titleLabel.attributedText = NSMutableAttributedString.byConcatenating(withNewline: true,
-            book.title.withTextStyle(UIFontTextStyleTitle1),
-            book.subtitle?.withTextStyle(UIFontTextStyleSubheadline),
-            book.authorList?.withTextStyle(UIFontTextStyleSubheadline))
+            book.title.withTextStyle(UIFontTextStyle.title1),
+            book.subtitle?.withTextStyle(UIFontTextStyle.subheadline),
+            book.authorList?.withTextStyle(UIFontTextStyle.subheadline))
         
         // Setup the description label
-        let pageCountText: NSAttributedString? = book.pageCount == nil ? nil : "\(book.pageCount!) pages.".withTextStyle(UIFontTextStyleCallout)
-        let publishedWhenText: NSAttributedString? = book.publishedDate == nil ? nil : "Published \(book.publishedDate!.toString(withDateStyle: NSDateFormatterStyle.LongStyle))".withTextStyle(UIFontTextStyleCallout)
+        let pageCountText: NSAttributedString? = book.pageCount == nil ? nil : "\(book.pageCount!) pages.".withTextStyle(UIFontTextStyle.callout)
+        let publishedWhenText: NSAttributedString? = book.publishedDate == nil ? nil : "Published \(book.publishedDate!.toString(withDateStyle: DateFormatter.Style.long))".withTextStyle(UIFontTextStyle.callout)
         descriptionLabel.attributedText = NSMutableAttributedString.byConcatenating(withNewline: true,
-            pageCountText, publishedWhenText, book.bookDescription?.withTextStyle(UIFontTextStyleCallout))
+            pageCountText, publishedWhenText, book.bookDescription?.withTextStyle(UIFontTextStyle.callout))
         
         // Setup the image
         imageView.image = UIImage(optionalData: book.coverImage)
     }
     
-    private func ClearUi() {
+    fileprivate func ClearUi() {
         titleLabel.attributedText = nil
         descriptionLabel.attributedText = nil
         imageView.image = nil

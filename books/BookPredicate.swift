@@ -10,19 +10,19 @@ import Foundation
 
 class BookPredicate {
     
-    private static let titleFieldName = "title"
-    private static let authorFieldName = "authorList"
-    private static let sortFieldName = "sort"
-    private static let startedReadingFieldName = "startedReading"
-    private static let finishedReadingFieldName = "finishedReading"
+    fileprivate static let titleFieldName = "title"
+    fileprivate static let authorFieldName = "authorList"
+    fileprivate static let sortFieldName = "sort"
+    fileprivate static let startedReadingFieldName = "startedReading"
+    fileprivate static let finishedReadingFieldName = "finishedReading"
     
     static let readStateFieldName = "readState"
     
-    static func readStateEqual(readState: BookReadState) -> NSPredicate {
+    static func readStateEqual(_ readState: BookReadState) -> NSPredicate {
         return NSPredicate(fieldName: readStateFieldName, equalToInt: Int(readState.rawValue))
     }
     
-    static func searchInTitleOrAuthor(searchString: String) -> NSPredicate {
+    static func searchInTitleOrAuthor(_ searchString: String) -> NSPredicate {
         return NSPredicate.searchWithinFields(searchString, fieldNames: titleFieldName, authorFieldName)
     }
     

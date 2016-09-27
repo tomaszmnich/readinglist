@@ -15,50 +15,50 @@ extension UIColor {
     }
 }
 
-extension NSDate {
-    convenience init(dateString: String) {
-        let dateStringFormatter = NSDateFormatter()
+extension Date {
+    init(dateString: String) {
+        let dateStringFormatter = DateFormatter()
         dateStringFormatter.dateFormat = "yyyy-MM-dd"
-        dateStringFormatter.locale = NSLocale(localeIdentifier: "en_US_POSIX")
-        let date = dateStringFormatter.dateFromString(dateString)!
-        self.init(timeInterval: 0, sinceDate: date)
+        dateStringFormatter.locale = Locale(identifier: "en_US_POSIX")
+        let date = dateStringFormatter.date(from: dateString)!
+        self.init(timeInterval: 0, since: date)
     }
     
-    func toString(withDateStyle dateStyle: NSDateFormatterStyle) -> String {
-        let formatter = NSDateFormatter()
+    func toString(withDateStyle dateStyle: DateFormatter.Style) -> String {
+        let formatter = DateFormatter()
         formatter.dateStyle = dateStyle
-        formatter.timeStyle = .NoStyle
-        return formatter.stringFromDate(self)
+        formatter.timeStyle = .none
+        return formatter.string(from: self)
     }
     
     func toString(withDateFormat dateFormat: String) -> String {
-        let formatter = NSDateFormatter()
+        let formatter = DateFormatter()
         formatter.dateFormat = dateFormat
-        return formatter.stringFromDate(self)
+        return formatter.string(from: self)
     }
     
     func toHumanisedString() -> String {
-        let today = NSDate()
+        let today = Date()
         
         // If we are in the future, fully specify the date
-        if self.laterDate(today) == self {
+        if (self as NSDate).laterDate(today) == self {
             return self.toString(withDateFormat: "d MMM yyyy")
         }
         
         // Otherwise split the dates into components
-        let theseComponents = NSCalendar.currentCalendar().components([.Day, .Month, .Year], fromDate: self)
-        let todayComponents = NSCalendar.currentCalendar().components([.Day, .Month, .Year], fromDate: today)
+        let theseComponents = (Calendar.current as NSCalendar).components([.day, .month, .year], from: self)
+        let todayComponents = (Calendar.current as NSCalendar).components([.day, .month, .year], from: today)
         
         
         // more than 5 days ago
-        if theseComponents.year != todayComponents.year || todayComponents.month != theseComponents.month || todayComponents.day - theseComponents.day >= 5 {
+        if theseComponents.year! != todayComponents.year! || todayComponents.month! != theseComponents.month! || todayComponents.day! - theseComponents.day! >= 5 {
             return self.toString(withDateFormat: "d MMM yyyy")
         }
-        else if todayComponents.day - theseComponents.day >= 2 {
+        else if todayComponents.day! - theseComponents.day! >= 2 {
             // between 2 and 5 days ago
             return self.toString(withDateFormat: "EEEE")
         }
-        else if todayComponents.day - theseComponents.day == 1 {
+        else if todayComponents.day! - theseComponents.day! == 1 {
             return "Yesterday"
         }
         else {
@@ -67,15 +67,8 @@ extension NSDate {
     }
 }
 
-extension CollectionType {
-    /// Returns the element at the specified index iff it is within bounds, otherwise nil.
-    subscript (safe index: Index) -> Generator.Element? {
-        return indices.contains(index) ? self[index] : nil
-    }
-}
-
 extension UIImage {
-    convenience init?(optionalData: NSData?) {
+    convenience init?(optionalData: Data?) {
         if let data = optionalData {
             self.init(data: data)
         }
@@ -85,9 +78,9 @@ extension UIImage {
     }
 }
 
-extension NSCharacterSet {
-    static func nonAlphanumeric() -> NSCharacterSet {
-        return NSCharacterSet.alphanumericCharacterSet().invertedSet
+extension CharacterSet {
+    static func nonAlphanumeric() -> CharacterSet {
+        return CharacterSet.alphanumerics.inverted
     }
 }
 
@@ -99,37 +92,38 @@ extension String {
     
     /// Removes all whitespace characters from the beginning and the end of the string.
     func trim() -> String {
-        return self.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+        return self.trimmingCharacters(in: CharacterSet.whitespaces)
     }
     
-    func toAttributedString(attributes: [String : AnyObject]?) -> NSAttributedString {
+    func toAttributedString(_ attributes: [String : AnyObject]?) -> NSAttributedString {
         return NSAttributedString(string: self, attributes: attributes)
     }
     
-    func toAttributedStringWithFont(font: UIFont) -> NSAttributedString {
+    func toAttributedStringWithFont(_ font: UIFont) -> NSAttributedString {
         return self.toAttributedString([NSFontAttributeName: font])
     }
     
-    func withTextStyle(textStyle: String) -> NSAttributedString {
-        return self.toAttributedStringWithFont(UIFont.preferredFontForTextStyle(textStyle))
+    func withTextStyle(_ textStyle: UIFontTextStyle) -> NSAttributedString {
+        return self.toAttributedStringWithFont(UIFont.preferredFont(forTextStyle: textStyle))
     }
     
-    func toDateViaFormat(format: String) -> NSDate? {
-        let dateFormatter = NSDateFormatter()
+    func toDateViaFormat(_ format: String) -> Date? {
+        let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = format
-        dateFormatter.locale = NSLocale.currentLocale()
-        return dateFormatter.dateFromString(self)
+        dateFormatter.locale = Locale.current
+        return dateFormatter.date(from: self)
     }
 }
 
 extension NSMutableAttributedString {
     
-    static func byConcatenating(withNewline withNewline: Bool, _ attributedStrings: NSAttributedString?...) -> NSMutableAttributedString? {
+    static func byConcatenating(withNewline: Bool, _ attributedStrings: NSAttributedString?...) -> NSMutableAttributedString? {
         // First of all, filter out all of the nil strings
         let notNilStrings = attributedStrings.flatMap{$0}
         
         // Check that there is a first string in the array; if not, return nil
-        guard let firstString = notNilStrings[safe: 0] else { return nil }
+        guard notNilStrings.count > 0 else { return nil }
+        let firstString = notNilStrings[0]
         
         // Initialise the mutable string with the first string
         let mutableAttributedString = NSMutableAttributedString(attributedString: firstString)
@@ -139,14 +133,14 @@ extension NSMutableAttributedString {
             if withNewline {
                 mutableAttributedString.appendNewline()
             }
-            mutableAttributedString.appendAttributedString(attrString)
+            mutableAttributedString.append(attrString)
         }
         
         return mutableAttributedString
     }
     
     func appendNewline() {
-        self.appendAttributedString(NSAttributedString(string: "\u{2028}"))
+        self.append(NSAttributedString(string: "\u{2028}"))
     }
 }
 
@@ -166,17 +160,17 @@ extension NSPredicate {
         }
     }
     
-    static func Or(orPredicates: [NSPredicate]) -> NSPredicate {
+    static func Or(_ orPredicates: [NSPredicate]) -> NSPredicate {
         return NSCompoundPredicate(orPredicateWithSubpredicates: orPredicates)
     }
     
-    static func And(andPredicates: [NSPredicate]) -> NSPredicate {
+    static func And(_ andPredicates: [NSPredicate]) -> NSPredicate {
         return NSCompoundPredicate(andPredicateWithSubpredicates: andPredicates)
     }
     
-    static func searchWithinFields(searchString: String, fieldNames: String...) -> NSPredicate {
+    static func searchWithinFields(_ searchString: String, fieldNames: String...) -> NSPredicate {
         // Split on whitespace and remove empty elements
-        let searchStringComponents = searchString.componentsSeparatedByCharactersInSet(NSCharacterSet.nonAlphanumeric()).filter{
+        let searchStringComponents = searchString.components(separatedBy: CharacterSet.nonAlphanumeric()).filter{
             !$0.isEmpty
         }
         
@@ -188,13 +182,13 @@ extension NSPredicate {
         })
     }
     
-    @warn_unused_result
-    func Or(orPredicate: NSPredicate) -> NSPredicate {
+    
+    func Or(_ orPredicate: NSPredicate) -> NSPredicate {
         return NSPredicate.Or([self, orPredicate])
     }
     
-    @warn_unused_result
-    func And(andPredicate: NSPredicate) -> NSPredicate {
+    
+    func And(_ andPredicate: NSPredicate) -> NSPredicate {
         return NSPredicate.And([self, andPredicate])
     }
 }

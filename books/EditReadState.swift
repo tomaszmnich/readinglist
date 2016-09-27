@@ -27,10 +27,10 @@ class EditReadState: ReadStateForm {
     }
     
     override func OnChange() {
-        doneButton.enabled = IsValid()
+        doneButton.isEnabled = IsValid()
     }
     
-    @IBAction func doneWasPressed(sender: UIBarButtonItem) {
+    @IBAction func doneWasPressed(_ sender: UIBarButtonItem) {
         self.view.endEditing(true)
         
         // Create an object representation of the form values
@@ -44,12 +44,12 @@ class EditReadState: ReadStateForm {
         appDelegate.booksStore.UpdateSpotlightIndex(bookToEdit)
         appDelegate.booksStore.Save()
         
-        self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
+        self.navigationController?.dismiss(animated: true, completion: nil)
     }
     
-    @IBAction func cancelWasPressed(sender: UIBarButtonItem) {
+    @IBAction func cancelWasPressed(_ sender: UIBarButtonItem) {
         // Just exit
         self.view.endEditing(true)
-        self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
+        self.navigationController?.dismiss(animated: true, completion: nil)
     }
 }

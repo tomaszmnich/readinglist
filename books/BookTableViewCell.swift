@@ -13,29 +13,29 @@ class BookTableViewCell: UITableViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var bookCover: UIImageView!
     
-    func configureFrom(book: BookMetadata) {
+    func configureFrom(_ book: BookMetadata) {
         let titleAndAuthor = NSMutableAttributedString.byConcatenating(
             withNewline: true,
-            book.title.withTextStyle(UIFontTextStyleSubheadline),
-            book.authorList?.withTextStyle(UIFontTextStyleCaption1))!
+            book.title.withTextStyle(UIFontTextStyle.subheadline),
+            book.authorList?.withTextStyle(UIFontTextStyle.caption1))!
         
         titleLabel.attributedText = titleAndAuthor
         bookCover.image = UIImage(optionalData: book.coverImage)
     }
     
-    func configureFromBook(book: Book) {
+    func configureFromBook(_ book: Book) {
         let titleAndAuthor = NSMutableAttributedString.byConcatenating(
             withNewline: true,
-            book.title.withTextStyle(UIFontTextStyleSubheadline),
-            book.authorList?.withTextStyle(UIFontTextStyleCaption1))!
+            book.title.withTextStyle(UIFontTextStyle.subheadline),
+            book.authorList?.withTextStyle(UIFontTextStyle.caption1))!
         
-        if book.readState == .Reading {
+        if book.readState == .reading {
             titleAndAuthor.appendNewline()
-            titleAndAuthor.appendAttributedString("Started: \(book.startedReading!.toHumanisedString())".withTextStyle(UIFontTextStyleCaption1))
+            titleAndAuthor.append("Started: \(book.startedReading!.toHumanisedString())".withTextStyle(UIFontTextStyle.caption1))
         }
-        else if book.readState == .Finished {
+        else if book.readState == .finished {
             titleAndAuthor.appendNewline()
-            titleAndAuthor.appendAttributedString("\(book.startedReading!.toHumanisedString()) - \(book.finishedReading!.toHumanisedString())".withTextStyle(UIFontTextStyleCaption1))
+            titleAndAuthor.append("\(book.startedReading!.toHumanisedString()) - \(book.finishedReading!.toHumanisedString())".withTextStyle(UIFontTextStyle.caption1))
         }
         
         titleLabel.attributedText = titleAndAuthor

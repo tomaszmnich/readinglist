@@ -23,7 +23,7 @@ class EditBook: BookMetadataForm {
         deleteSection.append(ButtonRow("delete"){
             $0.title = "Delete Book"
             }.cellSetup{cell, row in
-                cell.tintColor = UIColor.redColor()
+                cell.tintColor = UIColor.red
             }
             .onCellSelection{ _ in
                 self.presentDeleteAlert()
@@ -41,29 +41,29 @@ class EditBook: BookMetadataForm {
     
     func presentDeleteAlert(){
         // We are going to show an action sheet
-        let confirmDeleteAlert = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
+        let confirmDeleteAlert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
         // Bring up the action sheet)
-        confirmDeleteAlert.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
-        confirmDeleteAlert.addAction(UIAlertAction(title: "Delete", style: .Destructive) { _ in
+        confirmDeleteAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        confirmDeleteAlert.addAction(UIAlertAction(title: "Delete", style: .destructive) { _ in
             
             // Dismiss this modal view and then delete the book
-            self.dismissViewControllerAnimated(true) {
+            self.dismiss(animated: true) {
                 appDelegate.booksStore.DeleteBookAndDeindex(self.bookToEdit!)
             }
         })
-        self.presentViewController(confirmDeleteAlert, animated: true, completion: nil)
+        self.present(confirmDeleteAlert, animated: true, completion: nil)
     }
     
     override func OnChange() {
-        doneButton.enabled = IsValid()
+        doneButton.isEnabled = IsValid()
     }
     
-    @IBAction func cancelButtonWasPressed(sender: AnyObject) {
+    @IBAction func cancelButtonWasPressed(_ sender: AnyObject) {
         Dismiss()
     }
     
-    @IBAction func doneButtonWasPressed(sender: AnyObject) {
+    @IBAction func doneButtonWasPressed(_ sender: AnyObject) {
         // Check the title field is not nil
         guard let TitleField = TitleField else { return }
         

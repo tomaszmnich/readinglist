@@ -10,14 +10,14 @@ import Foundation
 import SwiftyJSON
 
 protocol BookParser {
-    static func ParseJsonResponse(jResponse: JSON, maxResultCount: Int) -> [BookMetadata]
+    static func ParseJsonResponse(_ jResponse: JSON, maxResultCount: Int) -> [BookMetadata]
 }
 
 class OnlineBookClient<TParser: BookParser>{
     
-    static func TryGetBookMetadata(from url: NSURL, maxResults: Int, onError: (NSError -> Void), onSuccess: ([BookMetadata] -> Void)) {
+    static func TryGetBookMetadata(from url: URL, maxResults: Int, onError: @escaping ((Error) -> Void), onSuccess: @escaping (([BookMetadata]) -> Void)) {
         
-        func SuccessCallback(result: JSON?) {
+        func SuccessCallback(_ result: JSON?) {
             guard let result = result else { onSuccess([BookMetadata]()); return }
             
             let results = TParser.ParseJsonResponse(result, maxResultCount: maxResults)

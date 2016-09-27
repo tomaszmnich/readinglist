@@ -28,7 +28,7 @@ class CreateBook: BookMetadataForm {
             PublicationDate = initialBookMetadata.publishedDate
             Description = initialBookMetadata.bookDescription
             if let data = initialBookMetadata.coverImage {
-                Image = UIImage(data: data)
+                Image = UIImage(data: data as Data)
             }
         }
         
@@ -37,15 +37,15 @@ class CreateBook: BookMetadataForm {
     }
     
     override func OnChange() {
-        nextButton.enabled = IsValid()
+        nextButton.isEnabled = IsValid()
     }
     
-    @IBAction func cancelButtonWasPressed(sender: AnyObject) {
+    @IBAction func cancelButtonWasPressed(_ sender: AnyObject) {
         Dismiss()
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if let createReadState = segue.destinationViewController as? CreateReadState {
+    func prepare(for segue: UIStoryboardSegue, sender: AnyObject?) {
+        if let createReadState = segue.destination as? CreateReadState {
             
             let finalBookMetadata = initialBookMetadata ?? BookMetadata()
             finalBookMetadata.title = TitleField!

@@ -11,19 +11,19 @@ import SwiftyJSON
 /// Builds a request to perform an operation on the GoogleBooks API.
 enum GoogleBooksRequest {
     
-    case Search(String)
-    case GetIsbn(String)
+    case search(String)
+    case getIsbn(String)
     
     // The base URL for GoogleBooks API v1 requests
-    static let baseUrl = NSURL(string: "https://www.googleapis.com")!
+    static let baseUrl = URL(string: "https://www.googleapis.com")!
     
-    var url: NSURL {
+    var url: URL {
         switch self{
-        case let Search(query):
-            let encodedQuery = query.stringByAddingPercentEncodingWithAllowedCharacters(.URLHostAllowedCharacterSet())!
-            return NSURL(string: "/books/v1/volumes?q=\(encodedQuery)", relativeToURL: GoogleBooksRequest.baseUrl)!
-        case let GetIsbn(isbn):
-            return NSURL(string: "/books/v1/volumes?q=isbn:\(isbn)", relativeToURL: GoogleBooksRequest.baseUrl)!
+        case let .search(query):
+            let encodedQuery = query.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+            return URL(string: "/books/v1/volumes?q=\(encodedQuery)", relativeTo: GoogleBooksRequest.baseUrl)!
+        case let .getIsbn(isbn):
+            return URL(string: "/books/v1/volumes?q=isbn:\(isbn)", relativeTo: GoogleBooksRequest.baseUrl)!
         }
     }
 }
@@ -31,7 +31,7 @@ enum GoogleBooksRequest {
 /// Deals with parsing the JSON returned by GoogleBook's API into object representations.
 class GoogleBooksParser: BookParser {
     
-    static func ParseJsonResponse(jResponse: JSON, maxResultCount: Int) -> [BookMetadata] {
+    static func ParseJsonResponse(_ jResponse: JSON, maxResultCount: Int) -> [BookMetadata] {
         var results = [BookMetadata]()
         
         // The information we seek is in the volumneInfo element.
@@ -48,7 +48,7 @@ class GoogleBooksParser: BookParser {
         return results
     }
     
-    private static func ParseItem(item: JSON) -> BookMetadata? {
+    fileprivate static func ParseItem(_ item: JSON) -> BookMetadata? {
         let volumeInfo = item["volumeInfo"]
         
         // Books with no title are useless
@@ -60,14 +60,14 @@ class GoogleBooksParser: BookParser {
         book.subtitle = volumeInfo["subtitle"].string
         book.pageCount = volumeInfo["pageCount"].int
         book.bookDescription = volumeInfo["description"].string
-        book.authorList = volumeInfo["authors"].map{$1.rawString()!}.joinWithSeparator(", ")
+        book.authorList = volumeInfo["authors"].map{$1.rawString()!}.joined(separator: ", ")
         book.publishedDate = volumeInfo["publishedDate"].string?.toDateViaFormat("yyyy-MM-dd")
         
         // Add a link at which a front cover image can be found.
         // The link seems to be equally accessible at https, and iOS apps don't seem to like
         // accessing http addresses, so adjust the provided url.
-        if let url = volumeInfo["imageLinks"]["thumbnail"].string?.stringByReplacingOccurrencesOfString("http://", withString: "https://"){
-            book.coverUrl = NSURL(string: url)
+        if let url = volumeInfo["imageLinks"]["thumbnail"].string?.replacingOccurrences(of: "http://", with: "https://"){
+            book.coverUrl = URL(string: url)
         }
         return book
     }

@@ -16,16 +16,16 @@ class FilteredFetchedResultsTable: FetchedResultsTable, UISearchResultsUpdating 
         self.definesPresentationContext = true
         self.searchController.searchResultsUpdater = self
         self.searchController.dimsBackgroundDuringPresentation = false
-        self.searchController.searchBar.returnKeyType = .Done
+        self.searchController.searchBar.returnKeyType = .done
         self.tableView.tableHeaderView = searchController.searchBar
         
         // Offset by the height of the search bar, so as to hide it on load.
-        self.tableView.setContentOffset(CGPointMake(0, searchController.searchBar.frame.height), animated: false)
+        self.tableView.setContentOffset(CGPoint(x: 0, y: searchController.searchBar.frame.height), animated: false)
         
         super.viewDidLoad()
     }
     
-    func updateSearchResultsForSearchController(searchController: UISearchController) {
+    func updateSearchResults(for searchController: UISearchController) {
         // We have to update the predicate even if the search text is empty, as the user
         // may have arrived at this state by deleting text from an existing search.
         if let searchText = searchController.searchBar.text {
@@ -33,18 +33,18 @@ class FilteredFetchedResultsTable: FetchedResultsTable, UISearchResultsUpdating 
         }
     }
     
-    func predicateForSearchText(searchText: String) -> NSPredicate {
+    func predicateForSearchText(_ searchText: String) -> NSPredicate {
         // Should be overriden
         return NSPredicate(format: "FALSEPREDICATE")
     }
     
     func isShowingSearchResults() -> Bool {
-        return searchController.active && searchController.searchBar.text?.isEmpty == false
+        return searchController.isActive && searchController.searchBar.text?.isEmpty == false
     }
     
     func dismissSearch() {
-        self.searchController.active = false
+        self.searchController.isActive = false
         self.searchController.searchBar.showsCancelButton = false
-        self.updateSearchResultsForSearchController(self.searchController)
+        self.updateSearchResults(for: self.searchController)
     }
 }

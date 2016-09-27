@@ -11,11 +11,11 @@ import UIKit
 // This subclass exists solely to stop the app opening in "detail" view on iPhones
 class SplitViewController: UISplitViewController, UISplitViewControllerDelegate {
     override func viewDidLoad() {
-        self.preferredDisplayMode = .AllVisible
+        self.preferredDisplayMode = .allVisible
         self.delegate = self
     }
     
-    func splitViewController(splitViewController: UISplitViewController, collapseSecondaryViewController secondaryViewController: UIViewController, ontoPrimaryViewController primaryViewController: UIViewController) -> Bool {
+    func splitViewController(_ splitViewController: UISplitViewController, collapseSecondary secondaryViewController: UIViewController, onto primaryViewController: UIViewController) -> Bool {
         return true
     }
     
@@ -28,7 +28,10 @@ class SplitViewController: UISplitViewController, UISplitViewControllerDelegate 
     }
     
     var detailNavigationControllerIfSplit: UINavigationController? {
-        return self.viewControllers[safe: 1] as? UINavigationController
+        if self.viewControllers.count >= 2 {
+            return self.viewControllers[1] as? UINavigationController
+        }
+        return nil
     }
     
     var detailNavigationController: UINavigationController? {

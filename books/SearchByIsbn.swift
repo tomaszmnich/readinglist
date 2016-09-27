@@ -21,14 +21,14 @@ class SearchByIsbn: UIViewController {
         spinner.startAnimating()
         
         // We've found an ISBN-13. Let's search for it online.
-        OnlineBookClient<GoogleBooksParser>.TryGetBookMetadata(from: GoogleBooksRequest.GetIsbn(isbn13).url, maxResults: 1, onError: errorHandler, onSuccess: searchCompletionHandler)
+        OnlineBookClient<GoogleBooksParser>.TryGetBookMetadata(from: GoogleBooksRequest.getIsbn(isbn13).url, maxResults: 1, onError: errorHandler, onSuccess: searchCompletionHandler)
     }
     
-    func errorHandler(error: NSError?) {
+    func errorHandler(_ error: Error?) {
         spinner.stopAnimating()
         var message = "An error occurred."
         
-        if let error = error {
+        if let error = error as? NSError {
             switch error.code {
                 case NSURLErrorNotConnectedToInternet,
                      NSURLErrorNetworkConnectionLost:
@@ -41,7 +41,7 @@ class SearchByIsbn: UIViewController {
         return
     }
     
-    func searchCompletionHandler(metadata: [BookMetadata]) {
+    func searchCompletionHandler(_ metadata: [BookMetadata]) {
         guard metadata.count == 1 else {
             spinner.stopAnimating()
             PresentInfoAlert(title: "No Results", message: "No matching books found online")
@@ -50,22 +50,22 @@ class SearchByIsbn: UIViewController {
         
         foundMetadata = metadata[0]
         spinner.stopAnimating()
-        self.performSegueWithIdentifier("showIsbnSearchResultSegue", sender: self)
+        self.performSegue(withIdentifier: "showIsbnSearchResultSegue", sender: self)
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if let createReadStateController = segue.destinationViewController as? CreateReadState {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let createReadStateController = segue.destination as? CreateReadState {
             createReadStateController.bookMetadata = foundMetadata
         }
     }
     
     /// Presents a popup alerting the use to the fact that there were no results.
-    func PresentInfoAlert(title title: String, message: String) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
-            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: { _ in
+    func PresentInfoAlert(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: { _ in
                 self.spinner.stopAnimating()
-                self.dismissViewControllerAnimated(true, completion: nil)
+                self.dismiss(animated: true, completion: nil)
         }))
-        self.presentViewController(alert, animated: true, completion: nil)
+        self.present(alert, animated: true, completion: nil)
     }
 }

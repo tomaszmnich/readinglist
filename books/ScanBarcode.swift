@@ -21,28 +21,28 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         super.viewDidLoad()
         
         // Setup the camera preview on another thread
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+        DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.default).async {
             self.setupAvSession()
         }
     }
     
-    @IBAction func cancelWasPressed(sender: AnyObject) {
-        self.dismissViewControllerAnimated(true, completion: nil)
+    @IBAction func cancelWasPressed(_ sender: AnyObject) {
+        self.dismiss(animated: true, completion: nil)
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         session.stopRunning()
     }
     
-    private func setupAvSession() {
-        guard let input = try? AVCaptureDeviceInput(device: AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeVideo)) else {
+    fileprivate func setupAvSession() {
+        guard let input = try? AVCaptureDeviceInput(device: AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo)) else {
             return
         }
         self.session.addInput(input)
         
         // Prepare the metadata output and add to the session
         let output = AVCaptureMetadataOutput()
-        output.setMetadataObjectsDelegate(self, queue: dispatch_get_main_queue())
+        output.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
         self.session.addOutput(output)
         output.metadataObjectTypes = output.availableMetadataObjectTypes
         
@@ -51,7 +51,7 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         previewLayer!.frame = self.cameraPreviewPlaceholder.frame
         previewLayer!.videoGravity = AVLayerVideoGravityResize
         
-        dispatch_async(dispatch_get_main_queue()) {
+        DispatchQueue.main.async {
             self.view.layer.addSublayer(self.previewLayer!)
         }
         
@@ -60,11 +60,11 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     }
     
     // This is called when we find a known barcode type with the camera.
-    func captureOutput(captureOutput: AVCaptureOutput!, didOutputMetadataObjects metadataObjects: [AnyObject]!, fromConnection connection: AVCaptureConnection!) {
+    func captureOutput(_ captureOutput: AVCaptureOutput!, didOutputMetadataObjects metadataObjects: [Any]!, from connection: AVCaptureConnection!) {
         
         // The scanner is capable of capturing multiple 2-dimensional barcodes in one scan.
         // Filter out everything which is not a EAN13 code.
-        let ean13MetadataObjects = metadataObjects.filter { return $0.type == AVMetadataObjectTypeEAN13Code }
+        let ean13MetadataObjects = metadataObjects.filter { return ($0 as AnyObject).type == AVMetadataObjectTypeEAN13Code }
         
         if let avMetadata = ean13MetadataObjects.first as? AVMetadataMachineReadableCodeObject {
             // Store the detected value of the barcode
@@ -72,7 +72,7 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
             
             // Since we have a result, stop the session and pop to the next page
             self.session.stopRunning()
-            performSegueWithIdentifier("isbnDetectedSegue", sender: self)
+            performSegue(withIdentifier: "isbnDetectedSegue", sender: self)
         }
     }
     
@@ -80,24 +80,24 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         // Accomodate for device rotation.
         // This is kind of annoyingly juddery, but I can't find a simple way to stop that.
         
-        if let connection = self.previewLayer?.connection where connection.supportsVideoOrientation {
-            switch UIDevice.currentDevice().orientation {
-            case .LandscapeRight:
-                connection.videoOrientation = AVCaptureVideoOrientation.LandscapeLeft
-            case .LandscapeLeft:
-                connection.videoOrientation = AVCaptureVideoOrientation.LandscapeRight
-            case .PortraitUpsideDown:
-                connection.videoOrientation = AVCaptureVideoOrientation.PortraitUpsideDown
+        if let connection = self.previewLayer?.connection , connection.isVideoOrientationSupported {
+            switch UIDevice.current.orientation {
+            case .landscapeRight:
+                connection.videoOrientation = AVCaptureVideoOrientation.landscapeLeft
+            case .landscapeLeft:
+                connection.videoOrientation = AVCaptureVideoOrientation.landscapeRight
+            case .portraitUpsideDown:
+                connection.videoOrientation = AVCaptureVideoOrientation.portraitUpsideDown
             default:
-                connection.videoOrientation = AVCaptureVideoOrientation.Portrait
+                connection.videoOrientation = AVCaptureVideoOrientation.portrait
             }
         }
         
         self.previewLayer?.frame = self.view.bounds;
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if let searchResultsController = segue.destinationViewController as? SearchByIsbn {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let searchResultsController = segue.destination as? SearchByIsbn {
             searchResultsController.isbn13 = detectedIsbn13!
         }
     }
