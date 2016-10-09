@@ -88,7 +88,9 @@ extension FetchedResultsTable: NSFetchedResultsControllerDelegate {
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange object: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         switch type {
         case .update:
-            configureCell(tableView.cellForRow(at: indexPath!)!, fromObject: object as AnyObject);
+            if let cell = tableView.cellForRow(at: indexPath!) {
+                configureCell(cell, fromObject: object as AnyObject)
+            }
         case .insert:
             tableView.insertRows(at: [newIndexPath!], with: .automatic)
         case .move:
