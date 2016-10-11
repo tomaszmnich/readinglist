@@ -4,6 +4,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
+        <capability name="Segues with Peek and Pop" minToolsVersion="7.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -97,10 +98,10 @@
             </objects>
             <point key="canvasLocation" x="-3426" y="744"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Previewing Navigation Controller-->
         <scene sceneID="zdk-AE-L8G">
             <objects>
-                <navigationController id="xOz-rG-HY1" sceneMemberID="viewController">
+                <navigationController id="xOz-rG-HY1" customClass="PreviewingNavigationController" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Tyo-wU-14L">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -165,6 +166,10 @@
                                 <connections>
                                     <outlet property="bookCover" destination="Gpt-3n-dBG" id="umR-g4-0Vd"/>
                                     <outlet property="titleLabel" destination="j4t-DS-san" id="UBn-Ra-1zm"/>
+                                    <segue destination="xOz-rG-HY1" kind="showDetail" identifier="showDetail" id="XHh-AV-pat">
+                                        <segue key="commit" inheritsFrom="parent" id="vQB-9q-NrK"/>
+                                        <segue key="preview" inheritsFrom="commit" id="c9r-AY-uqQ"/>
+                                    </segue>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -197,7 +202,6 @@
                         <outlet property="segmentControl" destination="gD4-Hg-VY5" id="hfq-l9-bDd"/>
                         <segue destination="MoR-st-owh" kind="presentation" identifier="scanBarcodeSegue" modalPresentationStyle="formSheet" id="Qcd-L8-NyS"/>
                         <segue destination="Mfc-92-vqK" kind="presentation" identifier="addManuallySegue" modalPresentationStyle="formSheet" id="PtV-8Y-ubq"/>
-                        <segue destination="xOz-rG-HY1" kind="showDetail" identifier="showDetail" id="43w-HF-ugB"/>
                         <segue destination="ciW-Jd-Gs4" kind="presentation" identifier="searchByTextSegue" modalPresentationStyle="formSheet" id="zeo-7j-yVE"/>
                     </connections>
                 </tableViewController>
@@ -263,6 +267,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="43w-HF-ugB"/>
+        <segue reference="XHh-AV-pat"/>
     </inferredMetricsTieBreakers>
 </document>

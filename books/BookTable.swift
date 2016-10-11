@@ -57,6 +57,7 @@ class BookTable: FilteredFetchedResultsTable {
         
         navigationItem.leftBarButtonItem = editButtonItem
         tableView.allowsMultipleSelectionDuringEditing = true
+        
         super.viewDidLoad()
     }
     
@@ -188,15 +189,10 @@ class BookTable: FilteredFetchedResultsTable {
         selectedSegment = TableSegmentOption(rawValue: segmentControl.selectedSegmentIndex)!
         
         // If there is a Book currently displaying on the split Detail view, select the corresponding row if possible
-        if let currentlyShowingBook = appDelegate.splitViewController.bookDetailsControllerIfSplit?.book , selectedSegment.readStates.contains(currentlyShowingBook.readState) {
+        if let currentlyShowingBook = appDelegate.splitViewController.bookDetailsControllerIfSplit?.book,
+            selectedSegment.readStates.contains(currentlyShowingBook.readState) {
             
             tableView.selectRow(at: self.resultsController.indexPath(forObject: currentlyShowingBook), animated: false, scrollPosition: .none)
-        }
-    }
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if !tableView.isEditing {
-            performSegue(withIdentifier: "showDetail", sender: self.resultsController.object(at: indexPath) as? Book)
         }
     }
     
@@ -205,6 +201,10 @@ class BookTable: FilteredFetchedResultsTable {
             navWithReadState.readState = selectedSegment.readStates.first
         }
         else if let destinationViewController = (segue.destination as? UINavigationController)?.topViewController as? BookDetails {
+
+            if isEditing {
+                return
+            }
 
             // The sender is a Book if we are restoring state
             if let bookSender = sender as? Book {

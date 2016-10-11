@@ -78,4 +78,33 @@ class BookDetails: UIViewController {
         descriptionLabel.attributedText = nil
         imageView.image = nil
     }
+    
+    override var previewActionItems: [UIPreviewActionItem] {
+        get {
+            var previewActions = [UIPreviewActionItem]()
+            
+            if let book = book {
+                if book.readState == .toRead {
+                    previewActions.append(UIPreviewAction(title: "Started Reading", style: .default) {_,_ in
+                        book.readState = .reading
+                        book.startedReading = Date()
+                        appDelegate.booksStore.Save()
+                    })
+                }
+                
+                if book.readState == .reading {
+                    previewActions.append(UIPreviewAction(title: "Finished Reading", style: .default) {_,_ in
+                        book.readState = .finished
+                        book.finishedReading = Date()
+                        appDelegate.booksStore.Save()
+                    })
+                }
+            
+                previewActions.append(UIPreviewAction(title: "Delete", style: .destructive){_,_ in
+                    appDelegate.booksStore.DeleteBookAndDeindex(book)
+                })
+            }
+            return previewActions
+        }
+    }
 }
