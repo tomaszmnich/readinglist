@@ -77,7 +77,10 @@ class BookTable: FilteredFetchedResultsTable {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        tableViewScrollPositions![selectedSegment] = tableView.contentOffset
+        // It seems perverse that a view could disappear before appearing, but exactly that
+        // happens when launching the app view a quick action. Hence the possibility that 
+        // tableViewScrollPositions is nil when this method is called.
+        tableViewScrollPositions?[selectedSegment] = tableView.contentOffset
     }
     
     @IBOutlet weak var segmentControl: UISegmentedControl!
@@ -86,16 +89,13 @@ class BookTable: FilteredFetchedResultsTable {
         // We are going to show an action sheet
         let optionsAlert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         optionsAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        optionsAlert.addAction(UIAlertAction(title: "Enter Manually", style: .default) {
-            _ in
+        optionsAlert.addAction(UIAlertAction(title: "Enter Manually", style: .default) {_ in
             self.performSegue(withIdentifier: "addManuallySegue", sender: self)
         })
-        optionsAlert.addAction(UIAlertAction(title: "Search Online", style: .default) {
-            _ in
+        optionsAlert.addAction(UIAlertAction(title: "Search Online", style: .default) {_ in
             self.performSegue(withIdentifier: "searchByTextSegue", sender: self)
         })
-        optionsAlert.addAction(UIAlertAction(title: "Scan Barcode", style: .default){
-            _ in
+        optionsAlert.addAction(UIAlertAction(title: "Scan Barcode", style: .default){_ in
             self.performSegue(withIdentifier: "scanBarcodeSegue", sender: self)
         })
         #if DEBUG
