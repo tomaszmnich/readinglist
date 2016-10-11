@@ -19,7 +19,6 @@ class SearchByText: UIViewController, UITableViewDelegate, UITableViewDataSource
     
     fileprivate var spinner = UIActivityIndicatorView()
     fileprivate var loadingLabel = UILabel()
-    fileprivate var loadingView = UIView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,33 +29,25 @@ class SearchByText: UIViewController, UITableViewDelegate, UITableViewDataSource
         tableView.dataSource = self
         tableView.tableFooterView = UIView()
         
-        
         searchBar.delegate = self
         searchBar.becomeFirstResponder()
         
-        
         // Setup loading screen
-        let width: CGFloat = 120
-        let height: CGFloat = 30
-        let x = (self.tableView.frame.width - width)/2
-        let y = (self.tableView.frame.height - height)/2 - self.navigationController!.navigationBar.frame.height
-        loadingView.center = self.tableView.center
-        CGRect(x: x, y: y, width: width, height: height)
-
         loadingLabel.textColor = UIColor.gray
         loadingLabel.textAlignment = NSTextAlignment.center
         loadingLabel.text = "Loading..."
         loadingLabel.isHidden = true
-        //loadingLabel.frame = CGRectMake(0, 0, 140, 30)
         
-        spinner.activityIndicatorViewStyle = .gray
-        //spinner.frame = CGRectMake(0, 0, 30, 30)
+        spinner.translatesAutoresizingMaskIntoConstraints = false
         spinner.hidesWhenStopped = true
+        spinner.startAnimating()
         
-        loadingView.addSubview(spinner)
-        loadingView.addSubview(loadingLabel)
         
-        tableView.addSubview(loadingView)
+        
+        tableView.addSubview(spinner)
+        tableView.bringSubview(toFront: spinner)
+        tableView.addConstraints([NSLayoutConstraint(item: spinner, attribute: NSLayoutAttribute.centerX, relatedBy:NSLayoutRelation.equal, toItem: tableView, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0),
+                                  NSLayoutConstraint(item: spinner, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: tableView, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0)])
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -67,7 +58,7 @@ class SearchByText: UIViewController, UITableViewDelegate, UITableViewDataSource
     func numberOfSections(in tableView: UITableView) -> Int { return 1 }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section != 0 {
+        guard section == 0 else {
             return 0
         }
         return results?.count ?? 0
@@ -76,7 +67,7 @@ class SearchByText: UIViewController, UITableViewDelegate, UITableViewDataSource
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: BookTableViewCell.self)) as! BookTableViewCell
 
-        if let book = results?[(indexPath as NSIndexPath).row] {
+        if let book = results?[indexPath.row] {
             cell.configureFrom(book)
         }
         return cell
@@ -100,7 +91,7 @@ class SearchByText: UIViewController, UITableViewDelegate, UITableViewDataSource
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let createBook = segue.destination as? CreateBook {
             let selectedCellPath = tableView.indexPath(for: sender as! UITableViewCell)!
-            let selectedBook = results?[(selectedCellPath as NSIndexPath).row]
+            let selectedBook = results?[selectedCellPath.row]
             createBook.initialBookMetadata = selectedBook
         }
     }

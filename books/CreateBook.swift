@@ -44,7 +44,7 @@ class CreateBook: BookMetadataForm {
         Dismiss()
     }
     
-    func prepare(for segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let createReadState = segue.destination as? CreateReadState {
             
             let finalBookMetadata = initialBookMetadata ?? BookMetadata()
