@@ -20,7 +20,7 @@ enum TableSegmentOption: Int {
     }
     
     func toPredicate() -> NSPredicate {
-        return NSPredicate.Or(self.readStates.map{BookPredicate.readStateEqual($0)})
+        return NSPredicate.Or(self.readStates.map{BookPredicate.readState(equalTo: $0)})
     }
     
     static func fromReadState(_ state: BookReadState) -> TableSegmentOption {
@@ -40,7 +40,7 @@ class BookTable: FilteredFetchedResultsTable {
     
     override func viewDidLoad() {
         // Set up the results controller
-        innerController = appDelegate.booksStore.FetchedBooksController(selectedSegment.toPredicate(), initialSortDescriptors: [BookPredicate.readStateSort, NSSortDescriptor(key: "sort", ascending: true), NSSortDescriptor(key: "startedReading", ascending: true), NSSortDescriptor(key: "finishedReading", ascending: true)])
+        innerController = appDelegate.booksStore.fetchedResultsController(selectedSegment.toPredicate(), initialSortDescriptors: [BookPredicate.readStateSort, NSSortDescriptor(key: "sort", ascending: true), NSSortDescriptor(key: "startedReading", ascending: true), NSSortDescriptor(key: "finishedReading", ascending: true)])
         innerController.delegate = self
         
         cellIdentifier = String(describing: BookTableViewCell.self)
@@ -158,7 +158,7 @@ class BookTable: FilteredFetchedResultsTable {
         // Check that the user activity corresponds to a book which we have a row for
         guard let identifier = activity.userInfo?[CSSearchableItemActivityIdentifier] as? String,
             let identifierUrl = URL(string: identifier),
-            let selectedBook = appDelegate.booksStore.GetBook(identifierUrl) else { return }
+            let selectedBook = appDelegate.booksStore.get(bookIdUrl: identifierUrl) else { return }
 
         // Update the selected segment, which will reload the table, and dismiss the search if there is one
         selectedSegment = TableSegmentOption.fromReadState(selectedBook.readState)
@@ -220,7 +220,7 @@ class BookTable: FilteredFetchedResultsTable {
     override func predicateForSearchText(_ searchText: String) -> NSPredicate {
         var predicate = selectedSegment.toPredicate()
         if !searchText.isEmptyOrWhitespace() && searchText.trim().characters.count >= 2 {
-            predicate = predicate.And(BookPredicate.searchInTitleOrAuthor(searchText))
+            predicate = predicate.And(BookPredicate.titleAndAuthor(searchString: searchText))
         }
         return predicate
     }
@@ -236,7 +236,7 @@ extension BookTable {
         
         let delete = UITableViewRowAction(style: .destructive, title: "Delete") { _, _ in
             // If there is a book at this index, delete it
-            appDelegate.booksStore.DeleteBookAndDeindex(selectedBook)
+            appDelegate.booksStore.delete(selectedBook)
         }
         delete.backgroundColor = UIColor(fromHex: 0xe74c3c)
         var editActions = [delete]
@@ -245,7 +245,7 @@ extension BookTable {
             let startedAction = UITableViewRowAction(style: .normal, title: "Started") { _, _ in
                 selectedBook.readState = .reading
                 selectedBook.startedReading = Date()
-                appDelegate.booksStore.UpdateSpotlightIndex(selectedBook)
+                appDelegate.booksStore.updateSpotlightIndex(for: selectedBook)
                 self.tableView.setEditing(false, animated: true)
             }
             startedAction.backgroundColor = UIColor(fromHex: 0x3498db)
@@ -255,7 +255,7 @@ extension BookTable {
             let finishedAction = UITableViewRowAction(style: .normal, title: "Finished") { _, _ in
                 selectedBook.readState = .finished
                 selectedBook.finishedReading = Date()
-                appDelegate.booksStore.UpdateSpotlightIndex(selectedBook)
+                appDelegate.booksStore.updateSpotlightIndex(for: selectedBook)
                 self.tableView.setEditing(false, animated: true)
             }
             finishedAction.backgroundColor = UIColor(fromHex: 0x2ecc71)
@@ -308,7 +308,7 @@ extension BookTable {
         // Turn off updates while we save the object context
         toggleUpdates(on: false)
         
-        appDelegate.booksStore.Save()
+        appDelegate.booksStore.save()
         refetch(reloadTable: false)
         
         toggleUpdates(on: true)
@@ -320,8 +320,8 @@ extension BookTable {
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            appDelegate.booksStore.DeleteBookAndDeindex(resultsController.object(at: indexPath) as! Book)
-            appDelegate.booksStore.Save()
+            appDelegate.booksStore.delete(resultsController.object(at: indexPath) as! Book)
+            appDelegate.booksStore.save()
         }
     }
 }

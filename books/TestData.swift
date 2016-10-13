@@ -39,7 +39,7 @@ class TestData {
                 readingInfo.readState = bookToAdd.readState
                 readingInfo.startedReading = bookToAdd.started
                 readingInfo.finishedReading = bookToAdd.finished
-                appDelegate.booksStore.CreateBook(bookMetadata, readingInformation: readingInfo)
+                appDelegate.booksStore.create(from: bookMetadata, readingInformation: readingInfo)
             })
         }
     }

@@ -49,7 +49,7 @@ class EditBook: BookMetadataForm {
             
             // Dismiss this modal view and then delete the book
             self.dismiss(animated: true) {
-                appDelegate.booksStore.DeleteBookAndDeindex(self.bookToEdit!)
+                appDelegate.booksStore.delete(self.bookToEdit)
             }
         })
         self.present(confirmDeleteAlert, animated: true, completion: nil)
@@ -79,8 +79,8 @@ class EditBook: BookMetadataForm {
         
         // Update and save the book
         bookToEdit.Populate(newMetadata)
-        appDelegate.booksStore.UpdateSpotlightIndex(bookToEdit)
-        appDelegate.booksStore.Save()
+        appDelegate.booksStore.updateSpotlightIndex(for: bookToEdit)
+        appDelegate.booksStore.save()
 
         Dismiss()
     }

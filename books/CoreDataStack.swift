@@ -14,8 +14,8 @@ import CoreData
 */
 class CoreDataStack {
 
-    fileprivate var modelUrl: URL!
-    fileprivate var sqliteStoreUrl: URL!
+    private var modelUrl: URL!
+    private var sqliteStoreUrl: URL!
     
     /**
      Constructs a CoreDataStack which represents the model contained in the .momd file with the specified
@@ -30,20 +30,13 @@ class CoreDataStack {
     
     /// The managed object context
     lazy var managedObjectContext: NSManagedObjectContext = {
-        let moc = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
-        moc.persistentStoreCoordinator = self.persistentStoreCoordinator
-        moc.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
-        return moc
+        let objectContent = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
+        objectContent.persistentStoreCoordinator = self.persistentStoreCoordinator
+        objectContent.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+        return objectContent
     }()
     
-    /// Creates a new item of the specified type with the provided entity name.
-    func createNewItem<T>(_ entityName: String) -> T where T: NSManagedObject {
-        let newItem = NSEntityDescription.insertNewObject(forEntityName: entityName, into: managedObjectContext) as! T
-        print("Created new object with ID \(newItem.objectID.uriRepresentation().absoluteString)")
-        return newItem
-    }
-    
-    fileprivate lazy var persistentStoreCoordinator: NSPersistentStoreCoordinator = {
+    private lazy var persistentStoreCoordinator: NSPersistentStoreCoordinator = {
         let coordinator = NSPersistentStoreCoordinator(managedObjectModel: self.managedObjectModel)
         do {
             try coordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: self.sqliteStoreUrl, options: nil)
@@ -54,7 +47,15 @@ class CoreDataStack {
         return coordinator
     }()
 
-    fileprivate lazy var managedObjectModel: NSManagedObjectModel = {
+    private lazy var managedObjectModel: NSManagedObjectModel = {
         return NSManagedObjectModel(contentsOf: self.modelUrl)!
     }()
+    
+    
+    /// Creates a new item of the specified type with the provided entity name.
+    func createNew<T>(entity: String) -> T where T: NSManagedObject {
+        let newItem = NSEntityDescription.insertNewObject(forEntityName: entity, into: managedObjectContext) as! T
+        print("Created new object with ID \(newItem.objectID.uriRepresentation().absoluteString)")
+        return newItem
+    }
 }

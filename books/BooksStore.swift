@@ -12,23 +12,23 @@ import MobileCoreServices
 /// Interfaces with the CoreData storage of Book objects
 class BooksStore {
     
-    fileprivate let bookEntityName = "Book"
+    private let bookEntityName = "Book"
     
     /// The core data stack which will be doing the MOM work
-    fileprivate lazy var coreDataStack = CoreDataStack(sqliteFileName: "books", momdFileName: "books")
+    private lazy var coreDataStack = CoreDataStack(sqliteFileName: "books", momdFileName: "books")
     
     /// The spotlight stack which will be doing the indexing work
-    fileprivate lazy var coreSpotlightStack = CoreSpotlightStack(domainIdentifier: "com.andrewbennet.books")
+    private lazy var coreSpotlightStack = CoreSpotlightStack(domainIdentifier: "com.andrewbennet.books")
     
     /// The mapping from a Book to a SpotlightItem
-    fileprivate func CreateSpotlightItemForBook(_ book: Book) -> SpotlightItem{
+    private func spotlightItem(for book: Book) -> SpotlightItem {
         return SpotlightItem(uniqueIdentifier: book.objectID.uriRepresentation().absoluteString, title: book.title, description: "\(book.finishedReading != nil ? "Completed: " + book.finishedReading!.description + ". " : "")\(book.bookDescription != nil ? book.bookDescription! : "")", thumbnailImageData: book.coverImage)
     }
     
     /**
      Creates a NSFetchedResultsController to retrieve books in the given state.
     */
-    func FetchedBooksController(_ initialPredicate: NSPredicate?, initialSortDescriptors: [NSSortDescriptor]?) -> NSFetchedResultsController<Book> {
+    func fetchedResultsController(_ initialPredicate: NSPredicate?, initialSortDescriptors: [NSSortDescriptor]?) -> NSFetchedResultsController<Book> {
         let fetchRequest = NSFetchRequest<Book>(entityName: bookEntityName)
         fetchRequest.predicate = initialPredicate
         fetchRequest.sortDescriptors = initialSortDescriptors
@@ -41,26 +41,26 @@ class BooksStore {
     /**
      Retrieves the specified Book, if it exists.
      */
-    func GetBook(_ objectIdUrl: URL) -> Book? {
-        let bookObjectUrl = coreDataStack.managedObjectContext.persistentStoreCoordinator!.managedObjectID(forURIRepresentation: objectIdUrl)!
+    func get(bookIdUrl: URL) -> Book? {
+        let bookObjectUrl = coreDataStack.managedObjectContext.persistentStoreCoordinator!.managedObjectID(forURIRepresentation: bookIdUrl)!
         return coreDataStack.managedObjectContext.object(with: bookObjectUrl) as? Book
     }
     
     /**
      Adds or updates the book in the Spotlight index.
     */
-    func UpdateSpotlightIndex(_ book: Book) {
-        coreSpotlightStack.UpdateItems([CreateSpotlightItemForBook(book)])
+    func updateSpotlightIndex(for book: Book) {
+        coreSpotlightStack.updateItems([spotlightItem(for: book)])
     }
     
     /**
      Gets the current maximum sort index in the books store
     */
-    func GetMaxSort() -> NSNumber? {
+    func max(attribute: String) -> NSNumber? {
         // Build an expression for the maximum value of the 'sort' attribute
         let expression = NSExpressionDescription()
-        expression.name = "maxSort"
-        expression.expression = NSExpression(forFunction: "max:", arguments: [NSExpression(forKeyPath: "sort")])
+        expression.name = "max\(attribute)"
+        expression.expression = NSExpression(forFunction: "max:", arguments: [NSExpression(forKeyPath: attribute)])
         expression.expressionResultType = NSAttributeType.integer32AttributeType
         
         // Build a fetch request for the above expression
@@ -83,34 +83,35 @@ class BooksStore {
      Deletes the given book from the managed object context.
      Deindexes from Spotlight if necessary.
     */
-    func DeleteBookAndDeindex(_ bookToDelete: Book) {
-        coreSpotlightStack.DeindexItems([bookToDelete.objectID.uriRepresentation().absoluteString])
-        coreDataStack.managedObjectContext.delete(bookToDelete)
-        Save()
+    func delete(_ book: Book) {
+        coreSpotlightStack.deindexItems(withIdentifiers: [book.objectID.uriRepresentation().absoluteString])
+        coreDataStack.managedObjectContext.delete(book)
+        save()
     }
     
     /**
      Creates a new Book object, populates with the provided metadata, saves the
      object context, and adds the book to the Spotlight index.
     */
-    func CreateBook(_ metadata: BookMetadata, readingInformation: BookReadingInformation) {
-        let book: Book = coreDataStack.createNewItem(bookEntityName)
+    func create(from metadata: BookMetadata, readingInformation: BookReadingInformation) {
+        let book: Book = coreDataStack.createNew(entity: bookEntityName)
         book.Populate(metadata)
         book.Populate(readingInformation)
         
         // The sort index should be 1 more than our maximum, and only if this book is in the ToRead state
         if readingInformation.readState == .toRead {
-            book.sort = NSNumber(value: (GetMaxSort()?.int32Value ?? -1) + 1 as Int32)
+            let maxSort = max(attribute: "sort")?.intValue ?? -1
+            book.sort = NSNumber(value: maxSort + 1)
         }
         
-        Save()
-        UpdateSpotlightIndex(book)
+        save()
+        updateSpotlightIndex(for: book)
     }
     
     /**
      Saves the managedObjectContext and suppresses any errors.
     */
-    func Save() {
+    func save() {
         do {
             try coreDataStack.managedObjectContext.save()
         }
@@ -122,7 +123,7 @@ class BooksStore {
     /**
      Adds the specified object as an observer of saves to the managed object context.
     */
-    func AddSaveObserver(_ observer: AnyObject, callbackSelector: Selector) {
-        NotificationCenter.default.addObserver(observer, selector: callbackSelector, name: NSNotification.Name.NSManagedObjectContextDidSave, object: coreDataStack.managedObjectContext)
+    func addSaveObserver(_ observer: AnyObject, selector: Selector) {
+        NotificationCenter.default.addObserver(observer, selector: selector, name: NSNotification.Name.NSManagedObjectContextDidSave, object: coreDataStack.managedObjectContext)
     }
 }

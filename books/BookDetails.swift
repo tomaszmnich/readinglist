@@ -20,7 +20,7 @@ class BookDetails: UIViewController {
     
     override func viewDidLoad() {
         // Keep an eye on changes to the book store
-        appDelegate.booksStore.AddSaveObserver(self, callbackSelector: #selector(bookChanged(_:)))
+        appDelegate.booksStore.addSaveObserver(self, selector: #selector(bookChanged(_:)))
         UpdateUi()
     }
     
@@ -85,23 +85,23 @@ class BookDetails: UIViewController {
             
             if let book = book {
                 if book.readState == .toRead {
-                    previewActions.append(UIPreviewAction(title: "Started Reading", style: .default) {_,_ in
+                    previewActions.append(UIPreviewAction(title: "Started", style: .default) {_,_ in
                         book.readState = .reading
                         book.startedReading = Date()
-                        appDelegate.booksStore.Save()
+                        appDelegate.booksStore.save()
                     })
                 }
                 
                 if book.readState == .reading {
-                    previewActions.append(UIPreviewAction(title: "Finished Reading", style: .default) {_,_ in
+                    previewActions.append(UIPreviewAction(title: "Finished", style: .default) {_,_ in
                         book.readState = .finished
                         book.finishedReading = Date()
-                        appDelegate.booksStore.Save()
+                        appDelegate.booksStore.save()
                     })
                 }
             
                 previewActions.append(UIPreviewAction(title: "Delete", style: .destructive){_,_ in
-                    appDelegate.booksStore.DeleteBookAndDeindex(book)
+                    appDelegate.booksStore.delete(book)
                 })
             }
             return previewActions

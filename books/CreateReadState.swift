@@ -36,8 +36,8 @@ class CreateReadState: ReadStateForm {
         bookReadingInformation.readState = ReadState
         bookReadingInformation.startedReading = ReadState == .toRead ? nil : StartedReading
         bookReadingInformation.finishedReading = ReadState != .finished ? nil : FinishedReading
-        appDelegate.booksStore.CreateBook(bookMetadata, readingInformation: bookReadingInformation)
-        appDelegate.booksStore.Save()
+        appDelegate.booksStore.create(from: bookMetadata, readingInformation: bookReadingInformation)
+        appDelegate.booksStore.save()
         
         self.navigationController?.dismiss(animated: true, completion: nil)
     }

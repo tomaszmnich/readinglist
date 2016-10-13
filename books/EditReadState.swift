@@ -41,8 +41,8 @@ class EditReadState: ReadStateForm {
         
         // Update and save the book
         bookToEdit.Populate(newReadStateInfo)
-        appDelegate.booksStore.UpdateSpotlightIndex(bookToEdit)
-        appDelegate.booksStore.Save()
+        appDelegate.booksStore.updateSpotlightIndex(for: bookToEdit)
+        appDelegate.booksStore.save()
         
         self.navigationController?.dismiss(animated: true, completion: nil)
     }
