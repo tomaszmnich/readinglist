@@ -10,24 +10,24 @@ import Foundation
 import SwiftyJSON
 
 protocol BookParser {
-    static func ParseJsonResponse(_ jResponse: JSON, maxResultCount: Int) -> [BookMetadata]
+    static func parse(response: JSON, maxResultCount: Int) -> [BookMetadata]
 }
 
 class OnlineBookClient<TParser: BookParser>{
     
-    static func TryGetBookMetadata(from url: URL, maxResults: Int, onError: @escaping ((Error) -> Void), onSuccess: @escaping (([BookMetadata]) -> Void)) {
+    static func getBookMetadata(from url: URL, maxResults: Int, onError: @escaping ((Error) -> Void), onSuccess: @escaping (([BookMetadata]) -> Void)) {
         
-        func SuccessCallback(_ result: JSON?) {
+        func successCallback(_ result: JSON?) {
             guard let result = result else { onSuccess([BookMetadata]()); return }
             
-            let results = TParser.ParseJsonResponse(result, maxResultCount: maxResults)
+            let results = TParser.parse(response: result, maxResultCount: maxResults)
             
             let resultsWithCoverUrl = results.filter{ $0.coverUrl != nil }
             var extraCallsReturned = 0
             
             for result in resultsWithCoverUrl {
                 // Request the book cover image too, and call the completion handler
-                HttpClient.GetData(result.coverUrl!, onError: onError) {
+                HttpClient.getData(result.coverUrl!, onError: onError) {
                     result.coverImage = $0
                     extraCallsReturned += 1
                     if extraCallsReturned == resultsWithCoverUrl.count {
@@ -42,6 +42,6 @@ class OnlineBookClient<TParser: BookParser>{
         }
         
         // Make the request!
-        HttpClient.GetJson(url, onError: onError, onSuccess: SuccessCallback)
+        HttpClient.getJson(url, onError: onError, onSuccess: successCallback)
     }
 }

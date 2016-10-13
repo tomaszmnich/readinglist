@@ -28,7 +28,7 @@ class TestData {
         
         // Search for each book and add the result
         for bookToAdd in booksToAdd {
-            OnlineBookClient<GoogleBooksParser>.TryGetBookMetadata(from: GoogleBooksRequest.getIsbn(bookToAdd.isbn).url,
+            OnlineBookClient<GoogleBooksParser>.getBookMetadata(from: GoogleBooksRequest.getIsbn(bookToAdd.isbn).url,
                                                                    maxResults: 1,
                                                                    onError: {print($0)},
                                                                    onSuccess: {

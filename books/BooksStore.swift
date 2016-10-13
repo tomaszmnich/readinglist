@@ -95,8 +95,8 @@ class BooksStore {
     */
     func create(from metadata: BookMetadata, readingInformation: BookReadingInformation) {
         let book: Book = coreDataStack.createNew(entity: bookEntityName)
-        book.Populate(metadata)
-        book.Populate(readingInformation)
+        book.populate(from: metadata)
+        book.populate(from: readingInformation)
         
         // The sort index should be 1 more than our maximum, and only if this book is in the ToRead state
         if readingInformation.readState == .toRead {

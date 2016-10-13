@@ -12,14 +12,14 @@ import CoreData
 @objc(Book)
 class Book: NSManagedObject {
     // Book Metadata
-    @NSManaged fileprivate(set) var title: String
-    @NSManaged fileprivate(set) var subtitle: String?
-    @NSManaged fileprivate(set) var authorList: String?
-    @NSManaged fileprivate(set) var isbn13: String?
-    @NSManaged fileprivate(set) var pageCount: NSNumber?
-    @NSManaged fileprivate(set) var publishedDate: Date?
-    @NSManaged fileprivate(set) var bookDescription: String?
-    @NSManaged fileprivate(set) var coverImage: Data?
+    @NSManaged private(set) var title: String
+    @NSManaged private(set) var subtitle: String?
+    @NSManaged private(set) var authorList: String?
+    @NSManaged private(set) var isbn13: String?
+    @NSManaged private(set) var pageCount: NSNumber?
+    @NSManaged private(set) var publishedDate: Date?
+    @NSManaged private(set) var bookDescription: String?
+    @NSManaged private(set) var coverImage: Data?
     
     // Reading Information
     @NSManaged var readState: BookReadState
@@ -29,7 +29,7 @@ class Book: NSManagedObject {
     // Other Metadata
     @NSManaged var sort: NSNumber?
     
-    func Populate(_ metadata: BookMetadata) {
+    func populate(from metadata: BookMetadata) {
         title = metadata.title
         authorList = metadata.authorList
         isbn13 = metadata.isbn13
@@ -39,7 +39,7 @@ class Book: NSManagedObject {
         coverImage = metadata.coverImage
     }
     
-    func Populate(_ readingInformation: BookReadingInformation) {
+    func populate(from readingInformation: BookReadingInformation) {
         readState = readingInformation.readState
         startedReading = readingInformation.startedReading
         finishedReading = readingInformation.finishedReading

@@ -40,7 +40,7 @@ class EditReadState: ReadStateForm {
         newReadStateInfo.finishedReading = FinishedReading
         
         // Update and save the book
-        bookToEdit.Populate(newReadStateInfo)
+        bookToEdit.populate(from: newReadStateInfo)
         appDelegate.booksStore.updateSpotlightIndex(for: bookToEdit)
         appDelegate.booksStore.save()
         

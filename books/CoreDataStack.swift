@@ -29,7 +29,7 @@ class CoreDataStack {
     }
     
     /// The managed object context
-    lazy var managedObjectContext: NSManagedObjectContext = {
+    lazy private(set) var managedObjectContext: NSManagedObjectContext = {
         let objectContent = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
         objectContent.persistentStoreCoordinator = self.persistentStoreCoordinator
         objectContent.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy

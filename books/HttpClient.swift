@@ -15,7 +15,7 @@ class HttpClient{
     /**
      Gets the content of a given URL, casted to JSON, and executes the provided callback on the main thread.
      */
-    static func GetJson(_ from: URL, onError: @escaping ((Error) -> Void), onSuccess: @escaping ((JSON?) -> Void)) {
+    static func getJson(_ from: URL, onError: @escaping ((Error) -> Void), onSuccess: @escaping ((JSON?) -> Void)) {
         print("Requesting \(from.absoluteString)")
         
         Alamofire.request(from).responseJSON {
@@ -39,7 +39,7 @@ class HttpClient{
     /**
      Requests the data from the url, and passes the NSData into the callback.
      */
-    static func GetData(_ from: URL, onError: @escaping ((Error) -> Void), onSuccess: @escaping ((Data?) -> Void)) {
+    static func getData(_ from: URL, onError: @escaping ((Error) -> Void), onSuccess: @escaping ((Data?) -> Void)) {
         print("Requesting \(from.absoluteString)")
         
         // Make a request for the data

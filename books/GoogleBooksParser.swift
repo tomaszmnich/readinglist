@@ -15,7 +15,7 @@ enum GoogleBooksRequest {
     case getIsbn(String)
     
     // The base URL for GoogleBooks API v1 requests
-    static let baseUrl = URL(string: "https://www.googleapis.com")!
+    private static let baseUrl = URL(string: "https://www.googleapis.com")!
     
     var url: URL {
         switch self{
@@ -31,13 +31,13 @@ enum GoogleBooksRequest {
 /// Deals with parsing the JSON returned by GoogleBook's API into object representations.
 class GoogleBooksParser: BookParser {
     
-    static func ParseJsonResponse(_ jResponse: JSON, maxResultCount: Int) -> [BookMetadata] {
+    static func parse(response: JSON, maxResultCount: Int) -> [BookMetadata] {
         var results = [BookMetadata]()
         
         // The information we seek is in the volumneInfo element.
-        let items = jResponse["items"]
+        let items = response["items"]
         for item in items {
-            if let result = ParseItem(item.1) {
+            if let result = parse(item: item.1) {
                 results.append(result)
             }
             if results.count >= maxResultCount {
@@ -48,7 +48,7 @@ class GoogleBooksParser: BookParser {
         return results
     }
     
-    fileprivate static func ParseItem(_ item: JSON) -> BookMetadata? {
+    private static func parse(item: JSON) -> BookMetadata? {
         let volumeInfo = item["volumeInfo"]
         
         // Books with no title are useless

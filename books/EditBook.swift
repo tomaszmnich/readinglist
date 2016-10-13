@@ -78,7 +78,7 @@ class EditBook: BookMetadataForm {
         newMetadata.coverImage = bookToEdit.coverImage
         
         // Update and save the book
-        bookToEdit.Populate(newMetadata)
+        bookToEdit.populate(from: newMetadata)
         appDelegate.booksStore.updateSpotlightIndex(for: bookToEdit)
         appDelegate.booksStore.save()
 

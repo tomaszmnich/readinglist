@@ -21,7 +21,7 @@ class SearchByIsbn: UIViewController {
         spinner.startAnimating()
         
         // We've found an ISBN-13. Let's search for it online.
-        OnlineBookClient<GoogleBooksParser>.TryGetBookMetadata(from: GoogleBooksRequest.getIsbn(isbn13).url, maxResults: 1, onError: errorHandler, onSuccess: searchCompletionHandler)
+        OnlineBookClient<GoogleBooksParser>.getBookMetadata(from: GoogleBooksRequest.getIsbn(isbn13).url, maxResults: 1, onError: errorHandler, onSuccess: searchCompletionHandler)
     }
     
     func errorHandler(_ error: Error?) {
