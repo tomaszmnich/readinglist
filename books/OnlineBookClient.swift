@@ -8,40 +8,43 @@
 
 import Foundation
 import SwiftyJSON
+import Alamofire
 
 protocol BookParser {
     static func parse(response: JSON, maxResultCount: Int) -> [BookMetadata]
 }
 
-class OnlineBookClient<TParser: BookParser>{
+class OnlineBookClient<TParser: BookParser> {
     
     static func getBookMetadata(from url: URL, maxResults: Int, onError: @escaping ((Error) -> Void), onSuccess: @escaping (([BookMetadata]) -> Void)) {
         
-        func successCallback(_ result: JSON?) {
-            guard let result = result else { onSuccess([BookMetadata]()); return }
-            
-            let results = TParser.parse(response: result, maxResultCount: maxResults)
-            
-            let resultsWithCoverUrl = results.filter{ $0.coverUrl != nil }
-            var extraCallsReturned = 0
-            
-            for result in resultsWithCoverUrl {
-                // Request the book cover image too, and call the completion handler
-                HttpClient.getData(result.coverUrl!, onError: onError) {
-                    result.coverImage = $0
-                    extraCallsReturned += 1
-                    if extraCallsReturned == resultsWithCoverUrl.count {
-                        onSuccess(results)
+        // Make the request!
+        Alamofire.request(url).responseJSON {
+            if $0.result.isSuccess, let responseData = $0.result.value {
+                let results = TParser.parse(response: JSON(responseData), maxResultCount: maxResults)
+                
+                let resultsWithCoverUrl = results.filter{ $0.coverUrl != nil }
+                var extraCallsReturned = 0
+                
+                for result in resultsWithCoverUrl {
+                    // Request the book cover image too
+                    Alamofire.request(result.coverUrl!).responseData {
+                        if let error = $0.result.error {
+                            onError(error)
+                        }
+                        else {
+                            result.coverImage = $0.data
+                            extraCallsReturned += 1
+                            if extraCallsReturned == resultsWithCoverUrl.count {
+                                onSuccess(results)
+                            }
+                        }
                     }
                 }
             }
-            
-            if resultsWithCoverUrl.count == 0 {
-                onSuccess(results)
+            else if let error = $0.result.error {
+                onError(error)
             }
         }
-        
-        // Make the request!
-        HttpClient.getJson(url, onError: onError, onSuccess: successCallback)
     }
 }
