@@ -8,8 +8,9 @@
 
 import UIKit
 
-// This subclass exists solely to stop the app opening in "detail" view on iPhones
+// This subclass stops the app opening in "detail" view on iPhones
 class SplitViewController: UISplitViewController, UISplitViewControllerDelegate {
+    
     override func viewDidLoad() {
         self.preferredDisplayMode = .allVisible
         self.delegate = self
