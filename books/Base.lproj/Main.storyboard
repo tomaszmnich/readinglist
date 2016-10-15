@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="16A320" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="flR-X9-qpy">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="16A320" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="6Zx-kR-dlc">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -114,10 +114,28 @@
             </objects>
             <point key="canvasLocation" x="-4185" y="772"/>
         </scene>
-        <!--Split View Controller-->
+        <!--Tab Bar Controller-->
+        <scene sceneID="Enj-rw-YfI">
+            <objects>
+                <tabBarController id="6Zx-kR-dlc" sceneMemberID="viewController">
+                    <tabBar key="tabBar" contentMode="scaleToFill" id="9ra-oi-NTS">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    </tabBar>
+                    <connections>
+                        <segue destination="flR-X9-qpy" kind="relationship" relationship="viewControllers" id="318-MQ-Xpe"/>
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="kLe-pr-wrk" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-5894" y="377"/>
+        </scene>
+        <!--Item-->
         <scene sceneID="E7I-JX-wrl">
             <objects>
                 <splitViewController modalTransitionStyle="flipHorizontal" id="flR-X9-qpy" customClass="SplitViewController" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Item" id="gkV-t0-UUG"/>
                     <connections>
                         <segue destination="UOh-2k-ImR" kind="relationship" relationship="masterViewController" id="gID-65-vXg"/>
                         <segue destination="xOz-rG-HY1" kind="relationship" relationship="detailViewController" id="4X1-bu-8ma"/>
@@ -207,7 +225,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="g3f-d3-nU4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-3426" y="-105"/>
+            <point key="canvasLocation" x="-3426" y="-11"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="BSt-Nr-8Po">
@@ -247,7 +265,7 @@
                 <viewControllerPlaceholder storyboardName="ScanBarcode" id="MoR-st-owh" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nEo-eW-fdL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2820" y="-133"/>
+            <point key="canvasLocation" x="-2789" y="-63"/>
         </scene>
         <!--AddManually-->
         <scene sceneID="M2Z-UZ-dyI">
@@ -255,7 +273,7 @@
                 <viewControllerPlaceholder storyboardName="AddManually" id="Mfc-92-vqK" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xi8-sU-oQg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2792" y="-29"/>
+            <point key="canvasLocation" x="-2761" y="40"/>
         </scene>
         <!--SearchByText-->
         <scene sceneID="JUq-IZ-EpW">
@@ -263,7 +281,7 @@
                 <viewControllerPlaceholder storyboardName="SearchByText" id="ciW-Jd-Gs4" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9UH-iZ-rNO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2802" y="-85"/>
+            <point key="canvasLocation" x="-2771" y="-15"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
