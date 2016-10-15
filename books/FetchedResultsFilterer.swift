@@ -1,5 +1,5 @@
 //
-//  FilteredFetchedResultsTable.swift
+//  FetchedResultsFilterer.swift
 //  books
 //
 //  Created by Andrew Bennet on 29/05/2016.
@@ -26,6 +26,10 @@ class FetchedResultsFilterer<ResultType, PredicateBuilderType>: NSObject, UISear
         searchController.searchResultsUpdater = self
         searchController.dimsBackgroundDuringPresentation = false
         searchController.searchBar.returnKeyType = .done
+    }
+    
+    func updateResults() {
+        updateSearchResults(for: searchController)
     }
 
     public func updateSearchResults(for searchController: UISearchController) {

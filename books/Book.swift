@@ -48,6 +48,17 @@ class Book: NSManagedObject {
             sort = nil
         }
     }
+    
+    func setDate(_ date: Date, forState: BookReadState) {
+        switch readState {
+        case .reading:
+            startedReading = date
+        case .finished:
+            finishedReading = date
+        default:
+            break
+        }
+    }
 }
 
 

@@ -92,24 +92,22 @@ class BookTable: AutoUpdatingTableViewController {
     }
 
     @IBAction func addWasPressed(_ sender: AnyObject) {
-        // We are going to show an action sheet
+        func segueAction(title: String, identifier: String) -> UIAlertAction {
+            return UIAlertAction(title: title, style: .default){_ in
+                self.performSegue(withIdentifier: identifier, sender: self)
+            }
+        }
+
         let optionsAlert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         optionsAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        optionsAlert.addAction(UIAlertAction(title: "Enter Manually", style: .default) {_ in
-            self.performSegue(withIdentifier: "addManuallySegue", sender: self)
+        optionsAlert.addAction(segueAction(title: "Enter Manually", identifier: "addManuallySegue"))
+        optionsAlert.addAction(segueAction(title: "Search Online", identifier: "searchByTextSegue"))
+        optionsAlert.addAction(segueAction(title: "Scan Barcode", identifier: "scanBarcodeSegue"))
+#if DEBUG
+        optionsAlert.addAction(UIAlertAction(title: "Add Test Data", style: .default){ _ in
+            TestData.loadTestData()
         })
-        optionsAlert.addAction(UIAlertAction(title: "Search Online", style: .default) {_ in
-            self.performSegue(withIdentifier: "searchByTextSegue", sender: self)
-        })
-        optionsAlert.addAction(UIAlertAction(title: "Scan Barcode", style: .default){_ in
-            self.performSegue(withIdentifier: "scanBarcodeSegue", sender: self)
-        })
-        #if DEBUG
-            optionsAlert.addAction(UIAlertAction(title: "Add Test Data", style: .default){
-                _ in
-                TestData.loadTestData()
-            })
-        #endif
+#endif
         
         // For iPad, set the popover presentation controller's source
         if let popPresenter = optionsAlert.popoverPresentationController {
@@ -136,6 +134,9 @@ class BookTable: AutoUpdatingTableViewController {
                     tableView.setContentOffset(newPosition, animated: false)
                 }
             }
+            
+            // Load the new results
+            resultsFilterer.updateResults()
             
             // Update the selected segment index. This may have already been done, but never mind.
             segmentControl.selectedSegmentIndex = selectedSegment.rawValue
@@ -220,32 +221,31 @@ extension BookTable {
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         let selectedBook = self.resultsController.object(at: indexPath)
         
-        let delete = UITableViewRowAction(style: .destructive, title: "Delete") { _, _ in
-            // If there is a book at this index, delete it
+        // Helper function to create actions which modify the read states of books
+        func updateReadStateAction(title: String, newReadState: BookReadState, actionColour: UIColor) -> UITableViewRowAction {
+            let action = UITableViewRowAction(style: .normal, title: title) { _, _ in
+                selectedBook.readState = newReadState
+                selectedBook.setDate(Date(), forState: newReadState)
+                appDelegate.booksStore.updateSpotlightIndex(for: selectedBook)
+                self.tableView.setEditing(false, animated: true)
+            }
+            action.backgroundColor = actionColour
+            return action
+        }
+        
+        var editActions = [UITableViewRowAction]()
+        
+        let deleteAction = UITableViewRowAction(style: .destructive, title: "Delete") { _, _ in
             appDelegate.booksStore.delete(selectedBook)
         }
-        delete.backgroundColor = UIColor(fromHex: 0xe74c3c)
-        var editActions = [delete]
+        deleteAction.backgroundColor = UIColor(fromHex: 0xe74c3c)
+        editActions.append(deleteAction)
         
         if selectedBook.readState == .toRead {
-            let startedAction = UITableViewRowAction(style: .normal, title: "Started") { _, _ in
-                selectedBook.readState = .reading
-                selectedBook.startedReading = Date()
-                appDelegate.booksStore.updateSpotlightIndex(for: selectedBook)
-                self.tableView.setEditing(false, animated: true)
-            }
-            startedAction.backgroundColor = UIColor(fromHex: 0x3498db)
-            editActions.append(startedAction)
+            editActions.append(updateReadStateAction(title: "Started", newReadState: .reading, actionColour: UIColor(fromHex: 0x3498db)))
         }
         if selectedBook.readState == .reading {
-            let finishedAction = UITableViewRowAction(style: .normal, title: "Finished") { _, _ in
-                selectedBook.readState = .finished
-                selectedBook.finishedReading = Date()
-                appDelegate.booksStore.updateSpotlightIndex(for: selectedBook)
-                self.tableView.setEditing(false, animated: true)
-            }
-            finishedAction.backgroundColor = UIColor(fromHex: 0x2ecc71)
-            editActions.append(finishedAction)
+            editActions.append(updateReadStateAction(title: "Finished", newReadState: .finished, actionColour: UIColor(fromHex: 0x2ecc71)))
         }
         
         return editActions
@@ -309,7 +309,6 @@ extension BookTable {
         }
     }
 }
-
 
 /**
  Functions controlling the DZNEmptyDataSet.

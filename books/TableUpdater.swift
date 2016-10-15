@@ -45,6 +45,7 @@ where ResultType : NSFetchRequestResult, CellType : UITableViewCell, CellType: C
         self.controller = controller
         super.init()
         
+        try! self.controller.performFetch()
         self.controller.delegate = self
     }
     
