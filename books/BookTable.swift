@@ -28,22 +28,26 @@ enum TableSegmentOption: Int {
     }
 }
 
-class BookTable: FilteredFetchedResultsTable {
+class BookTable: AutoUpdatingTableViewController {
     
-    var innerController: NSFetchedResultsController<Book>!
-    
-    override var resultsController: NSFetchedResultsController<NSFetchRequestResult>! {
-        get {
-            return innerController as! NSFetchedResultsController<NSFetchRequestResult>
-        }
-    }
+    var resultsController: NSFetchedResultsController<Book>!
+    var resultsFilterer: FetchedResultsFilterer<Book, BookPredicateBuilder>!
     
     override func viewDidLoad() {
         // Set up the results controller
-        innerController = appDelegate.booksStore.fetchedResultsController(selectedSegment.toPredicate(), initialSortDescriptors: [BookPredicate.readStateSort, NSSortDescriptor(key: "sort", ascending: true), NSSortDescriptor(key: "startedReading", ascending: true), NSSortDescriptor(key: "finishedReading", ascending: true)])
-        innerController.delegate = self
+        resultsController = appDelegate.booksStore.fetchedResultsController(selectedSegment.toPredicate(), initialSortDescriptors: [BookPredicate.readStateSort, NSSortDescriptor(key: "sort", ascending: true), NSSortDescriptor(key: "startedReading", ascending: true), NSSortDescriptor(key: "finishedReading", ascending: true)])
+    
+        // Assign the table updator, which will deal with changes to the data
+        tableUpdater = TableUpdater<Book, BookTableViewCell>(table: tableView, controller: resultsController)
         
-        cellIdentifier = String(describing: BookTableViewCell.self)
+        /// The UISearchController to which this UITableViewController will be connected.
+        let searchController = UISearchController(searchResultsController: nil)
+        let predicateBuilder = BookPredicateBuilder {
+            return self.selectedSegment
+        }
+        searchController.dimsBackgroundDuringPresentation = false
+        searchController.searchBar.returnKeyType = .done
+        resultsFilterer = FetchedResultsFilterer(uiSearchController: searchController, tableView: self.tableView, fetchedResultsController: resultsController, predicateBuilder: predicateBuilder)
         
         // Set the DZN data set source
         tableView.emptyDataSetSource = self
@@ -51,12 +55,11 @@ class BookTable: FilteredFetchedResultsTable {
         // Set the view of the NavigationController to be white, so that glimpses
         // of dark colours are not seen through the translucent bar when segueing from this view.
         // Also, we will manage the clearing of selections ourselves. Setting the table footer removes the cell separators
-        self.navigationController!.view.backgroundColor = UIColor.white
-        self.clearsSelectionOnViewWillAppear = false
-        tableView.tableFooterView = UIView()
-        
+        navigationController!.view.backgroundColor = UIColor.white
         navigationItem.leftBarButtonItem = editButtonItem
+        clearsSelectionOnViewWillAppear = false
         tableView.allowsMultipleSelectionDuringEditing = true
+        tableView.tableFooterView = UIView()
         
         super.viewDidLoad()
     }
@@ -133,9 +136,6 @@ class BookTable: FilteredFetchedResultsTable {
             
             // Update the selected segment index. This may have already been done, but never mind.
             segmentControl.selectedSegmentIndex = selectedSegment.rawValue
-            
-            // Update the predicate
-            updatePredicateAndReloadTable(selectedSegment.toPredicate())
         }
     }
     
@@ -150,10 +150,6 @@ class BookTable: FilteredFetchedResultsTable {
         return BookReadState(rawValue: sectionAsInt)!.description
     }
     
-    override func configureCell(_ cell: UITableViewCell, fromObject object: AnyObject) {
-        (cell as! BookTableViewCell).configureFromBook(object as! Book)
-    }
-    
     override func restoreUserActivityState(_ activity: NSUserActivity) {
         // Check that the user activity corresponds to a book which we have a row for
         guard let identifier = activity.userInfo?[CSSearchableItemActivityIdentifier] as? String,
@@ -162,7 +158,7 @@ class BookTable: FilteredFetchedResultsTable {
 
         // Update the selected segment, which will reload the table, and dismiss the search if there is one
         selectedSegment = TableSegmentOption.fromReadState(selectedBook.readState)
-        dismissSearch()
+        resultsFilterer.dismissSearch()
         
         // Select the corresponding row and scroll it in to view.
         if let indexPathOfSelectedBook = self.resultsController.indexPath(forObject: selectedBook) {
@@ -212,14 +208,23 @@ class BookTable: FilteredFetchedResultsTable {
             }
             else if let cellSender = sender as? UITableViewCell,
                 let selectedIndex = self.tableView.indexPath(for: cellSender) {
-                destinationViewController.book = self.resultsController.object(at: selectedIndex) as? Book
+                destinationViewController.book = self.resultsController.object(at: selectedIndex)
             }
         }
     }
+}
+
+class BookPredicateBuilder : SearchPredicateBuilder {
+    init(selectedSegment: @escaping (() -> TableSegmentOption)){
+        selectedSegmentFunc = selectedSegment
+    }
     
-    override func predicateForSearchText(_ searchText: String) -> NSPredicate {
-        var predicate = selectedSegment.toPredicate()
-        if !searchText.isEmptyOrWhitespace() && searchText.trim().characters.count >= 2 {
+    let selectedSegmentFunc: (() -> TableSegmentOption)
+    
+    func buildPredicateFrom(searchText: String?) -> NSPredicate {
+        var predicate = self.selectedSegmentFunc().toPredicate()
+        if let searchText = searchText,
+            searchText.isEmptyOrWhitespace() && searchText.trim().characters.count >= 2 {
             predicate = predicate.And(BookPredicate.titleAndAuthor(searchString: searchText))
         }
         return predicate
@@ -230,9 +235,7 @@ class BookTable: FilteredFetchedResultsTable {
 extension BookTable {
 
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        
-        // For safety check that there is a Book here
-        guard let selectedBook = self.resultsController.object(at: indexPath) as? Book else { return nil }
+        let selectedBook = self.resultsController.object(at: indexPath)
         
         let delete = UITableViewRowAction(style: .destructive, title: "Delete") { _, _ in
             // If there is a book at this index, delete it
@@ -266,8 +269,8 @@ extension BookTable {
     }
     
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // All cells are "editable"; just for safety check that there is a Book there
-        return self.resultsController.object(at: indexPath) is Book
+        // All cells are "editable"
+        return true
     }
     
     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
@@ -306,12 +309,10 @@ extension BookTable {
         }
         
         // Turn off updates while we save the object context
-        toggleUpdates(on: false)
-        
-        appDelegate.booksStore.save()
-        refetch(reloadTable: false)
-        
-        toggleUpdates(on: true)
+        tableUpdater.withoutUpdates {
+            appDelegate.booksStore.save()
+            try! resultsController.performFetch()
+        }
     }
     
     override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
@@ -320,7 +321,7 @@ extension BookTable {
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            appDelegate.booksStore.delete(resultsController.object(at: indexPath) as! Book)
+            appDelegate.booksStore.delete(resultsController.object(at: indexPath))
             appDelegate.booksStore.save()
         }
     }
@@ -333,12 +334,12 @@ extension BookTable {
 extension BookTable : DZNEmptyDataSetSource {
     
     func image(forEmptyDataSet scrollView: UIScrollView!) -> UIImage! {
-        return UIImage(named: isShowingSearchResults() ? "fa-search" : "fa-book")
+        return UIImage(named: resultsFilterer.showingSearchResults ? "fa-search" : "fa-book")
     }
     
     func title(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
         let titleText: String!
-        if isShowingSearchResults() {
+        if resultsFilterer.showingSearchResults {
             titleText = "No results"
         }
         else {
@@ -349,7 +350,7 @@ extension BookTable : DZNEmptyDataSetSource {
     }
     
     func description(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
-        let descriptionText = isShowingSearchResults() ? "Try changing your search." : "Add a book by clicking the + button above."
+        let descriptionText = resultsFilterer.showingSearchResults ? "Try changing your search." : "Add a book by clicking the + button above."
         
         return NSAttributedString(string: descriptionText, attributes: [NSFontAttributeName: UIFont.preferredFont(forTextStyle: UIFontTextStyle.body)])
     }

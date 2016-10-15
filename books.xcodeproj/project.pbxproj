@@ -19,6 +19,7 @@
 		491F14621C02228C0052B355 /* ScanBarcode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491F14611C02228C0052B355 /* ScanBarcode.swift */; };
 		492141291C05B2030048E647 /* GoogleBooksParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 492141281C05B2030048E647 /* GoogleBooksParser.swift */; };
 		492500781C0B1B0000C149B5 /* BooksStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 492500771C0B1B0000C149B5 /* BooksStore.swift */; };
+		493056431DB1561C0086FDAD /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493056421DB1561C0086FDAD /* TableViewController.swift */; };
 		493421FB1DAD7D7500C09A22 /* PreviewingNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493421FA1DAD7D7500C09A22 /* PreviewingNavigationController.swift */; };
 		4936B5841D2C3A2C00600562 /* AddManually.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4936B5831D2C3A2C00600562 /* AddManually.storyboard */; };
 		494C61D21C0BAF8C00F64105 /* SearchByIsbn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494C61D11C0BAF8C00F64105 /* SearchByIsbn.swift */; };
@@ -59,6 +60,7 @@
 		491F14611C02228C0052B355 /* ScanBarcode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScanBarcode.swift; sourceTree = "<group>"; };
 		492141281C05B2030048E647 /* GoogleBooksParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleBooksParser.swift; sourceTree = "<group>"; };
 		492500771C0B1B0000C149B5 /* BooksStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BooksStore.swift; sourceTree = "<group>"; };
+		493056421DB1561C0086FDAD /* TableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
 		493421FA1DAD7D7500C09A22 /* PreviewingNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreviewingNavigationController.swift; sourceTree = "<group>"; };
 		4936B5831D2C3A2C00600562 /* AddManually.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = AddManually.storyboard; sourceTree = "<group>"; };
 		494C61D11C0BAF8C00F64105 /* SearchByIsbn.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchByIsbn.swift; sourceTree = "<group>"; };
@@ -139,6 +141,7 @@
 				49BDCC6B1CD6120400F20AAE /* NavWithReadState.swift */,
 				49097BA71CFB102B001AF1F9 /* FilteredFetchedResultsTable.swift */,
 				493421FA1DAD7D7500C09A22 /* PreviewingNavigationController.swift */,
+				493056421DB1561C0086FDAD /* TableViewController.swift */,
 			);
 			name = Common;
 			sourceTree = "<group>";
@@ -402,6 +405,7 @@
 				494F9D6F1CA98CFB00A9816F /* OnlineBookClient.swift in Sources */,
 				495FDC311CF8C760006DCF2E /* TestData.swift in Sources */,
 				4905D85E1C135AB500F57B3C /* books.xcdatamodeld in Sources */,
+				493056431DB1561C0086FDAD /* TableViewController.swift in Sources */,
 				495879651BF7E76200000131 /* CoreDataStack.swift in Sources */,
 				49097BA81CFB102B001AF1F9 /* FilteredFetchedResultsTable.swift in Sources */,
 				495C5D411BF1423900E00C07 /* Book.swift in Sources */,

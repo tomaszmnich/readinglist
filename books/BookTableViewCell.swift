@@ -9,9 +9,11 @@
 import Foundation
 import UIKit
 
-class BookTableViewCell: UITableViewCell {
+class BookTableViewCell: UITableViewCell, ConfigurableCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var bookCover: UIImageView!
+    
+    typealias ResultType = Book
     
     func configureFrom(_ book: BookMetadata) {
         let titleAndAuthor = NSMutableAttributedString.byConcatenating(
@@ -23,22 +25,22 @@ class BookTableViewCell: UITableViewCell {
         bookCover.image = UIImage(optionalData: book.coverImage)
     }
     
-    func configureFromBook(_ book: Book) {
+    func configureFrom(_ result: Book) {
         let titleAndAuthor = NSMutableAttributedString.byConcatenating(
             withNewline: true,
-            book.title.withTextStyle(UIFontTextStyle.subheadline),
-            book.authorList?.withTextStyle(UIFontTextStyle.caption1))!
+            result.title.withTextStyle(UIFontTextStyle.subheadline),
+            result.authorList?.withTextStyle(UIFontTextStyle.caption1))!
         
-        if book.readState == .reading {
+        if result.readState == .reading {
             titleAndAuthor.appendNewline()
-            titleAndAuthor.append("Started: \(book.startedReading!.toHumanisedString())".withTextStyle(UIFontTextStyle.caption1))
+            titleAndAuthor.append("Started: \(result.startedReading!.toHumanisedString())".withTextStyle(UIFontTextStyle.caption1))
         }
-        else if book.readState == .finished {
+        else if result.readState == .finished {
             titleAndAuthor.appendNewline()
-            titleAndAuthor.append("\(book.startedReading!.toHumanisedString()) - \(book.finishedReading!.toHumanisedString())".withTextStyle(UIFontTextStyle.caption1))
+            titleAndAuthor.append("\(result.startedReading!.toHumanisedString()) - \(result.finishedReading!.toHumanisedString())".withTextStyle(UIFontTextStyle.caption1))
         }
         
         titleLabel.attributedText = titleAndAuthor
-        bookCover.image = UIImage(optionalData: book.coverImage)
+        bookCover.image = UIImage(optionalData: result.coverImage)
     }
 }
