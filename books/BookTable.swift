@@ -258,11 +258,11 @@ extension BookTable {
     
     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         // We can reorder the "ToRead" books
-        return selectedSegment == .toRead && (indexPath as NSIndexPath).section == 1
+        return selectedSegment == .toRead && indexPath.section == 1
     }
     
     override func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath, toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
-        if (sourceIndexPath as NSIndexPath).section == (proposedDestinationIndexPath as NSIndexPath).section {
+        if sourceIndexPath.section == proposedDestinationIndexPath.section {
             return proposedDestinationIndexPath
         }
         else {
@@ -273,18 +273,18 @@ extension BookTable {
     override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         
         // We should only have movement in section 1. We also ignore moves which have no effect
-        guard (sourceIndexPath as NSIndexPath).section == 1 && (destinationIndexPath as NSIndexPath).section == 1 else { return }
-        guard (sourceIndexPath as NSIndexPath).row != (destinationIndexPath as NSIndexPath).row else { return }
+        guard sourceIndexPath.section == 1 && destinationIndexPath.section == 1 else { return }
+        guard sourceIndexPath.row != destinationIndexPath.row else { return }
         
         // Calculate the ordering of the two rows involved
-        let itemMovedDown = (sourceIndexPath as NSIndexPath).row < (destinationIndexPath as NSIndexPath).row
-        let firstRow = itemMovedDown ? (sourceIndexPath as NSIndexPath).row : (destinationIndexPath as NSIndexPath).row
-        let lastRow = itemMovedDown ? (destinationIndexPath as NSIndexPath).row : (sourceIndexPath as NSIndexPath).row
+        let itemMovedDown = sourceIndexPath.row < destinationIndexPath.row
+        let firstRow = itemMovedDown ? sourceIndexPath.row : destinationIndexPath.row
+        let lastRow = itemMovedDown ? destinationIndexPath.row : sourceIndexPath.row
         
         // Move the objects to reflect the rows
         var objectsInSection = resultsController.sections![1].objects!
-        let movedObj = objectsInSection.remove(at: (sourceIndexPath as NSIndexPath).row)
-        objectsInSection.insert(movedObj, at: (destinationIndexPath as NSIndexPath).row)
+        let movedObj = objectsInSection.remove(at: sourceIndexPath.row)
+        objectsInSection.insert(movedObj, at: destinationIndexPath.row)
         
         // Update the model to reflect the objects's positions
         for rowNumber in firstRow...lastRow {
