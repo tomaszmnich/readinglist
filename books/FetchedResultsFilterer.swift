@@ -9,6 +9,10 @@
 import UIKit
 import CoreData
 
+/**
+ Manages mapping search queries to Predicates, applying the predicates to a NSFetchedResultsController,
+ and updating the results displayed in a table.
+*/
 class FetchedResultsFilterer<ResultType, PredicateBuilderType>: NSObject, UISearchResultsUpdating where ResultType : NSFetchRequestResult, PredicateBuilderType : SearchPredicateBuilder {
     let searchController: UISearchController
     let predicateBuilder: PredicateBuilderType
