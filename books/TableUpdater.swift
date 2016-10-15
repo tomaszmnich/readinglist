@@ -9,16 +9,11 @@
 import UIKit
 import CoreData
 
-protocol ConfigurableCell {
-    associatedtype ResultType : NSFetchRequestResult
-    func configureFrom(_ result: ResultType)
-}
-
 /**
  Extends NSFetchedResultsControllerDelegate with methods which return number of rows and sections,
  and can configure a cell for a given IndexPath.
  */
-protocol TableUpdaterGeneral : NSFetchedResultsControllerDelegate {
+protocol GeneralTableUpdater : NSFetchedResultsControllerDelegate {
     func numberOfSections() -> Int
     func numberOfRows(inSection section: Int) -> Int
     func cellForRow(at indexPath: IndexPath) -> UITableViewCell
@@ -26,15 +21,24 @@ protocol TableUpdaterGeneral : NSFetchedResultsControllerDelegate {
 }
 
 /**
+ A cell which can be configured from a object returned from a NSFetchedResultsController.
+*/
+protocol ConfigurableCell {
+    associatedtype ResultType : NSFetchRequestResult
+    func configureFrom(_ result: ResultType)
+}
+
+/**
  A generic implementation of TableUpdaterGeneral, typed to the NSFetchedResultsController result type and the UITableViewCell type.
  Given a UITableView, an NSFetchedResultsController and a function to update Cells, can react to changed in the NSFetchedResultsController,
  and also expose the current values for the number of rows and sections, and provide a configured cell for a given IndexPath.
  */
-class TableUpdater<ResultType, CellType> : NSObject, TableUpdaterGeneral
+class TableUpdater<ResultType, CellType> : NSObject, GeneralTableUpdater
 where ResultType : NSFetchRequestResult, CellType : UITableViewCell, CellType: ConfigurableCell, CellType.ResultType == ResultType {
-    let tableView: UITableView
-    let controller: NSFetchedResultsController<ResultType>
-    let cellIdentifier = String(describing: CellType.self)
+    
+    private let tableView: UITableView
+    private let controller: NSFetchedResultsController<ResultType>
+    private let cellIdentifier = String(describing: CellType.self)
     
     init(table: UITableView, controller: NSFetchedResultsController<ResultType>){
         self.tableView = table
@@ -53,11 +57,8 @@ where ResultType : NSFetchRequestResult, CellType : UITableViewCell, CellType: C
     }
     
     func cellForRow(at indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
-        
-        if let cell = cell as? CellType {
-            cell.configureFrom(controller.object(at: indexPath))
-        }
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as! CellType
+        cell.configureFrom(controller.object(at: indexPath))
         return cell
     }
     
@@ -109,7 +110,7 @@ where ResultType : NSFetchRequestResult, CellType : UITableViewCell, CellType: C
  provided the tableUpdater variable is assigned on load.
  */
 class AutoUpdatingTableViewController : UITableViewController {
-    var tableUpdater: TableUpdaterGeneral!
+    var tableUpdater: GeneralTableUpdater!
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return tableUpdater.numberOfRows(inSection: section)

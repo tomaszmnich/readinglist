@@ -33,6 +33,11 @@ class BookTable: AutoUpdatingTableViewController {
     var resultsController: NSFetchedResultsController<Book>!
     var resultsFilterer: FetchedResultsFilterer<Book, BookPredicateBuilder>!
     
+    /// The stored scroll positions to allow our single table to function like two tables
+    var tableViewScrollPositions: [TableSegmentOption: CGPoint]?
+    
+    @IBOutlet weak var segmentControl: UISegmentedControl!
+    
     override func viewDidLoad() {
         // Set up the results controller
         resultsController = appDelegate.booksStore.fetchedResultsController(selectedSegment.toPredicate(), initialSortDescriptors: [BookPredicate.readStateSort, NSSortDescriptor(key: "sort", ascending: true), NSSortDescriptor(key: "startedReading", ascending: true), NSSortDescriptor(key: "finishedReading", ascending: true)])
@@ -85,8 +90,6 @@ class BookTable: AutoUpdatingTableViewController {
         // tableViewScrollPositions is nil when this method is called.
         tableViewScrollPositions?[selectedSegment] = tableView.contentOffset
     }
-    
-    @IBOutlet weak var segmentControl: UISegmentedControl!
 
     @IBAction func addWasPressed(_ sender: AnyObject) {
         // We are going to show an action sheet
@@ -138,9 +141,6 @@ class BookTable: AutoUpdatingTableViewController {
             segmentControl.selectedSegmentIndex = selectedSegment.rawValue
         }
     }
-    
-    /// The stored scroll positions to allow our single table to function like two tables
-    var tableViewScrollPositions: [TableSegmentOption: CGPoint]?
 
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         if selectedSegment == .finished { return nil }
@@ -211,23 +211,6 @@ class BookTable: AutoUpdatingTableViewController {
                 destinationViewController.book = self.resultsController.object(at: selectedIndex)
             }
         }
-    }
-}
-
-class BookPredicateBuilder : SearchPredicateBuilder {
-    init(selectedSegment: @escaping (() -> TableSegmentOption)){
-        selectedSegmentFunc = selectedSegment
-    }
-    
-    let selectedSegmentFunc: (() -> TableSegmentOption)
-    
-    func buildPredicateFrom(searchText: String?) -> NSPredicate {
-        var predicate = self.selectedSegmentFunc().toPredicate()
-        if let searchText = searchText,
-            searchText.isEmptyOrWhitespace() && searchText.trim().characters.count >= 2 {
-            predicate = predicate.And(BookPredicate.titleAndAuthor(searchString: searchText))
-        }
-        return predicate
     }
 }
 
