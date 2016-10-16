@@ -39,6 +39,7 @@ where ResultType : NSFetchRequestResult, CellType : UITableViewCell, CellType: C
     private let tableView: UITableView
     private let controller: NSFetchedResultsController<ResultType>
     private let cellIdentifier = String(describing: CellType.self)
+    private var createdSectionIndexes = [Int]()
     
     init(table: UITableView, controller: NSFetchedResultsController<ResultType>){
         self.tableView = table
@@ -64,6 +65,7 @@ where ResultType : NSFetchRequestResult, CellType : UITableViewCell, CellType: C
     }
     
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        createdSectionIndexes.removeAll(keepingCapacity: false)
         tableView.beginUpdates()
     }
     
@@ -74,8 +76,12 @@ where ResultType : NSFetchRequestResult, CellType : UITableViewCell, CellType: C
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange object: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         switch type {
         case .update:
-            if let cell = tableView.cellForRow(at: indexPath!) as? CellType, let result = object as? ResultType {
-                cell.configureFrom(result)
+            if indexPath != newIndexPath {
+                tableView.deleteRows(at: [indexPath!], with: .automatic)
+                tableView.insertRows(at: [newIndexPath!], with: .automatic)
+            }
+            else if !createdSectionIndexes.contains(indexPath!.section) {
+                tableView.reloadRows(at: [indexPath!], with: .automatic)
             }
         case .insert:
             tableView.insertRows(at: [newIndexPath!], with: .automatic)
@@ -91,16 +97,16 @@ where ResultType : NSFetchRequestResult, CellType : UITableViewCell, CellType: C
         switch type {
         case .insert:
             self.tableView.insertSections(IndexSet(integer: sectionIndex), with: .automatic)
+            createdSectionIndexes.append(sectionIndex)
         case .delete:
             self.tableView.deleteSections(IndexSet(integer: sectionIndex), with: .automatic)
         default:
-            // Move and Updates should in theory not occur for sections
-            return
+            break
         }
     }
     
     func withoutUpdates(closure: ((Void) -> Void)) {
-        tableView.delegate = nil
+        controller.delegate = nil
         closure()
         controller.delegate = self
     }

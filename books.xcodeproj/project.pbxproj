@@ -252,8 +252,6 @@
 				498B4D4C1CB1AB7A00C5F38B /* SplitViewController.swift */,
 				495C5D3E1BF1412600E00C07 /* BookTable.swift */,
 				495C5D421BF14BEB00E00C07 /* BookDetails.swift */,
-				49C5339E1DB281A10043E50E /* BookPredicateBuilder.swift */,
-				49097BA71CFB102B001AF1F9 /* FetchedResultsFilterer.swift */,
 			);
 			name = Main;
 			sourceTree = "<group>";
@@ -261,6 +259,8 @@
 		49C5339D1DB280D80043E50E /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				49C5339E1DB281A10043E50E /* BookPredicateBuilder.swift */,
+				49097BA71CFB102B001AF1F9 /* FetchedResultsFilterer.swift */,
 				493056421DB1561C0086FDAD /* TableUpdater.swift */,
 			);
 			name = Utilities;

@@ -227,6 +227,7 @@ extension BookTable {
                 selectedBook.readState = newReadState
                 selectedBook.setDate(Date(), forState: newReadState)
                 appDelegate.booksStore.updateSpotlightIndex(for: selectedBook)
+                appDelegate.booksStore.save()
                 self.tableView.setEditing(false, animated: true)
             }
             action.backgroundColor = actionColour
@@ -237,6 +238,7 @@ extension BookTable {
         
         let deleteAction = UITableViewRowAction(style: .destructive, title: "Delete") { _, _ in
             appDelegate.booksStore.delete(selectedBook)
+            appDelegate.booksStore.save()
         }
         deleteAction.backgroundColor = UIColor(fromHex: 0xe74c3c)
         editActions.append(deleteAction)
