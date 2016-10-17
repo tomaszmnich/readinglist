@@ -11,56 +11,34 @@ import DZNEmptyDataSet
 import CoreData
 import CoreSpotlight
 
-enum TableSegmentOption: Int {
-    case toRead = 0
-    case finished = 1
-    
-    var readStates: [BookReadState] {
-        return self == .toRead ? [.toRead, .reading] : [.finished]
-    }
-    
-    func toPredicate() -> NSPredicate {
-        return NSPredicate.Or(self.readStates.map{BookPredicate.readState(equalTo: $0)})
-    }
-    
-    static func fromReadState(_ state: BookReadState) -> TableSegmentOption {
-        return state == .finished ? .finished : .toRead
-    }
-}
-
 class BookTable: AutoUpdatingTableViewController {
     
     var resultsController: NSFetchedResultsController<Book>!
     var resultsFilterer: FetchedResultsFilterer<Book, BookPredicateBuilder>!
-    
-    /// The stored scroll positions to allow our single table to function like two tables
-    var tableViewScrollPositions: [TableSegmentOption: CGPoint]?
-    
-    @IBOutlet weak var segmentControl: UISegmentedControl!
+    var readStates: [BookReadState]!
+    private var readStatePredicate: NSPredicate!
     
     override func viewDidLoad() {
+        readStatePredicate = NSPredicate.Or(readStates.map{BookPredicate.readState(equalTo: $0)})
+        
         // Set up the results controller
-        resultsController = appDelegate.booksStore.fetchedResultsController(selectedSegment.toPredicate(), initialSortDescriptors: [BookPredicate.readStateSort, NSSortDescriptor(key: "sort", ascending: true), NSSortDescriptor(key: "startedReading", ascending: true), NSSortDescriptor(key: "finishedReading", ascending: true)])
+        resultsController = appDelegate.booksStore.fetchedResultsController(readStatePredicate, initialSortDescriptors: [BookPredicate.readStateSort, NSSortDescriptor(key: "sort", ascending: true), NSSortDescriptor(key: "startedReading", ascending: true), NSSortDescriptor(key: "finishedReading", ascending: true)])
     
         // Assign the table updator, which will deal with changes to the data
         tableUpdater = TableUpdater<Book, BookTableViewCell>(table: tableView, controller: resultsController)
         
         /// The UISearchController to which this UITableViewController will be connected.
         let searchController = UISearchController(searchResultsController: nil)
-        let predicateBuilder = BookPredicateBuilder {
-            return self.selectedSegment
-        }
+        let predicateBuilder = BookPredicateBuilder(readStatePredicate: self.readStatePredicate)
         searchController.dimsBackgroundDuringPresentation = false
         searchController.searchBar.returnKeyType = .done
         resultsFilterer = FetchedResultsFilterer(uiSearchController: searchController, tableView: self.tableView, fetchedResultsController: resultsController, predicateBuilder: predicateBuilder)
-        
-        // Set the DZN data set source
-        tableView.emptyDataSetSource = self
+
         
         // Set the view of the NavigationController to be white, so that glimpses
         // of dark colours are not seen through the translucent bar when segueing from this view.
         // Also, we will manage the clearing of selections ourselves. Setting the table footer removes the cell separators
-        navigationController!.view.backgroundColor = UIColor.white
+        //navigationController!.view.backgroundColor = UIColor.white
         navigationItem.leftBarButtonItem = editButtonItem
         clearsSelectionOnViewWillAppear = false
         tableView.allowsMultipleSelectionDuringEditing = true
@@ -70,25 +48,12 @@ class BookTable: AutoUpdatingTableViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        // If we haven't initialised the scroll positions dictionary, do so now, for all
-        // tabs, with the current scroll position (which will be the starting position).
-        if tableViewScrollPositions == nil {
-            tableViewScrollPositions = [.toRead: tableView.contentOffset, .finished: tableView.contentOffset]
-        }
-        
         // Deselect selected rows, so they don't stay highlighted
         if let selectedIndexPath = self.tableView.indexPathForSelectedRow {
             self.tableView.deselectRow(at: selectedIndexPath, animated: animated)
         }
         
         super.viewDidAppear(animated)
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        // It seems perverse that a view could disappear before appearing, but exactly that
-        // happens when launching the app view a quick action. Hence the possibility that 
-        // tableViewScrollPositions is nil when this method is called.
-        tableViewScrollPositions?[selectedSegment] = tableView.contentOffset
     }
 
     @IBAction func addWasPressed(_ sender: AnyObject) {
@@ -118,35 +83,9 @@ class BookTable: AutoUpdatingTableViewController {
         self.present(optionsAlert, animated: true, completion: nil)
     }
     
-    /// The currently selected segment
-    var selectedSegment = TableSegmentOption.toRead {
-        didSet {
-            guard selectedSegment != oldValue else { return }
-            
-            // If the view is visible, save the scroll position
-            if self.view.window != nil {
-                
-                // Store the scroll position for the old read state
-                tableViewScrollPositions![oldValue] = tableView.contentOffset
-            
-                // If we have a position in the dictionary for the new segment state, scroll to that
-                if let newPosition = tableViewScrollPositions![selectedSegment] {
-                    tableView.setContentOffset(newPosition, animated: false)
-                }
-            }
-            
-            // Load the new results
-            resultsFilterer.updateResults()
-            
-            // Update the selected segment index. This may have already been done, but never mind.
-            segmentControl.selectedSegmentIndex = selectedSegment.rawValue
-        }
-    }
 
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if selectedSegment == .finished { return nil }
-        
-        // Otherwise, turn the section name into a BookReadState and use its description property
+        // Turn the section name into a BookReadState and use its description property
         let sectionAsInt = Int32(self.resultsController.sections![section].name)!
         return BookReadState(rawValue: sectionAsInt)!.description
     }
@@ -158,7 +97,7 @@ class BookTable: AutoUpdatingTableViewController {
             let selectedBook = appDelegate.booksStore.get(bookIdUrl: identifierUrl) else { return }
 
         // Update the selected segment, which will reload the table, and dismiss the search if there is one
-        selectedSegment = TableSegmentOption.fromReadState(selectedBook.readState)
+        //selectedSegment = TableSegmentOption.fromReadState(selectedBook.readState)
         resultsFilterer.dismissSearch()
         
         // Select the corresponding row and scroll it in to view.
@@ -179,23 +118,11 @@ class BookTable: AutoUpdatingTableViewController {
         
         self.presentedViewController?.dismiss(animated: false, completion: nil)
     }
-    
-    @IBAction func selectedSegmentChanged(_ sender: AnyObject) {
-        
-        // Update the read state to the selected read state
-        selectedSegment = TableSegmentOption(rawValue: segmentControl.selectedSegmentIndex)!
-        
-        // If there is a Book currently displaying on the split Detail view, select the corresponding row if possible
-        if let currentlyShowingBook = appDelegate.splitViewController.bookDetailsControllerIfSplit?.book,
-            selectedSegment.readStates.contains(currentlyShowingBook.readState) {
-            
-            tableView.selectRow(at: self.resultsController.indexPath(forObject: currentlyShowingBook), animated: false, scrollPosition: .none)
-        }
-    }
+
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let navWithReadState = segue.destination as? NavWithReadState {
-            navWithReadState.readState = selectedSegment.readStates.first
+            navWithReadState.readState = readStates.first!
         }
         else if let destinationViewController = (segue.destination as? UINavigationController)?.topViewController as? BookDetails {
 
@@ -257,11 +184,11 @@ extension BookTable {
         // All cells are "editable"
         return true
     }
-    
+    /*
     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         // We can reorder the "ToRead" books
         return selectedSegment == .toRead && indexPath.section == 1
-    }
+    }*/
     
     override func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath, toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
         if sourceIndexPath.section == proposedDestinationIndexPath.section {
@@ -309,33 +236,5 @@ extension BookTable {
             appDelegate.booksStore.delete(resultsController.object(at: indexPath))
             appDelegate.booksStore.save()
         }
-    }
-}
-
-/**
- Functions controlling the DZNEmptyDataSet.
- */
-extension BookTable : DZNEmptyDataSetSource {
-    
-    func image(forEmptyDataSet scrollView: UIScrollView!) -> UIImage! {
-        return UIImage(named: resultsFilterer.showingSearchResults ? "fa-search" : "fa-book")
-    }
-    
-    func title(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
-        let titleText: String!
-        if resultsFilterer.showingSearchResults {
-            titleText = "No results"
-        }
-        else {
-            titleText = self.selectedSegment == .toRead ? "You are not reading any books!" : "You haven't yet finished a book. Get going!"
-        }
-        
-        return NSAttributedString(string: titleText, attributes: [NSFontAttributeName: UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline)])
-    }
-    
-    func description(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
-        let descriptionText = resultsFilterer.showingSearchResults ? "Try changing your search." : "Add a book by clicking the + button above."
-        
-        return NSAttributedString(string: descriptionText, attributes: [NSFontAttributeName: UIFont.preferredFont(forTextStyle: UIFontTextStyle.body)])
     }
 }

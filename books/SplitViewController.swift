@@ -25,7 +25,7 @@ class SplitViewController: UISplitViewController, UISplitViewControllerDelegate 
     }
     
     var bookTableController: BookTable {
-        return masterNavigationController.viewControllers[0] as! BookTable
+        return masterNavigationController.viewControllers[1] as! BookTable
     }
     
     var detailNavigationControllerIfSplit: UINavigationController? {

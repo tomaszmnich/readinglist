@@ -9,17 +9,17 @@
 import Foundation
 
 class BookPredicateBuilder : SearchPredicateBuilder {
-    init(selectedSegment: @escaping (() -> TableSegmentOption)){
-        selectedSegmentFunc = selectedSegment
+    init(readStatePredicate: NSPredicate){
+        self.readStatePredicate = readStatePredicate
     }
     
-    let selectedSegmentFunc: (() -> TableSegmentOption)
+    let readStatePredicate: NSPredicate
     
     func buildPredicateFrom(searchText: String?) -> NSPredicate {
-        var predicate = self.selectedSegmentFunc().toPredicate()
+        var predicate = readStatePredicate
         if let searchText = searchText,
             searchText.isEmptyOrWhitespace() && searchText.trim().characters.count >= 2 {
-            predicate = predicate.And(BookPredicate.titleAndAuthor(searchString: searchText))
+            predicate = readStatePredicate.And(BookPredicate.titleAndAuthor(searchString: searchText))
         }
         return predicate
     }

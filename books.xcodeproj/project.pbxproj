@@ -35,6 +35,9 @@
 		4968A2B21CB3E0BF00CBF3F0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4968A2B11CB3E0BF00CBF3F0 /* LaunchScreen.storyboard */; };
 		49812BB41CA95F0600A49EBA /* BookPredicate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49812BB31CA95F0600A49EBA /* BookPredicate.swift */; };
 		498B4D4D1CB1AB7A00C5F38B /* SplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 498B4D4C1CB1AB7A00C5F38B /* SplitViewController.swift */; };
+		499470681DB40D22008CB06E /* TabbedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 499470671DB40D22008CB06E /* TabbedViewController.swift */; };
+		4994706A1DB42067008CB06E /* ReadingTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 499470691DB42067008CB06E /* ReadingTable.swift */; };
+		4994706C1DB421A2008CB06E /* FinishedTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4994706B1DB421A2008CB06E /* FinishedTable.swift */; };
 		49BDCC631CD2A00F00F20AAE /* BookMetadataForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BDCC621CD2A00F00F20AAE /* BookMetadataForm.swift */; };
 		49BDCC661CD4E6FA00F20AAE /* ScanBarcode.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 49BDCC641CD4E6FA00F20AAE /* ScanBarcode.storyboard */; };
 		49BDCC681CD4E72400F20AAE /* EditBook.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 49BDCC671CD4E72400F20AAE /* EditBook.storyboard */; };
@@ -78,6 +81,9 @@
 		4968A2B11CB3E0BF00CBF3F0 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		49812BB31CA95F0600A49EBA /* BookPredicate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookPredicate.swift; sourceTree = "<group>"; };
 		498B4D4C1CB1AB7A00C5F38B /* SplitViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplitViewController.swift; sourceTree = "<group>"; };
+		499470671DB40D22008CB06E /* TabbedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabbedViewController.swift; sourceTree = "<group>"; };
+		499470691DB42067008CB06E /* ReadingTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadingTable.swift; sourceTree = "<group>"; };
+		4994706B1DB421A2008CB06E /* FinishedTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FinishedTable.swift; sourceTree = "<group>"; };
 		49BDCC621CD2A00F00F20AAE /* BookMetadataForm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookMetadataForm.swift; sourceTree = "<group>"; };
 		49BDCC651CD4E6FA00F20AAE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/ScanBarcode.storyboard; sourceTree = "<group>"; };
 		49BDCC671CD4E72400F20AAE /* EditBook.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = EditBook.storyboard; sourceTree = "<group>"; };
@@ -135,6 +141,7 @@
 		491C84311CF6305700894313 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				495C5D3E1BF1412600E00C07 /* BookTable.swift */,
 				49BDCC621CD2A00F00F20AAE /* BookMetadataForm.swift */,
 				491C84271CF5027800894313 /* ReadStateForm.swift */,
 				49BDCC6B1CD6120400F20AAE /* NavWithReadState.swift */,
@@ -250,8 +257,10 @@
 			isa = PBXGroup;
 			children = (
 				498B4D4C1CB1AB7A00C5F38B /* SplitViewController.swift */,
-				495C5D3E1BF1412600E00C07 /* BookTable.swift */,
 				495C5D421BF14BEB00E00C07 /* BookDetails.swift */,
+				499470671DB40D22008CB06E /* TabbedViewController.swift */,
+				499470691DB42067008CB06E /* ReadingTable.swift */,
+				4994706B1DB421A2008CB06E /* FinishedTable.swift */,
 			);
 			name = Main;
 			sourceTree = "<group>";
@@ -395,6 +404,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4994706C1DB421A2008CB06E /* FinishedTable.swift in Sources */,
 				492141291C05B2030048E647 /* GoogleBooksParser.swift in Sources */,
 				491C84351CF6519800894313 /* EditBook.swift in Sources */,
 				49C5339F1DB281A10043E50E /* BookPredicateBuilder.swift in Sources */,
@@ -415,9 +425,11 @@
 				4905D85E1C135AB500F57B3C /* books.xcdatamodeld in Sources */,
 				493056431DB1561C0086FDAD /* TableUpdater.swift in Sources */,
 				495879651BF7E76200000131 /* CoreDataStack.swift in Sources */,
+				499470681DB40D22008CB06E /* TabbedViewController.swift in Sources */,
 				49097BA81CFB102B001AF1F9 /* FetchedResultsFilterer.swift in Sources */,
 				495C5D411BF1423900E00C07 /* Book.swift in Sources */,
 				49D93AA51CAB16F800AE6611 /* CoreSpotlightStack.swift in Sources */,
+				4994706A1DB42067008CB06E /* ReadingTable.swift in Sources */,
 				49C451801C35578A00F431DB /* BookTableViewCell.swift in Sources */,
 				49FE2ED51D6F675D00F04239 /* SearchByText.swift in Sources */,
 				498B4D4D1CB1AB7A00C5F38B /* SplitViewController.swift in Sources */,
