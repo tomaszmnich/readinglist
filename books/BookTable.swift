@@ -226,6 +226,7 @@ extension BookTable {
             let action = UITableViewRowAction(style: .normal, title: title) { _, _ in
                 selectedBook.readState = newReadState
                 selectedBook.setDate(Date(), forState: newReadState)
+                selectedBook.sort = nil
                 appDelegate.booksStore.updateSpotlightIndex(for: selectedBook)
                 appDelegate.booksStore.save()
                 self.tableView.setEditing(false, animated: true)
