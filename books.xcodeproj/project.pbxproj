@@ -21,6 +21,7 @@
 		493056431DB1561C0086FDAD /* TableUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493056421DB1561C0086FDAD /* TableUpdater.swift */; };
 		493421FB1DAD7D7500C09A22 /* PreviewingNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493421FA1DAD7D7500C09A22 /* PreviewingNavigationController.swift */; };
 		4936B5841D2C3A2C00600562 /* AddManually.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4936B5831D2C3A2C00600562 /* AddManually.storyboard */; };
+		4943DB761DBB9D92004CAF30 /* Settings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4943DB751DBB9D92004CAF30 /* Settings.storyboard */; };
 		494C61D21C0BAF8C00F64105 /* SearchByIsbn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494C61D11C0BAF8C00F64105 /* SearchByIsbn.swift */; };
 		494F9D6F1CA98CFB00A9816F /* OnlineBookClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494F9D6E1CA98CFB00A9816F /* OnlineBookClient.swift */; };
 		495879651BF7E76200000131 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 495879641BF7E76200000131 /* CoreDataStack.swift */; };
@@ -65,6 +66,7 @@
 		493056421DB1561C0086FDAD /* TableUpdater.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableUpdater.swift; sourceTree = "<group>"; };
 		493421FA1DAD7D7500C09A22 /* PreviewingNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreviewingNavigationController.swift; sourceTree = "<group>"; };
 		4936B5831D2C3A2C00600562 /* AddManually.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = AddManually.storyboard; sourceTree = "<group>"; };
+		4943DB751DBB9D92004CAF30 /* Settings.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Settings.storyboard; sourceTree = "<group>"; };
 		494C61D11C0BAF8C00F64105 /* SearchByIsbn.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchByIsbn.swift; sourceTree = "<group>"; };
 		494F9D6E1CA98CFB00A9816F /* OnlineBookClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnlineBookClient.swift; sourceTree = "<group>"; };
 		495879641BF7E76200000131 /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
@@ -196,6 +198,7 @@
 				49FE2ED81D6F80D500F04239 /* SearchByText.storyboard */,
 				491C84291CF5055D00894313 /* EditReadState.storyboard */,
 				49BDCC671CD4E72400F20AAE /* EditBook.storyboard */,
+				4943DB751DBB9D92004CAF30 /* Settings.storyboard */,
 				49BDCC641CD4E6FA00F20AAE /* ScanBarcode.storyboard */,
 				4936B5831D2C3A2C00600562 /* AddManually.storyboard */,
 				4968A2B11CB3E0BF00CBF3F0 /* LaunchScreen.storyboard */,
@@ -344,6 +347,7 @@
 				495C5D151BF1404D00E00C07 /* Main.storyboard in Resources */,
 				49FE2EDA1D6F80D500F04239 /* SearchByText.storyboard in Resources */,
 				49BDCC681CD4E72400F20AAE /* EditBook.storyboard in Resources */,
+				4943DB761DBB9D92004CAF30 /* Settings.storyboard in Resources */,
 				4936B5841D2C3A2C00600562 /* AddManually.storyboard in Resources */,
 				4968A2B21CB3E0BF00CBF3F0 /* LaunchScreen.storyboard in Resources */,
 			);

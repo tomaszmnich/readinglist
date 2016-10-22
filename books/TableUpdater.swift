@@ -10,6 +10,27 @@ import UIKit
 import CoreData
 
 /**
+ A UITableViewController which automatically updates its cells via a TableUpdaterGeneral object,
+ provided the tableUpdater variable is assigned on load.
+ */
+class AutoUpdatingTableViewController : UITableViewController {
+    var tableUpdater: GeneralTableUpdater!
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return tableUpdater.numberOfRows(inSection: section)
+    }
+    
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return tableUpdater.numberOfSections()
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        return tableUpdater.cellForRow(at: indexPath)
+    }
+}
+
+
+/**
  Extends NSFetchedResultsControllerDelegate with methods which return number of rows and sections,
  and can configure a cell for a given IndexPath.
  */
@@ -109,25 +130,5 @@ where ResultType : NSFetchRequestResult, CellType : UITableViewCell, CellType: C
         controller.delegate = nil
         closure()
         controller.delegate = self
-    }
-}
-
-/**
- A UITableViewController which automatically updates its cells via a TableUpdaterGeneral object,
- provided the tableUpdater variable is assigned on load.
- */
-class AutoUpdatingTableViewController : UITableViewController {
-    var tableUpdater: GeneralTableUpdater!
-    
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return tableUpdater.numberOfRows(inSection: section)
-    }
-    
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return tableUpdater.numberOfSections()
-    }
-    
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return tableUpdater.cellForRow(at: indexPath)
     }
 }

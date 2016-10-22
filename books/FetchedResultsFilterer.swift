@@ -27,9 +27,7 @@ class FetchedResultsFilterer<ResultType, PredicateBuilderType>: NSObject, UISear
         self.predicateBuilder = predicateBuilder
         super.init()
         
-        searchController.searchResultsUpdater = self
-        searchController.dimsBackgroundDuringPresentation = false
-        searchController.searchBar.returnKeyType = .done
+        self.searchController.searchResultsUpdater = self
     }
     
     func updateResults() {

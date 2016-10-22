@@ -24,7 +24,11 @@ class SplitViewController: UISplitViewController, UISplitViewControllerDelegate 
         return self.viewControllers[0] as! UINavigationController
     }
     
-    var bookTableController: BookTable {
+    var tabbedViewController: TabbedViewController {
+        return masterNavigationController.viewControllers.first as! TabbedViewController
+    }
+    
+    /*var bookTableController: BookTable {
         return masterNavigationController.viewControllers[1] as! BookTable
     }
     
@@ -41,5 +45,5 @@ class SplitViewController: UISplitViewController, UISplitViewControllerDelegate 
     
     var bookDetailsControllerIfSplit: BookDetails? {
         return detailNavigationControllerIfSplit?.viewControllers.first as? BookDetails
-    }
+    }*/
 }
