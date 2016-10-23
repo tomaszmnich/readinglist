@@ -21,13 +21,13 @@ class EditReadState: ReadStateForm {
         navigationItem.title = bookToEdit.title
         
         // Load the existing values on to the form when it's about to appear
-        ReadState = bookToEdit.readState
-        StartedReading = bookToEdit.startedReading
-        FinishedReading = bookToEdit.finishedReading
+        readState = bookToEdit.readState
+        startedReading = bookToEdit.startedReading
+        finishedReading = bookToEdit.finishedReading
     }
     
-    override func OnChange() {
-        doneButton.isEnabled = IsValid()
+    override func onChange() {
+        doneButton.isEnabled = isValid
     }
     
     @IBAction func doneWasPressed(_ sender: UIBarButtonItem) {
@@ -35,9 +35,9 @@ class EditReadState: ReadStateForm {
         
         // Create an object representation of the form values
         let newReadStateInfo = BookReadingInformation()
-        newReadStateInfo.readState = ReadState
-        newReadStateInfo.startedReading = StartedReading
-        newReadStateInfo.finishedReading = FinishedReading
+        newReadStateInfo.readState = readState
+        newReadStateInfo.startedReading = startedReading
+        newReadStateInfo.finishedReading = finishedReading
         
         // Update and save the book
         bookToEdit.populate(from: newReadStateInfo)

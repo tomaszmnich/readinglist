@@ -55,12 +55,12 @@ class EditBook: BookMetadataForm {
         self.present(confirmDeleteAlert, animated: true, completion: nil)
     }
     
-    override func OnChange() {
-        doneButton.isEnabled = IsValid()
+    override func onChange() {
+        doneButton.isEnabled = isValid
     }
     
     @IBAction func cancelButtonWasPressed(_ sender: AnyObject) {
-        Dismiss()
+        dismiss()
     }
     
     @IBAction func doneButtonWasPressed(_ sender: AnyObject) {
@@ -82,6 +82,6 @@ class EditBook: BookMetadataForm {
         appDelegate.booksStore.updateSpotlightIndex(for: bookToEdit)
         appDelegate.booksStore.save()
 
-        Dismiss()
+        dismiss()
     }
 }

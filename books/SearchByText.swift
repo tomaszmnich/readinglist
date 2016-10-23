@@ -12,13 +12,12 @@ import UIKit
 class SearchByText: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
     
     @IBOutlet weak var searchBar: UISearchBar!
-    
     @IBOutlet weak var tableView: UITableView!
     
     var results: [BookMetadata]?
     
-    fileprivate var spinner = UIActivityIndicatorView()
-    fileprivate var loadingLabel = UILabel()
+    private var spinner = UIActivityIndicatorView()
+    private var loadingLabel = UILabel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,8 +40,6 @@ class SearchByText: UIViewController, UITableViewDelegate, UITableViewDataSource
         spinner.translatesAutoresizingMaskIntoConstraints = false
         spinner.hidesWhenStopped = true
         spinner.startAnimating()
-        
-        
         
         tableView.addSubview(spinner)
         tableView.bringSubview(toFront: spinner)

@@ -26,7 +26,7 @@ class ReadStateForm: FormViewController {
             // Set a value here so we can be sure that the read state option is *never* null.
             $0.value = .toRead
         }.onChange{_ in
-            self.OnChange()
+            self.onChange()
         })
         form.append(readStateSection)
         
@@ -40,10 +40,10 @@ class ReadStateForm: FormViewController {
         startedReadingSection.append(DateRow(dateStartedKey){
             $0.title = "Started Reading"
         }.onChange{_ in
-            self.OnChange()
+            self.onChange()
         }
         .cellUpdate{ _, _ in
-            self.OnChange()
+            self.onChange()
         })
         form.append(startedReadingSection)
         
@@ -57,42 +57,42 @@ class ReadStateForm: FormViewController {
         finishedReadingSection.append(DateRow(dateFinishedKey){
             $0.title = "Finished Reading"
         }.onChange{_ in
-            self.OnChange()
+            self.onChange()
         }
         .cellUpdate{ _, _ in
-            self.OnChange()
+            self.onChange()
         })
         form.append(finishedReadingSection)
     }
     
-    func OnChange() {
+    func onChange() {
         // Should be overriden
     }
     
-    var ReadState: BookReadState {
+    var readState: BookReadState {
         get { return form.values()[readStateKey] as! BookReadState }
         set { form.setValues([readStateKey: newValue]) }
     }
     
-    var StartedReading: Date? {
+    var startedReading: Date? {
         get { return form.values()[dateStartedKey] as? Date }
         set { form.setValues([dateStartedKey: newValue]) }
     }
     
-    var FinishedReading: Date? {
+    var finishedReading: Date? {
         get { return form.values()[dateFinishedKey] as? Date }
         set { form.setValues([dateFinishedKey: newValue]) }
     }
     
-    func IsValid() -> Bool {
+    var isValid: Bool {
         // Check that the relevant dates have been set.
-        switch ReadState {
+        switch readState {
         case .toRead:
             return true
         case .reading:
-            return StartedReading != nil
+            return startedReading != nil
         case .finished:
-            return StartedReading != nil && FinishedReading != nil && StartedReading!.compare(FinishedReading!) != .orderedDescending
+            return startedReading != nil && finishedReading != nil && startedReading!.compare(finishedReading!) != .orderedDescending
         }
     }
 }

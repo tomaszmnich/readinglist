@@ -33,15 +33,15 @@ class CreateBook: BookMetadataForm {
         }
         
         // Trigger a validation update
-        OnChange()
+        onChange()
     }
     
-    override func OnChange() {
-        nextButton.isEnabled = IsValid()
+    override func onChange() {
+        nextButton.isEnabled = isValid
     }
     
     @IBAction func cancelButtonWasPressed(_ sender: AnyObject) {
-        Dismiss()
+        dismiss()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

@@ -23,9 +23,9 @@ class CreateReadState: ReadStateForm {
         super.viewDidLoad()
         
         // Set the read state on the form; add some default form values for the dates
-        ReadState = bookReadingInformation.readState
-        StartedReading = Date()
-        FinishedReading = Date()
+        readState = bookReadingInformation.readState
+        startedReading = Date()
+        finishedReading = Date()
     }
     
     @IBAction func doneWasPressed(_ sender: UIBarButtonItem) {
@@ -33,16 +33,16 @@ class CreateReadState: ReadStateForm {
         
         // Update the book metadata object and create a book from it.
         // Ignore the dates which are not relevant.
-        bookReadingInformation.readState = ReadState
-        bookReadingInformation.startedReading = ReadState == .toRead ? nil : StartedReading
-        bookReadingInformation.finishedReading = ReadState != .finished ? nil : FinishedReading
+        bookReadingInformation.readState = readState
+        bookReadingInformation.startedReading = readState == .toRead ? nil : startedReading
+        bookReadingInformation.finishedReading = readState != .finished ? nil : finishedReading
         appDelegate.booksStore.create(from: bookMetadata, readingInformation: bookReadingInformation)
         appDelegate.booksStore.save()
         
         self.navigationController?.dismiss(animated: true, completion: nil)
     }
     
-    override func OnChange() {
-        doneButton.isEnabled = IsValid()
+    override func onChange() {
+        doneButton.isEnabled = isValid
     }
 }

@@ -34,7 +34,7 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         session.stopRunning()
     }
     
-    fileprivate func setupAvSession() {
+    private func setupAvSession() {
         guard let input = try? AVCaptureDeviceInput(device: AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo)) else {
             return
         }

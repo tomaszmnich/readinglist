@@ -12,17 +12,17 @@
             <objects>
                 <tableViewController title="Settings" clearsSelectionOnViewWillAppear="NO" id="Xjd-mh-KAZ" customClass="Settings" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="8" sectionFooterHeight="8" id="XO8-Rx-eXy">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
                             <tableViewSection id="Idf-Zw-QD4">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" id="tHR-Qd-tnK">
-                                        <rect key="frame" x="0.0" y="35" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="35" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="tHR-Qd-tnK" id="9Eq-oh-yPu">
-                                            <frame key="frameInset" width="287" height="43"/>
+                                            <frame key="frameInset" width="342" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="About" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eh8-ER-suA">
@@ -50,10 +50,10 @@
                             <tableViewSection id="zVl-n2-rxW">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="i96-Ig-sDO">
-                                        <rect key="frame" x="0.0" y="95" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="95" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="i96-Ig-sDO" id="7mU-Ad-Vvl">
-                                            <frame key="frameInset" width="320" height="43"/>
+                                            <frame key="frameInset" width="375" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add Test Data" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WU3-sm-W6b">
@@ -112,7 +112,7 @@
                         <viewControllerLayoutGuide type="bottom" id="jmk-BD-2hG"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="wUN-5d-tDj">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ohu-gi-SwF">

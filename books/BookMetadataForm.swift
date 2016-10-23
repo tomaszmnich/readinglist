@@ -26,12 +26,12 @@ class BookMetadataForm: FormViewController {
         titleAuthorSection.append(TextRow(titleKey) {
             $0.placeholder = "Title"
         }.onChange{_ in
-            self.OnChange()
+            self.onChange()
         })
         titleAuthorSection.append(TextRow(authorListKey) {
             $0.placeholder = "Author"
         }.onChange{ _ in
-            self.OnChange()
+            self.onChange()
         })
         form.append(titleAuthorSection)
         
@@ -86,16 +86,16 @@ class BookMetadataForm: FormViewController {
         set { form.setValues([imageKey: newValue]) }
     }
     
-    func OnChange() {
+    func onChange() {
         // Should be overriden
     }
     
-    func Dismiss() {
+    func dismiss() {
         self.view.endEditing(true)
         self.navigationController?.dismiss(animated: true, completion: nil)
     }
     
-    func IsValid() -> Bool {
+    var isValid: Bool {
         return TitleField?.isEmptyOrWhitespace() == false && AuthorList?.isEmptyOrWhitespace() == false
     }
 }
