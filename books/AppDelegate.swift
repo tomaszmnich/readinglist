@@ -32,7 +32,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([Any]?) -> Void) -> Bool {
         if userActivity.activityType == CSSearchableItemActionType && userActivity.userInfo?[CSSearchableItemActivityIdentifier] is String {
-            splitViewController.bookTableController.restoreUserActivityState(userActivity)
+            splitViewController.tabbedViewController.restoreUserActivityState(userActivity)
             return true
         }
         return false
@@ -44,10 +44,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
         if shortcutItem.type == "\(productBundleIdentifier).ScanBarcode" {
-            splitViewController.bookTableController.performSegue(withIdentifier: "scanBarcodeSegue", sender: self)
+            splitViewController.tabbedViewController.performSegue(withIdentifier: "scanBarcode", sender: self)
         }
         if shortcutItem.type == "\(productBundleIdentifier).SearchOnline" {
-            splitViewController.bookTableController.performSegue(withIdentifier: "searchByTextSegue", sender: self)
+            splitViewController.tabbedViewController.performSegue(withIdentifier: "searchByText", sender: self)
         }
         completionHandler(true)
     }

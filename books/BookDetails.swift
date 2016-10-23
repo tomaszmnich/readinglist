@@ -21,7 +21,7 @@ class BookDetails: UIViewController {
     override func viewDidLoad() {
         // Keep an eye on changes to the book store
         appDelegate.booksStore.addSaveObserver(self, selector: #selector(bookChanged(_:)))
-        UpdateUi()
+        updateUi()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -34,28 +34,22 @@ class BookDetails: UIViewController {
         }
     }
     
-    func updateDisplayedBook(_ newBook: Book) {
-        book = newBook
-        UpdateUi()
-        self.dismiss(animated: false, completion: nil)
-    }
-    
-    @objc fileprivate func bookChanged(_ notification: Notification) {
+    @objc private func bookChanged(_ notification: Notification) {
         guard let book = book, let userInfo = (notification as NSNotification).userInfo else { return }
         
         if let updatedObjects = userInfo[NSUpdatedObjectsKey] as? NSSet , updatedObjects.contains(book) {
             // If the book was updated, update this page
-            UpdateUi()
+            updateUi()
         }
         else if let deletedObjects = userInfo[NSDeletedObjectsKey] as? NSSet , deletedObjects.contains(book) {
             // If the book was deleted, clear this page, and pop back if necessary
-            ClearUi()
+            clearUi()
             appDelegate.splitViewController.masterNavigationController.popToRootViewController(animated: false)
         }
     }
     
-    fileprivate func UpdateUi() {
-        guard let book = book else { ClearUi(); return }
+    private func updateUi() {
+        guard let book = book else { clearUi(); return }
 
         // Setup the title label
         titleLabel.attributedText = NSMutableAttributedString.byConcatenating(withNewline: true,
@@ -73,7 +67,7 @@ class BookDetails: UIViewController {
         imageView.image = UIImage(optionalData: book.coverImage)
     }
     
-    fileprivate func ClearUi() {
+    private func clearUi() {
         titleLabel.attributedText = nil
         descriptionLabel.attributedText = nil
         imageView.image = nil
