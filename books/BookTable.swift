@@ -16,10 +16,9 @@ class BookTable: AutoUpdatingTableViewController {
     var resultsController: NSFetchedResultsController<Book>!
     var resultsFilterer: FetchedResultsFilterer<Book, BookPredicateBuilder>!
     var readStates: [BookReadState]!
-    private var readStatePredicate: NSPredicate!
     
     override func viewDidLoad() {
-        readStatePredicate = NSPredicate.Or(readStates.map{BookPredicate.readState(equalTo: $0)})
+        let readStatePredicate = NSPredicate.Or(readStates.map{BookPredicate.readState(equalTo: $0)})
         
         // Set up the results controller
         resultsController = appDelegate.booksStore.fetchedResultsController(readStatePredicate, initialSortDescriptors: [BookPredicate.readStateSort, NSSortDescriptor(key: "sort", ascending: true), NSSortDescriptor(key: "startedReading", ascending: true), NSSortDescriptor(key: "finishedReading", ascending: true)])
@@ -29,7 +28,7 @@ class BookTable: AutoUpdatingTableViewController {
         
         /// The UISearchController to which this UITableViewController will be connected.
         let searchController = UISearchController(searchResultsController: nil)
-        let predicateBuilder = BookPredicateBuilder(readStatePredicate: self.readStatePredicate)
+        let predicateBuilder = BookPredicateBuilder(readStatePredicate: readStatePredicate)
         resultsFilterer = FetchedResultsFilterer(uiSearchController: searchController, tableView: self.tableView, fetchedResultsController: resultsController, predicateBuilder: predicateBuilder)
         
         // Search Controller UI decisions
@@ -43,6 +42,9 @@ class BookTable: AutoUpdatingTableViewController {
         
         // Setting the table footer removes the cell separators.
         tableView.tableFooterView = UIView()
+        
+        // Set the DZN data set source
+        tableView.emptyDataSetSource = self
 
         super.viewDidLoad()
     }
@@ -63,38 +65,34 @@ class BookTable: AutoUpdatingTableViewController {
     }
     
     func triggerBookSelection(_ book: Book){
+        // There must be a row corresponding to this book
+        guard let indexPathOfSelectedBook = self.resultsController.indexPath(forObject: book) else { return }
+            
         // Dismiss the search if there is one
         resultsFilterer.dismissSearch()
         
-        // Select the corresponding row and scroll it in to view.
-        if let indexPathOfSelectedBook = self.resultsController.indexPath(forObject: book) {
-            self.tableView.scrollToRow(at: indexPathOfSelectedBook, at: .none, animated: false)
-            self.tableView.selectRow(at: indexPathOfSelectedBook, animated: false, scrollPosition: .none)
+        // Scroll to and select the row
+        self.tableView.scrollToRow(at: indexPathOfSelectedBook, at: .none, animated: false)
+        self.tableView.selectRow(at: indexPathOfSelectedBook, animated: false, scrollPosition: .none)
+        
+        // If there is a detail view presented, pop back to the tabbed page.
+        if appDelegate.splitViewController.detailIsPresented {
+            let _ = appDelegate.splitViewController.rootDetailViewController?.navigationController?.popToViewController(appDelegate.splitViewController.tabbedViewController, animated: false)
         }
         
-        // Check whether the detail view is already displayed, and update the book it is showing.
-        /*if let bookDetails = appDelegate.splitViewController.detailNavigationController?.topViewController as? BookDetails {
-         bookDetails.updateDisplayedBook(selectedBook)
-         }
-         else {*/
-        // Otherwise, segue to the details view. This will be the case when, in compact width,
-        // this table is at the top of the navigation stack.
-        self.performSegue(withIdentifier: "showDetail", sender: book)
-        //}
+        // Segue to the details view, with the cell corresponding to the book as the sender
+        self.performSegue(withIdentifier: "showDetail", sender: tableView.cellForRow(at: indexPathOfSelectedBook))
         
+        // Get rid of any modal controllers (e.g. edit views, etc)
         self.presentedViewController?.dismiss(animated: false, completion: nil)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let destinationViewController = (segue.destination as? UINavigationController)?.topViewController as? BookDetails {
-            // The sender is a Book if we are restoring state
-            if let bookSender = sender as? Book {
-                destinationViewController.book = bookSender
-            }
-            else if let cellSender = sender as? UITableViewCell,
-                let selectedIndex = self.tableView.indexPath(for: cellSender) {
-                destinationViewController.book = self.resultsController.object(at: selectedIndex)
-            }
+        if let detailsViewController = (segue.destination as? UINavigationController)?.topViewController as? BookDetails,
+            let cell = sender as? UITableViewCell,
+            let selectedIndex = self.tableView.indexPath(for: cell) {
+         
+            detailsViewController.book = self.resultsController.object(at: selectedIndex)
         }
     }
 }
@@ -130,10 +128,41 @@ extension BookTable {
         if selectedBook.readState == .toRead {
             editActions.append(updateReadStateAction(title: "Started", newReadState: .reading, actionColour: UIColor(fromHex: 0x3498db)))
         }
-        if selectedBook.readState == .reading {
+        else if selectedBook.readState == .reading {
             editActions.append(updateReadStateAction(title: "Finished", newReadState: .finished, actionColour: UIColor(fromHex: 0x2ecc71)))
         }
         
         return editActions
     }
+}
+
+/// DZNEmptyDataSetSource functions
+extension BookTable : DZNEmptyDataSetSource {
+    
+    func image(forEmptyDataSet scrollView: UIScrollView!) -> UIImage! {
+        return UIImage(named: resultsFilterer.showingSearchResults ? "fa-search" : "fa-book")
+    }
+    
+    func title(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
+        let titleText: String!
+        if resultsFilterer.showingSearchResults {
+            titleText = "No results"
+        }
+        else if readStates.contains(.reading) {
+            titleText = "You are not reading any books!"
+        }
+        else {
+            titleText = "You haven't yet finished a book. Get going!"
+        }
+        
+        return NSAttributedString(string: titleText, attributes: [NSFontAttributeName: UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline)])
+    }
+    
+    func description(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
+        let descriptionText = resultsFilterer.showingSearchResults ? "Try changing your search." : "Add a book by clicking the + button above."
+        
+        return NSAttributedString(string: descriptionText, attributes: [NSFontAttributeName: UIFont.preferredFont(forTextStyle: UIFontTextStyle.body)])
+    }
+    
+    
 }

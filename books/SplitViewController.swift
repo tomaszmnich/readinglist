@@ -8,7 +8,6 @@
 
 import UIKit
 
-// This subclass stops the app opening in "detail" view on iPhones
 class SplitViewController: UISplitViewController, UISplitViewControllerDelegate {
     
     override func viewDidLoad() {
@@ -21,29 +20,41 @@ class SplitViewController: UISplitViewController, UISplitViewControllerDelegate 
     }
     
     var masterNavigationController: UINavigationController {
-        return self.viewControllers[0] as! UINavigationController
+        return viewControllers[0] as! UINavigationController
     }
     
     var tabbedViewController: TabbedViewController {
         return masterNavigationController.viewControllers.first as! TabbedViewController
     }
     
-    /*var bookTableController: BookTable {
-        return masterNavigationController.viewControllers[1] as! BookTable
-    }
-    
-    var detailNavigationControllerIfSplit: UINavigationController? {
-        if self.viewControllers.count >= 2 {
-            return self.viewControllers[1] as? UINavigationController
+    var bookDetailsViewController: BookDetails? {
+        // If the master and detail are separate, the detail will be the second item in viewControllers
+        if viewControllers.count >= 2,
+            let detailNavController = viewControllers[1] as? UINavigationController {
+            return detailNavController.viewControllers.first as? BookDetails
         }
+        
+        // Otherwise, navigate to where the Details view controller should be (if it is displayed)
+        if masterNavigationController.viewControllers.count >= 2,
+            let previewNavController = masterNavigationController.viewControllers[1] as? PreviewingNavigationController {
+            return previewNavController.viewControllers.first as? BookDetails
+        }
+        
+        // The controller is not present
         return nil
     }
     
-    var detailNavigationController: UINavigationController? {
-        return detailNavigationControllerIfSplit ?? masterNavigationController.topViewController as? UINavigationController
+    var detailIsPresented: Bool {
+        return viewControllers.count >= 2 || masterNavigationController.viewControllers.count >= 2
     }
     
-    var bookDetailsControllerIfSplit: BookDetails? {
-        return detailNavigationControllerIfSplit?.viewControllers.first as? BookDetails
-    }*/
+    var rootDetailViewController: UIViewController? {
+        if viewControllers.count >= 2 {
+            return viewControllers[1]
+        }
+        if masterNavigationController.viewControllers.count >= 2 {
+            return masterNavigationController.viewControllers[1]
+        }
+        return nil
+    }
 }

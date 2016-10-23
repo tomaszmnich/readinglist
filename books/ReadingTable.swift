@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import DZNEmptyDataSet
 
 class ReadingTable: BookTable {
 
@@ -67,5 +68,4 @@ class ReadingTable: BookTable {
             try! resultsController.performFetch()
         }
     }
-
 }

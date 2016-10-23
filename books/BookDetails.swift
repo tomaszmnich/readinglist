@@ -40,7 +40,7 @@ class BookDetails: UIViewController {
         self.dismiss(animated: false, completion: nil)
     }
     
-    @objc fileprivate func bookChanged(_ notification: Notification) {
+    @objc private func bookChanged(_ notification: Notification) {
         guard let book = book, let userInfo = (notification as NSNotification).userInfo else { return }
         
         if let updatedObjects = userInfo[NSUpdatedObjectsKey] as? NSSet , updatedObjects.contains(book) {

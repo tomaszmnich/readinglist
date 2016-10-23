@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import DZNEmptyDataSet
 
 class FinishedTable: BookTable {
 
@@ -15,5 +16,4 @@ class FinishedTable: BookTable {
         
         super.viewDidLoad()
     }
-
 }
