@@ -44,7 +44,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7gT-5z-qMi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-242" y="-428"/>
+            <point key="canvasLocation" x="-730" y="-392"/>
         </scene>
         <!--Set Read State-->
         <scene sceneID="Akp-v3-3aF">
@@ -72,7 +72,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mJ1-SA-xV9" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="528" y="-428"/>
+            <point key="canvasLocation" x="-117" y="-393"/>
         </scene>
         <!--Scan Barcode-->
         <scene sceneID="b2c-9w-e3P">
@@ -86,17 +86,16 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pEt-SH-GKe">
-                                <frame key="frameInset" width="600" height="600"/>
+                            <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pEt-SH-GKe">
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="pEt-SH-GKe" firstAttribute="top" secondItem="Li1-Bc-Q61" secondAttribute="topMargin" id="8hf-Y9-qgL"/>
-                            <constraint firstItem="za8-pr-DLM" firstAttribute="top" secondItem="pEt-SH-GKe" secondAttribute="bottom" id="KvY-GZ-7e3"/>
-                            <constraint firstAttribute="trailing" secondItem="pEt-SH-GKe" secondAttribute="trailing" id="eOQ-ru-KNI"/>
-                            <constraint firstItem="pEt-SH-GKe" firstAttribute="leading" secondItem="Li1-Bc-Q61" secondAttribute="leading" id="hjg-LJ-wbA"/>
+                            <constraint firstItem="za8-pr-DLM" firstAttribute="top" secondItem="pEt-SH-GKe" secondAttribute="bottom" id="FEW-SH-fKp"/>
+                            <constraint firstItem="pEt-SH-GKe" firstAttribute="leading" secondItem="Li1-Bc-Q61" secondAttribute="leading" id="TJT-tb-EGp"/>
+                            <constraint firstItem="pEt-SH-GKe" firstAttribute="top" secondItem="8uf-ya-Hu9" secondAttribute="bottom" id="eBo-6Z-lBC"/>
+                            <constraint firstAttribute="trailing" secondItem="pEt-SH-GKe" secondAttribute="trailing" id="g9A-Qp-eLc"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Item" id="C92-un-dfo"/>
@@ -116,7 +115,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="akl-GW-6eJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-991" y="-428"/>
+            <point key="canvasLocation" x="-1286" y="-392"/>
         </scene>
         <!--Nav With Read State-->
         <scene sceneID="YJu-cP-9jM">

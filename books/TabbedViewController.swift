@@ -12,19 +12,24 @@ import CoreSpotlight
 class TabbedViewController: UIViewController, UITabBarDelegate {
 
     @IBOutlet weak var tabBar: UITabBar!
-    @IBOutlet weak var tab1View: UIView!
-    @IBOutlet weak var tab2View: UIView!
-    @IBOutlet weak var tab3View: UIView!
-    @IBOutlet weak var addButton: UIBarButtonItem!
+    @IBOutlet weak var readingTabView: UIView!
+    @IBOutlet weak var finishedTabView: UIView!
+    @IBOutlet weak var settingsTabView: UIView!
+    
+    private var addButton: UIBarButtonItem!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Set the view of the NavigationController to be white, so that glimpses
-        // of dark colours are not seen through the translucent bar when segueing from this view.
+        // Set the view of the NavigationController to be white, so that glimpses of dark 
+        // colours are not seen through the translucent bar when segueing from this view.
         navigationController!.view.backgroundColor = UIColor.white
+        
+        // Construct the bar buttons in the controller, so we can control when they appear.
+        addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(presentAddAlert))
+        
+        // Set the tab bar delegate to this controller, and always start on tab 1.
         tabBar.delegate = self
-
         setSelectedTab(to: .toRead)
     }
     
@@ -32,41 +37,38 @@ class TabbedViewController: UIViewController, UITabBarDelegate {
         setSelectedTab(to: TabOption(rawValue: item.tag)!)
     }
     
-    @IBAction func addWasPressed(_ sender: AnyObject) {
+    var selectedTabOption: TabOption {
+        return TabOption(rawValue: tabBar.selectedItem!.tag)!
+    }
+    
+    var selectedViewController: UIViewController {
+        return childViewControllers[selectedTabOption.rawValue]
+    }
+    
+    func presentAddAlert() {
         func segueAction(title: String, identifier: String) -> UIAlertAction {
             return UIAlertAction(title: title, style: .default){_ in
-                self.performSegue(withIdentifier: identifier, sender: sender)
+                self.performSegue(withIdentifier: identifier, sender: self)
             }
         }
         
         let optionsAlert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        optionsAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        optionsAlert.addAction(segueAction(title: "Enter Manually", identifier: "addManually"))
-        optionsAlert.addAction(segueAction(title: "Search Online", identifier: "searchByText"))
         optionsAlert.addAction(segueAction(title: "Scan Barcode", identifier: "scanBarcode"))
-#if DEBUG
-        optionsAlert.addAction(UIAlertAction(title: "Add Test Data", style: .default){ _ in
-            TestData.loadTestData()
-        })
-#endif
+        optionsAlert.addAction(segueAction(title: "Search Online", identifier: "searchByText"))
+        optionsAlert.addAction(segueAction(title: "Enter Manually", identifier: "addManually"))
+        optionsAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         
         // For iPad, set the popover presentation controller's source
         if let popPresenter = optionsAlert.popoverPresentationController {
-            popPresenter.sourceView = sender.view
-            popPresenter.sourceRect = sender.view.bounds
+            popPresenter.barButtonItem = addButton
         }
-        
+
         self.present(optionsAlert, animated: true, completion: nil)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let navWithReadState = segue.destination as? NavWithReadState {
-            if selectedTabOption == .finished {
-                navWithReadState.readState = .finished
-            }
-            else {
-                navWithReadState.readState = .toRead
-            }
+            navWithReadState.readState = selectedTabOption == .finished ? .finished : .toRead
         }
     }
     
@@ -76,44 +78,31 @@ class TabbedViewController: UIViewController, UITabBarDelegate {
             let identifierUrl = URL(string: identifier),
             let selectedBook = appDelegate.booksStore.get(bookIdUrl: identifierUrl) else { return }
         
-        if selectedBook.readState == .finished {
-            setSelectedTab(to: .finished)
-            finishedTable.triggerBookSelection(selectedBook)
-        }
-        else {
-            setSelectedTab(to: .toRead)
-            readingTable.triggerBookSelection(selectedBook)
-        }
+        setSelectedTab(to: selectedBook.readState == .finished ? .finished : .toRead)
+        (selectedViewController as! ReadingTable).triggerBookSelection(selectedBook)
     }
     
     private func setSelectedTab(to tabOption: TabOption) {
-        tab1View.isHidden = tabOption != .toRead
-        tab2View.isHidden = tabOption != .finished
-        tab3View.isHidden = tabOption != .settings
+        // Hide all views except the one which corresponds to the selected tab
+        readingTabView.isHidden = tabOption != .toRead
+        finishedTabView.isHidden = tabOption != .finished
+        settingsTabView.isHidden = tabOption != .settings
         
+        // Configure the navigation item
         switch tabOption {
         case .toRead:
             navigationItem.title = "Reading"
+            navigationItem.rightBarButtonItem = addButton
         case .finished:
             navigationItem.title = "Finished"
+            navigationItem.rightBarButtonItem = addButton
         default:
             navigationItem.title = "Settings"
-            
+            navigationItem.rightBarButtonItem = nil
         }
         
+        // Update the actual tab bar item
         tabBar.selectedItem = tabBar.items![tabOption.rawValue]
-    }
-    
-    var selectedTabOption: TabOption {
-        return TabOption(rawValue: tabBar.selectedItem!.tag)!
-    }
-    
-    var readingTable: ReadingTable {
-        return childViewControllers[0] as! ReadingTable
-    }
-    
-    var finishedTable: FinishedTable {
-        return childViewControllers[1] as! FinishedTable
     }
 }
 

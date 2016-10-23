@@ -22,6 +22,7 @@
 		493421FB1DAD7D7500C09A22 /* PreviewingNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493421FA1DAD7D7500C09A22 /* PreviewingNavigationController.swift */; };
 		4936B5841D2C3A2C00600562 /* AddManually.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4936B5831D2C3A2C00600562 /* AddManually.storyboard */; };
 		4943DB761DBB9D92004CAF30 /* Settings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4943DB751DBB9D92004CAF30 /* Settings.storyboard */; };
+		4943DB791DBD5104004CAF30 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4943DB781DBD5104004CAF30 /* Settings.swift */; };
 		494C61D21C0BAF8C00F64105 /* SearchByIsbn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494C61D11C0BAF8C00F64105 /* SearchByIsbn.swift */; };
 		494F9D6F1CA98CFB00A9816F /* OnlineBookClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494F9D6E1CA98CFB00A9816F /* OnlineBookClient.swift */; };
 		495879651BF7E76200000131 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 495879641BF7E76200000131 /* CoreDataStack.swift */; };
@@ -67,6 +68,7 @@
 		493421FA1DAD7D7500C09A22 /* PreviewingNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreviewingNavigationController.swift; sourceTree = "<group>"; };
 		4936B5831D2C3A2C00600562 /* AddManually.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = AddManually.storyboard; sourceTree = "<group>"; };
 		4943DB751DBB9D92004CAF30 /* Settings.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Settings.storyboard; sourceTree = "<group>"; };
+		4943DB781DBD5104004CAF30 /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		494C61D11C0BAF8C00F64105 /* SearchByIsbn.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchByIsbn.swift; sourceTree = "<group>"; };
 		494F9D6E1CA98CFB00A9816F /* OnlineBookClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnlineBookClient.swift; sourceTree = "<group>"; };
 		495879641BF7E76200000131 /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
@@ -163,6 +165,14 @@
 			name = Data;
 			sourceTree = "<group>";
 		};
+		4943DB771DBD4F24004CAF30 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				4943DB781DBD5104004CAF30 /* Settings.swift */,
+			);
+			name = Settings;
+			sourceTree = "<group>";
+		};
 		495879601BF7E6BC00000131 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -218,6 +228,7 @@
 		495C5D441BF14C4B00E00C07 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				4943DB771DBD4F24004CAF30 /* Settings */,
 				49BDCC6E1CD6173100F20AAE /* Main */,
 				49BDCC6D1CD614E600F20AAE /* AddBook */,
 				491C84301CF6287100894313 /* Edit */,
@@ -260,10 +271,10 @@
 			isa = PBXGroup;
 			children = (
 				498B4D4C1CB1AB7A00C5F38B /* SplitViewController.swift */,
-				495C5D421BF14BEB00E00C07 /* BookDetails.swift */,
 				499470671DB40D22008CB06E /* TabbedViewController.swift */,
 				499470691DB42067008CB06E /* ReadingTable.swift */,
 				4994706B1DB421A2008CB06E /* FinishedTable.swift */,
+				495C5D421BF14BEB00E00C07 /* BookDetails.swift */,
 			);
 			name = Main;
 			sourceTree = "<group>";
@@ -417,6 +428,7 @@
 				494C61D21C0BAF8C00F64105 /* SearchByIsbn.swift in Sources */,
 				49812BB41CA95F0600A49EBA /* BookPredicate.swift in Sources */,
 				495C5D3F1BF1412600E00C07 /* BookTable.swift in Sources */,
+				4943DB791DBD5104004CAF30 /* Settings.swift in Sources */,
 				491C842F1CF6281B00894313 /* EditReadState.swift in Sources */,
 				495C5D101BF1404D00E00C07 /* AppDelegate.swift in Sources */,
 				491C84331CF630B600894313 /* CreateBook.swift in Sources */,
@@ -571,6 +583,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 76A2E2AAC7E93BC8BDDE2157 /* Pods-books.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = books/Info.plist;
@@ -588,6 +601,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BCE0CE831B8E4C2F1ABC627E /* Pods-books.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = books/Info.plist;

@@ -10,19 +10,19 @@
         <!--Settings-->
         <scene sceneID="nCV-ns-boD">
             <objects>
-                <tableViewController title="Settings" id="Xjd-mh-KAZ" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="XO8-Rx-eXy">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                <tableViewController title="Settings" clearsSelectionOnViewWillAppear="NO" id="Xjd-mh-KAZ" customClass="Settings" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="8" sectionFooterHeight="8" id="XO8-Rx-eXy">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
                             <tableViewSection id="Idf-Zw-QD4">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" id="tHR-Qd-tnK">
-                                        <rect key="frame" x="0.0" y="35" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="35" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="tHR-Qd-tnK" id="9Eq-oh-yPu">
-                                            <frame key="frameInset" width="342" height="43"/>
+                                            <frame key="frameInset" width="287" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="About" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eh8-ER-suA">
@@ -35,15 +35,40 @@
                                                 <constraint firstAttribute="bottomMargin" secondItem="eh8-ER-suA" secondAttribute="bottom" id="5Oi-ZM-ZWc"/>
                                                 <constraint firstItem="eh8-ER-suA" firstAttribute="top" secondItem="9Eq-oh-yPu" secondAttribute="topMargin" id="6DJ-WK-LLs"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="eh8-ER-suA" secondAttribute="trailing" id="AQa-oX-7IL"/>
-                                                <constraint firstItem="eh8-ER-suA" firstAttribute="leading" secondItem="9Eq-oh-yPu" secondAttribute="leadingMargin" id="amD-hg-c2v"/>
+                                                <constraint firstItem="eh8-ER-suA" firstAttribute="leading" secondItem="9Eq-oh-yPu" secondAttribute="leadingMargin" constant="8" id="amD-hg-c2v"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="u8f-T2-ckJ" kind="showDetail" id="SPx-28-2Fg">
-                                                <segue key="commit" inheritsFrom="parent" id="Kvg-2J-uDC"/>
-                                                <segue key="preview" inheritsFrom="commit" id="p8y-XI-xeQ"/>
+                                            <segue destination="Scq-ap-L4X" kind="showDetail" id="gQF-Rj-mzn">
+                                                <segue key="commit" inheritsFrom="parent" id="1HY-qI-eNW"/>
+                                                <segue key="preview" inheritsFrom="commit" id="Z1G-Tp-11D"/>
                                             </segue>
                                         </connections>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                            <tableViewSection id="zVl-n2-rxW">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="i96-Ig-sDO">
+                                        <rect key="frame" x="0.0" y="95" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="i96-Ig-sDO" id="7mU-Ad-Vvl">
+                                            <frame key="frameInset" width="320" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add Test Data" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WU3-sm-W6b">
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="bottomMargin" secondItem="WU3-sm-W6b" secondAttribute="bottom" id="SOF-V5-7Oh"/>
+                                                <constraint firstItem="WU3-sm-W6b" firstAttribute="leading" secondItem="7mU-Ad-Vvl" secondAttribute="leadingMargin" constant="8" id="VYi-F5-dam"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="WU3-sm-W6b" secondAttribute="trailing" id="srg-PS-atQ"/>
+                                                <constraint firstItem="WU3-sm-W6b" firstAttribute="top" secondItem="7mU-Ad-Vvl" secondAttribute="topMargin" id="vz9-Ia-p0T"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
@@ -54,10 +79,29 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Root View Controller" id="dAh-ED-Nhz"/>
+                    <connections>
+                        <outlet property="addTestDataCell" destination="i96-Ig-sDO" id="IOT-2E-Z6U"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="I2D-fm-I5J" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="868" y="285"/>
+        </scene>
+        <!--Previewing Navigation Controller-->
+        <scene sceneID="cye-y7-H3z">
+            <objects>
+                <navigationController id="Scq-ap-L4X" customClass="PreviewingNavigationController" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="rfN-O7-OOg">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="u8f-T2-ckJ" kind="relationship" relationship="rootViewController" id="cZe-Nd-ifA"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="t0T-sq-0Mu" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1814" y="114"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="AQn-aB-NBm">
@@ -68,13 +112,14 @@
                         <viewControllerLayoutGuide type="bottom" id="jmk-BD-2hG"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="wUN-5d-tDj">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Reading List is open source. To contribute, visit https://github.com/AndrewBennet/readinglist" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ohu-gi-SwF">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ohu-gi-SwF">
                                 <constraints>
-                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="60" id="Jvh-6y-3xA"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="100" id="Jvh-6y-3xA"/>
                                 </constraints>
+                                <mutableString key="text">Reading List is makes use of the following third party resources or libraries:  https://icons8.com https://github.com/Alamofire/Alamofire https://github.com/xmartlabs/Eureka https://github.com/SwiftyJSON/SwiftyJSON https://github.com/dzenbot/DZNEmptyDataSet</mutableString>
                                 <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -83,7 +128,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="Ohu-gi-SwF" firstAttribute="trailing" secondItem="wUN-5d-tDj" secondAttribute="trailingMargin" id="5ga-kB-0A7"/>
-                            <constraint firstItem="Ohu-gi-SwF" firstAttribute="top" secondItem="90E-gD-9Gp" secondAttribute="bottom" id="A0r-I0-w6j"/>
+                            <constraint firstItem="Ohu-gi-SwF" firstAttribute="top" secondItem="90E-gD-9Gp" secondAttribute="bottom" constant="8" id="A0r-I0-w6j"/>
                             <constraint firstItem="Ohu-gi-SwF" firstAttribute="leading" secondItem="wUN-5d-tDj" secondAttribute="leadingMargin" id="bcO-e1-Jbo"/>
                         </constraints>
                     </view>
@@ -91,10 +136,10 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QLt-2m-pcu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1844" y="285"/>
+            <point key="canvasLocation" x="2600.625" y="113.75"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="SPx-28-2Fg"/>
+        <segue reference="gQF-Rj-mzn"/>
     </inferredMetricsTieBreakers>
 </document>

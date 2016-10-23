@@ -199,22 +199,15 @@
                             <constraint firstAttribute="trailing" secondItem="g5b-K0-iF0" secondAttribute="trailing" id="yD6-2t-soE"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Tab Title" id="lMp-aF-ysw">
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="cKJ-hX-oq3">
-                            <connections>
-                                <action selector="addWasPressed:" destination="3JT-ho-tNX" id="t7W-zW-3H0"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="Tab Title" id="lMp-aF-ysw"/>
                     <connections>
-                        <outlet property="addButton" destination="cKJ-hX-oq3" id="or8-v1-4c4"/>
-                        <outlet property="tab1View" destination="g5b-K0-iF0" id="e8a-6Z-TBo"/>
-                        <outlet property="tab2View" destination="uTq-pl-nbP" id="XPV-H2-iQR"/>
-                        <outlet property="tab3View" destination="BVa-JB-dqf" id="KDC-Mp-ivf"/>
+                        <outlet property="finishedTabView" destination="uTq-pl-nbP" id="KDb-eQ-zTv"/>
+                        <outlet property="readingTabView" destination="g5b-K0-iF0" id="brC-fn-V9s"/>
+                        <outlet property="settingsTabView" destination="BVa-JB-dqf" id="A7a-iE-mmS"/>
                         <outlet property="tabBar" destination="Win-bR-5Nh" id="L4C-2O-v75"/>
-                        <segue destination="MoR-st-owh" kind="presentation" identifier="scanBarcode" id="Avs-Rx-Vt6"/>
-                        <segue destination="ciW-Jd-Gs4" kind="presentation" identifier="searchByText" id="hRS-tr-IVA"/>
-                        <segue destination="Mfc-92-vqK" kind="presentation" identifier="addManually" id="Tlk-ss-rWy"/>
+                        <segue destination="MoR-st-owh" kind="presentation" identifier="scanBarcode" modalPresentationStyle="formSheet" id="Avs-Rx-Vt6"/>
+                        <segue destination="ciW-Jd-Gs4" kind="presentation" identifier="searchByText" modalPresentationStyle="formSheet" id="hRS-tr-IVA"/>
+                        <segue destination="Mfc-92-vqK" kind="presentation" identifier="addManually" modalPresentationStyle="formSheet" id="Tlk-ss-rWy"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sAx-n5-gGO" userLabel="First Responder" sceneMemberID="firstResponder"/>
