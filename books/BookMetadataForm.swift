@@ -48,11 +48,11 @@ class BookMetadataForm: FormViewController {
         }.cellSetup{
             $0.0.height = {return 200}
         })
-        /*
+        
         pagePublicationSection.append(ImageRow(imageKey){
             $0.title = "Cover Image"
             $0.cell.height = {return 100}
-        })*/
+        })
         form.append(pagePublicationSection)
     }
     
