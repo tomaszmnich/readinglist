@@ -14,18 +14,7 @@ class ReadingTable: BookTable {
     override func viewDidLoad() {
         readStates = [.toRead, .reading]
         super.viewDidLoad()
-        
-        //tableView.allowsSelectionDuringEditing = true
     }
-    
-    /*
-    override func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
-        return false
-    }
-    
-    override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
-        return .none
-    }*/
 
     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         // We can reorder the "ToRead" books, if there are more than one

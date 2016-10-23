@@ -159,9 +159,9 @@
                             <tabBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Win-bR-5Nh">
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <items>
-                                    <tabBarItem title="Reading" id="4aL-FN-K6X"/>
-                                    <tabBarItem tag="1" title="Finished" id="jiq-ma-a6a"/>
-                                    <tabBarItem tag="2" title="Settings" id="6sg-I5-RbP"/>
+                                    <tabBarItem title="Reading" image="courses" selectedImage="courses-filled" id="4aL-FN-K6X"/>
+                                    <tabBarItem tag="1" title="Finished" image="to-do" selectedImage="to-do-filled" id="jiq-ma-a6a"/>
+                                    <tabBarItem tag="2" title="Settings" image="settings" selectedImage="settings-filled" id="6sg-I5-RbP"/>
                                 </items>
                             </tabBar>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="g5b-K0-iF0">
@@ -408,7 +408,15 @@
             <point key="canvasLocation" x="-4625" y="210"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="courses" width="25" height="25"/>
+        <image name="courses-filled" width="25" height="25"/>
+        <image name="settings" width="25" height="25"/>
+        <image name="settings-filled" width="25" height="25"/>
+        <image name="to-do" width="25" height="25"/>
+        <image name="to-do-filled" width="25" height="25"/>
+    </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="XHh-AV-pat"/>
+        <segue reference="jro-WN-wC7"/>
     </inferredMetricsTieBreakers>
 </document>

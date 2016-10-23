@@ -34,12 +34,6 @@ class BookDetails: UIViewController {
         }
     }
     
-    func updateDisplayedBook(_ newBook: Book) {
-        book = newBook
-        updateUi()
-        self.dismiss(animated: false, completion: nil)
-    }
-    
     @objc private func bookChanged(_ notification: Notification) {
         guard let book = book, let userInfo = (notification as NSNotification).userInfo else { return }
         

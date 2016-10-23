@@ -68,9 +68,9 @@
                             <tabBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hPS-WP-psj">
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <items>
-                                    <tabBarItem id="N5l-AR-FPg"/>
-                                    <tabBarItem id="HFZ-Yj-JRQ"/>
-                                    <tabBarItem title="" id="FJT-CD-HLn"/>
+                                    <tabBarItem title="Reading" image="courses" selectedImage="courses-filled" id="N5l-AR-FPg"/>
+                                    <tabBarItem title="Finished" image="to-do" selectedImage="to-do-filled" id="HFZ-Yj-JRQ"/>
+                                    <tabBarItem title="Settings" image="settings" selectedImage="settings-filled" id="FJT-CD-HLn"/>
                                 </items>
                             </tabBar>
                         </subviews>
@@ -90,4 +90,12 @@
             <point key="canvasLocation" x="-4124" y="-510"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="courses" width="25" height="25"/>
+        <image name="courses-filled" width="25" height="25"/>
+        <image name="settings" width="25" height="25"/>
+        <image name="settings-filled" width="25" height="25"/>
+        <image name="to-do" width="25" height="25"/>
+        <image name="to-do-filled" width="25" height="25"/>
+    </resources>
 </document>
