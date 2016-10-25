@@ -86,12 +86,12 @@ extension CharacterSet {
 
 extension String {
     /// Return whether the string contains any characters which are not whitespace.
-    func isEmptyOrWhitespace() -> Bool {
-        return self.trim().isEmpty
+    var isEmptyOrWhitespace: Bool {
+        return self.trimming().isEmpty
     }
     
     /// Removes all whitespace characters from the beginning and the end of the string.
-    func trim() -> String {
+    func trimming() -> String {
         return self.trimmingCharacters(in: CharacterSet.whitespaces)
     }
     

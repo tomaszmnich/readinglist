@@ -96,6 +96,6 @@ class BookMetadataForm: FormViewController {
     }
     
     var isValid: Bool {
-        return TitleField?.isEmptyOrWhitespace() == false && AuthorList?.isEmptyOrWhitespace() == false
+        return TitleField?.isEmptyOrWhitespace == false && AuthorList?.isEmptyOrWhitespace == false
     }
 }
