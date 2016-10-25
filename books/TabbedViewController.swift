@@ -17,6 +17,7 @@ class TabbedViewController: UIViewController, UITabBarDelegate {
     @IBOutlet weak var settingsTabView: UIView!
     
     private var addButton: UIBarButtonItem!
+    private var editButton: UIBarButtonItem!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,7 +27,8 @@ class TabbedViewController: UIViewController, UITabBarDelegate {
         navigationController!.view.backgroundColor = UIColor.white
         
         // Construct the bar buttons in the controller, so we can control when they appear.
-        addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(presentAddAlert))
+        addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addWasPressed))
+        editButton = editButtonItem
         
         // Set the tab bar delegate to this controller, and always start on tab 1.
         tabBar.delegate = self
@@ -45,7 +47,7 @@ class TabbedViewController: UIViewController, UITabBarDelegate {
         return childViewControllers[selectedTabOption.rawValue]
     }
     
-    func presentAddAlert() {
+    func addWasPressed() {
         func segueAction(title: String, identifier: String) -> UIAlertAction {
             return UIAlertAction(title: title, style: .default){_ in
                 self.performSegue(withIdentifier: identifier, sender: self)
@@ -66,6 +68,13 @@ class TabbedViewController: UIViewController, UITabBarDelegate {
         self.present(optionsAlert, animated: true, completion: nil)
     }
     
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        
+        // Propagate the editing setting to the selected embedded view controller
+        selectedViewController.setEditing(editing, animated: animated)
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let navWithReadState = segue.destination as? NavWithReadState {
             navWithReadState.readState = selectedTabOption == .finished ? .finished : .toRead
@@ -79,7 +88,7 @@ class TabbedViewController: UIViewController, UITabBarDelegate {
             let selectedBook = appDelegate.booksStore.get(bookIdUrl: identifierUrl) else { return }
         
         setSelectedTab(to: selectedBook.readState == .finished ? .finished : .toRead)
-        (selectedViewController as! ReadingTable).triggerBookSelection(selectedBook)
+        (selectedViewController as! BookTable).triggerBookSelection(selectedBook)
     }
     
     private func setSelectedTab(to tabOption: TabOption) {
@@ -93,16 +102,22 @@ class TabbedViewController: UIViewController, UITabBarDelegate {
         case .toRead:
             navigationItem.title = "Reading"
             navigationItem.rightBarButtonItem = addButton
+            navigationItem.leftBarButtonItem = editButton
         case .finished:
             navigationItem.title = "Finished"
             navigationItem.rightBarButtonItem = addButton
+            navigationItem.leftBarButtonItem = editButton
         default:
             navigationItem.title = "Settings"
             navigationItem.rightBarButtonItem = nil
+            navigationItem.leftBarButtonItem = nil
         }
         
         // Update the actual tab bar item
         tabBar.selectedItem = tabBar.items![tabOption.rawValue]
+        
+        // This view controller's editing flag should refelct the selected embedded view controller's flag
+        setEditing(selectedViewController.isEditing, animated: false)
     }
 }
 
