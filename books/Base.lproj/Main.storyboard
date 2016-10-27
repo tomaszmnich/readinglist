@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="16A320" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="flR-X9-qpy">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="flR-X9-qpy">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
-        <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
         <capability name="Segues with Peek and Pop" minToolsVersion="7.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -57,46 +56,52 @@
                                     </view>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstAttribute="bottom" secondItem="Qxc-PW-YFe" secondAttribute="bottom" id="RfY-WM-YmB"/>
+                                    <constraint firstAttribute="bottom" secondItem="Qxc-PW-YFe" secondAttribute="bottom" constant="44" id="RfY-WM-YmB"/>
                                     <constraint firstItem="Qxc-PW-YFe" firstAttribute="top" secondItem="WOs-nU-bp0" secondAttribute="top" id="VUG-NF-IZf"/>
                                     <constraint firstAttribute="trailing" secondItem="Qxc-PW-YFe" secondAttribute="trailing" id="ach-Jb-X5x"/>
                                     <constraint firstItem="Qxc-PW-YFe" firstAttribute="leading" secondItem="WOs-nU-bp0" secondAttribute="leading" id="pil-pi-gQx"/>
                                 </constraints>
                             </scrollView>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XOj-Mo-uqS">
+                                <items>
+                                    <barButtonItem systemItem="edit" id="01C-mQ-dqn">
+                                        <connections>
+                                            <segue destination="hSG-hA-aNk" kind="presentation" modalPresentationStyle="formSheet" id="bOO-nf-ktV"/>
+                                        </connections>
+                                    </barButtonItem>
+                                </items>
+                            </toolbar>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="XOj-Mo-uqS" firstAttribute="leading" secondItem="EZk-RK-IhE" secondAttribute="leading" id="0lX-2s-yh4"/>
                             <constraint firstItem="yel-qD-x6K" firstAttribute="top" secondItem="WOs-nU-bp0" secondAttribute="bottom" id="31b-w3-6Ph"/>
+                            <constraint firstItem="yel-qD-x6K" firstAttribute="top" secondItem="XOj-Mo-uqS" secondAttribute="bottom" id="50l-xH-p2F"/>
                             <constraint firstAttribute="trailing" secondItem="WOs-nU-bp0" secondAttribute="trailing" id="AHc-aQ-ahK"/>
                             <constraint firstItem="WOs-nU-bp0" firstAttribute="top" secondItem="EZk-RK-IhE" secondAttribute="top" id="Bdy-2F-5Z7"/>
                             <constraint firstItem="WOs-nU-bp0" firstAttribute="leading" secondItem="EZk-RK-IhE" secondAttribute="leading" id="S96-eb-ie8"/>
                             <constraint firstAttribute="width" secondItem="Qxc-PW-YFe" secondAttribute="width" id="Ule-jN-VH1"/>
+                            <constraint firstAttribute="trailing" secondItem="XOj-Mo-uqS" secondAttribute="trailing" id="fGU-Lb-Fbq"/>
                         </constraints>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
                     <navigationItem key="navigationItem" id="YRx-69-dRa">
-                        <rightBarButtonItems>
-                            <barButtonItem systemItem="edit" id="AXa-H3-O12">
-                                <connections>
-                                    <segue destination="hSG-hA-aNk" kind="presentation" identifier="editBookSegue" modalPresentationStyle="formSheet" id="bfD-cG-YZ2"/>
-                                </connections>
-                            </barButtonItem>
-                            <barButtonItem systemItem="bookmarks" id="COZ-4N-Rqo">
-                                <connections>
-                                    <segue destination="I2A-UO-0Si" kind="presentation" identifier="editReadStateSegue" modalPresentationStyle="formSheet" id="yZJ-t8-f8y"/>
-                                </connections>
-                            </barButtonItem>
-                        </rightBarButtonItems>
+                        <barButtonItem key="rightBarButtonItem" systemItem="bookmarks" id="COZ-4N-Rqo">
+                            <connections>
+                                <segue destination="I2A-UO-0Si" kind="presentation" identifier="editReadStateSegue" modalPresentationStyle="formSheet" id="yZJ-t8-f8y"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="descriptionLabel" destination="cfS-jr-URE" id="TO8-19-5c0"/>
                         <outlet property="imageView" destination="HXj-zH-Neb" id="ZYa-Ki-xdJ"/>
+                        <outlet property="scrollView" destination="WOs-nU-bp0" id="FwU-6c-7Ib"/>
                         <outlet property="titleLabel" destination="Bmm-uv-eym" id="yqU-Pv-faG"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="i9A-VS-Eof" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-4017" y="970"/>
+            <point key="canvasLocation" x="-4018.4000000000001" y="969.26536731634189"/>
         </scene>
         <!--Previewing Navigation Controller-->
         <scene sceneID="zdk-AE-L8G">
@@ -232,13 +237,14 @@
                         <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="0.0" reuseIdentifier="BookTableViewCell" rowHeight="92" id="IaP-tj-7Wn" customClass="BookTableViewCell" customModule="Reading_List" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="56" width="375" height="92"/>
+                                <rect key="frame" x="0.0" y="55.5" width="375" height="92"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="IaP-tj-7Wn" id="N7c-k9-dzi">
-                                    <frame key="frameInset" width="375" height="91"/>
+                                    <frame key="frameInset" width="375" height="91.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j4t-DS-san">
+                                            <accessibility key="accessibilityConfiguration" identifier="title"/>
                                             <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
@@ -289,7 +295,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="g3f-d3-nU4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-3913" y="210"/>
+            <point key="canvasLocation" x="-3914.4000000000001" y="209.59520239880061"/>
         </scene>
         <!--EditBook-->
         <scene sceneID="DkH-3o-pb3">
@@ -341,13 +347,14 @@
                         <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="0.0" reuseIdentifier="BookTableViewCell" rowHeight="92" id="F8n-eP-d2J" customClass="BookTableViewCell" customModule="Reading_List" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="56" width="375" height="92"/>
+                                <rect key="frame" x="0.0" y="55.5" width="375" height="92"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="F8n-eP-d2J" id="Wf5-Vt-Vto">
-                                    <frame key="frameInset" width="375" height="91"/>
+                                    <frame key="frameInset" width="375" height="91.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N80-cz-K4w">
+                                            <accessibility key="accessibilityConfiguration" identifier="title"/>
                                             <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
@@ -398,7 +405,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rxk-zF-gYq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-4625" y="210"/>
+            <point key="canvasLocation" x="-4626.3999999999996" y="209.59520239880061"/>
         </scene>
     </scenes>
     <resources>
@@ -410,6 +417,6 @@
         <image name="to-do-filled" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="jro-WN-wC7"/>
+        <segue reference="vQB-9q-NrK"/>
     </inferredMetricsTieBreakers>
 </document>

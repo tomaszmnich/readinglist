@@ -17,11 +17,14 @@ class BookDetails: UIViewController {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var descriptionLabel: UILabel!
     @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var scrollView: UIScrollView!
     
     override func viewDidLoad() {
         // Keep an eye on changes to the book store
         appDelegate.booksStore.addSaveObserver(self, selector: #selector(bookChanged(_:)))
         updateUi()
+        
+        scrollView.scrollIndicatorInsets = UIEdgeInsetsMake(0.0, 0.0, 44.0, 0.0)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
