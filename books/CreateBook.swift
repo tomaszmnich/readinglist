@@ -24,11 +24,11 @@ class CreateBook: BookMetadataForm {
             // Set the field values
             TitleField = initialBookMetadata.title
             AuthorList = initialBookMetadata.authorList
-            PageCount = initialBookMetadata.pageCount != nil ? Int(initialBookMetadata.pageCount!) : nil
+            PageCount = initialBookMetadata.pageCount
             PublicationDate = initialBookMetadata.publishedDate
             Description = initialBookMetadata.bookDescription
             if let data = initialBookMetadata.coverImage {
-                Image = UIImage(data: data as Data)
+                Image = UIImage(data: data)
             }
         }
         
@@ -53,7 +53,7 @@ class CreateBook: BookMetadataForm {
             finalBookMetadata.bookDescription = Description
             finalBookMetadata.publishedDate = PublicationDate
             finalBookMetadata.pageCount = PageCount
-            finalBookMetadata.coverImage = Image == nil ? nil : UIImagePNGRepresentation(Image!)
+            finalBookMetadata.coverImage = Image == nil ? nil : UIImageJPEGRepresentation(Image!, 0.7)
             
             createReadState.bookMetadata = finalBookMetadata
         }
