@@ -34,17 +34,22 @@
                                                     <constraint firstAttribute="height" constant="157" id="aMl-cw-GXP"/>
                                                 </constraints>
                                             </imageView>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Description" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cfS-jr-URE" userLabel="Description">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Description" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cfS-jr-URE" userLabel="Description">
                                                 <fontDescription key="fontDescription" style="UICTFontTextStyleCallout"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KH7-sz-fDm">
+                                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                <state key="normal" title="More"/>
+                                            </button>
                                         </subviews>
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
+                                            <constraint firstItem="KH7-sz-fDm" firstAttribute="top" secondItem="cfS-jr-URE" secondAttribute="bottom" constant="8" id="2Mi-Xu-TgW"/>
                                             <constraint firstItem="HXj-zH-Neb" firstAttribute="top" secondItem="Qxc-PW-YFe" secondAttribute="topMargin" constant="8" id="5NM-Uu-9fV"/>
+                                            <constraint firstAttribute="bottom" secondItem="KH7-sz-fDm" secondAttribute="bottom" constant="8" id="DUr-FL-Uxs"/>
                                             <constraint firstAttribute="trailingMargin" secondItem="Bmm-uv-eym" secondAttribute="trailing" constant="24" id="EZT-Wo-FZK"/>
-                                            <constraint firstAttribute="bottomMargin" secondItem="cfS-jr-URE" secondAttribute="bottom" constant="8" id="LKx-EJ-sPn"/>
                                             <constraint firstItem="Bmm-uv-eym" firstAttribute="leading" secondItem="HXj-zH-Neb" secondAttribute="trailing" constant="8" id="Lwl-5v-DKj"/>
                                             <constraint firstItem="cfS-jr-URE" firstAttribute="leading" secondItem="HXj-zH-Neb" secondAttribute="leading" id="SKh-E2-q6m"/>
                                             <constraint firstItem="cfS-jr-URE" firstAttribute="trailing" secondItem="Bmm-uv-eym" secondAttribute="trailing" id="X5Z-du-E9L"/>
@@ -52,6 +57,7 @@
                                             <constraint firstItem="cfS-jr-URE" firstAttribute="top" secondItem="HXj-zH-Neb" secondAttribute="bottom" constant="8" id="fcW-bN-rOM"/>
                                             <constraint firstItem="HXj-zH-Neb" firstAttribute="leading" secondItem="Qxc-PW-YFe" secondAttribute="leadingMargin" constant="8" id="jNT-06-oTQ"/>
                                             <constraint firstItem="Bmm-uv-eym" firstAttribute="height" relation="lessThanOrEqual" secondItem="HXj-zH-Neb" secondAttribute="height" id="lpW-ey-CLW"/>
+                                            <constraint firstItem="KH7-sz-fDm" firstAttribute="trailing" secondItem="cfS-jr-URE" secondAttribute="trailing" id="xg6-Tt-7vR"/>
                                         </constraints>
                                     </view>
                                 </subviews>

@@ -74,8 +74,7 @@ class EditBook: BookMetadataForm {
         newMetadata.bookDescription = Description
         newMetadata.pageCount = PageCount
         newMetadata.publishedDate = PublicationDate
-        // TODO: Deal with cover images at some point. Currently, copy it across
-        newMetadata.coverImage = bookToEdit.coverImage
+        newMetadata.coverImage = Image == nil ? nil : UIImageJPEGRepresentation(Image!, 0.7)
         
         // Update and save the book
         bookToEdit.populate(from: newMetadata)
