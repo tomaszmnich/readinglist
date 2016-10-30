@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="16A320" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="rYQ-41-cfc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="rYQ-41-cfc">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -72,7 +72,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mJ1-SA-xV9" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-117" y="-393"/>
+            <point key="canvasLocation" x="121" y="-393"/>
         </scene>
         <!--Scan Barcode-->
         <scene sceneID="b2c-9w-e3P">
@@ -85,18 +85,7 @@
                     <view key="view" contentMode="scaleToFill" id="Li1-Bc-Q61">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pEt-SH-GKe">
-                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </view>
-                        </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstItem="za8-pr-DLM" firstAttribute="top" secondItem="pEt-SH-GKe" secondAttribute="bottom" id="FEW-SH-fKp"/>
-                            <constraint firstItem="pEt-SH-GKe" firstAttribute="leading" secondItem="Li1-Bc-Q61" secondAttribute="leading" id="TJT-tb-EGp"/>
-                            <constraint firstItem="pEt-SH-GKe" firstAttribute="top" secondItem="8uf-ya-Hu9" secondAttribute="bottom" id="eBo-6Z-lBC"/>
-                            <constraint firstAttribute="trailing" secondItem="pEt-SH-GKe" secondAttribute="trailing" id="g9A-Qp-eLc"/>
-                        </constraints>
+                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Item" id="C92-un-dfo"/>
                     <navigationItem key="navigationItem" title="Scan Barcode" id="UpE-wp-wNv">
@@ -107,7 +96,6 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="cameraPreviewPlaceholder" destination="pEt-SH-GKe" id="iAc-8o-ged"/>
                         <segue destination="eTM-OJ-MME" kind="show" identifier="isbnDetectedSegue" id="AvE-Bh-e7Y">
                             <nil key="action"/>
                         </segue>
@@ -115,7 +103,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="akl-GW-6eJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1286" y="-392"/>
+            <point key="canvasLocation" x="-1471" y="-393"/>
         </scene>
         <!--Nav With Read State-->
         <scene sceneID="YJu-cP-9jM">
@@ -131,7 +119,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LGP-mQ-oFJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1877" y="-391"/>
+            <point key="canvasLocation" x="-2198" y="-393"/>
         </scene>
     </scenes>
 </document>

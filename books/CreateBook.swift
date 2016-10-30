@@ -22,13 +22,13 @@ class CreateBook: BookMetadataForm {
             navigationItem.title = "Add Book"
             
             // Set the field values
-            TitleField = initialBookMetadata.title
-            AuthorList = initialBookMetadata.authorList
-            PageCount = initialBookMetadata.pageCount
-            PublicationDate = initialBookMetadata.publishedDate
-            Description = initialBookMetadata.bookDescription
+            titleField = initialBookMetadata.title
+            authorList = initialBookMetadata.authorList
+            pageCount = initialBookMetadata.pageCount
+            publicationDate = initialBookMetadata.publishedDate
+            descriptionField = initialBookMetadata.bookDescription
             if let data = initialBookMetadata.coverImage {
-                Image = UIImage(data: data)
+                image = UIImage(data: data)
             }
         }
         
@@ -48,12 +48,12 @@ class CreateBook: BookMetadataForm {
         if let createReadState = segue.destination as? CreateReadState {
             
             let finalBookMetadata = initialBookMetadata ?? BookMetadata()
-            finalBookMetadata.title = TitleField!
-            finalBookMetadata.authorList = AuthorList
-            finalBookMetadata.bookDescription = Description
-            finalBookMetadata.publishedDate = PublicationDate
-            finalBookMetadata.pageCount = PageCount
-            finalBookMetadata.coverImage = Image == nil ? nil : UIImageJPEGRepresentation(Image!, 0.7)
+            finalBookMetadata.title = titleField!
+            finalBookMetadata.authorList = authorList
+            finalBookMetadata.bookDescription = descriptionField
+            finalBookMetadata.publishedDate = publicationDate
+            finalBookMetadata.pageCount = pageCount
+            finalBookMetadata.coverImage = image == nil ? nil : UIImageJPEGRepresentation(image!, 0.7)
             
             createReadState.bookMetadata = finalBookMetadata
         }

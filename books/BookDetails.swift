@@ -24,7 +24,7 @@ class BookDetails: UIViewController {
         appDelegate.booksStore.addSaveObserver(self, selector: #selector(bookChanged(_:)))
         updateUi()
         
-        scrollView.scrollIndicatorInsets = UIEdgeInsetsMake(0.0, 0.0, 44.0, 0.0)
+        scrollView.scrollIndicatorInsets = UIEdgeInsetsMake(0.0, 0.0, 44.0, 0.0) // (The height of a tool bar)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -74,6 +74,10 @@ class BookDetails: UIViewController {
         titleLabel.attributedText = nil
         descriptionLabel.attributedText = nil
         imageView.image = nil
+    }
+    
+    @IBAction func moreDescriptionWasPressed(_ sender: UIButton) {
+        descriptionLabel.numberOfLines = 0
     }
     
     override var previewActionItems: [UIPreviewActionItem] {

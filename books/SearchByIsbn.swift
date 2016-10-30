@@ -24,48 +24,46 @@ class SearchByIsbn: UIViewController {
         OnlineBookClient<GoogleBooksParser>.getBookMetadata(from: GoogleBooksRequest.getIsbn(isbn13).url, maxResults: 1, onError: errorHandler, onSuccess: searchCompletionHandler)
     }
     
+    func searchCompletionHandler(_ metadata: [BookMetadata]) {
+        spinner.stopAnimating()
+        
+        guard metadata.count == 1 else {
+            presentInfoAlert(title: "No Results", message: "No matching books found online")
+            return
+        }
+        
+        foundMetadata = metadata[0]
+        self.performSegue(withIdentifier: "showIsbnSearchResultSegue", sender: self)
+    }
+    
     func errorHandler(_ error: Error?) {
         spinner.stopAnimating()
         var message = "An error occurred."
         
         if let error = error as? NSError {
             switch error.code {
-                case NSURLErrorNotConnectedToInternet,
-                     NSURLErrorNetworkConnectionLost:
-                    message = "No internet connection."
-                default:
-                    break
+            case NSURLErrorNotConnectedToInternet,
+                 NSURLErrorNetworkConnectionLost:
+                message = "No internet connection."
+            default:
+                break
             }
         }
-        PresentInfoAlert(title: "Error", message: message)
-        return
+        presentInfoAlert(title: "Error", message: message)
     }
     
-    func searchCompletionHandler(_ metadata: [BookMetadata]) {
-        guard metadata.count == 1 else {
-            spinner.stopAnimating()
-            PresentInfoAlert(title: "No Results", message: "No matching books found online")
-            return
-        }
-        
-        foundMetadata = metadata[0]
-        spinner.stopAnimating()
-        self.performSegue(withIdentifier: "showIsbnSearchResultSegue", sender: self)
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let createReadStateController = segue.destination as? CreateReadState {
-            createReadStateController.bookMetadata = foundMetadata
-        }
-    }
-    
-    /// Presents a popup alerting the use to the fact that there were no results.
-    func PresentInfoAlert(title: String, message: String) {
+    func presentInfoAlert(title: String, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
             alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: { _ in
                 self.spinner.stopAnimating()
                 self.dismiss(animated: true, completion: nil)
         }))
         self.present(alert, animated: true, completion: nil)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let createReadStateController = segue.destination as? CreateReadState {
+            createReadStateController.bookMetadata = foundMetadata
+        }
     }
 }

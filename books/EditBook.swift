@@ -31,12 +31,12 @@ class EditBook: BookMetadataForm {
         form.append(deleteSection)
         
         // Initialise the form with the book values
-        TitleField = bookToEdit.title
-        AuthorList = bookToEdit.authorList
-        PageCount = bookToEdit.pageCount != nil ? Int(bookToEdit.pageCount!) : nil
-        PublicationDate = bookToEdit.publishedDate
-        Description = bookToEdit.bookDescription
-        Image = UIImage(optionalData: bookToEdit.coverImage)
+        titleField = bookToEdit.title
+        authorList = bookToEdit.authorList
+        pageCount = bookToEdit.pageCount != nil ? Int(bookToEdit.pageCount!) : nil
+        publicationDate = bookToEdit.publishedDate
+        descriptionField = bookToEdit.bookDescription
+        image = UIImage(optionalData: bookToEdit.coverImage)
     }
     
     func presentDeleteAlert(){
@@ -65,16 +65,16 @@ class EditBook: BookMetadataForm {
     
     @IBAction func doneButtonWasPressed(_ sender: AnyObject) {
         // Check the title field is not nil
-        guard let TitleField = TitleField else { return }
+        guard let titleField = titleField else { return }
         
         // Load the book metadata into an object from the form values
         let newMetadata = BookMetadata()
-        newMetadata.title = TitleField
-        newMetadata.authorList = AuthorList
-        newMetadata.bookDescription = Description
-        newMetadata.pageCount = PageCount
-        newMetadata.publishedDate = PublicationDate
-        newMetadata.coverImage = Image == nil ? nil : UIImageJPEGRepresentation(Image!, 0.7)
+        newMetadata.title = titleField
+        newMetadata.authorList = authorList
+        newMetadata.bookDescription = description
+        newMetadata.pageCount = pageCount
+        newMetadata.publishedDate = publicationDate
+        newMetadata.coverImage = image == nil ? nil : UIImageJPEGRepresentation(image!, 0.7)
         
         // Update and save the book
         bookToEdit.populate(from: newMetadata)

@@ -11,12 +11,12 @@ import UIKit
 
 class BookMetadataForm: FormViewController {
     
-    let titleKey = "title"
-    let authorListKey = "author"
-    let pageCountKey = "page-count"
-    let publicationDateKey = "publication-date"
-    let descriptionKey = "description"
-    let imageKey = "image"
+    private let titleKey = "title"
+    private let authorListKey = "author"
+    private let pageCountKey = "page-count"
+    private let publicationDateKey = "publication-date"
+    private let descriptionKey = "description"
+    private let imageKey = "image"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -56,32 +56,32 @@ class BookMetadataForm: FormViewController {
         form.append(pagePublicationSection)
     }
     
-    var TitleField: String? {
+    var titleField: String? {
         get { return form.values()[titleKey] as? String }
         set { form.setValues([titleKey: newValue]) }
     }
     
-    var AuthorList: String? {
+    var authorList: String? {
         get { return form.values()[authorListKey] as? String }
         set { form.setValues([authorListKey: newValue]) }
     }
     
-    var PageCount: Int? {
+    var pageCount: Int? {
         get { return form.values()[pageCountKey] as? Int }
         set { form.setValues([pageCountKey: newValue]) }
     }
     
-    var PublicationDate: Date? {
+    var publicationDate: Date? {
         get { return form.values()[publicationDateKey] as? Date }
         set { form.setValues([publicationDateKey: newValue]) }
     }
     
-    var Description: String? {
+    var descriptionField: String? {
         get { return form.values()[descriptionKey] as? String }
         set { form.setValues([descriptionKey: newValue]) }
     }
     
-    var Image: UIImage? {
+    var image: UIImage? {
         get { return form.values()[imageKey] as? UIImage }
         set { form.setValues([imageKey: newValue]) }
     }
@@ -96,6 +96,6 @@ class BookMetadataForm: FormViewController {
     }
     
     var isValid: Bool {
-        return TitleField?.isEmptyOrWhitespace == false && AuthorList?.isEmptyOrWhitespace == false
+        return titleField?.isEmptyOrWhitespace == false && authorList?.isEmptyOrWhitespace == false
     }
 }
