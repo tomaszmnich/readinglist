@@ -11,4 +11,5 @@ target 'books' do
   pod 'Alamofire', '~> 4.0'
   pod 'SwiftyJSON', '~> 3.1'
   pod 'Eureka', '~> 2.0-beta'
+  pod 'BGTableViewRowActionWithImage', '~> 0.3'
 end

@@ -10,6 +10,7 @@ import UIKit
 import DZNEmptyDataSet
 import CoreData
 import CoreSpotlight
+import BGTableViewRowActionWithImage
 
 class BookTable: AutoUpdatingTableViewController {
     
@@ -87,6 +88,11 @@ class BookTable: AutoUpdatingTableViewController {
         self.presentedViewController?.dismiss(animated: false, completion: nil)
     }
     
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+        // No clicking on books in edit mode, even if you force-press
+        return !tableView.isEditing
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let detailsViewController = (segue.destination as? UINavigationController)?.topViewController as? BookDetails,
             let cell = sender as? UITableViewCell,
@@ -104,33 +110,28 @@ extension BookTable {
         let selectedBook = self.resultsController.object(at: indexPath)
         
         // Helper function to create actions which modify the read states of books
-        func updateReadStateAction(title: String, newReadState: BookReadState, actionColour: UIColor) -> UITableViewRowAction {
-            let action = UITableViewRowAction(style: .normal, title: title) { _, _ in
-                selectedBook.readState = newReadState
-                selectedBook.setDate(Date(), forState: newReadState)
-                selectedBook.sort = nil
-                appDelegate.booksStore.updateSpotlightIndex(for: selectedBook)
-                appDelegate.booksStore.save()
-                self.tableView.setEditing(false, animated: true)
-            }
-            action.backgroundColor = actionColour
-            return action
-        }
-        
-        var editActions = [UITableViewRowAction]()
-        
-        let deleteAction = UITableViewRowAction(style: .destructive, title: "Delete") { _, _ in
-            appDelegate.booksStore.delete(selectedBook)
+        func updateReadState(newReadState: BookReadState) {
+            selectedBook.readState = newReadState
+            selectedBook.setDate(Date(), forState: newReadState)
+            selectedBook.sort = nil
+            appDelegate.booksStore.updateSpotlightIndex(for: selectedBook)
             appDelegate.booksStore.save()
         }
-        deleteAction.backgroundColor = UIColor(fromHex: 0xe74c3c)
-        editActions.append(deleteAction)
+        
+        var editActions = [BGTableViewRowActionWithImage.rowAction(with: .destructive, title: "Delete", backgroundColor: UIColor.red, image: #imageLiteral(resourceName: "delete"), forCellHeight: UInt(tableView.cellForRow(at: indexPath)!.frame.height)){ _, _ in
+            appDelegate.booksStore.delete(selectedBook)
+            appDelegate.booksStore.save()
+        }!]
         
         if selectedBook.readState == .toRead {
-            editActions.append(updateReadStateAction(title: "Started", newReadState: .reading, actionColour: UIColor(fromHex: 0x3498db)))
+            editActions.append(BGTableViewRowActionWithImage.rowAction(with: .normal, title: "Start", backgroundColor: UIColor(fromHex: 0x3498db), image: #imageLiteral(resourceName: "play"), forCellHeight: UInt(tableView.cellForRow(at: indexPath)!.frame.height)) { _,_ in
+                updateReadState(newReadState: .reading)
+            }!)
         }
         else if selectedBook.readState == .reading {
-            editActions.append(updateReadStateAction(title: "Finished", newReadState: .finished, actionColour: UIColor(fromHex: 0x2ecc71)))
+            editActions.append(BGTableViewRowActionWithImage.rowAction(with: .normal, title: "Finish", backgroundColor: UIColor(fromHex: 0x2ecc71), image: #imageLiteral(resourceName: "checkmark"), forCellHeight: UInt(tableView.cellForRow(at: indexPath)!.frame.height)) {_,_ in
+                updateReadState(newReadState: .finished)
+            }!)
         }
         
         return editActions
