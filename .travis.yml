@@ -2,4 +2,4 @@ language: objective-c
 osx_image: xcode8
 script:
   - xcodebuild -workspace books.xcworkspace -scheme books -sdk iphonesimulator CODE_SIGNING_REQUIRED=NO
-  - xcodebuild test -workspace books.xcworkspace -scheme books -destination 'platform=iOS Simulator,name=iPhone 7,OS=10.0' CODE_SIGNING_REQUIRED=NO
+#  - xcodebuild test -workspace books.xcworkspace -scheme books -destination 'platform=iOS Simulator,name=iPhone 7,OS=10.0' CODE_SIGNING_REQUIRED=NO
