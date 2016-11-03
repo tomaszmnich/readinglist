@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="16A320" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="HSh-6U-tny">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="HSh-6U-tny">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -53,7 +56,7 @@
             </objects>
             <point key="canvasLocation" x="-5063" y="351"/>
         </scene>
-        <!--Reading-->
+        <!--View Controller-->
         <scene sceneID="hRk-V0-h3c">
             <objects>
                 <viewController id="zkx-dg-Okd" sceneMemberID="viewController">
@@ -66,6 +69,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tabBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hPS-WP-psj">
+                                <rect key="frame" x="0.0" y="618" width="375" height="49"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <items>
                                     <tabBarItem title="Reading" image="courses" selectedImage="courses-filled" id="N5l-AR-FPg"/>
@@ -81,9 +85,7 @@
                             <constraint firstItem="hPS-WP-psj" firstAttribute="leading" secondItem="Hiz-UY-law" secondAttribute="leading" id="m8I-Ll-IOj"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Reading" id="h80-oa-BUt">
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="lGF-Zi-WIb"/>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" id="h80-oa-BUt"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Jwh-3P-jM4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

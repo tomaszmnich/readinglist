@@ -15,16 +15,18 @@ class BookDetails: UIViewController {
     var book: Book?
     
     @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var authorsLabel: UILabel!
     @IBOutlet weak var descriptionLabel: UILabel!
     @IBOutlet weak var imageView: UIImageView!
-    @IBOutlet weak var scrollView: UIScrollView!
     
     override func viewDidLoad() {
         // Keep an eye on changes to the book store
         appDelegate.booksStore.addSaveObserver(self, selector: #selector(bookChanged(_:)))
         updateUi()
-        
-        scrollView.scrollIndicatorInsets = UIEdgeInsetsMake(0.0, 0.0, 44.0, 0.0) // (The height of a tool bar)
+    }
+    
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+        return book != nil
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -54,25 +56,15 @@ class BookDetails: UIViewController {
     private func updateUi() {
         guard let book = book else { clearUi(); return }
 
-        // Setup the title label
-        titleLabel.attributedText = NSMutableAttributedString.byConcatenating(withNewline: true,
-            book.title.withTextStyle(UIFontTextStyle.title1),
-            book.subtitle?.withTextStyle(UIFontTextStyle.subheadline),
-            book.authorList?.withTextStyle(UIFontTextStyle.subheadline))
-        
-        // Setup the description label
-        let pageCountText: NSAttributedString? = book.pageCount == nil ? nil : "\(book.pageCount!) pages.".withTextStyle(UIFontTextStyle.callout)
-        let publishedWhenText: NSAttributedString? = book.publishedDate == nil ? nil : "Published \(book.publishedDate!.toString(withDateStyle: DateFormatter.Style.long))".withTextStyle(UIFontTextStyle.callout)
-        descriptionLabel.attributedText = NSMutableAttributedString.byConcatenating(withNewline: true,
-            pageCountText, publishedWhenText, book.bookDescription?.withTextStyle(UIFontTextStyle.callout))
-        
-        // Setup the image
+        titleLabel.text = book.title
+        authorsLabel.text = book.authorList
+        descriptionLabel.text = book.bookDescription
         imageView.image = UIImage(optionalData: book.coverImage)
     }
     
     private func clearUi() {
-        titleLabel.attributedText = nil
-        descriptionLabel.attributedText = nil
+        titleLabel.text = nil
+        descriptionLabel.text = nil
         imageView.image = nil
     }
     
@@ -82,29 +74,26 @@ class BookDetails: UIViewController {
     
     override var previewActionItems: [UIPreviewActionItem] {
         get {
-            var previewActions = [UIPreviewActionItem]()
+            guard let book = book else { return [UIPreviewActionItem]() }
             
-            if let book = book {
-                if book.readState == .toRead {
-                    previewActions.append(UIPreviewAction(title: "Started", style: .default) {_,_ in
-                        book.readState = .reading
-                        book.startedReading = Date()
-                        appDelegate.booksStore.save()
-                    })
-                }
+            func readStatePreviewAction() -> UIPreviewAction? {
+                guard book.readState != .finished else { return nil }
                 
-                if book.readState == .reading {
-                    previewActions.append(UIPreviewAction(title: "Finished", style: .default) {_,_ in
-                        book.readState = .finished
-                        book.finishedReading = Date()
-                        appDelegate.booksStore.save()
-                    })
+                return UIPreviewAction(title: book.readState == .toRead ? "Started" : "Finished", style: .default) {_,_ in
+                    book.readState = book.readState == .toRead ? .reading : .finished
+                    book.setDate(Date(), forState: book.readState)
+                    appDelegate.booksStore.save()
                 }
-            
-                previewActions.append(UIPreviewAction(title: "Delete", style: .destructive){_,_ in
-                    appDelegate.booksStore.delete(book)
-                })
             }
+            
+            var previewActions = [UIPreviewActionItem]()
+            if let readStatePreviewAction = readStatePreviewAction() {
+                previewActions.append(readStatePreviewAction)
+            }
+            previewActions.append(UIPreviewAction(title: "Delete", style: .destructive){_,_ in
+                appDelegate.booksStore.delete(book)
+            })
+            
             return previewActions
         }
     }

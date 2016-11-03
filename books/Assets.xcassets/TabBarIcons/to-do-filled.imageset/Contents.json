@@ -2,16 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
+      "filename" : "To Do Filled-25.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "Settings-50.png",
+      "filename" : "To Do Filled-50.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "Settings-75.png",
+      "filename" : "To Do Filled-75.png",
       "scale" : "3x"
     }
   ],

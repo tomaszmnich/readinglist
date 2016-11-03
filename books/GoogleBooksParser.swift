@@ -57,7 +57,6 @@ class GoogleBooksParser: BookParser {
         // Build the metadata
         let book = BookMetadata()
         book.title = title
-        book.subtitle = volumeInfo["subtitle"].string
         book.pageCount = volumeInfo["pageCount"].int
         book.bookDescription = volumeInfo["description"].string
         book.authorList = volumeInfo["authors"].map{$1.rawString()!}.joined(separator: ", ")

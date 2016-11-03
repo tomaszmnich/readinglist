@@ -164,6 +164,4 @@ extension BookTable : DZNEmptyDataSetSource {
         
         return NSAttributedString(string: descriptionText, attributes: [NSFontAttributeName: UIFont.preferredFont(forTextStyle: UIFontTextStyle.body)])
     }
-    
-    
 }

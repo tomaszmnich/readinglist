@@ -11,7 +11,7 @@ import AVFoundation
 
 class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     
-    let session = AVCaptureSession()
+    var session: AVCaptureSession?
     var previewLayer: AVCaptureVideoPreviewLayer?
     var detectedIsbn13: String?
     
@@ -31,50 +31,80 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        if !session.isRunning {
-            session.startRunning()
+        if session?.isRunning == false {
+            session!.startRunning()
         }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        if session.isRunning {
-            session.stopRunning()
+        if session?.isRunning == true {
+            session!.stopRunning()
         }
     }
     
     private func setupAvSession() {
         guard let input = try? AVCaptureDeviceInput(device: AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo)) else {
-            return
+            scanningNotPossible(); return
         }
         let output = AVCaptureMetadataOutput()
+        session = AVCaptureSession()
         
         // Check that we can add the input and output to the session
-        guard session.canAddInput(input) && session.canAddOutput(output) else { scanningNotPossible(); return }
+        guard session!.canAddInput(input) && session!.canAddOutput(output) else { scanningNotPossible(); return }
         
         // Prepare the metadata output and add to the session
-        session.addInput(input)
-        
+        session!.addInput(input)
         output.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
+        session!.addOutput(output)
+        
+        // This line must be after session outputs are added
         output.metadataObjectTypes = [AVMetadataObjectTypeEAN13Code]
-        session.addOutput(output)
         
         // Begin the capture session.
-        session.startRunning()
+        session!.startRunning()
         
         // We want to view what the camera is seeing
-        previewLayer = AVCaptureVideoPreviewLayer(session: self.session)
-        previewLayer!.frame = view.layer.bounds
+        previewLayer = AVCaptureVideoPreviewLayer(session: session!)
         previewLayer!.videoGravity = AVLayerVideoGravityResizeAspectFill
-        DispatchQueue.main.sync {
-            view.layer.addSublayer(previewLayer!)
+        previewLayer!.frame = view.bounds
+        setVideoOrientation()
+        
+        view.layer.addSublayer(previewLayer!)
+    }
+    
+    // TODO: check whether this is needed
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        previewLayer?.frame = view.bounds
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        setVideoOrientation()
+    }
+    
+    private func setVideoOrientation() {
+        if let connection = self.previewLayer?.connection, connection.isVideoOrientationSupported {
+            switch UIDevice.current.orientation {
+            case .landscapeRight:
+                connection.videoOrientation = AVCaptureVideoOrientation.landscapeLeft
+            case .landscapeLeft:
+                connection.videoOrientation = AVCaptureVideoOrientation.landscapeRight
+            case .portraitUpsideDown:
+                connection.videoOrientation = AVCaptureVideoOrientation.portraitUpsideDown
+            default:
+                connection.videoOrientation = AVCaptureVideoOrientation.portrait
+            }
         }
     }
     
     func scanningNotPossible() {
         // Let the user know that scanning isn't possible with the current device.
         let alert = UIAlertController(title: "Can't Scan Barcode.", message: "The device's camera cannot be found.", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-        self.present(alert, animated: true, completion: nil)
+        alert.addAction(UIAlertAction(title: "OK", style: .default){ _ in
+            self.dismiss(animated: true)
+        })
+        self.present(alert, animated: true)
     }
     
     func captureOutput(_ captureOutput: AVCaptureOutput!, didOutputMetadataObjects metadataObjects: [Any]!, from connection: AVCaptureConnection!) {
@@ -85,7 +115,7 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         detectedIsbn13 = avMetadata.stringValue
             
         // Since we have a result, stop the session and pop to the next page
-        self.session.stopRunning()
+        session!.stopRunning()
         performSegue(withIdentifier: "isbnDetectedSegue", sender: self)
     }
     

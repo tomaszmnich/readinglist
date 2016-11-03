@@ -13,7 +13,6 @@ import CoreData
 class Book: NSManagedObject {
     // Book Metadata
     @NSManaged private(set) var title: String
-    @NSManaged private(set) var subtitle: String?
     @NSManaged private(set) var authorList: String?
     @NSManaged private(set) var isbn13: String?
     @NSManaged private(set) var pageCount: NSNumber?
@@ -67,7 +66,6 @@ class Book: NSManagedObject {
 /// Useful for maintaining in-creation books, or books being edited.
 class BookMetadata {
     var title: String!
-    var subtitle: String?
     var isbn13: String?
     var authorList: String?
     var pageCount: Int?

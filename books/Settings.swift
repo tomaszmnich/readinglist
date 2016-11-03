@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Foundation
 
 class Settings: UITableViewController {
 
@@ -21,7 +22,7 @@ class Settings: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.section == 1 && indexPath.row == 0 {
+        if indexPath.section == 2 && indexPath.row == 0 {
             TestData.loadTestData()
         }
         tableView.deselectRow(at: indexPath, animated: true)
