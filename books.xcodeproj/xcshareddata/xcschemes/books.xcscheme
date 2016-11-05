@@ -70,6 +70,16 @@
                ReferencedContainer = "container:books.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "491612A11DCD20FA0086D7E5"
+               BuildableName = "books_UnitTests.xctest"
+               BlueprintName = "books_UnitTests"
+               ReferencedContainer = "container:books.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
