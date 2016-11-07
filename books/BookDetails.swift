@@ -16,26 +16,53 @@ class BookDetails: UIViewController {
     
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var authorsLabel: UILabel!
-    @IBOutlet weak var descriptionLabel: UILabel!
-    @IBOutlet weak var imageView: UIImageView!
-    @IBOutlet weak var publicationDate: UILabel!
-    @IBOutlet weak var pageCount: UILabel!
+    @IBOutlet weak var descriptionTextView: UITextView!
     
+    @IBOutlet weak var readStateContainerView: UIView!
     @IBOutlet weak var readStateLabel: UILabel!
-    @IBOutlet var descriptionHeightConstraint: NSLayoutConstraint!
+    
+    @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var moreDescriptionButton: UIButton!
     
-    var descriptionConstraint: NSLayoutConstraint!
+    var descriptionHeightConstraint: NSLayoutConstraint!
     
-    override func viewDidLoad() {
-        // Keep an eye on changes to the book store
-        appDelegate.booksStore.addSaveObserver(self, selector: #selector(bookChanged(_:)))
-        view.backgroundColor = UIColor.white
-        updateUi()
+    /// Nil means that a "See more" toggle should not be visible
+    var descriptionExpanded: Bool? {
+        didSet {
+            if descriptionExpanded == true {
+                descriptionTextView.removeConstraint(descriptionHeightConstraint)
+                moreDescriptionButton.isHidden = false
+                moreDescriptionButton.setTitle("See Less", for: .normal)
+            }
+            else if descriptionExpanded == false {
+                descriptionTextView.addConstraint(descriptionHeightConstraint)
+                moreDescriptionButton.isHidden = false
+                moreDescriptionButton.setTitle("See More", for: .normal)
+            }
+            else {
+                descriptionTextView.removeConstraint(descriptionHeightConstraint)
+                moreDescriptionButton.isHidden = true
+            }
+        }
     }
     
-    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
-        return book != nil
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        descriptionHeightConstraint = NSLayoutConstraint(item: descriptionTextView, attribute: .height, relatedBy: .lessThanOrEqual, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: 130.0)
+        readStateContainerView.layer.borderColor = UIColor.lightGray.cgColor
+        view.backgroundColor = UIColor.white
+        
+        // Weave the description text around the image; get the '...' at the end of the
+        // description if it is truncated; remove the padding from the top of the description.
+        descriptionTextView.textContainer.exclusionPaths = [UIBezierPath(rect: imageView.bounds)]
+        descriptionTextView.textContainer.lineBreakMode = .byTruncatingTail
+        descriptionTextView.textContainerInset = UIEdgeInsets.zero
+        descriptionExpanded = nil
+        
+        updateUi()
+        
+        appDelegate.booksStore.addSaveObserver(self, selector: #selector(bookChanged(_:)))
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -52,51 +79,80 @@ class BookDetails: UIViewController {
         guard let currentBook = book, let userInfo = (notification as NSNotification).userInfo else { return }
         
         if let updatedObjects = userInfo[NSUpdatedObjectsKey] as? NSSet, updatedObjects.contains(currentBook) {
-            // If the book was updated, update this page
+            // If the book was updated, update this page.
             updateUi()
         }
         else if let deletedObjects = userInfo[NSDeletedObjectsKey] as? NSSet, deletedObjects.contains(currentBook) {
-            // If the book was deleted, clear this page, and pop back if necessary
-            view.isHidden = true
+            // If the book was deleted, set our book to nil and update this page
             book = nil
+            updateUi()
+            
+            // Pop back to the book table if necessary
             appDelegate.splitViewController.masterNavigationController.popToRootViewController(animated: false)
         }
     }
     
     private func updateUi() {
-        guard let book = book else { view.isHidden = true; return }
+        guard let book = book else {
+            view.isHidden = true
+            navigationItem.rightBarButtonItem?.isEnabled = false
+            return
+        }
 
+        // Enable the UI
         view.isHidden = false
+        navigationItem.rightBarButtonItem?.isEnabled = true
+        
+        // Set the values according to the book
         titleLabel.text = book.title
         authorsLabel.text = book.authorList
-        descriptionLabel.text = book.bookDescription
-        imageView.image = UIImage(optionalData: book.coverImage)
-        pageCount.text = book.pageCount == nil ? nil : "\(book.pageCount!) pages"
-        publicationDate.text = book.publishedDate?.toString(withDateFormat: "dd MMM yyyy")
-        
+        descriptionTextView.text = book.bookDescription
         readStateLabel.text = BookDetails.readStateDescription(for: book)
+        
+        if let uiImage = UIImage(optionalData: book.coverImage) {
+            imageView.image = uiImage
+        }
+        
+        updateLayout()
+    }
+    
+    private func updateLayout() {
+        view.layoutIfNeeded()
+        
+        if let uiImage = imageView.image,
+            let imageViewHeight = (imageView.constraints.filter{$0.firstAttribute == .height}).first?.constant,
+            let widthConstraint = (imageView.constraints.filter{$0.firstAttribute == .width}).first {
+            widthConstraint.constant = (imageViewHeight / uiImage.size.height) * uiImage.size.width
+        }
+        if descriptionExpanded == nil && descriptionTextView.bounds.height > descriptionHeightConstraint.constant {
+            descriptionExpanded = false
+        }
+        if descriptionExpanded == true && descriptionTextView.bounds.height <= descriptionHeightConstraint.constant {
+            descriptionExpanded = nil
+        }
+    }
+        
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+
+        updateLayout()
     }
     
     private static func readStateDescription(for book: Book) -> String {
-        if book.readState == .toRead {
+        switch book.readState {
+        case .toRead:
             return "Not Started"
+        case .reading:
+            return "Started: \(book.startedReading!.toString(withDateFormat: "dd MMM yyyy"))"
+        case .finished:
+            return "Read: \(book.startedReading!.toString(withDateFormat: "dd MMM yyyy")) - \(book.finishedReading!.toString(withDateFormat: "dd MMM yyyy"))"
         }
-        var result = "\(book.startedReading!.toString(withDateFormat: "dd MMM yyyy"))"
-        if book.readState == .finished {
-            result += " - \(book.finishedReading!.toString(withDateFormat: "dd MMM yyyy"))"
-        }
-        return result
     }
     
     @IBAction func moreButtonPressed(_ sender: UIButton) {
-        if descriptionLabel.constraints.contains(descriptionHeightConstraint) {
-            descriptionLabel.removeConstraint(descriptionHeightConstraint)
-            moreDescriptionButton.setTitle("Less", for: .normal)
-        }
-        else {
-            descriptionLabel.addConstraint(descriptionHeightConstraint)
-            moreDescriptionButton.setTitle("More", for: .normal)
-        }
+        guard descriptionExpanded != nil else { return }
+            
+        descriptionExpanded = !descriptionExpanded!
         UIView.animate(withDuration: 0.5) {
             self.view.layoutIfNeeded()
         }
@@ -109,7 +165,7 @@ class BookDetails: UIViewController {
             func readStatePreviewAction() -> UIPreviewAction? {
                 guard book.readState != .finished else { return nil }
                 
-                return UIPreviewAction(title: book.readState == .toRead ? "Started" : "Finished", style: .default) {_,_ in
+                return UIPreviewAction(title: book.readState == .toRead ? "Start" : "Finish", style: .default) {_,_ in
                     book.readState = book.readState == .toRead ? .reading : .finished
                     book.setDate(Date(), forState: book.readState)
                     appDelegate.booksStore.save()
