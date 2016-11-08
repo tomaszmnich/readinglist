@@ -1,51 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="rYQ-41-cfc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="rYQ-41-cfc">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Search By Isbn-->
-        <scene sceneID="eFJ-kC-eB4">
-            <objects>
-                <viewController modalTransitionStyle="flipHorizontal" id="eTM-OJ-MME" customClass="SearchByIsbn" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="5Z0-0O-1bl"/>
-                        <viewControllerLayoutGuide type="bottom" id="wNp-l3-pkc"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="1Sa-X1-LI1">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Searching for Books" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sCo-yn-uou">
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="sSV-6S-uTM">
-                                <color key="color" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </activityIndicatorView>
-                        </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstItem="sSV-6S-uTM" firstAttribute="centerX" secondItem="1Sa-X1-LI1" secondAttribute="centerX" id="LDz-dr-KGV"/>
-                            <constraint firstItem="sSV-6S-uTM" firstAttribute="centerY" secondItem="1Sa-X1-LI1" secondAttribute="centerY" id="VAW-jE-h72"/>
-                            <constraint firstItem="sSV-6S-uTM" firstAttribute="top" secondItem="sCo-yn-uou" secondAttribute="bottom" constant="8" id="Vjq-V3-pTU"/>
-                            <constraint firstItem="sCo-yn-uou" firstAttribute="leading" secondItem="1Sa-X1-LI1" secondAttribute="leadingMargin" id="bAY-Po-hWZ"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="sCo-yn-uou" secondAttribute="trailing" id="zmI-x6-QvP"/>
-                        </constraints>
-                    </view>
-                    <navigationItem key="navigationItem" id="4hc-nu-uIc"/>
-                    <connections>
-                        <outlet property="spinner" destination="sSV-6S-uTM" id="wmz-J1-aqx"/>
-                        <segue destination="bN9-Cz-0Ly" kind="show" identifier="showIsbnSearchResultSegue" id="d2h-Hr-BX6"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="7gT-5z-qMi" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-730" y="-392"/>
-        </scene>
         <!--Set Read State-->
         <scene sceneID="Akp-v3-3aF">
             <objects>
@@ -72,7 +36,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mJ1-SA-xV9" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="121" y="-393"/>
+            <point key="canvasLocation" x="-580" y="-394"/>
         </scene>
         <!--Scan Barcode-->
         <scene sceneID="b2c-9w-e3P">
@@ -85,7 +49,34 @@
                     <view key="view" contentMode="scaleToFill" id="Li1-Bc-Q61">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <subviews>
+                            <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VIt-na-l7a">
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="710-zJ-iLP">
+                                <rect key="frame" x="47" y="295.5" width="281" height="140.5"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="710-zJ-iLP" secondAttribute="height" multiplier="2:1" id="bw1-bF-OIn"/>
+                                </constraints>
+                            </view>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="4Wb-Fh-3wm">
+                                <rect key="frame" x="169" y="347" width="37" height="37"/>
+                                <color key="color" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                            </activityIndicatorView>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="VIt-na-l7a" secondAttribute="trailing" id="Ifn-HB-v19"/>
+                            <constraint firstItem="4Wb-Fh-3wm" firstAttribute="centerX" secondItem="VIt-na-l7a" secondAttribute="centerX" id="OKF-FJ-Dg8"/>
+                            <constraint firstItem="VIt-na-l7a" firstAttribute="leading" secondItem="Li1-Bc-Q61" secondAttribute="leading" id="Trq-9S-fSQ"/>
+                            <constraint firstItem="za8-pr-DLM" firstAttribute="top" secondItem="VIt-na-l7a" secondAttribute="bottom" id="U2P-TF-Rsb"/>
+                            <constraint firstItem="710-zJ-iLP" firstAttribute="centerX" secondItem="VIt-na-l7a" secondAttribute="centerX" id="Xh8-sC-A2p"/>
+                            <constraint firstItem="710-zJ-iLP" firstAttribute="centerY" secondItem="VIt-na-l7a" secondAttribute="centerY" id="tKA-ms-Iut"/>
+                            <constraint firstItem="710-zJ-iLP" firstAttribute="width" secondItem="VIt-na-l7a" secondAttribute="width" multiplier="3:4" id="vJw-tw-9FO"/>
+                            <constraint firstItem="4Wb-Fh-3wm" firstAttribute="centerY" secondItem="VIt-na-l7a" secondAttribute="centerY" id="w0F-SN-QFC"/>
+                            <constraint firstItem="VIt-na-l7a" firstAttribute="top" secondItem="8uf-ya-Hu9" secondAttribute="bottom" id="wv6-dE-OPd"/>
+                        </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Item" id="C92-un-dfo"/>
                     <navigationItem key="navigationItem" title="Scan Barcode" id="UpE-wp-wNv">
@@ -96,14 +87,17 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <segue destination="eTM-OJ-MME" kind="show" identifier="isbnDetectedSegue" id="AvE-Bh-e7Y">
-                            <nil key="action"/>
-                        </segue>
+                        <outlet property="cameraPreviewView" destination="VIt-na-l7a" id="62h-so-ss3"/>
+                        <outlet property="previewBottomConstraint" destination="U2P-TF-Rsb" id="HWx-km-vRb"/>
+                        <outlet property="previewOverlay" destination="710-zJ-iLP" id="qCX-qv-uzC"/>
+                        <outlet property="previewTopConstraint" destination="wv6-dE-OPd" id="cYE-Wi-Jp4"/>
+                        <outlet property="spinner" destination="4Wb-Fh-3wm" id="qxP-Xp-lta"/>
+                        <segue destination="bN9-Cz-0Ly" kind="show" identifier="barcodeScanResult" id="tSI-ig-Qb0"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="akl-GW-6eJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1471" y="-393"/>
+            <point key="canvasLocation" x="-1471.2" y="-393.55322338830587"/>
         </scene>
         <!--Nav With Read State-->
         <scene sceneID="YJu-cP-9jM">
@@ -119,7 +113,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LGP-mQ-oFJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2198" y="-393"/>
+            <point key="canvasLocation" x="-2270" y="-394"/>
         </scene>
     </scenes>
 </document>

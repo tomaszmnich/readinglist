@@ -13,14 +13,23 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     
     var session: AVCaptureSession?
     var previewLayer: AVCaptureVideoPreviewLayer?
-    var detectedIsbn13: String?
+    var foundMetadata: BookMetadata?
+    
+    @IBOutlet weak var cameraPreviewView: UIView!
+    @IBOutlet weak var spinner: UIActivityIndicatorView!
+    @IBOutlet weak var previewOverlay: UIView!
+    @IBOutlet weak var previewTopConstraint: NSLayoutConstraint!
+    @IBOutlet weak var previewBottomConstraint: NSLayoutConstraint!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        spinner.stopAnimating()
         
         // Setup the camera preview on another thread
         DispatchQueue.main.async {
             self.setupAvSession()
+            self.previewOverlay.layer.borderColor = UIColor.red.cgColor
+            self.previewOverlay.layer.borderWidth = 1.0
         }
     }
     
@@ -30,6 +39,11 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+
+        previewOverlay.isHidden = false
+        previewTopConstraint.constant = 0
+        previewBottomConstraint.constant = 0
+        cameraPreviewView.layoutIfNeeded()
         
         if session?.isRunning == false {
             session!.startRunning()
@@ -44,13 +58,17 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     
     private func setupAvSession() {
         guard let input = try? AVCaptureDeviceInput(device: AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo)) else {
-            scanningNotPossible(); return
+            presentInfoAlert(title: "Can't Scan Barcode.", message: "The device's camera cannot be found."); return
         }
+        
         let output = AVCaptureMetadataOutput()
         session = AVCaptureSession()
         
         // Check that we can add the input and output to the session
-        guard session!.canAddInput(input) && session!.canAddOutput(output) else { scanningNotPossible(); return }
+        guard session!.canAddInput(input) && session!.canAddOutput(output) else {
+            presentInfoAlert(title: "Can't Scan Barcode.", message: "The device's camera cannot be found.")
+            return
+        }
         
         // Prepare the metadata output and add to the session
         session!.addInput(input)
@@ -69,13 +87,7 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         previewLayer!.frame = view.bounds
         setVideoOrientation()
         
-        view.layer.addSublayer(previewLayer!)
-    }
-    
-    // TODO: check whether this is needed
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        previewLayer?.frame = view.bounds
+        cameraPreviewView.layer.addSublayer(previewLayer!)
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -98,30 +110,63 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         }
     }
     
-    func scanningNotPossible() {
-        // Let the user know that scanning isn't possible with the current device.
-        let alert = UIAlertController(title: "Can't Scan Barcode.", message: "The device's camera cannot be found.", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default){ _ in
-            self.dismiss(animated: true)
-        })
-        self.present(alert, animated: true)
-    }
-    
     func captureOutput(_ captureOutput: AVCaptureOutput!, didOutputMetadataObjects metadataObjects: [Any]!, from connection: AVCaptureConnection!) {
         
         guard let avMetadata = metadataObjects.first as? AVMetadataMachineReadableCodeObject else { return }
             
-        // Store the detected value of the barcode. The output metadata object types was restricted to EAN13.
-        detectedIsbn13 = avMetadata.stringValue
-            
-        // Since we have a result, stop the session and pop to the next page
-        session!.stopRunning()
-        performSegue(withIdentifier: "isbnDetectedSegue", sender: self)
+        // Since we have a result, stop the session and hide the preview
+        session?.stopRunning()
+        previewTopConstraint.constant = cameraPreviewView.frame.height / 2
+        previewBottomConstraint.constant = cameraPreviewView.frame.height / 2
+        previewOverlay.isHidden = true
+        UIView.animate(withDuration: 0.3, animations: self.view.layoutIfNeeded) { _ in
+            self.spinner.startAnimating()
+        }
+        
+        // We've found an ISBN-13. Let's search for it online.
+        OnlineBookClient<GoogleBooksParser>.getBookMetadata(from: GoogleBooksRequest.getIsbn(avMetadata.stringValue).url, maxResults: 1, onError: errorHandler, onSuccess: searchCompletionHandler)
+    }
+    
+    func searchCompletionHandler(_ metadata: [BookMetadata]) {
+        spinner.stopAnimating()
+        
+        if metadata.count == 0 {
+            presentInfoAlert(title: "No Results", message: "No matching books found online")
+        }
+        else {
+            foundMetadata = metadata[0]
+            self.performSegue(withIdentifier: "barcodeScanResult", sender: self)
+        }
+    }
+    
+    func errorHandler(_ error: Error?) {
+        spinner.stopAnimating()
+        
+        var message: String!
+        if let error = error as? NSError {
+            switch error.code {
+            case NSURLErrorNotConnectedToInternet,
+                 NSURLErrorNetworkConnectionLost:
+                message = "No internet connection."
+            default:
+                message = "An error occurred."
+            }
+        }
+        presentInfoAlert(title: "Error", message: message)
+    }
+    
+    func presentInfoAlert(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: { _ in
+            self.spinner.stopAnimating()
+            self.dismiss(animated: true, completion: nil)
+        }))
+        self.present(alert, animated: true, completion: nil)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let searchResultsController = segue.destination as? SearchByIsbn {
-            searchResultsController.isbn13 = detectedIsbn13!
+        if let createReadStateController = segue.destination as? CreateReadState {
+            createReadStateController.bookMetadata = foundMetadata
         }
     }
 }
