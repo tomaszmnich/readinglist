@@ -19,6 +19,7 @@ class CreateReadState: ReadStateForm {
     override func viewDidLoad() {
         // Set the read state on the info
         bookReadingInformation.readState = (self.navigationController as! NavWithReadState).readState
+        navigationItem.title = bookMetadata.title
         
         super.viewDidLoad()
         

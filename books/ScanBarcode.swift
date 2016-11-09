@@ -57,7 +57,13 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     }
     
     private func setupAvSession() {
-        guard let input = try? AVCaptureDeviceInput(device: AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo)) else {
+        let camera = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo)
+        if camera?.isFocusPointOfInterestSupported == true {
+            try? camera!.lockForConfiguration()
+            camera!.focusPointOfInterest = cameraPreviewView.center
+        }
+        
+        guard let input = try? AVCaptureDeviceInput(device: camera) else {
             presentInfoAlert(title: "Can't Scan Barcode.", message: "The device's camera cannot be found."); return
         }
         

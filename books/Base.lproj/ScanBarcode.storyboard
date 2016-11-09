@@ -80,6 +80,7 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Item" id="C92-un-dfo"/>
                     <navigationItem key="navigationItem" title="Scan Barcode" id="UpE-wp-wNv">
+                        <barButtonItem key="backBarButtonItem" title="Scan" id="sTj-nn-7bp"/>
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="MuG-PG-sW7">
                             <connections>
                                 <action selector="cancelWasPressed:" destination="MGK-ee-YjP" id="DTh-jk-3Uy"/>
