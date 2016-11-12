@@ -77,10 +77,10 @@ class SearchByText: UIViewController, UITableViewDelegate, UITableViewDataSource
         spinner.startAnimating()
         searchBar.resignFirstResponder()
         
-        OnlineBookClient<GoogleBooksParser>.getBookMetadataOnly(from: GoogleBooksRequest.search(searchBar.text!).url, maxResults: 10, onError: {_ in}) {
+        GoogleBooksAPI.search(searchString: searchBar.text!) {
             self.spinner.stopAnimating()
             self.loadingLabel.isHidden = true
-            self.results = $0
+            self.results = $0.0
             self.tableView.reloadData()
         }
     }

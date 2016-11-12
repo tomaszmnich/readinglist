@@ -130,33 +130,38 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         }
         
         // We've found an ISBN-13. Let's search for it online.
-        OnlineBookClient<GoogleBooksParser>.getBookMetadata(from: GoogleBooksRequest.getIsbn(avMetadata.stringValue).url, maxResults: 1, onError: errorHandler, onSuccess: searchCompletionHandler)
+        GoogleBooksAPI.lookupIsbn(isbn: avMetadata.stringValue) { bookMetadata, error in
+            if let error = error {
+                self.onSearchError(error)
+            }
+            else {
+                self.isbnSearchComplete(bookMetadata)
+            }
+        }
     }
     
-    func searchCompletionHandler(_ metadata: [BookMetadata]) {
+    func isbnSearchComplete(_ metadata: BookMetadata?) {
         spinner.stopAnimating()
         
-        if metadata.count == 0 {
+        if metadata == nil {
             presentInfoAlert(title: "No Results", message: "No matching books found online")
         }
         else {
-            foundMetadata = metadata[0]
+            foundMetadata = metadata
             self.performSegue(withIdentifier: "barcodeScanResult", sender: self)
         }
     }
     
-    func errorHandler(_ error: Error?) {
+    func onSearchError(_ error: Error) {
         spinner.stopAnimating()
         
         var message: String!
-        if let error = error as? NSError {
-            switch error.code {
+        switch (error as NSError).code {
             case NSURLErrorNotConnectedToInternet,
                  NSURLErrorNetworkConnectionLost:
                 message = "No internet connection."
             default:
                 message = "An error occurred."
-            }
         }
         presentInfoAlert(title: "Error", message: message)
     }

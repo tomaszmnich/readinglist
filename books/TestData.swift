@@ -28,19 +28,18 @@ class TestData {
         
         // Search for each book and add the result
         for bookToAdd in booksToAdd {
-            OnlineBookClient<GoogleBooksParser>.getBookMetadata(from: GoogleBooksRequest.getIsbn(bookToAdd.isbn).url,
-                                                                   maxResults: 1,
-                                                                   onError: {print($0)},
-                                                                   onSuccess: {
-                guard $0.count == 1 else { return }
-                let bookMetadata = $0[0]
-                bookMetadata.isbn13 = bookToAdd.isbn
-                let readingInfo = BookReadingInformation()
-                readingInfo.readState = bookToAdd.readState
-                readingInfo.startedReading = bookToAdd.started
-                readingInfo.finishedReading = bookToAdd.finished
-                appDelegate.booksStore.create(from: bookMetadata, readingInformation: readingInfo)
-            })
+            GoogleBooksAPI.lookupIsbn(isbn: bookToAdd.isbn) { bookMetadata, error in
+                
+                if let bookMetadata = bookMetadata {
+                    bookMetadata.isbn13 = bookToAdd.isbn
+                    let readingInfo = BookReadingInformation()
+                    readingInfo.readState = bookToAdd.readState
+                    readingInfo.startedReading = bookToAdd.started
+                    readingInfo.finishedReading = bookToAdd.finished
+                    
+                    appDelegate.booksStore.create(from: bookMetadata, readingInformation: readingInfo)
+                }
+            }
         }
     }
 }
