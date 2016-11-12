@@ -11,36 +11,30 @@ import UIKit
 
 class BookTableViewCell: UITableViewCell, ConfigurableCell {
     @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var authorsLabel: UILabel!
     @IBOutlet weak var bookCover: UIImageView!
-    
+    @IBOutlet weak var readTimeLabel: UILabel!
+
     typealias ResultType = Book
     
     func configureFrom(_ book: BookMetadata) {
-        let titleAndAuthor = NSMutableAttributedString.byConcatenating(
-            withNewline: true,
-            book.title.withTextStyle(UIFontTextStyle.subheadline),
-            book.authorList?.withTextStyle(UIFontTextStyle.caption1))!
-        
-        titleLabel.attributedText = titleAndAuthor
+        titleLabel.text = book.title
+        authorsLabel.text = book.authorList
         bookCover.image = UIImage(optionalData: book.coverImage)
     }
     
-    func configureFrom(_ result: Book) {
-        let titleAndAuthor = NSMutableAttributedString.byConcatenating(
-            withNewline: true,
-            result.title.withTextStyle(UIFontTextStyle.subheadline),
-            result.authorList?.withTextStyle(UIFontTextStyle.caption1))!
-        
-        if result.readState == .reading {
-            titleAndAuthor.appendNewline()
-            titleAndAuthor.append("Started: \(result.startedReading!.toHumanisedString())".withTextStyle(UIFontTextStyle.caption1))
+    func configureFrom(_ book: Book) {
+        titleLabel.text = book.title
+        authorsLabel.text = book.authorList
+        bookCover.image = UIImage(optionalData: book.coverImage)
+        if book.readState == .reading {
+            readTimeLabel.text = book.startedReading!.toString(withDateFormat: "dd MMM")
         }
-        else if result.readState == .finished {
-            titleAndAuthor.appendNewline()
-            titleAndAuthor.append("\(result.startedReading!.toHumanisedString()) - \(result.finishedReading!.toHumanisedString())".withTextStyle(UIFontTextStyle.caption1))
+        else if book.readState == .finished {
+            readTimeLabel.text = book.finishedReading!.toString(withDateFormat: "dd MMM")
         }
-        
-        titleLabel.attributedText = titleAndAuthor
-        bookCover.image = UIImage(optionalData: result.coverImage)
+        else {
+            readTimeLabel.text = nil
+        }
     }
 }

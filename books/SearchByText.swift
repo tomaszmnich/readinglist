@@ -62,10 +62,10 @@ class SearchByText: UIViewController, UITableViewDelegate, UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: BookTableViewCell.self)) as! BookTableViewCell
-
+        let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: BookTableViewCell.self))!
         if let book = results?[indexPath.row] {
-            cell.configureFrom(book)
+            cell.textLabel?.text = book.title
+            cell.detailTextLabel?.text = book.authorList
         }
         return cell
     }
@@ -77,7 +77,7 @@ class SearchByText: UIViewController, UITableViewDelegate, UITableViewDataSource
         spinner.startAnimating()
         searchBar.resignFirstResponder()
         
-        OnlineBookClient<GoogleBooksParser>.getBookMetadata(from: GoogleBooksRequest.search(searchBar.text!).url, maxResults: 10, onError: {_ in}) {
+        OnlineBookClient<GoogleBooksParser>.getBookMetadataOnly(from: GoogleBooksRequest.search(searchBar.text!).url, maxResults: 10, onError: {_ in}) {
             self.spinner.stopAnimating()
             self.loadingLabel.isHidden = true
             self.results = $0

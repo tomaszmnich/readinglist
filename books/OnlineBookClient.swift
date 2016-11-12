@@ -16,6 +16,19 @@ protocol BookParser {
 
 class OnlineBookClient<TParser: BookParser> {
     
+    static func getBookMetadataOnly(from url: URL, maxResults: Int, onError: @escaping ((Error) -> Void), onSuccess: @escaping (([BookMetadata]) -> Void)){
+        
+        // Make the request!
+        Alamofire.request(url).responseJSON {
+            if $0.result.isSuccess, let responseData = $0.result.value {
+                onSuccess(TParser.parse(response: JSON(responseData), maxResultCount: maxResults))
+            }
+            else if let error = $0.result.error {
+                onError(error)
+            }
+        }
+    }
+    
     static func getBookMetadata(from url: URL, maxResults: Int, onError: @escaping ((Error) -> Void), onSuccess: @escaping (([BookMetadata]) -> Void)) {
         
         // Make the request!

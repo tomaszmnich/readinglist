@@ -50,14 +50,17 @@ class BookDetails: UIViewController {
         super.viewDidLoad()
 
         descriptionHeightConstraint = NSLayoutConstraint(item: descriptionTextView, attribute: .height, relatedBy: .lessThanOrEqual, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: 130.0)
+        
         readStateContainerView.layer.borderColor = UIColor.lightGray.cgColor
         view.backgroundColor = UIColor.white
         
         // Weave the description text around the image; get the '...' at the end of the
         // description if it is truncated; remove the padding from the top of the description.
-        descriptionTextView.textContainer.exclusionPaths = [UIBezierPath(rect: imageView.bounds)]
+        descriptionTextView.textContainer.exclusionPaths = [UIBezierPath(rect: CGRect(x: imageView.bounds.origin.x, y: imageView.bounds.origin.y, width: imageView.bounds.width + 8, height: imageView.bounds.height))]
         descriptionTextView.textContainer.lineBreakMode = .byTruncatingTail
+        descriptionTextView.textContainer.lineFragmentPadding = 0
         descriptionTextView.textContainerInset = UIEdgeInsets.zero
+        
         descriptionExpanded = nil
         
         updateUi()
