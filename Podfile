@@ -12,4 +12,6 @@ target 'books' do
   pod 'SwiftyJSON', '~> 3.1'
   pod 'Eureka', '~> 2.0-beta'
   pod 'BGTableViewRowActionWithImage', '~> 0.3'
+  pod 'RxSwift', '~> 3.0'
+  pod 'RxCocoa', '~> 3.0'
 end

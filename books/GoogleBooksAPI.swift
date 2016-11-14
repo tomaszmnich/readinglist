@@ -9,24 +9,51 @@
 import Foundation
 import Alamofire
 import SwiftyJSON
+import RxSwift
 
 class GoogleBooksAPI {
-    /*
-     This could be useful in the future
-     
-    static func search(query: String) -> Observable<[BookMetadata]> {
-        return Observable<[BookMetadata]>.create { (observer) -> Disposable in
-            let requestReference = Alamofire.request(GoogleBooksRequest.search(query).url)
-                .responseJSON {
-                    guard $0.result.value != nil else { return }
-                    observer.onNext(GoogleBooksParser.parse(response: JSON($0.result.value!)))
-                    observer.onCompleted()
-            }
-            return Disposables.create(with: { requestReference.cancel() })
-        }
-    }*/
     
-    static func search(searchString: String, callback: @escaping ([BookMetadata]?, Error?) -> Void) {
+    static func getData(_ url: URL) -> Observable<Data> {
+        return Observable<Data>.create { observable -> Disposable in
+            let requestReference = Alamofire.request(url).responseData {
+                if $0.result.isSuccess, let data = $0.result.value {
+                    observable.onNext(data)
+                }
+                else {
+                    observable.onError($0.result.error!)
+                }
+                observable.onCompleted()
+            }
+            return Disposables.create {
+                requestReference.cancel()
+            }
+            
+        }
+    }
+    
+    static func search(_ searchString: String) -> Observable<[BookMetadata]> {
+        return Observable<[BookMetadata]>.create { (observer) -> Disposable in
+            if searchString.isEmptyOrWhitespace {
+                observer.onNext([])
+                observer.onCompleted()
+                return Disposables.create()
+            }
+            let requestReference = Alamofire.request(GoogleBooksRequest.search(searchString).url).responseJSON {
+                if $0.result.isSuccess, let response = $0.result.value {
+                    observer.onNext(GoogleBooksParser.parse(response: JSON(response)))
+                }
+                else {
+                    observer.onError($0.result.error!)
+                }
+                observer.onCompleted()
+            }
+            return Disposables.create {
+                requestReference.cancel()
+            }
+        }
+    }
+    
+    static func search(_ searchString: String, callback: @escaping ([BookMetadata]?, Error?) -> Void) {
         Alamofire.request(GoogleBooksRequest.search(searchString).url).responseJSON {
             if $0.result.isSuccess, let response = $0.result.value {
                 callback(GoogleBooksParser.parse(response: JSON(response)), nil)
@@ -37,7 +64,7 @@ class GoogleBooksAPI {
         }
     }
     
-    static func lookupIsbn(isbn: String, callback: @escaping (BookMetadata?, Error?) -> Void) {
+    static func lookupIsbn(_ isbn: String, callback: @escaping (BookMetadata?, Error?) -> Void) {
         Alamofire.request(GoogleBooksRequest.getIsbn(isbn).url).responseJSON {
             if $0.result.isSuccess, let response = $0.result.value {
                 callback(GoogleBooksParser.parseFirst(response: JSON(response)), nil)

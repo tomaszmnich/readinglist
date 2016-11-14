@@ -130,7 +130,7 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         }
         
         // We've found an ISBN-13. Let's search for it online.
-        GoogleBooksAPI.lookupIsbn(isbn: avMetadata.stringValue) { bookMetadata, error in
+        GoogleBooksAPI.lookupIsbn(avMetadata.stringValue) { bookMetadata, error in
             if let error = error {
                 self.onSearchError(error)
             }

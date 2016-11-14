@@ -28,7 +28,7 @@ class TestData {
         
         // Search for each book and add the result
         for bookToAdd in booksToAdd {
-            GoogleBooksAPI.lookupIsbn(isbn: bookToAdd.isbn) { bookMetadata, error in
+            GoogleBooksAPI.lookupIsbn(bookToAdd.isbn) { bookMetadata, error in
                 
                 if let bookMetadata = bookMetadata {
                     bookMetadata.isbn13 = bookToAdd.isbn
