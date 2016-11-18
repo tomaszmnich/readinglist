@@ -46,48 +46,49 @@
                                 <rect key="frame" x="0.0" y="108" width="375" height="559"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="0.0" reuseIdentifier="SearchResultCell" rowHeight="81" id="cbl-0B-qL9" customClass="SearchResultCell" customModule="Reading_List" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="18" width="375" height="81"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="0.0" reuseIdentifier="SearchResultCell" rowHeight="92" id="OA2-yq-v9U" customClass="SearchResultCell" customModule="Reading_List" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="18" width="375" height="92"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="cbl-0B-qL9" id="soP-MF-hPS">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="80"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="OA2-yq-v9U" id="2aQ-go-24X">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="91"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rci-af-uX2">
-                                                    <rect key="frame" x="54.5" y="8" width="312.5" height="21"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <nil key="textColor"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bs5-Gi-0Ag">
+                                                    <rect key="frame" x="64" y="8" width="295" height="18"/>
+                                                    <accessibility key="accessibilityConfiguration" identifier="title"/>
+                                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Author" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hPM-78-2Jg">
-                                                    <rect key="frame" x="54.5" y="29" width="312.5" height="21"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ZW5-vv-349">
-                                                    <rect key="frame" x="8" y="8" width="42.5" height="64"/>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="pLh-fq-Whs">
+                                                    <rect key="frame" x="4" y="4" width="52" height="84"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" secondItem="ZW5-vv-349" secondAttribute="height" multiplier="1:1.5" id="Ehy-JS-WUQ"/>
+                                                        <constraint firstAttribute="width" secondItem="pLh-fq-Whs" secondAttribute="height" multiplier="1:1.6" id="C3e-In-4b5"/>
                                                     </constraints>
                                                 </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Authors" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FRa-pU-Zdo">
+                                                    <rect key="frame" x="64" y="26" width="295" height="16"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="ZW5-vv-349" firstAttribute="leading" secondItem="soP-MF-hPS" secondAttribute="leadingMargin" id="9Tx-d4-Fir"/>
-                                                <constraint firstItem="hPM-78-2Jg" firstAttribute="top" secondItem="rci-af-uX2" secondAttribute="bottom" id="CPa-zp-iI0"/>
-                                                <constraint firstItem="ZW5-vv-349" firstAttribute="top" secondItem="soP-MF-hPS" secondAttribute="topMargin" id="JRI-hB-FPy"/>
-                                                <constraint firstItem="hPM-78-2Jg" firstAttribute="leading" secondItem="ZW5-vv-349" secondAttribute="trailing" constant="4" id="MyO-Zv-oH2"/>
-                                                <constraint firstItem="rci-af-uX2" firstAttribute="leading" secondItem="ZW5-vv-349" secondAttribute="trailing" constant="4" id="NV5-UC-nwR"/>
-                                                <constraint firstItem="ZW5-vv-349" firstAttribute="bottom" secondItem="soP-MF-hPS" secondAttribute="bottomMargin" id="eVZ-pp-j5j"/>
-                                                <constraint firstItem="rci-af-uX2" firstAttribute="top" secondItem="soP-MF-hPS" secondAttribute="topMargin" id="fCD-1Y-g1V"/>
-                                                <constraint firstItem="rci-af-uX2" firstAttribute="trailing" secondItem="soP-MF-hPS" secondAttribute="trailingMargin" id="fb1-N6-mSk"/>
-                                                <constraint firstItem="hPM-78-2Jg" firstAttribute="trailing" secondItem="soP-MF-hPS" secondAttribute="trailingMargin" id="gTm-61-C7w"/>
+                                                <constraint firstItem="bs5-Gi-0Ag" firstAttribute="top" secondItem="2aQ-go-24X" secondAttribute="topMargin" id="9mR-Ww-nOb"/>
+                                                <constraint firstAttribute="bottom" secondItem="pLh-fq-Whs" secondAttribute="bottom" constant="4" id="A8u-5l-OZi"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="FRa-pU-Zdo" secondAttribute="trailing" constant="8" id="SBJ-nx-rb9"/>
+                                                <constraint firstItem="pLh-fq-Whs" firstAttribute="leading" secondItem="2aQ-go-24X" secondAttribute="leading" constant="4" id="Vi4-xH-v3b"/>
+                                                <constraint firstItem="FRa-pU-Zdo" firstAttribute="top" secondItem="bs5-Gi-0Ag" secondAttribute="bottom" id="XCz-WM-lYb"/>
+                                                <constraint firstItem="bs5-Gi-0Ag" firstAttribute="leading" secondItem="pLh-fq-Whs" secondAttribute="trailing" constant="8" id="b9n-gT-ICH"/>
+                                                <constraint firstItem="pLh-fq-Whs" firstAttribute="top" secondItem="2aQ-go-24X" secondAttribute="top" constant="4" id="bjF-pU-7Wa"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="bs5-Gi-0Ag" secondAttribute="trailing" constant="8" id="dE8-0d-acG"/>
+                                                <constraint firstItem="FRa-pU-Zdo" firstAttribute="leading" secondItem="bs5-Gi-0Ag" secondAttribute="leading" id="jnA-d5-N8N"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="authorOutlet" destination="hPM-78-2Jg" id="Fx5-aZ-CtF"/>
-                                            <outlet property="imageOutlet" destination="ZW5-vv-349" id="RNF-G2-VeB"/>
-                                            <outlet property="titleOutlet" destination="rci-af-uX2" id="5Jn-9v-MCS"/>
+                                            <outlet property="authorOutlet" destination="FRa-pU-Zdo" id="ZAv-9B-dPM"/>
+                                            <outlet property="imageOutlet" destination="pLh-fq-Whs" id="Ati-EC-nV5"/>
+                                            <outlet property="titleOutlet" destination="bs5-Gi-0Ag" id="dG9-3a-AP7"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>

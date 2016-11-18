@@ -115,6 +115,9 @@ class BookDetails: UIViewController {
         if let uiImage = UIImage(optionalData: book.coverImage) {
             imageView.image = uiImage
         }
+        else {
+            imageView.image = #imageLiteral(resourceName: "CoverPlaceholder")
+        }
         
         updateLayout()
     }

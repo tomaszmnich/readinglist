@@ -60,7 +60,7 @@ class SearchResultViewModel {
                 .asDriver(onErrorJustReturn: nil)
         }
         else {
-            coverImage = Driver.never()
+            coverImage = Driver.just(#imageLiteral(resourceName: "CoverPlaceholder"))
         }
     }
 }
