@@ -15,6 +15,7 @@ class GoogleBooksAPI {
     
     static func getData(_ url: URL) -> Observable<Data> {
         return Observable<Data>.create { observable -> Disposable in
+            print("Requesting \(url)")
             let requestReference = Alamofire.request(url).responseData {
                 if $0.result.isSuccess, let data = $0.result.value {
                     observable.onNext(data)
@@ -38,6 +39,7 @@ class GoogleBooksAPI {
                 observer.onCompleted()
                 return Disposables.create()
             }
+            print("requesting search for \(searchString)")
             let requestReference = Alamofire.request(GoogleBooksRequest.search(searchString).url).responseJSON {
                 if $0.result.isSuccess, let response = $0.result.value {
                     observer.onNext(GoogleBooksParser.parse(response: JSON(response)))

@@ -51,6 +51,7 @@ class SearchResultViewModel {
         self.title = searchResult.title
         self.author = searchResult.authorList
         if let coverURL = searchResult.coverUrl {
+            print("requesting \(coverURL)")
             coverImage = URLSession.shared.rx.data(request: URLRequest(url: coverURL))
                 .map(Optional.init)
                 .startWith(nil)
@@ -86,15 +87,27 @@ class SearchByText: UIViewController {
             .addDisposableTo(disposeBag)
         
         // Map the search bar text to a google books search, and bind the result to the table cells
-        searchBar.rx.text.orEmpty.asDriver()
-            .throttle(0.3)
-            .distinctUntilChanged()
+        let cancelNoResults = searchBar.rx.cancelButtonClicked.asDriver()
+            .map { _ -> [BookMetadata] in
+                []
+            }
+        .asObservable()
+        
+        let searchResults = searchBar.rx.text.orEmpty.asDriver()
+            .throttle(1)
+            .distinctUntilChanged{ str1, str2 in
+                str1.trimming() == str2.trimming()
+            }
             .flatMapLatest {
                 GoogleBooksAPI.search($0)
-                    .startWith([])
                     .trackActivity(self.indicator)
                     .asDriver(onErrorJustReturn: [])
             }
+            .asObservable()
+        
+        Observable.of(cancelNoResults, searchResults)
+            .merge()
+            .asDriver(onErrorJustReturn: [])
             .map{ results in
                 results.map(SearchResultViewModel.init)
             }
