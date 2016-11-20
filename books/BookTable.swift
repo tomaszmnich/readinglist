@@ -98,7 +98,7 @@ class BookTable: AutoUpdatingTableViewController {
             let cell = sender as? UITableViewCell,
             let selectedIndex = self.tableView.indexPath(for: cell) {
          
-            detailsViewController.book = self.resultsController.object(at: selectedIndex)
+            detailsViewController.viewModel = BookDetailsViewModel(book: self.resultsController.object(at: selectedIndex))
         }
     }
 }

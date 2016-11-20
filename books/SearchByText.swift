@@ -41,9 +41,9 @@ class SearchResultCell : UITableViewCell {
 class SearchResultViewModel {
     let searchResult: BookMetadata
     
-    var title: String
-    var author: String?
-    var coverImage: Driver<UIImage?>
+    let title: String
+    let author: String?
+    let coverImage: Driver<UIImage?>
     
     init(searchResult: BookMetadata) {
         self.searchResult = searchResult
