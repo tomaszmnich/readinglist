@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import SwiftyJSON
 
 extension UIColor {
     convenience init(fromHex: UInt32){
@@ -46,8 +47,8 @@ extension Date {
         }
         
         // Otherwise split the dates into components
-        let theseComponents = (Calendar.current as NSCalendar).components([.day, .month, .year], from: self)
-        let todayComponents = (Calendar.current as NSCalendar).components([.day, .month, .year], from: today)
+        let theseComponents = Calendar.current.dateComponents([.day, .month, .year], from: self)
+        let todayComponents = Calendar.current.dateComponents([.day, .month, .year], from: today)
         
         
         // more than 5 days ago
@@ -78,9 +79,14 @@ extension UIImage {
     }
 }
 
-extension CharacterSet {
-    static func nonAlphanumeric() -> CharacterSet {
-        return CharacterSet.alphanumerics.inverted
+extension JSON {
+    init?(optionalData: Data?) {
+        if let data = optionalData {
+            self.init(data: data)
+        }
+        else {
+            return nil
+        }
     }
 }
 
@@ -115,35 +121,6 @@ extension String {
     }
 }
 
-extension NSMutableAttributedString {
-    
-    static func byConcatenating(withNewline: Bool, _ attributedStrings: NSAttributedString?...) -> NSMutableAttributedString? {
-        // First of all, filter out all of the nil strings
-        let notNilStrings = attributedStrings.flatMap{$0}
-        
-        // Check that there is a first string in the array; if not, return nil
-        guard notNilStrings.count > 0 else { return nil }
-        let firstString = notNilStrings[0]
-        
-        // Initialise the mutable string with the first string
-        let mutableAttributedString = NSMutableAttributedString(attributedString: firstString)
-        
-        // For all of the other strings (if there are any), append them to the mutable strings
-        for attrString in notNilStrings.dropFirst() {
-            if withNewline {
-                mutableAttributedString.appendNewline()
-            }
-            mutableAttributedString.append(attrString)
-        }
-        
-        return mutableAttributedString
-    }
-    
-    func appendNewline() {
-        self.append(NSAttributedString(string: "\u{2028}"))
-    }
-}
-
 extension NSPredicate {    
     
     convenience init(fieldName: String, equalToInt: Int) {
@@ -170,7 +147,7 @@ extension NSPredicate {
     
     static func searchWithinFields(_ searchString: String, fieldNames: String...) -> NSPredicate {
         // Split on whitespace and remove empty elements
-        let searchStringComponents = searchString.components(separatedBy: CharacterSet.nonAlphanumeric()).filter{
+        let searchStringComponents = searchString.components(separatedBy: CharacterSet.alphanumerics.inverted).filter{
             !$0.isEmpty
         }
         
