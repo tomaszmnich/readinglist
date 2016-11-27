@@ -8,7 +8,6 @@ source 'https://github.com/SwiftyJSON/SwiftyJSON.git'
 
 target 'books' do
   pod 'DZNEmptyDataSet', '~> 1.8'
-  pod 'Alamofire', '~> 4.0'
   pod 'SwiftyJSON', '~> 3.1'
   pod 'Eureka', '~> 2.0-beta'
   pod 'BGTableViewRowActionWithImage', '~> 0.3'
