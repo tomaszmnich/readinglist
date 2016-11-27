@@ -98,6 +98,7 @@ class SearchByText: UIViewController {
             .distinctUntilChanged{ str1, str2 in
                 str1.trimming() == str2.trimming()
             }
+            .filter { !$0.isEmptyOrWhitespace }
             .flatMapLatest {
                 GoogleBooksAPI.search($0)
                     .trackActivity(self.indicator)

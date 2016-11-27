@@ -28,9 +28,9 @@ class TestData {
         
         // Search for each book and add the result
         for bookToAdd in booksToAdd {
-            GoogleBooksAPI.lookupIsbn(bookToAdd.isbn) { bookMetadata, error in
+            GoogleBooksAPI.search(isbn: bookToAdd.isbn) { bookMetadata, error in
                 
-                if let bookMetadata = bookMetadata {
+                if let bookMetadata = bookMetadata?.first {
                     bookMetadata.isbn13 = bookToAdd.isbn
                     let readingInfo = BookReadingInformation()
                     readingInfo.readState = bookToAdd.readState
