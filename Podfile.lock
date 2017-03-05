@@ -6,6 +6,9 @@ PODS:
   - RxCocoa (3.2.0):
     - RxSwift (~> 3.1)
   - RxSwift (3.2.0)
+  - RxSwiftUtilities (1.0.1):
+    - RxCocoa (~> 3.0)
+    - RxSwift (~> 3.0)
   - SwiftyJSON (3.1.4)
 
 DEPENDENCIES:
@@ -14,6 +17,7 @@ DEPENDENCIES:
   - ImageRow (~> 1.0)
   - RxCocoa (~> 3.0)
   - RxSwift (~> 3.0)
+  - RxSwiftUtilities
   - SwiftyJSON (~> 3.1)
 
 SPEC CHECKSUMS:
@@ -22,8 +26,9 @@ SPEC CHECKSUMS:
   ImageRow: 1e37db26f61a0c4ad3bc9a3a803c32d968782857
   RxCocoa: ccdf43101a70407097a29082f648ba1676075b30
   RxSwift: 46574f70d416b7923c237195939cc488a7fbf3a0
+  RxSwiftUtilities: 57e77c17b885931c37aa038f114f14fd1f478ac2
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
 
-PODFILE CHECKSUM: 6ddcbf24141480c4a9ae16a2a4293298f11bbd24
+PODFILE CHECKSUM: 5700626f69496db054405b83e05d1245801a1d2d
 
 COCOAPODS: 1.2.0

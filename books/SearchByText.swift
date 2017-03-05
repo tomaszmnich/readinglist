@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 import RxSwift
 import RxCocoa
+import RxSwiftUtilities
 
 class SearchResultCell : UITableViewCell {
     @IBOutlet weak var titleOutlet: UILabel!
