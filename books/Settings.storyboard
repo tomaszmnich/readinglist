@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Xjd-mh-KAZ">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Xjd-mh-KAZ">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -24,11 +24,11 @@
                                         <rect key="frame" x="0.0" y="35" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="tHR-Qd-tnK" id="9Eq-oh-yPu">
-                                            <rect key="frame" x="0.0" y="0.0" width="342" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="342" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="About" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="1sT-8b-Obn">
-                                                    <rect key="frame" x="59" y="0.0" width="281" height="43"/>
+                                                    <rect key="frame" x="59" y="0.0" width="281" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
@@ -48,11 +48,11 @@
                                         <rect key="frame" x="0.0" y="79" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="5ab-mO-VFa" id="frw-Pj-mMH">
-                                            <rect key="frame" x="0.0" y="0.0" width="342" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="342" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Attributions" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="q85-7d-T3e">
-                                                    <rect key="frame" x="59" y="0.0" width="281" height="43"/>
+                                                    <rect key="frame" x="59" y="0.0" width="281" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
@@ -72,11 +72,11 @@
                                         <rect key="frame" x="0.0" y="123" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="64P-KO-ipE" id="lG8-Qs-2GV">
-                                            <rect key="frame" x="0.0" y="0.0" width="342" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="342" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Rate Reading List" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="0Cf-5g-svA">
-                                                    <rect key="frame" x="59" y="0.0" width="281" height="43"/>
+                                                    <rect key="frame" x="59" y="0.0" width="281" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
@@ -177,40 +177,24 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="G9w-61-xeG" userLabel="source">
-                                <rect key="frame" x="16" y="72" width="271" height="81.5"/>
+                                <rect key="frame" x="16" y="72" width="351" height="162.5"/>
                                 <attributedString key="attributedText">
-                                    <fragment content="Reading List is open source; the source is available at https://github.com/AndrewBennet/readinglist.">
+                                    <fragment>
+                                        <string key="content">Thanks for trying Reading List.  Reading List is free and open source: https://github.com/AndrewBennet/readinglist.  To report a problem or suggest an improvement, please raise an issue at https://github.com/AndrewBennet/readinglist/issues.</string>
                                         <attributes>
                                             <font key="NSFont" metaFont="system" size="17"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                                         </attributes>
                                     </fragment>
                                 </attributedString>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="github" translatesAutoresizingMaskIntoConstraints="NO" id="yWA-Cn-Erp">
-                                <rect key="frame" x="287" y="72" width="72" height="72"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="72" id="jK5-nL-kqR"/>
-                                    <constraint firstAttribute="height" constant="72" id="xNW-PG-PCh"/>
-                                </constraints>
-                            </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="To report a problem, or suggest an improvement, please raise an issue at https://github.com/AndrewBennet/readinglist/issues." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ptF-59-2W7" userLabel="reportProblem">
-                                <rect key="frame" x="16" y="152" width="343" height="81.5"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="yWA-Cn-Erp" firstAttribute="top" secondItem="G9w-61-xeG" secondAttribute="top" id="6C9-Ma-l5Y"/>
                             <constraint firstItem="G9w-61-xeG" firstAttribute="leading" secondItem="1uY-i2-SfU" secondAttribute="leadingMargin" id="W75-fe-zRc"/>
-                            <constraint firstItem="ptF-59-2W7" firstAttribute="leading" secondItem="1uY-i2-SfU" secondAttribute="leadingMargin" id="Wgx-bD-Obq"/>
-                            <constraint firstItem="yWA-Cn-Erp" firstAttribute="trailing" secondItem="1uY-i2-SfU" secondAttribute="trailingMargin" id="cbh-hs-MCu"/>
-                            <constraint firstItem="ptF-59-2W7" firstAttribute="trailing" secondItem="1uY-i2-SfU" secondAttribute="trailingMargin" id="gyG-rf-NKD"/>
                             <constraint firstItem="G9w-61-xeG" firstAttribute="top" secondItem="mTj-vV-qJE" secondAttribute="bottom" constant="8" id="pGi-Ev-g7Y"/>
-                            <constraint firstItem="ptF-59-2W7" firstAttribute="top" secondItem="yWA-Cn-Erp" secondAttribute="bottom" constant="8" id="s0N-aD-9sZ"/>
-                            <constraint firstItem="yWA-Cn-Erp" firstAttribute="leading" secondItem="G9w-61-xeG" secondAttribute="trailing" id="zCc-a1-sD0"/>
+                            <constraint firstAttribute="trailing" secondItem="G9w-61-xeG" secondAttribute="trailing" constant="8" id="pXe-ao-mSF"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="About" id="GVF-Zk-ULF"/>
@@ -229,7 +213,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <mutableString key="text">Icons8 (https://icons8.com/) Copyright © Icons8. Provided under the CC-BY-ND 3.0 Licence  Eureka (https://github.com/xmartlabs/Eureka/)
 Copyright © 2015 XMARTLABS Provided under The MIT Licence  DZNEmptyDataSet (https://github.com/dzenbot/DZNEmptyDataSet) Copyright © 2016 Ignacio Romero Zurbuchen iromero@dzen.cl Provided under The MIT Licence  SwiftyJSON (https://github.com/SwiftyJSON/SwiftyJSON) Copyright © 2016 Ruoyu Fu Provided under The MIT Licence
-  The MIT Licence
+ RxSwift (https://github.com/ReactiveX/RxSwift) Copyright © ReactiveX Provided under The MIT Licence  The MIT Licence
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE</mutableString>
@@ -247,7 +231,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     <resources>
         <image name="about" width="29" height="29"/>
         <image name="code" width="29" height="29"/>
-        <image name="github" width="72" height="72"/>
         <image name="heart" width="29" height="29"/>
     </resources>
 </document>
