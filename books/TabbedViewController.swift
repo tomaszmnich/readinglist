@@ -109,9 +109,12 @@ class TabbedViewController: UIViewController, UITabBarDelegate, EditingNotificat
         guard let identifier = activity.userInfo?[CSSearchableItemActivityIdentifier] as? String,
             let identifierUrl = URL(string: identifier),
             let selectedBook = appDelegate.booksStore.get(bookIdUrl: identifierUrl) else { return }
-        
-        setSelectedTab(to: selectedBook.readState == .finished ? .finished : .toRead)
-        (selectedViewController as! BookTable).triggerBookSelection(selectedBook)
+        simulateBookSelection(selectedBook)
+    }
+    
+    func simulateBookSelection(_ book: Book){
+        setSelectedTab(to: book.readState == .finished ? .finished : .toRead)
+        (selectedViewController as! BookTable).triggerBookSelection(book)
     }
     
     private func setSelectedTab(to tabOption: TabOption) {

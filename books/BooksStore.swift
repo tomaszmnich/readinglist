@@ -106,6 +106,7 @@ class BooksStore {
         
         save()
         updateSpotlightIndex(for: book)
+        return book
     }
     
     /**

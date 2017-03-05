@@ -16,8 +16,33 @@ class GoogleBooksAPI {
         return requestAndParseAndObserve(url: GoogleBooksRequest.search(searchString).url)
     }
     
-    static func search(isbn: String, callback: @escaping ([BookMetadata]?, Error?) -> Void) {
-        requestAndParse(url: GoogleBooksRequest.getIsbn(isbn).url, callback: callback)
+    /// Gets up to 1 result, by ISBN. Supplements the book result with the image data
+    static func get(isbn: String, callback: @escaping (BookMetadata?, Error?) -> Void) {
+        requestAndParse(url: GoogleBooksRequest.getIsbn(isbn).url) { results, error in
+            
+            guard let result = results?.first else {
+                callback(nil, error)
+                return
+            }
+            
+            supplementMetadataWithImage(result) {
+                callback(result, error)
+            }
+        }
+    }
+    
+    static func supplementMetadataWithImage(_ metadata: BookMetadata, completion: @escaping () -> ()){
+        // Quick return if no image URL available
+        guard let coverUrl = metadata.coverUrl else {
+            completion()
+            return
+        }
+        
+        let searchRequest = URLSession.shared.dataTask(with: coverUrl) { (data, _, error) in
+            metadata.coverImage = data
+            completion()
+        }
+        searchRequest.resume()
     }
     
     private static func requestAndParseAndObserve(url: URL) -> Observable<[BookMetadata]> {
@@ -45,7 +70,9 @@ class GoogleBooksAPI {
             if let json = JSON(optionalData: data) {
                 callback(GoogleBooksParser.parse(response: json), nil)
             }
-            callback(nil, error)
+            else {
+                callback(nil, error)
+            }
         }
         searchRequest.resume()
         return searchRequest
@@ -100,6 +127,7 @@ class GoogleBooksAPI {
             // Add a link at which a front cover image can be found.
             // The link seems to be equally accessible at https, and iOS apps don't seem to like
             // accessing http addresses, so adjust the provided url.
+            // FUTURE: Do this better
             if let url = volumeInfo["imageLinks"]["thumbnail"].string?.replacingOccurrences(of: "http://", with: "https://"){
                 book.coverUrl = URL(string: url)
             }

@@ -64,7 +64,8 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         }
         
         guard let input = try? AVCaptureDeviceInput(device: camera) else {
-            presentInfoAlert(title: "Can't Scan Barcode.", message: "The device's camera cannot be found."); return
+            presentError()
+            return
         }
         
         let output = AVCaptureMetadataOutput()
@@ -72,7 +73,7 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         
         // Check that we can add the input and output to the session
         guard session!.canAddInput(input) && session!.canAddOutput(output) else {
-            presentInfoAlert(title: "Can't Scan Barcode.", message: "The device's camera cannot be found.")
+            presentError()
             return
         }
         
@@ -130,24 +131,18 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         }
         
         // We've found an ISBN-13. Let's search for it online.
-        GoogleBooksAPI.search(isbn: avMetadata.stringValue) { bookMetadata, error in
-            if let error = error {
-                self.onSearchError(error)
+        GoogleBooksAPI.get(isbn: avMetadata.stringValue) { result, error in
+            guard error == nil else {
+                self.onSearchError(error!)
+                return
             }
-            else {
-                self.isbnSearchComplete(bookMetadata?.first)
+            guard let bookMetadata = result else {
+                self.presentInfoAlert(title: "No Results", message: "No matching books found online")
+                return
             }
-        }
-    }
-    
-    func isbnSearchComplete(_ metadata: BookMetadata?) {
-        spinner.stopAnimating()
-        
-        if metadata == nil {
-            presentInfoAlert(title: "No Results", message: "No matching books found online")
-        }
-        else {
-            foundMetadata = metadata
+            
+            self.spinner.stopAnimating()
+            self.foundMetadata = bookMetadata
             self.performSegue(withIdentifier: "barcodeScanResult", sender: self)
         }
     }
@@ -173,6 +168,10 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
             self.dismiss(animated: true, completion: nil)
         }))
         self.present(alert, animated: true, completion: nil)
+    }
+    
+    func presentError() {
+        presentInfoAlert(title: "Cannot Scan Barcode", message: "The camera could not be found.")
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
