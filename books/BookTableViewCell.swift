@@ -22,6 +22,7 @@ class BookTableViewCell: UITableViewCell, ConfigurableCell {
         authorsLabel.text = book.authorList
         bookCover.image = UIImage(optionalData: book.coverImage)
     }
+
     
     func configureFrom(_ book: Book) {
         titleLabel.text = book.title

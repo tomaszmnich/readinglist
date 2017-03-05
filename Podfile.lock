@@ -1,5 +1,4 @@
 PODS:
-  - BGTableViewRowActionWithImage (0.4.1)
   - DZNEmptyDataSet (1.8.1)
   - Eureka (2.0.1)
   - RxCocoa (3.2.0):
@@ -8,7 +7,6 @@ PODS:
   - SwiftyJSON (3.1.4)
 
 DEPENDENCIES:
-  - BGTableViewRowActionWithImage (~> 0.3)
   - DZNEmptyDataSet (~> 1.8)
   - Eureka (~> 2.0)
   - RxCocoa (~> 3.0)
@@ -16,13 +14,12 @@ DEPENDENCIES:
   - SwiftyJSON (~> 3.1)
 
 SPEC CHECKSUMS:
-  BGTableViewRowActionWithImage: 6a0731a84662735f5ec28dc253e3fba6a73ebc5b
   DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
   Eureka: ae837bb1dfae0c07bc1bda7aeef87876eeb537c2
   RxCocoa: ccdf43101a70407097a29082f648ba1676075b30
   RxSwift: 46574f70d416b7923c237195939cc488a7fbf3a0
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
 
-PODFILE CHECKSUM: 0e1f7ffe84cd60024d6e38730aba73288fc544df
+PODFILE CHECKSUM: 72555eac6980d4f49103a4cddcba98c03b619e9a
 
 COCOAPODS: 1.2.0

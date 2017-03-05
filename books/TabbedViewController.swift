@@ -9,7 +9,11 @@
 import UIKit
 import CoreSpotlight
 
-class TabbedViewController: UIViewController, UITabBarDelegate {
+protocol EditingNotificationDelegate {
+    func editingWasSet(editing: Bool, animated: Bool)
+}
+
+class TabbedViewController: UIViewController, UITabBarDelegate, EditingNotificationDelegate {
 
     @IBOutlet weak var tabBar: UITabBar!
     @IBOutlet weak var readingTabView: UIView!
@@ -18,6 +22,12 @@ class TabbedViewController: UIViewController, UITabBarDelegate {
     
     private var addButton: UIBarButtonItem!
     private var editButton: UIBarButtonItem!
+    
+    enum TabOption : Int {
+        case toRead = 0
+        case finished = 1
+        case settings = 2
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,6 +43,10 @@ class TabbedViewController: UIViewController, UITabBarDelegate {
         // Set the tab bar delegate to this controller, and always start on tab 1.
         tabBar.delegate = self
         setSelectedTab(to: .toRead)
+        
+        for childController in childViewControllers {
+            (childController as? BookTable)?.editingNotification = self
+        }
     }
     
     func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
@@ -72,7 +86,16 @@ class TabbedViewController: UIViewController, UITabBarDelegate {
         super.setEditing(editing, animated: animated)
         
         // Propagate the editing setting to the selected embedded view controller
-        selectedViewController.setEditing(editing, animated: animated)
+        if selectedViewController.isEditing != editing {
+            selectedViewController.setEditing(editing, animated: animated)
+        }
+    }
+    
+    func editingWasSet(editing: Bool, animated: Bool) {
+        // If a contained view controller notifies us of a change to the editing state, update *this* view controller
+        if self.isEditing != editing {
+            setEditing(editing, animated: animated)
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -119,10 +142,4 @@ class TabbedViewController: UIViewController, UITabBarDelegate {
         // This view controller's editing flag should refelct the selected embedded view controller's flag
         setEditing(selectedViewController.isEditing, animated: false)
     }
-}
-
-enum TabOption : Int {
-    case toRead = 0
-    case finished = 1
-    case settings = 2
 }

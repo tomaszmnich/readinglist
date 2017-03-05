@@ -10,13 +10,13 @@ import UIKit
 import DZNEmptyDataSet
 import CoreData
 import CoreSpotlight
-import BGTableViewRowActionWithImage
 
 class BookTable: AutoUpdatingTableViewController {
     
     var resultsController: NSFetchedResultsController<Book>!
     var resultsFilterer: FetchedResultsFilterer<Book, BookPredicateBuilder>!
     var readStates: [BookReadState]!
+    var editingNotification: EditingNotificationDelegate?
     
     override func viewDidLoad() {
         let readStatePredicate = NSPredicate.Or(readStates.map{BookPredicate.readState(equalTo: $0)})
@@ -93,6 +93,15 @@ class BookTable: AutoUpdatingTableViewController {
         return !tableView.isEditing
     }
     
+    override func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
+        return false
+    }
+    
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        editingNotification?.editingWasSet(editing: editing, animated: animated)
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let detailsViewController = (segue.destination as? UINavigationController)?.topViewController as? BookDetails,
             let cell = sender as? UITableViewCell,
@@ -101,40 +110,37 @@ class BookTable: AutoUpdatingTableViewController {
             detailsViewController.viewModel = BookDetailsViewModel(book: self.resultsController.object(at: selectedIndex))
         }
     }
-}
-
-/// Editing logic.
-extension BookTable {
-
-    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        let selectedBook = self.resultsController.object(at: indexPath)
-        
-        // Helper function to create actions which modify the read states of books
-        func updateReadState(newReadState: BookReadState) {
-            selectedBook.readState = newReadState
-            selectedBook.setDate(Date(), forState: newReadState)
-            selectedBook.sort = nil
-            appDelegate.booksStore.updateSpotlightIndex(for: selectedBook)
-            appDelegate.booksStore.save()
-        }
-        
-        var editActions = [BGTableViewRowActionWithImage.rowAction(with: .destructive, title: "Delete", backgroundColor: UIColor.red, image: #imageLiteral(resourceName: "delete"), forCellHeight: UInt(tableView.cellForRow(at: indexPath)!.frame.height)){ _, _ in
+    
+    /// Returns the row actions to be used for a book in a given state
+    func rowActionsForBookInState(_ readState: BookReadState) -> [UITableViewRowAction] {
+        var rowActions = [UITableViewRowAction(style: .destructive, title: "Delete") {_, indexPath in
+            let selectedBook = self.resultsController.object(at: indexPath)
             appDelegate.booksStore.delete(selectedBook)
             appDelegate.booksStore.save()
-        }!]
+        }]
         
-        if selectedBook.readState == .toRead {
-            editActions.append(BGTableViewRowActionWithImage.rowAction(with: .normal, title: "Start", backgroundColor: UIColor(fromHex: 0x3498db), image: #imageLiteral(resourceName: "play"), forCellHeight: UInt(tableView.cellForRow(at: indexPath)!.frame.height)) { _,_ in
-                updateReadState(newReadState: .reading)
-            }!)
-        }
-        else if selectedBook.readState == .reading {
-            editActions.append(BGTableViewRowActionWithImage.rowAction(with: .normal, title: "Finish", backgroundColor: UIColor(fromHex: 0x2ecc71), image: #imageLiteral(resourceName: "checkmark"), forCellHeight: UInt(tableView.cellForRow(at: indexPath)!.frame.height)) {_,_ in
-                updateReadState(newReadState: .finished)
-            }!)
+        // Helper function to create actions which modify the read states of books
+        func updateReadState(book: Book, newReadState: BookReadState) {
+            book.readState = newReadState
+            book.setDate(Date(), forState: newReadState)
+            book.sort = nil
+            appDelegate.booksStore.updateSpotlightIndex(for: book)
+            appDelegate.booksStore.save()
         }
         
-        return editActions
+        //0x3498db, 0x2ecc71
+        if readState == .toRead {
+            rowActions.append(UITableViewRowAction(style: .normal, title: "Start") {_, indexPath in
+                updateReadState(book: self.resultsController.object(at: indexPath), newReadState: .reading)
+            })
+        }
+        else if readState == .reading {
+            rowActions.append(UITableViewRowAction(style: .normal, title: "Finish") {_, indexPath in
+                updateReadState(book: self.resultsController.object(at: indexPath), newReadState: .finished)
+            })
+        }
+        
+        return rowActions
     }
 }
 

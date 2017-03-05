@@ -15,10 +15,12 @@ class ReadingTable: BookTable {
         readStates = [.toRead, .reading]
         super.viewDidLoad()
     }
+    
+    let readingSection = 0, toReadSection = 1
 
     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         // We can reorder the "ToRead" books, if there are more than one
-        return indexPath.section == 1 && self.tableView(tableView, numberOfRowsInSection: 1) > 1
+        return indexPath.section == toReadSection && self.tableView(tableView, numberOfRowsInSection: toReadSection) > 1
     }
     
     override func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath, toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
@@ -26,14 +28,14 @@ class ReadingTable: BookTable {
             return proposedDestinationIndexPath
         }
         else {
-            return IndexPath(row: 0, section: 1)
+            return IndexPath(row: 0, section: toReadSection)
         }
     }
     
     override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         
         // We should only have movement in section 1. We also ignore moves which have no effect
-        guard sourceIndexPath.section == 1 && destinationIndexPath.section == 1 else { return }
+        guard sourceIndexPath.section == toReadSection && destinationIndexPath.section == toReadSection else { return }
         guard sourceIndexPath.row != destinationIndexPath.row else { return }
         
         // Calculate the ordering of the two rows involved
@@ -42,7 +44,7 @@ class ReadingTable: BookTable {
         let lastRow = itemMovedDown ? destinationIndexPath.row : sourceIndexPath.row
         
         // Move the objects to reflect the rows
-        var objectsInSection = resultsController.sections![1].objects!
+        var objectsInSection = resultsController.sections![toReadSection].objects!
         let movedObj = objectsInSection.remove(at: sourceIndexPath.row)
         objectsInSection.insert(movedObj, at: destinationIndexPath.row)
         
@@ -56,5 +58,9 @@ class ReadingTable: BookTable {
             appDelegate.booksStore.save()
             try? resultsController.performFetch()
         }
+    }
+    
+    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        return rowActionsForBookInState(indexPath.section == toReadSection ? .toRead : .reading)
     }
 }

@@ -13,7 +13,10 @@ class FinishedTable: BookTable {
 
     override func viewDidLoad() {
         readStates = [.finished]
-        
         super.viewDidLoad()
+    }
+    
+    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        return rowActionsForBookInState(.finished)
     }
 }
