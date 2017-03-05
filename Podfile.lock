@@ -1,6 +1,8 @@
 PODS:
   - DZNEmptyDataSet (1.8.1)
   - Eureka (2.0.1)
+  - ImageRow (1.0.0):
+    - Eureka (~> 2.0.0-beta.1)
   - RxCocoa (3.2.0):
     - RxSwift (~> 3.1)
   - RxSwift (3.2.0)
@@ -9,6 +11,7 @@ PODS:
 DEPENDENCIES:
   - DZNEmptyDataSet (~> 1.8)
   - Eureka (~> 2.0)
+  - ImageRow (~> 1.0)
   - RxCocoa (~> 3.0)
   - RxSwift (~> 3.0)
   - SwiftyJSON (~> 3.1)
@@ -16,10 +19,11 @@ DEPENDENCIES:
 SPEC CHECKSUMS:
   DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
   Eureka: ae837bb1dfae0c07bc1bda7aeef87876eeb537c2
+  ImageRow: 1e37db26f61a0c4ad3bc9a3a803c32d968782857
   RxCocoa: ccdf43101a70407097a29082f648ba1676075b30
   RxSwift: 46574f70d416b7923c237195939cc488a7fbf3a0
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
 
-PODFILE CHECKSUM: 72555eac6980d4f49103a4cddcba98c03b619e9a
+PODFILE CHECKSUM: 6ddcbf24141480c4a9ae16a2a4293298f11bbd24
 
 COCOAPODS: 1.2.0

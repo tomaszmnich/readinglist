@@ -10,6 +10,7 @@ target 'books' do
   pod 'DZNEmptyDataSet', '~> 1.8'
   pod 'SwiftyJSON', '~> 3.1'
   pod 'Eureka', '~> 2.0'
+  pod 'ImageRow', '~> 1.0'
   pod 'RxSwift', '~> 3.0'
   pod 'RxCocoa', '~> 3.0'
 end
