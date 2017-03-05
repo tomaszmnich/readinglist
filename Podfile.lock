@@ -17,7 +17,7 @@ DEPENDENCIES:
   - ImageRow (~> 1.0)
   - RxCocoa (~> 3.0)
   - RxSwift (~> 3.0)
-  - RxSwiftUtilities
+  - RxSwiftUtilities (~> 1.0)
   - SwiftyJSON (~> 3.1)
 
 SPEC CHECKSUMS:
@@ -29,6 +29,6 @@ SPEC CHECKSUMS:
   RxSwiftUtilities: 57e77c17b885931c37aa038f114f14fd1f478ac2
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
 
-PODFILE CHECKSUM: 5700626f69496db054405b83e05d1245801a1d2d
+PODFILE CHECKSUM: f8109160392b2c5be384b1e2de96f3b29c0d794d
 
 COCOAPODS: 1.2.0
