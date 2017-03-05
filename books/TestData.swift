@@ -7,39 +7,56 @@
 //
 
 import Foundation
+import UIKit
+import CoreData
 
 class TestData {
-    
-    static let booksToAdd: [(isbn: String, readState: BookReadState, started: Date?, finished: Date?)] = [
-        ("9780241197790", .finished, Date(dateString: "2015-07-15"), Date(dateString: "2015-08-10")), //The Trial
-        ("9780099800200", .finished, Date(dateString: "2015-08-12"), Date(dateString: "2015-09-21")), //Slaughterhouse 5
-        ("9781847924032", .reading, Date(dateString: "2016-04-27"), nil), //And The Weak Suffer What They Must?
-        ("9780099889809", .reading, Date(dateString: "2015-12-20"), nil), //Something Happened
-        ("9780007532766", .finished, Date(dateString: "2015-08-26"), Date(dateString: "2015-10-25")), //Purity
-        ("9780857059994", .finished, Date(dateString: "2016-01-12"), Date(dateString: "2016-02-23")), //The Girl in the Spider's web
-        ("9781476781105", .reading, Date(dateString: "2016-05-14"), nil), //Shards of Honor
-        ("9780751549256", .toRead, nil, nil), //The Cuckoo's Calling
-        ("9780099578512", .toRead, nil, nil), //Midnight's Children
-        ("9780141183442", .toRead, nil, nil), //The Castle
-        ("9780006546061", .toRead, nil, nil) //Fahrenheit 451
-    ]
     
     static func loadTestData() {
         
         // Search for each book and add the result
-        for bookToAdd in booksToAdd {
-            GoogleBooksAPI.search(isbn: bookToAdd.isbn) { bookMetadata, error in
-                
-                if let bookMetadata = bookMetadata?.first {
-                    bookMetadata.isbn13 = bookToAdd.isbn
-                    let readingInfo = BookReadingInformation()
-                    readingInfo.readState = bookToAdd.readState
-                    readingInfo.startedReading = bookToAdd.started
-                    readingInfo.finishedReading = bookToAdd.finished
-                    
-                    appDelegate.booksStore.create(from: bookMetadata, readingInformation: readingInfo)
-                }
+        for bookIndex in 0...1000 {
+            let bookMetatdata = BookMetadata()
+            bookMetatdata.title = "Book Number \(bookIndex)"
+            bookMetatdata.authorList = "Bennet, A.J."
+            bookMetatdata.coverImage = UIImagePNGRepresentation(UIImage.fromColor(color: getRandomColor()))
+            
+            let readingInfo = BookReadingInformation()
+            let randomNumber = drand48()
+            if randomNumber < 0.005 {
+                readingInfo.readState = .reading
+                readingInfo.startedReading = Date()
             }
+            else if randomNumber < 0.5 {
+                readingInfo.readState = .toRead
+            }
+            else {
+                readingInfo.readState = .finished
+                readingInfo.startedReading = Date()
+                readingInfo.finishedReading = Date()
+            }
+            appDelegate.booksStore.create(from: bookMetatdata, readingInformation: readingInfo)
         }
+    }
+    
+    static func getRandomColor() -> UIColor{
+        let randomRed = CGFloat(drand48())
+        let randomGreen = CGFloat(drand48())
+        let randomBlue = CGFloat(drand48())
+        
+        return UIColor(red: randomRed, green: randomGreen, blue: randomBlue, alpha: 1.0)
+    }
+}
+
+extension UIImage {
+    static func fromColor(color: UIColor) -> UIImage {
+        let rect = CGRect(x: 0, y: 0, width: 1, height: 1)
+        UIGraphicsBeginImageContext(rect.size)
+        let context = UIGraphicsGetCurrentContext()
+        context!.setFillColor(color.cgColor)
+        context!.fill(rect)
+        let img = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return img!
     }
 }

@@ -126,4 +126,15 @@ class BooksStore {
     func addSaveObserver(_ observer: AnyObject, selector: Selector) {
         NotificationCenter.default.addObserver(observer, selector: selector, name: NSNotification.Name.NSManagedObjectContextDidSave, object: coreDataStack.managedObjectContext)
     }
+    
+    func deleteAllData() {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: bookEntityName)
+        fetchRequest.returnsObjectsAsFaults = false
+        
+        let results = try! coreDataStack.managedObjectContext.fetch(fetchRequest)
+        for managedObject in results {
+            coreDataStack.managedObjectContext.delete(managedObject as! NSManagedObject)
+        }
+    
+    }
 }
