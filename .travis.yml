@@ -1,5 +1,6 @@
 language: objective-c
 osx_image: xcode8.1
-xcode_project: books.xcodeproj
 before_install:
   - pod repo update > /dev/null
+xcode_project: books.xcodeproj
+xcode_scheme: books
