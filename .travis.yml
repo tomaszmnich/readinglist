@@ -4,4 +4,4 @@ before_install:
   - pod repo update > /dev/null
 xcode_workspace: books.xcodeproj
 script:
-  - xcodebuild test -workspace books.xcworkspace -scheme books -destination 'platform=iOS Simulator,name=iPhone 7,OS=10.2'
+  - xcodebuild test -workspace books.xcworkspace -scheme books -destination 'platform=iOS Simulator,name=iPhone 7,OS=10.1'
