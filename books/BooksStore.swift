@@ -71,7 +71,14 @@ class BooksStore {
 
         // Execute it. Return nil if an error occurs.
         do {
-            return try coreDataStack.managedObjectContext.fetch(fetchRequest).first as? NSNumber
+            if let fetchDictionary = try coreDataStack.managedObjectContext.fetch(fetchRequest) as? Array<Dictionary<String,Any>>,
+                let maxSort = fetchDictionary.first?["maxsort"] as? NSNumber {
+               return maxSort
+            }
+            else{
+                print("Error determining max sort")
+                return nil
+            }
         }
         catch {
             print("Error fetching maximum sort index: \(error)")
