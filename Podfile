@@ -13,14 +13,14 @@ target 'books' do
   pod 'RxCocoa', '~> 3.0'
   pod 'RxSwiftUtilities', '~> 1.0'
 
-  #target 'books_UITests' do
-    #inherit! :search_paths
+  target 'books_UITests' do
+    inherit! :search_paths
     # Pods for testing
-  #end
+  end
 
-  #target 'books_UnitTests' do
-    #inherit! :search_paths
+  target 'books_UnitTests' do
+    inherit! :search_paths
     # Pods for testing
-  #end
+  end
 
 end

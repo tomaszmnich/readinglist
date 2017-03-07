@@ -69,8 +69,8 @@ class CoreDataStack {
     }
     
     /// Creates a new item of the specified type with the provided entity name.
-    func createNew<T>(entity: String) -> T where T: NSManagedObject {
-        let newItem = NSEntityDescription.insertNewObject(forEntityName: entity, into: managedObjectContext) as! T
+    func createNew(entity: String) -> NSManagedObject {
+        let newItem = NSEntityDescription.insertNewObject(forEntityName: entity, into: managedObjectContext)
         #if DEBUG
             print("Created new object with ID \(newItem.objectID.uriRepresentation().absoluteString)")
         #endif

@@ -12,8 +12,6 @@ import CoreSpotlight
 var appDelegate: AppDelegate {
     return UIApplication.shared.delegate as! AppDelegate
 }
- 
-let productBundleIdentifier = "com.andrewbennet.books"
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {

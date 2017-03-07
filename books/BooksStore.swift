@@ -9,6 +9,8 @@
 import CoreData
 import MobileCoreServices
 
+let productBundleIdentifier = "com.andrewbennet.books"
+
 /// Interfaces with the CoreData storage of Book objects
 class BooksStore {
     
@@ -102,8 +104,8 @@ class BooksStore {
      Creates a new Book object, populates with the provided metadata, saves the
      object context, and adds the book to the Spotlight index.
     */
-    func create(from metadata: BookMetadata, readingInformation: BookReadingInformation) {
-        let book: Book = coreDataStack.createNew(entity: bookEntityName)
+    @discardableResult func create(from metadata: BookMetadata, readingInformation: BookReadingInformation) -> Book {
+        let book = coreDataStack.createNew(entity: bookEntityName) as! Book
         book.populate(from: metadata)
         book.populate(from: readingInformation)
         
@@ -115,6 +117,7 @@ class BooksStore {
         
         save()
         updateSpotlightIndex(for: book)
+        return book
     }
     
     /**
