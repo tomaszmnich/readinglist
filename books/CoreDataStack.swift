@@ -13,49 +13,67 @@ import CoreData
  An instance of CoreDataStack can be held by a more specific accessing class.
 */
 class CoreDataStack {
-
-    private var modelUrl: URL!
-    private var sqliteStoreUrl: URL!
+    
+    let managedObjectContext: NSManagedObjectContext
+    
+    // TODO: consider removing these as instance variables
+    private let persistentStoreCoordinator: NSPersistentStoreCoordinator
+    private let managedObjectModel: NSManagedObjectModel
+    
+    enum PersistentStoreType {
+        case sqlite
+        case inMemory
+    }
     
     /**
      Constructs a CoreDataStack which represents the model contained in the .momd file with the specified
-     name, for storage in an .sqlite file with the given name (the extension should not be included)
+     name, for storage in an .sqlite file with the same name.
     */
-    init(sqliteFileName: String, momdFileName: String){
-        self.sqliteStoreUrl = FileManager.default
-            .urls(for: FileManager.SearchPathDirectory.documentDirectory, in: FileManager.SearchPathDomainMask.userDomainMask)
-            .first!.appendingPathComponent(sqliteFileName + ".sqlite")
-        self.modelUrl = Bundle.main.url(forResource: momdFileName, withExtension: "momd")!
-    }
-    
-    /// The managed object context
-    lazy private(set) var managedObjectContext: NSManagedObjectContext = {
-        let objectContent = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
-        objectContent.persistentStoreCoordinator = self.persistentStoreCoordinator
-        objectContent.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
-        return objectContent
-    }()
-    
-    private lazy var persistentStoreCoordinator: NSPersistentStoreCoordinator = {
-        let coordinator = NSPersistentStoreCoordinator(managedObjectModel: self.managedObjectModel)
+    init(momdFileName: String, persistentStoreType: PersistentStoreType) {
+        
+        // Build the ManagedObjectModel from the momd file
+        let managedObjectModelUrl = Bundle.main.url(forResource: momdFileName, withExtension: "momd")!
+        managedObjectModel = NSManagedObjectModel(contentsOf: managedObjectModelUrl)!
+        
+        // Build a PersistentStoreCoordinator for the ManagedObjectModel
+        persistentStoreCoordinator = NSPersistentStoreCoordinator(managedObjectModel: self.managedObjectModel)
+        
+        // Add the requested persistent store
+        let storeUrl: URL? = {
+            switch persistentStoreType {
+            case .sqlite:
+                return FileManager.default.urls(for: FileManager.SearchPathDirectory.documentDirectory, in: FileManager.SearchPathDomainMask.userDomainMask).first!.appendingPathComponent("\(momdFileName).sqlite")
+            case .inMemory:
+                return nil
+            }
+        }()
+        let storeDescriptor: String = {
+            switch persistentStoreType {
+            case .sqlite:
+                return NSSQLiteStoreType
+            case .inMemory:
+                return NSInMemoryStoreType
+            }
+        }()
         do {
-            try coordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: self.sqliteStoreUrl, options: nil)
+            try persistentStoreCoordinator.addPersistentStore(ofType: storeDescriptor, configurationName: nil, at: storeUrl, options: nil)
         }
         catch {
             print("Unresolved error adding persistent store: \(error)")
         }
-        return coordinator
-    }()
-
-    private lazy var managedObjectModel: NSManagedObjectModel = {
-        return NSManagedObjectModel(contentsOf: self.modelUrl)!
-    }()
-    
+        
+        // Add the ManagedObjectContext
+        managedObjectContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
+        managedObjectContext.persistentStoreCoordinator = self.persistentStoreCoordinator
+        managedObjectContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+    }
     
     /// Creates a new item of the specified type with the provided entity name.
     func createNew<T>(entity: String) -> T where T: NSManagedObject {
         let newItem = NSEntityDescription.insertNewObject(forEntityName: entity, into: managedObjectContext) as! T
-        print("Created new object with ID \(newItem.objectID.uriRepresentation().absoluteString)")
+        #if DEBUG
+            print("Created new object with ID \(newItem.objectID.uriRepresentation().absoluteString)")
+        #endif
         return newItem
     }
 }

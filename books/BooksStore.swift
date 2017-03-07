@@ -13,12 +13,13 @@ import MobileCoreServices
 class BooksStore {
     
     private let bookEntityName = "Book"
+    private let coreDataStack: CoreDataStack
+    private let coreSpotlightStack: CoreSpotlightStack
     
-    /// The core data stack which will be doing the MOM work
-    private lazy var coreDataStack = CoreDataStack(sqliteFileName: "books", momdFileName: "books")
-    
-    /// The spotlight stack which will be doing the indexing work
-    private lazy var coreSpotlightStack = CoreSpotlightStack(domainIdentifier: "com.andrewbennet.books")
+    init(storeType: CoreDataStack.PersistentStoreType) {
+        self.coreDataStack = CoreDataStack(momdFileName: "books", persistentStoreType: storeType)
+        self.coreSpotlightStack = CoreSpotlightStack(domainIdentifier: productBundleIdentifier)
+    }
     
     /// The mapping from a Book to a SpotlightItem
     private func spotlightItem(for book: Book) -> SpotlightItem {
@@ -70,6 +71,7 @@ class BooksStore {
         fetchRequest.propertiesToFetch = [expression]
 
         // Execute it. Return nil if an error occurs.
+        // TODO: consider making this fail hard
         do {
             if let fetchDictionary = try coreDataStack.managedObjectContext.fetch(fetchRequest) as? Array<Dictionary<String,Any>>,
                 let maxSort = fetchDictionary.first?["maxsort"] as? NSNumber {
@@ -142,6 +144,6 @@ class BooksStore {
         for managedObject in results {
             coreDataStack.managedObjectContext.delete(managedObject as! NSManagedObject)
         }
-    
+        save()
     }
 }

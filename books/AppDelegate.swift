@@ -20,7 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     
-    lazy var booksStore = BooksStore()
+    lazy var booksStore = BooksStore(storeType: .sqlite)
     
     var splitViewController: SplitViewController {
         return window!.rootViewController as! SplitViewController
