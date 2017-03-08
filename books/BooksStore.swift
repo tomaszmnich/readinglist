@@ -59,33 +59,16 @@ class BooksStore {
     /**
      Gets the current maximum sort index in the books store
     */
-    func max(attribute: String) -> NSNumber? {
-        // Build an expression for the maximum value of the 'sort' attribute
-        let expression = NSExpressionDescription()
-        expression.name = "max\(attribute)"
-        expression.expression = NSExpression(forFunction: "max:", arguments: [NSExpression(forKeyPath: attribute)])
-        expression.expressionResultType = NSAttributeType.integer32AttributeType
-        
-        // Build a fetch request for the above expression
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: bookEntityName)
+    func maxSort() -> Int? {
+        let fetchRequest = NSFetchRequest<Book>(entityName: self.bookEntityName)
         fetchRequest.fetchLimit = 1
-        fetchRequest.resultType = .dictionaryResultType
-        fetchRequest.propertiesToFetch = [expression]
-
-        // Execute it. Return nil if an error occurs.
-        // TODO: consider making this fail hard
+        
+        fetchRequest.sortDescriptors = [BookPredicate.sortIndexDescendingSort]
         do {
-            if let fetchDictionary = try coreDataStack.managedObjectContext.fetch(fetchRequest) as? Array<Dictionary<String,Any>>,
-                let maxSort = fetchDictionary.first?["maxsort"] as? NSNumber {
-               return maxSort
-            }
-            else{
-                print("Error determining max sort")
-                return nil
-            }
-        }
-        catch {
-            print("Error fetching maximum sort index: \(error)")
+            let books = try coreDataStack.managedObjectContext.fetch(fetchRequest)
+            return books.first?.sort as? Int
+        } catch {
+            print("Error determining max sort")
             return nil
         }
     }
@@ -111,7 +94,7 @@ class BooksStore {
         
         // The sort index should be 1 more than our maximum, and only if this book is in the ToRead state
         if readingInformation.readState == .toRead {
-            let maxSort = max(attribute: "sort")?.intValue ?? -1
+            let maxSort = self.maxSort() ?? -1
             book.sort = NSNumber(value: maxSort + 1)
         }
         

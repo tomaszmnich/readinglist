@@ -15,47 +15,60 @@ class books_UnitTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
         booksStore = BooksStore(storeType: .inMemory)
     }
     
     override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
+        booksStore = nil
     }
     
-    func testNewBook() {
+    var currentTestBook = 0
+    
+    /// Gets a fully populated BookMetadata object. Increments the ISBN by 1 each time.
+    private func getTestBookMetadata() -> BookMetadata {
+        currentTestBook += 1
+        
         let testBookMetadata = BookMetadata()
-        testBookMetadata.title = "Test Book Title"
-        testBookMetadata.authorList = "Test Book Authors"
-        testBookMetadata.bookDescription = "Test Book Description"
-        testBookMetadata.isbn13 = "1234567891011"
-        testBookMetadata.pageCount = 123
+        testBookMetadata.title = "Test Book Title \(currentTestBook)"
+        testBookMetadata.authorList = "Test Book Authors \(currentTestBook)"
+        testBookMetadata.bookDescription = "Test Book Description \(currentTestBook)"
+        testBookMetadata.isbn13 = "123456789\(currentTestBook)"
+        testBookMetadata.pageCount = 100 + currentTestBook
         testBookMetadata.publishedDate = Date(timeIntervalSince1970: 1488926352)
+        return testBookMetadata
+    }
+    
+    func testCreateNewBook() {
+        let testBookMetadata = getTestBookMetadata()
 
         let readingInformation = BookReadingInformation()
         readingInformation.readState = .reading
         readingInformation.startedReading = Date(timeIntervalSince1970: 1488926352)
         
+        // Create the book
         let book = booksStore.create(from: testBookMetadata, readingInformation: readingInformation)
-        XCTAssert(testBookMetadata.title == book.title)
-        XCTAssert(testBookMetadata.authorList == book.authorList)
-        XCTAssert(testBookMetadata.bookDescription == book.bookDescription)
-        XCTAssert(testBookMetadata.isbn13 == book.isbn13)
-        //XCTAssert(testBookMetadata.pageCount == Int(book.pageCount))
-        XCTAssert(testBookMetadata.publishedDate == book.publishedDate)
+        
+        // Test that the metadata is all the same
+        XCTAssertEqual(testBookMetadata.title, book.title)
+        XCTAssertEqual(testBookMetadata.authorList, book.authorList)
+        XCTAssertEqual(testBookMetadata.bookDescription, book.bookDescription)
+        XCTAssertEqual(testBookMetadata.isbn13, book.isbn13)
+        XCTAssertEqual(testBookMetadata.pageCount, book.pageCount as? Int)
+        XCTAssertEqual(testBookMetadata.publishedDate, book.publishedDate)
+        XCTAssertEqual(readingInformation.readState, book.readState)
+        XCTAssertEqual(readingInformation.startedReading, book.startedReading)
+        XCTAssertEqual(readingInformation.finishedReading, book.finishedReading)
     }
     
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-    
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
+    func testThatSortOrderIncrements() {
+        let toReadState = BookReadingInformation()
+        toReadState.readState = .toRead
+        
+        let book1 = booksStore.create(from: getTestBookMetadata(), readingInformation: toReadState)
+        let book2 = booksStore.create(from: getTestBookMetadata(), readingInformation: toReadState)
+        
+        XCTAssertEqual((book1.sort as! Int) + 1, (book2.sort as! Int))
     }
     
 }

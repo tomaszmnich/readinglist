@@ -31,4 +31,5 @@ class BookPredicate {
     static let finishedReadingSort = NSSortDescriptor(key: finishedReadingFieldName, ascending: true)
     static let readStateSort = NSSortDescriptor(key: readStateFieldName, ascending: true)
     static let sortIndexSort = NSSortDescriptor(key: sortFieldName, ascending: true)
+    static let sortIndexDescendingSort = NSSortDescriptor(key: sortFieldName, ascending: false)
 }
