@@ -8,15 +8,6 @@
 
 import XCTest
 
-extension XCUIElement {
-    // The following is a workaround for inputting text in the simulator when the keyboard is hidden
-    func setText(_ text: String, application: XCUIApplication) {
-        UIPasteboard.general.string = text
-        doubleTap()
-        application.menuItems["Paste"].tap()
-    }
-}
-
 class books_UITests: XCTestCase {
         
     override func setUp() {
@@ -40,8 +31,11 @@ class books_UITests: XCTestCase {
         
         // Add some book metadata
         let nextButton = app.toolbars.children(matching: .button).element(boundBy: 1)
-        app.textFields["Title"].setText("The Catcher in the Rye", application: app)
-        app.textFields["Author"].setText("J. D. Salinger", application: app)
+        app.textFields["Title"].tap()
+        sleep(1)
+        app.typeText("The Catcher in the Rye")
+        app.textFields["Author"].tap()
+        app.typeText("J. D. Salinger")
         nextButton.tap()
         app.typeText("241")
         nextButton.tap()
@@ -60,7 +54,8 @@ class books_UITests: XCTestCase {
         
         // Delete the book
         app.tables.children(matching: .cell).element(boundBy: initialNumberOfCells).tap()
-        app.navigationBars.buttons["Edit"].tap()
+        app.navigationBars["Reading_List.BookDetails"].buttons["Edit"].tap()
+        //app.navigationBars.buttons["Edit"].tap()
         app.tables.staticTexts["Delete Book"].tap()
         app.sheets.buttons["Delete"].tap()
         sleep(1)
