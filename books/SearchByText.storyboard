@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="o9x-cb-ys2">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="o9x-cb-ys2">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -54,20 +54,20 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bs5-Gi-0Ag">
-                                                    <rect key="frame" x="64" y="8" width="295" height="18"/>
+                                                    <rect key="frame" x="63" y="8" width="296" height="18"/>
                                                     <accessibility key="accessibilityConfiguration" identifier="title"/>
                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="pLh-fq-Whs">
-                                                    <rect key="frame" x="4" y="4" width="52" height="84"/>
+                                                    <rect key="frame" x="4" y="4" width="51" height="83"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" secondItem="pLh-fq-Whs" secondAttribute="height" multiplier="1:1.6" id="C3e-In-4b5"/>
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Authors" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FRa-pU-Zdo">
-                                                    <rect key="frame" x="64" y="26" width="295" height="16"/>
+                                                    <rect key="frame" x="63" y="26" width="296" height="16"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -123,40 +123,12 @@
                         <outlet property="searchBar" destination="Vde-59-8Z3" id="bL6-5L-juN"/>
                         <outlet property="spinner" destination="Lsm-Ck-OUF" id="jya-xm-H1F"/>
                         <outlet property="tableView" destination="1nj-su-2IL" id="yBi-z1-ZuF"/>
-                        <segue destination="j5V-0X-LwU" kind="show" identifier="searchResultSelected" id="FGj-qE-qJE"/>
+                        <segue destination="7vF-2L-Pie" kind="show" identifier="searchResultSelected" id="S39-PJ-HRt"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lTx-wk-0NZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1480.8" y="-91.304347826086968"/>
-        </scene>
-        <!--Create Book-->
-        <scene sceneID="F2Z-o4-0eZ">
-            <objects>
-                <viewController id="j5V-0X-LwU" customClass="CreateBook" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="i0S-ah-foW"/>
-                        <viewControllerLayoutGuide type="bottom" id="l3L-JJ-gwS"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="wkC-Zy-TfH">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    </view>
-                    <navigationItem key="navigationItem" id="cZV-vH-wus">
-                        <barButtonItem key="rightBarButtonItem" title="Next" id="Syx-tj-MBR">
-                            <connections>
-                                <segue destination="7vF-2L-Pie" kind="show" identifier="addManuallyNextSegue" id="uaK-Gj-wdH"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
-                    <connections>
-                        <outlet property="nextButton" destination="Syx-tj-MBR" id="k6B-Ew-Psf"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Nv8-iT-nez" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-791" y="-91"/>
+            <point key="canvasLocation" x="-1458" y="-91"/>
         </scene>
         <!--Create Read State-->
         <scene sceneID="54O-N4-cSB">
@@ -184,7 +156,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="W7s-u5-f7w" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-97" y="-91"/>
+            <point key="canvasLocation" x="-665" y="-91"/>
         </scene>
     </scenes>
 </document>

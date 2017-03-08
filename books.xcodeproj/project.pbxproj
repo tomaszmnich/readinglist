@@ -24,6 +24,7 @@
 		4942348E1E70AFA100CEEB4C /* SearchByText.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4942348A1E70AFA100CEEB4C /* SearchByText.storyboard */; };
 		4942348F1E70AFA100CEEB4C /* ScanBarcode.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4942348B1E70AFA100CEEB4C /* ScanBarcode.storyboard */; };
 		494234901E70AFA100CEEB4C /* EditReadState.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4942348C1E70AFA100CEEB4C /* EditReadState.storyboard */; };
+		494234931E70B24400CEEB4C /* BookDetails.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 494234921E70B24400CEEB4C /* BookDetails.storyboard */; };
 		4943DB761DBB9D92004CAF30 /* Settings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4943DB751DBB9D92004CAF30 /* Settings.storyboard */; };
 		4943DB791DBD5104004CAF30 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4943DB781DBD5104004CAF30 /* Settings.swift */; };
 		495879651BF7E76200000131 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 495879641BF7E76200000131 /* CoreDataStack.swift */; };
@@ -93,6 +94,7 @@
 		4942348A1E70AFA100CEEB4C /* SearchByText.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SearchByText.storyboard; sourceTree = "<group>"; };
 		4942348B1E70AFA100CEEB4C /* ScanBarcode.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ScanBarcode.storyboard; sourceTree = "<group>"; };
 		4942348C1E70AFA100CEEB4C /* EditReadState.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = EditReadState.storyboard; sourceTree = "<group>"; };
+		494234921E70B24400CEEB4C /* BookDetails.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = BookDetails.storyboard; sourceTree = "<group>"; };
 		4943DB751DBB9D92004CAF30 /* Settings.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Settings.storyboard; sourceTree = "<group>"; };
 		4943DB781DBD5104004CAF30 /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		495879641BF7E76200000131 /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
@@ -229,6 +231,7 @@
 			isa = PBXGroup;
 			children = (
 				494234891E70AFA100CEEB4C /* Main.storyboard */,
+				494234921E70B24400CEEB4C /* BookDetails.storyboard */,
 				4942348A1E70AFA100CEEB4C /* SearchByText.storyboard */,
 				4942348B1E70AFA100CEEB4C /* ScanBarcode.storyboard */,
 				4942348C1E70AFA100CEEB4C /* EditReadState.storyboard */,
@@ -498,6 +501,7 @@
 				4942348E1E70AFA100CEEB4C /* SearchByText.storyboard in Resources */,
 				4942348F1E70AFA100CEEB4C /* ScanBarcode.storyboard in Resources */,
 				49BDCC681CD4E72400F20AAE /* EditBook.storyboard in Resources */,
+				494234931E70B24400CEEB4C /* BookDetails.storyboard in Resources */,
 				4943DB761DBB9D92004CAF30 /* Settings.storyboard in Resources */,
 				4942348D1E70AFA100CEEB4C /* Main.storyboard in Resources */,
 				494234901E70AFA100CEEB4C /* EditReadState.storyboard in Resources */,

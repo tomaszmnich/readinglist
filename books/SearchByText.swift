@@ -126,8 +126,8 @@ class SearchByText: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let createBook = segue.destination as? CreateBook, let bookMetadata = sender as? BookMetadata {
-            createBook.initialBookMetadata = bookMetadata
+        if let createReadState = segue.destination as? CreateReadState, let bookMetadata = sender as? BookMetadata {
+            createReadState.bookMetadata = bookMetadata
         }
     }
     
