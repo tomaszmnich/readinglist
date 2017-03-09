@@ -59,20 +59,10 @@ class ReadingTable: BookTable {
         objectsInSection.insert(movedObj, at: destinationIndexPath.row)
         
         // Update the model to reflect the objects's positions
-        #if DEBUG
-            print("**** Reordering Rows ****")
-        #endif
         for rowNumber in firstRow...lastRow {
             let book = objectsInSection[rowNumber] as! Book
             book.sort = rowNumber as NSNumber?
-            #if DEBUG
-            print("\(book.title) set to Sort: \(book.sort!)")
-            #endif
         }
-        #if DEBUG
-            print("**** Finished Reordering Rows ****")
-            print("")
-        #endif
         
         // Turn off updates while we save the object context
         tableUpdater.withoutUpdates {
