@@ -113,31 +113,20 @@ class BookTable: AutoUpdatingTableViewController {
     
     /// Returns the row actions to be used for a book in a given state
     func rowActionsForBookInState(_ readState: BookReadState) -> [UITableViewRowAction] {
-        var rowActions = [UITableViewRowAction(style: .destructive, title: "Delete") {_, indexPath in
-            let selectedBook = self.resultsController.object(at: indexPath)
-            appDelegate.booksStore.delete(selectedBook)
-            appDelegate.booksStore.save()
-        }]
         
-        // Helper function to create actions which modify the read states of books
-        func updateReadState(book: Book, newReadState: BookReadState) {
-            book.readState = newReadState
-            book.setDate(Date(), forState: newReadState)
-            book.sort = nil
-            appDelegate.booksStore.updateSpotlightIndex(for: book)
-            appDelegate.booksStore.save()
+        func getBookFromIndexPath(rowAction: UITableViewRowAction, indexPath: IndexPath) -> Book {
+            return self.resultsController.object(at: indexPath)
         }
         
-        //0x3498db, 0x2ecc71
+        // Start with the delete action
+        var rowActions = [Book.deleteAction.toUITableViewRowAction(getActionableObject: getBookFromIndexPath)]
+        
+        // Add the other state change actions where appropriate
         if readState == .toRead {
-            rowActions.append(UITableViewRowAction(style: .normal, title: "Start") {_, indexPath in
-                updateReadState(book: self.resultsController.object(at: indexPath), newReadState: .reading)
-            })
+            rowActions.append(Book.transistionToReadingStateAction.toUITableViewRowAction(getActionableObject: getBookFromIndexPath))
         }
         else if readState == .reading {
-            rowActions.append(UITableViewRowAction(style: .normal, title: "Finish") {_, indexPath in
-                updateReadState(book: self.resultsController.object(at: indexPath), newReadState: .finished)
-            })
+            rowActions.append(Book.transistionToFinishedStateAction.toUITableViewRowAction(getActionableObject: getBookFromIndexPath))
         }
         
         return rowActions

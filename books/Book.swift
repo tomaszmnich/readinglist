@@ -11,6 +11,8 @@ import CoreData
 
 @objc(Book)
 class Book: NSManagedObject {
+    // The fields on this managed object have private setters, to enforce that the properties are internally consistent.
+    
     // Book Metadata
     @NSManaged private(set) var title: String
     @NSManaged private(set) var authorList: String?
@@ -21,11 +23,12 @@ class Book: NSManagedObject {
     @NSManaged private(set) var coverImage: Data?
     
     // Reading Information
-    @NSManaged var readState: BookReadState
-    @NSManaged var startedReading: Date?
-    @NSManaged var finishedReading: Date?
+    @NSManaged private(set) var readState: BookReadState
+    @NSManaged private(set) var startedReading: Date?
+    @NSManaged private(set) var finishedReading: Date?
     
     // Other Metadata
+    // TODO: Think about making this privately set, and managing its value internally
     @NSManaged var sort: NSNumber?
     
     func populate(from metadata: BookMetadata) {
@@ -48,15 +51,18 @@ class Book: NSManagedObject {
         }
     }
     
-    func setDate(_ date: Date, forState: BookReadState) {
-        switch readState {
-        case .reading:
-            startedReading = date
-        case .finished:
-            finishedReading = date
-        default:
-            break
-        }
+    static let transistionToReadingStateAction = GeneralUIAction<Book>(style: .normal, title: "Start") { book in
+        let reading = BookReadingInformation(readState: .reading, startedWhen: Date(), finishedWhen: nil)
+        appDelegate.booksStore.update(book: book, with: reading)
+    }
+    
+    static let transistionToFinishedStateAction = GeneralUIAction<Book>(style: .normal, title: "Finish") { book in
+        let finished = BookReadingInformation(readState: .finished, startedWhen: book.startedReading!, finishedWhen: Date())
+        appDelegate.booksStore.update(book: book, with: finished)
+    }
+    
+    static let deleteAction = GeneralUIAction<Book>(style: .destructive, title: "Delete") { book in
+        appDelegate.booksStore.delete(book)
     }
 }
 
@@ -82,7 +88,8 @@ class BookReadingInformation {
     let startedReading: Date?
     let finishedReading: Date?
     
-    /// Will only populate the start date if started; will only populate the finished date if finished
+    /// Will only populate the start date if started; will only populate the finished date if finished.
+    /// Otherwise, dates are set to nil.
     init(readState: BookReadState, startedWhen: Date?, finishedWhen: Date?) {
         self.readState = readState
         switch readState {

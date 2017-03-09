@@ -76,11 +76,8 @@ class EditBook: BookMetadataForm {
         newMetadata.publishedDate = publicationDate
         newMetadata.coverImage = image == nil ? nil : UIImageJPEGRepresentation(image!, 0.7)
         
-        // Update and save the book
-        bookToEdit.populate(from: newMetadata)
-        appDelegate.booksStore.updateSpotlightIndex(for: bookToEdit)
-        appDelegate.booksStore.save()
-
+        // Update the book
+        appDelegate.booksStore.update(book: bookToEdit, with: newMetadata)
         dismiss()
     }
 }

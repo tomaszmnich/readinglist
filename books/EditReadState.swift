@@ -36,10 +36,8 @@ class EditReadState: ReadStateForm {
         // Create an object representation of the form values
         let newReadStateInfo = BookReadingInformation(readState: readState, startedWhen: startedReading, finishedWhen: finishedReading)
         
-        // Update and save the book
-        bookToEdit.populate(from: newReadStateInfo)
-        appDelegate.booksStore.updateSpotlightIndex(for: bookToEdit)
-        appDelegate.booksStore.save()
+        // Update the book
+        appDelegate.booksStore.update(book: bookToEdit, with: newReadStateInfo)
         
         self.navigationController?.dismiss(animated: true, completion: nil)
     }

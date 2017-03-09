@@ -33,7 +33,6 @@ class CreateReadState: ReadStateForm {
         // Ignore the dates which are not relevant.
         let bookReadingInformation = BookReadingInformation(readState: readState, startedWhen: startedReading, finishedWhen: finishedReading)
         appDelegate.booksStore.create(from: bookMetadata, readingInformation: bookReadingInformation)
-        appDelegate.booksStore.save()
         
         self.navigationController?.dismiss(animated: true, completion: nil)
     }

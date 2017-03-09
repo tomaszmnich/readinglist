@@ -104,6 +104,24 @@ class BooksStore {
     }
     
     /**
+        Updates the provided book with the provided metadata. Saves and reindexes in spotlight.
+    */
+    func update(book: Book, with metadata: BookMetadata) {
+        book.populate(from: metadata)
+        save()
+        updateSpotlightIndex(for: book)
+    }
+    
+    /**
+        Updates the provided book with the provided reading information. Saves and reindexes in spotlight.
+     */
+    func update(book: Book, with readingInformation: BookReadingInformation) {
+        book.populate(from: readingInformation)
+        save()
+        updateSpotlightIndex(for: book)
+    }
+    
+    /**
      Saves the managedObjectContext and suppresses any errors.
     */
     func save() {
