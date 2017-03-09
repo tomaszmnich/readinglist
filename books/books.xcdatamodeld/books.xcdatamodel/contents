@@ -5,7 +5,7 @@
         <attribute name="bookDescription" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="coverImage" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES" syncable="YES"/>
         <attribute name="finishedReading" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="isbn13" optional="YES" attributeType="String" regularExpressionString="^\d{13}$" indexed="YES" syncable="YES"/>
+        <attribute name="isbn13" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="pageCount" optional="YES" attributeType="Integer 32" minValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="publishedDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="readState" attributeType="Integer 32" usesScalarValueType="NO" indexed="YES" syncable="YES"/>

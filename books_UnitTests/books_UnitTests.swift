@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import Foundation
 @testable import Reading_List
 
 class books_UnitTests: XCTestCase {
@@ -23,28 +24,28 @@ class books_UnitTests: XCTestCase {
         booksStore = nil
     }
     
+    private let yesterday = Date().addingTimeInterval(TimeInterval(-86400))
+    private let today = Date()
+    private let tomorrow = Date().addingTimeInterval(TimeInterval(86400))
+    
     var currentTestBook = 0
     
     /// Gets a fully populated BookMetadata object. Increments the ISBN by 1 each time.
     private func getTestBookMetadata() -> BookMetadata {
         currentTestBook += 1
-        
         let testBookMetadata = BookMetadata()
         testBookMetadata.title = "Test Book Title \(currentTestBook)"
         testBookMetadata.authorList = "Test Book Authors \(currentTestBook)"
         testBookMetadata.bookDescription = "Test Book Description \(currentTestBook)"
-        testBookMetadata.isbn13 = "123456789\(currentTestBook)"
+        testBookMetadata.isbn13 = "12345678910\(String(format: "%02d", currentTestBook))"
         testBookMetadata.pageCount = 100 + currentTestBook
         testBookMetadata.publishedDate = Date(timeIntervalSince1970: 1488926352)
         return testBookMetadata
     }
     
-    func testCreateNewBook() {
+    func testBookMetadataPopulates() {
         let testBookMetadata = getTestBookMetadata()
-
-        let readingInformation = BookReadingInformation()
-        readingInformation.readState = .reading
-        readingInformation.startedReading = Date(timeIntervalSince1970: 1488926352)
+        let readingInformation = BookReadingInformation.finished(started: yesterday, finished: today)
         
         // Create the book
         let book = booksStore.create(from: testBookMetadata, readingInformation: readingInformation)
@@ -62,13 +63,66 @@ class books_UnitTests: XCTestCase {
     }
     
     func testThatSortOrderIncrements() {
-        let toReadState = BookReadingInformation()
-        toReadState.readState = .toRead
-        
+        let toReadState = BookReadingInformation.toRead()
         let book1 = booksStore.create(from: getTestBookMetadata(), readingInformation: toReadState)
         let book2 = booksStore.create(from: getTestBookMetadata(), readingInformation: toReadState)
         
         XCTAssertEqual((book1.sort as! Int) + 1, (book2.sort as! Int))
+    }
+    
+    func testSortIndexRemovedWhenStarted() {
+        let toReadState = BookReadingInformation.toRead()
+        let book = booksStore.create(from: getTestBookMetadata(), readingInformation: toReadState)
+        
+        let reading = BookReadingInformation.reading(started: today)
+        booksStore.update(book: book, with: reading)
+        
+        XCTAssertNil(book.sort)
+    }
+    
+    func testToReadBookOrdering() {
+        let fetchedResultsController = booksStore.fetchedResultsController(BookPredicate.readState(equalTo: .toRead), initialSortDescriptors: BooksStore.standardSortOrder)
+        
+        let first = booksStore.create(from: getTestBookMetadata(), readingInformation: BookReadingInformation.reading(started: tomorrow))
+        let second = booksStore.create(from: getTestBookMetadata(), readingInformation: BookReadingInformation.reading(started: today))
+        
+        try! fetchedResultsController.performFetch()
+        XCTAssertEqual(first, fetchedResultsController.object(at: IndexPath(item: 0, section: 0)))
+        XCTAssertEqual(second, fetchedResultsController.object(at: IndexPath(item: 1, section: 0)))
+    }
+    
+    func testReadingBookOrdering() {
+        let fetchedResultsController = booksStore.fetchedResultsController(BookPredicate.readState(equalTo: .reading), initialSortDescriptors: BooksStore.standardSortOrder)
+        
+        let past = booksStore.create(from: getTestBookMetadata(), readingInformation: BookReadingInformation.reading(started: yesterday))
+        let future = booksStore.create(from: getTestBookMetadata(), readingInformation: BookReadingInformation.reading(started: tomorrow))
+        let present = booksStore.create(from: getTestBookMetadata(), readingInformation: BookReadingInformation.reading(started: today))
+        
+        try! fetchedResultsController.performFetch()
+        XCTAssertEqual(past, fetchedResultsController.object(at: IndexPath(item: 0, section: 0)))
+        XCTAssertEqual(present, fetchedResultsController.object(at: IndexPath(item: 1, section: 0)))
+        XCTAssertEqual(future, fetchedResultsController.object(at: IndexPath(item: 2, section: 0)))
+    }
+    
+    func testFinishedBookOrdering() {
+        let fetchedResultsController = booksStore.fetchedResultsController(BookPredicate.readState(equalTo: .finished), initialSortDescriptors: BooksStore.standardSortOrder)
+        
+        let past1 = booksStore.create(from: getTestBookMetadata(), readingInformation: BookReadingInformation.finished(started: yesterday, finished: yesterday))
+        let past2 = booksStore.create(from: getTestBookMetadata(), readingInformation: BookReadingInformation.finished(started: tomorrow, finished: yesterday))
+        
+        let future1 = booksStore.create(from: getTestBookMetadata(), readingInformation: BookReadingInformation.finished(started: yesterday, finished: tomorrow))
+        let future2 = booksStore.create(from: getTestBookMetadata(), readingInformation: BookReadingInformation.finished(started: tomorrow, finished: tomorrow))
+        
+        let present1 = booksStore.create(from: getTestBookMetadata(), readingInformation: BookReadingInformation.finished(started: yesterday, finished: today))
+        let present2 = booksStore.create(from: getTestBookMetadata(), readingInformation: BookReadingInformation.finished(started: tomorrow, finished: today))
+        
+        try! fetchedResultsController.performFetch()
+        XCTAssertEqual(past1, fetchedResultsController.object(at: IndexPath(item: 0, section: 0)))
+        XCTAssertEqual(past2, fetchedResultsController.object(at: IndexPath(item: 1, section: 0)))
+        XCTAssertEqual(present1, fetchedResultsController.object(at: IndexPath(item: 2, section: 0)))
+        XCTAssertEqual(present2, fetchedResultsController.object(at: IndexPath(item: 3, section: 0)))
+        XCTAssertEqual(future1, fetchedResultsController.object(at: IndexPath(item: 4, section: 0)))
+        XCTAssertEqual(future2, fetchedResultsController.object(at: IndexPath(item: 5, section: 0)))
     }
     
 }

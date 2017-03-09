@@ -123,6 +123,15 @@ extension String {
 
 extension NSPredicate {    
     
+    convenience init(boolean: Bool) {
+        switch boolean {
+        case true:
+            self.init(format: "TRUEPREDICATE")
+        case false:
+            self.init(format: "FALSEPREDICATE")
+        }
+    }
+    
     convenience init(fieldName: String, equalToInt: Int) {
         self.init(format: "\(fieldName) == %d", equalToInt)
     }
@@ -130,7 +139,7 @@ extension NSPredicate {
     convenience init(fieldName: String, containsSubstring: String) {
         // Special case for "contains empty string": should return TRUE
         if containsSubstring.isEmpty {
-            self.init(format: "TRUEPREDICATE")
+            self.init(boolean: true)
         }
         else {
             self.init(format: "\(fieldName) CONTAINS[cd] %@", containsSubstring)

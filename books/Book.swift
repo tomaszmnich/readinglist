@@ -84,6 +84,8 @@ class BookMetadata {
 /// A mutable, non-persistent representation of a the reading status of a Book object.
 /// Useful for maintaining in-creation books, or books being edited.
 class BookReadingInformation {
+    // TODO: consider create class heirachy with non-optional Dates where appropriate
+    
     let readState: BookReadState
     let startedReading: Date?
     let finishedReading: Date?
@@ -103,6 +105,18 @@ class BookReadingInformation {
             self.startedReading = startedWhen!
             self.finishedReading = finishedWhen!
         }
+    }
+    
+    static func toRead() -> BookReadingInformation {
+        return BookReadingInformation(readState: .toRead, startedWhen: nil, finishedWhen: nil)
+    }
+    
+    static func reading(started: Date) -> BookReadingInformation {
+        return BookReadingInformation(readState: .reading, startedWhen: started, finishedWhen: nil)
+    }
+    
+    static func finished(started: Date, finished: Date) -> BookReadingInformation {
+        return BookReadingInformation(readState: .finished, startedWhen: started, finishedWhen: finished)
     }
 }
 

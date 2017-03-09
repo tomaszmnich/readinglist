@@ -42,6 +42,14 @@ class BooksStore {
     }
     
     /**
+     Ordered by read state, sort order, started reading date and then finished reading date
+    */
+    static let standardSortOrder = [BookPredicate.readStateSort,
+                                    BookPredicate.sortIndexSort,
+                                    BookPredicate.finishedReadingSort,
+                                    BookPredicate.startedReadingSort]
+    
+    /**
      Retrieves the specified Book, if it exists.
      */
     func get(bookIdUrl: URL) -> Book? {
@@ -125,6 +133,7 @@ class BooksStore {
      Saves the managedObjectContext and suppresses any errors.
     */
     func save() {
+        // TODO: Find a way to make this method private, if possible
         do {
             try coreDataStack.managedObjectContext.save()
         }

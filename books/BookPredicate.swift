@@ -12,6 +12,7 @@ class BookPredicate {
     
     private static let titleFieldName = "title"
     private static let authorFieldName = "authorList"
+    
     private static let sortFieldName = "sort"
     private static let startedReadingFieldName = "startedReading"
     private static let finishedReadingFieldName = "finishedReading"

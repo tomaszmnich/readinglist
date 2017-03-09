@@ -18,11 +18,12 @@ class BookTable: AutoUpdatingTableViewController {
     var readStates: [BookReadState]!
     var editingNotification: EditingNotificationDelegate?
     
+    
     override func viewDidLoad() {
         let readStatePredicate = NSPredicate.Or(readStates.map{BookPredicate.readState(equalTo: $0)})
         
         // Set up the results controller
-        resultsController = appDelegate.booksStore.fetchedResultsController(readStatePredicate, initialSortDescriptors: [BookPredicate.readStateSort, NSSortDescriptor(key: "sort", ascending: true), NSSortDescriptor(key: "startedReading", ascending: true), NSSortDescriptor(key: "finishedReading", ascending: true)])
+        resultsController = appDelegate.booksStore.fetchedResultsController(readStatePredicate, initialSortDescriptors: BooksStore.standardSortOrder)
     
         // Assign the table updator, which will deal with changes to the data
         tableUpdater = TableUpdater<Book, BookTableViewCell>(table: tableView, controller: resultsController)
