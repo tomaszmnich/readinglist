@@ -2,6 +2,7 @@ language: objective-c
 osx_image: xcode8.2
 before_install:
   - pod repo update > /dev/null
+xcode_workspace: books.xcworkspace
+xcode_scheme: books
 script:
-  - xcodebuild clean build -workspace books.xcworkspace -scheme books
-  - xcodebuild test -workspace books.xcworkspace -scheme books -destination 'platform=iOS Simulator,name=iPhone 7,OS=10.1'
+  - xcodebuild test -workspace books.xcworkspace -scheme books -destination 'platform=iOS Simulator,name=iPhone 7,OS=10.1' CODE_SIGNING_REQUIRED=NO

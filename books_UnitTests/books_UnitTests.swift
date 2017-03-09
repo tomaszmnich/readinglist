@@ -83,8 +83,8 @@ class books_UnitTests: XCTestCase {
     func testToReadBookOrdering() {
         let fetchedResultsController = booksStore.fetchedResultsController(BookPredicate.readState(equalTo: .toRead), initialSortDescriptors: BooksStore.standardSortOrder)
         
-        let first = booksStore.create(from: getTestBookMetadata(), readingInformation: BookReadingInformation.reading(started: tomorrow))
-        let second = booksStore.create(from: getTestBookMetadata(), readingInformation: BookReadingInformation.reading(started: today))
+        let first = booksStore.create(from: getTestBookMetadata(), readingInformation: BookReadingInformation.toRead())
+        let second = booksStore.create(from: getTestBookMetadata(), readingInformation: BookReadingInformation.toRead())
         
         try! fetchedResultsController.performFetch()
         XCTAssertEqual(first, fetchedResultsController.object(at: IndexPath(item: 0, section: 0)))
