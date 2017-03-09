@@ -34,10 +34,7 @@ class EditReadState: ReadStateForm {
         self.view.endEditing(true)
         
         // Create an object representation of the form values
-        let newReadStateInfo = BookReadingInformation()
-        newReadStateInfo.readState = readState
-        newReadStateInfo.startedReading = startedReading
-        newReadStateInfo.finishedReading = finishedReading
+        let newReadStateInfo = BookReadingInformation(readState: readState, startedWhen: startedReading, finishedWhen: finishedReading)
         
         // Update and save the book
         bookToEdit.populate(from: newReadStateInfo)

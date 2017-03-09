@@ -21,19 +21,16 @@ class TestData {
             bookMetatdata.authorList = "Bennet, A.J."
             bookMetatdata.coverImage = UIImagePNGRepresentation(UIImage.fromColor(color: getRandomColor()))
             
-            let readingInfo = BookReadingInformation()
+            let readingInfo: BookReadingInformation
             let randomNumber = drand48()
             if randomNumber < 0.005 {
-                readingInfo.readState = .reading
-                readingInfo.startedReading = Date()
+                readingInfo = BookReadingInformation(readState: .reading, startedWhen: Date(), finishedWhen: nil)
             }
             else if randomNumber < 0.5 {
-                readingInfo.readState = .toRead
+                readingInfo = BookReadingInformation(readState: .toRead, startedWhen: nil, finishedWhen: nil)
             }
             else {
-                readingInfo.readState = .finished
-                readingInfo.startedReading = Date()
-                readingInfo.finishedReading = Date()
+                readingInfo = BookReadingInformation(readState: .finished, startedWhen: Date(), finishedWhen: Date())
             }
             appDelegate.booksStore.create(from: bookMetatdata, readingInformation: readingInfo)
         }

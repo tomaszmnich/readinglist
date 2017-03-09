@@ -62,7 +62,7 @@ class Book: NSManagedObject {
 
 
 
-/// A mutable, non-persistent representation of a Book object.
+/// A mutable, non-persistent representation of the metadata fields of a Book object.
 /// Useful for maintaining in-creation books, or books being edited.
 class BookMetadata {
     var title: String!
@@ -75,10 +75,28 @@ class BookMetadata {
     var coverImage: Data?
 }
 
+/// A mutable, non-persistent representation of a the reading status of a Book object.
+/// Useful for maintaining in-creation books, or books being edited.
 class BookReadingInformation {
-    var readState: BookReadState!
-    var startedReading: Date?
-    var finishedReading: Date?
+    let readState: BookReadState
+    let startedReading: Date?
+    let finishedReading: Date?
+    
+    /// Will only populate the start date if started; will only populate the finished date if finished
+    init(readState: BookReadState, startedWhen: Date?, finishedWhen: Date?) {
+        self.readState = readState
+        switch readState {
+        case .toRead:
+            self.startedReading = nil
+            self.finishedReading = nil
+        case .reading:
+            self.startedReading = startedWhen!
+            self.finishedReading = nil
+        case .finished:
+            self.startedReading = startedWhen!
+            self.finishedReading = finishedWhen!
+        }
+    }
 }
 
 /// The availale reading progress states
