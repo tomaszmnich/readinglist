@@ -16,7 +16,7 @@ extension UIColor {
     }
 }
 
-extension Date {
+public extension Date {
     init(dateString: String) {
         let dateStringFormatter = DateFormatter()
         dateStringFormatter.dateFormat = "yyyy-MM-dd"
@@ -41,30 +41,28 @@ extension Date {
     func toHumanisedString() -> String {
         let today = Date()
         
-        // If we are in the future, fully specify the date
-        if (self as NSDate).laterDate(today) == self {
-            return self.toString(withDateFormat: "d MMM yyyy")
-        }
+        // Replace the hour (time) of both dates with 00:00
+        let date1 = Calendar.current.startOfDay(for: self)
+        let date2 = Calendar.current.startOfDay(for: today)
         
-        // Otherwise split the dates into components
-        let theseComponents = Calendar.current.dateComponents([.day, .month, .year], from: self)
-        let todayComponents = Calendar.current.dateComponents([.day, .month, .year], from: today)
+        let daysBetween = Calendar.current.dateComponents([.day], from: date1, to: date2).day!
         
-        
-        // more than 5 days ago
-        if theseComponents.year! != todayComponents.year! || todayComponents.month! != theseComponents.month! || todayComponents.day! - theseComponents.day! >= 5 {
-            return self.toString(withDateFormat: "d MMM yyyy")
+        if daysBetween < 0 {
+            return self.toString(withDateFormat: "d MMM")
         }
-        else if todayComponents.day! - theseComponents.day! >= 2 {
-            // between 2 and 5 days ago
-            return self.toString(withDateFormat: "EEEE")
-        }
-        else if todayComponents.day! - theseComponents.day! == 1 {
-            return "Yesterday"
-        }
-        else {
+        if daysBetween == 0 {
             return "Today"
         }
+        if daysBetween > 0 && daysBetween <= 5 {
+            return self.toString(withDateFormat: "EEE")
+        }
+        else {
+            return self.toString(withDateFormat: "d MMM")
+        }
+    }
+    
+    func date(byAdding dateComponents: DateComponents) -> Date? {
+        return Calendar.current.date(byAdding: dateComponents, to: self)
     }
 }
 

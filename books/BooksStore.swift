@@ -25,7 +25,7 @@ class BooksStore {
     
     /// The mapping from a Book to a SpotlightItem
     private func spotlightItem(for book: Book) -> SpotlightItem {
-        return SpotlightItem(uniqueIdentifier: book.objectID.uriRepresentation().absoluteString, title: book.title, description: "\(book.finishedReading != nil ? "Completed: " + book.finishedReading!.description + ". " : "")\(book.bookDescription != nil ? book.bookDescription! : "")", thumbnailImageData: book.coverImage)
+        return SpotlightItem(uniqueIdentifier: book.objectID.uriRepresentation().absoluteString, title: book.title, description: "\(book.finishedReading != nil ? "Finished: " + book.finishedReading!.toString(withDateFormat: "d MMM") + ". " : "")\(book.bookDescription != nil ? book.bookDescription! : "")", thumbnailImageData: book.coverImage)
     }
     
     /**
@@ -47,7 +47,7 @@ class BooksStore {
     static let standardSortOrder = [BookPredicate.readStateSort,
                                     BookPredicate.sortIndexSort,
                                     BookPredicate.finishedReadingDescendingSort,
-                                    BookPredicate.startedReadingSort]
+                                    BookPredicate.startedReadingDescendingSort]
     
     /**
      Retrieves the specified Book, if it exists.
@@ -155,7 +155,7 @@ class BooksStore {
         
         let results = try! coreDataStack.managedObjectContext.fetch(fetchRequest)
         for managedObject in results {
-            coreDataStack.managedObjectContext.delete(managedObject as! NSManagedObject)
+            delete(managedObject as! Book)
         }
         save()
     }

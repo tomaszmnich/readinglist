@@ -29,10 +29,10 @@ class BookTableViewCell: UITableViewCell, ConfigurableCell {
         authorsLabel.text = book.authorList
         bookCover.image = UIImage(optionalData: book.coverImage)
         if book.readState == .reading {
-            readTimeLabel.text = book.startedReading!.toString(withDateFormat: "dd MMM")
+            readTimeLabel.text = book.startedReading!.toHumanisedString()
         }
         else if book.readState == .finished {
-            readTimeLabel.text = book.finishedReading!.toString(withDateFormat: "dd MMM")
+            readTimeLabel.text = book.finishedReading!.toHumanisedString()
         }
         else {
             readTimeLabel.text = nil

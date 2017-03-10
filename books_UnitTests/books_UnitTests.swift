@@ -24,9 +24,16 @@ class books_UnitTests: XCTestCase {
         booksStore = nil
     }
     
-    private let yesterday = Date().addingTimeInterval(TimeInterval(-86400))
+    
+    static func days(_ count: Int) -> DateComponents {
+        var component = DateComponents()
+        component.day = count
+        return component
+    }
+    
+    private let yesterday = Date().date(byAdding: books_UnitTests.days(-1))!
     private let today = Date()
-    private let tomorrow = Date().addingTimeInterval(TimeInterval(86400))
+    private let tomorrow = Date().date(byAdding: books_UnitTests.days(1))!
     
     var currentTestBook = 0
     
@@ -123,7 +130,11 @@ class books_UnitTests: XCTestCase {
         XCTAssertEqual(present2, fetchedResultsController.object(at: IndexPath(item: 3, section: 0)))
         XCTAssertEqual(past1, fetchedResultsController.object(at: IndexPath(item: 4, section: 0)))
         XCTAssertEqual(past2, fetchedResultsController.object(at: IndexPath(item: 5, section: 0)))
-        
+    }
+    
+    func testHumanisedDateString() {
+        XCTAssertEqual("Today", today.toHumanisedString())
+        XCTAssertEqual("Yesterday", yesterday.toHumanisedString())
     }
     
 }
