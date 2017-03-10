@@ -117,12 +117,13 @@ class books_UnitTests: XCTestCase {
         let present2 = booksStore.create(from: getTestBookMetadata(), readingInformation: BookReadingInformation.finished(started: tomorrow, finished: today))
         
         try! fetchedResultsController.performFetch()
-        XCTAssertEqual(past1, fetchedResultsController.object(at: IndexPath(item: 0, section: 0)))
-        XCTAssertEqual(past2, fetchedResultsController.object(at: IndexPath(item: 1, section: 0)))
+        XCTAssertEqual(future1, fetchedResultsController.object(at: IndexPath(item: 0, section: 0)))
+        XCTAssertEqual(future2, fetchedResultsController.object(at: IndexPath(item: 1, section: 0)))
         XCTAssertEqual(present1, fetchedResultsController.object(at: IndexPath(item: 2, section: 0)))
         XCTAssertEqual(present2, fetchedResultsController.object(at: IndexPath(item: 3, section: 0)))
-        XCTAssertEqual(future1, fetchedResultsController.object(at: IndexPath(item: 4, section: 0)))
-        XCTAssertEqual(future2, fetchedResultsController.object(at: IndexPath(item: 5, section: 0)))
+        XCTAssertEqual(past1, fetchedResultsController.object(at: IndexPath(item: 4, section: 0)))
+        XCTAssertEqual(past2, fetchedResultsController.object(at: IndexPath(item: 5, section: 0)))
+        
     }
     
 }

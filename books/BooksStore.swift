@@ -46,7 +46,7 @@ class BooksStore {
     */
     static let standardSortOrder = [BookPredicate.readStateSort,
                                     BookPredicate.sortIndexSort,
-                                    BookPredicate.finishedReadingSort,
+                                    BookPredicate.finishedReadingDescendingSort,
                                     BookPredicate.startedReadingSort]
     
     /**
