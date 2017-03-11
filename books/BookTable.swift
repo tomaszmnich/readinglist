@@ -18,7 +18,6 @@ class BookTable: AutoUpdatingTableViewController {
     var readStates: [BookReadState]!
     var editingNotification: EditingNotificationDelegate?
     
-    
     override func viewDidLoad() {
         let readStatePredicate = NSPredicate.Or(readStates.map{BookPredicate.readState(equalTo: $0)})
         
@@ -38,7 +37,12 @@ class BookTable: AutoUpdatingTableViewController {
         searchController.searchBar.returnKeyType = .done
         searchController.hidesNavigationBarDuringPresentation = false
         tableView.tableHeaderView = searchController.searchBar
-
+        
+        // contentOffset will not change before the main runloop ends without queueing it, for iPad that is
+        DispatchQueue.main.async {
+            self.tableView.contentOffset.y = searchController.searchBar.frame.size.height
+        }
+        
         // We will manage the clearing of selections ourselves.
         clearsSelectionOnViewWillAppear = false
         
