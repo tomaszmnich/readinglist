@@ -51,7 +51,6 @@ class SearchResultViewModel {
         self.title = searchResult.title
         self.author = searchResult.authorList
         if let coverURL = searchResult.coverUrl {
-            print("requesting \(coverURL)")
             coverImage = URLSession.shared.rx.data(request: URLRequest(url: coverURL))
                 .map(Optional.init)
                 .startWith(nil)
@@ -65,7 +64,7 @@ class SearchResultViewModel {
     }
 }
 
-class SearchByText: UIViewController {
+class SearchByText: UIViewController, UISearchBarDelegate {
     
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
@@ -77,6 +76,10 @@ class SearchByText: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // The search bar delegate is used only to dismiss the keyboard when Done is pressed
+        searchBar.returnKeyType = .done
+        searchBar.delegate = self
+        
         // Bring up the keyboard
         searchBar.becomeFirstResponder()
         
@@ -87,30 +90,17 @@ class SearchByText: UIViewController {
             .addDisposableTo(disposeBag)
         
         // Map the search bar text to a google books search, and bind the result to the table cells
-        let cancelNoResults = searchBar.rx.cancelButtonClicked.asDriver()
-            .map { _ -> [BookMetadata] in
-                []
-            }
-        .asObservable()
-        
-        let searchResults = searchBar.rx.text.orEmpty.asDriver()
+        searchBar.rx.text.orEmpty.asDriver()
             .throttle(1)
             .distinctUntilChanged{ str1, str2 in
                 str1.trimming() == str2.trimming()
             }
-            .filter { !$0.isEmptyOrWhitespace }
-            .flatMapLatest {
-                GoogleBooksAPI.search($0)
-                    .trackActivity(self.indicator)
-                    .asDriver(onErrorJustReturn: [])
-            }
-            .asObservable()
-        
-        Observable.of(cancelNoResults, searchResults)
-            .merge()
-            .asDriver(onErrorJustReturn: [])
-            .map{ results in
-                results.map(SearchResultViewModel.init)
+            .flatMapLatest { searchText in
+                searchText.isEmptyOrWhitespace ? Driver.just([]) :
+                    GoogleBooksAPI.search(searchText)
+                        .trackActivity(self.indicator)
+                        .map { $0.map(SearchResultViewModel.init) }
+                        .asDriver(onErrorJustReturn: [])
             }
             .drive(tableView.rx.items(cellIdentifier: "SearchResultCell", cellType: SearchResultCell.self)) {
                 (_, viewModel, cell) in
@@ -118,11 +108,16 @@ class SearchByText: UIViewController {
             }
             .addDisposableTo(disposeBag)
         
+        // On cell selection, go to the next page
         tableView.rx.modelSelected(SearchResultViewModel.self)
             .subscribe(onNext: { value in
                 self.performSegue(withIdentifier: "searchResultSelected", sender: value.searchResult)
             })
             .addDisposableTo(disposeBag)
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.endEditing(true)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
