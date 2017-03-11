@@ -16,10 +16,6 @@ class CoreDataStack {
     
     let managedObjectContext: NSManagedObjectContext
     
-    // TODO: consider removing these as instance variables
-    private let persistentStoreCoordinator: NSPersistentStoreCoordinator
-    private let managedObjectModel: NSManagedObjectModel
-    
     enum PersistentStoreType {
         case sqlite
         case inMemory
@@ -33,10 +29,10 @@ class CoreDataStack {
         
         // Build the ManagedObjectModel from the momd file
         let managedObjectModelUrl = Bundle.main.url(forResource: momdFileName, withExtension: "momd")!
-        managedObjectModel = NSManagedObjectModel(contentsOf: managedObjectModelUrl)!
+        let managedObjectModel = NSManagedObjectModel(contentsOf: managedObjectModelUrl)!
         
         // Build a PersistentStoreCoordinator for the ManagedObjectModel
-        persistentStoreCoordinator = NSPersistentStoreCoordinator(managedObjectModel: self.managedObjectModel)
+        let persistentStoreCoordinator = NSPersistentStoreCoordinator(managedObjectModel: managedObjectModel)
         
         // Add the requested persistent store
         let storeUrl: URL? = {
@@ -64,7 +60,7 @@ class CoreDataStack {
         
         // Add the ManagedObjectContext
         managedObjectContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
-        managedObjectContext.persistentStoreCoordinator = self.persistentStoreCoordinator
+        managedObjectContext.persistentStoreCoordinator = persistentStoreCoordinator
         managedObjectContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
     }
     

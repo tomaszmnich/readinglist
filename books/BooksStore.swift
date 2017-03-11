@@ -9,8 +9,6 @@
 import CoreData
 import MobileCoreServices
 
-let productBundleIdentifier = "com.andrewbennet.books"
-
 /// Interfaces with the CoreData storage of Book objects
 class BooksStore {
     
@@ -21,11 +19,6 @@ class BooksStore {
     init(storeType: CoreDataStack.PersistentStoreType) {
         self.coreDataStack = CoreDataStack(momdFileName: "books", persistentStoreType: storeType)
         self.coreSpotlightStack = CoreSpotlightStack(domainIdentifier: productBundleIdentifier)
-    }
-    
-    /// The mapping from a Book to a SpotlightItem
-    private func spotlightItem(for book: Book) -> SpotlightItem {
-        return SpotlightItem(uniqueIdentifier: book.objectID.uriRepresentation().absoluteString, title: book.title, description: "\(book.finishedReading != nil ? "Finished: " + book.finishedReading!.toString(withDateFormat: "d MMM") + ". " : "")\(book.bookDescription != nil ? book.bookDescription! : "")", thumbnailImageData: book.coverImage)
     }
     
     /**
@@ -61,7 +54,7 @@ class BooksStore {
      Adds or updates the book in the Spotlight index.
     */
     func updateSpotlightIndex(for book: Book) {
-        coreSpotlightStack.updateItems([spotlightItem(for: book)])
+        coreSpotlightStack.updateItems([book.toSpotlightItem()])
     }
     
     /**

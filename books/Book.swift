@@ -14,23 +14,45 @@ class Book: NSManagedObject {
     // The fields on this managed object have private setters, to enforce that the properties are internally consistent.
     
     // Book Metadata
-    @NSManaged private(set) var title: String
-    @NSManaged private(set) var authorList: String?
-    @NSManaged private(set) var isbn13: String?
-    @NSManaged private(set) var pageCount: NSNumber?
-    @NSManaged private(set) var publishedDate: Date?
-    @NSManaged private(set) var bookDescription: String?
-    @NSManaged private(set) var coverImage: Data?
+    @NSManaged fileprivate(set) var title: String
+    @NSManaged fileprivate(set) var authorList: String?
+    @NSManaged fileprivate(set) var isbn13: String?
+    @NSManaged fileprivate(set) var pageCount: NSNumber?
+    @NSManaged fileprivate(set) var publishedDate: Date?
+    @NSManaged fileprivate(set) var bookDescription: String?
+    @NSManaged fileprivate(set) var coverImage: Data?
     
     // Reading Information
-    @NSManaged private(set) var readState: BookReadState
-    @NSManaged private(set) var startedReading: Date?
-    @NSManaged private(set) var finishedReading: Date?
+    @NSManaged fileprivate(set) var readState: BookReadState
+    @NSManaged fileprivate(set) var startedReading: Date?
+    @NSManaged fileprivate(set) var finishedReading: Date?
     
     // Other Metadata
     // TODO: Think about making this privately set, and managing its value internally
     @NSManaged var sort: NSNumber?
+}
+
+/// The availale reading progress states
+@objc enum BookReadState : Int32, CustomStringConvertible {
+    case reading = 1
+    case toRead = 2
+    case finished = 3
     
+    var description: String {
+        switch self{
+        case .reading:
+            return "Reading"
+        case .toRead:
+            return "To Read"
+        case .finished:
+            return "Finished"
+        }
+    }
+}
+
+
+extension Book {
+
     func populate(from metadata: BookMetadata) {
         title = metadata.title
         authorList = metadata.authorList
@@ -49,6 +71,12 @@ class Book: NSManagedObject {
         if readState != .toRead {
             sort = nil
         }
+    }
+    
+    func toSpotlightItem() -> SpotlightItem {
+        let spotlightTitle = "\(title)\(authorList == nil ? "" : " - \(authorList!)")"
+        
+        return SpotlightItem(uniqueIdentifier: objectID.uriRepresentation().absoluteString, title: spotlightTitle, description: bookDescription, thumbnailImageData: coverImage)
     }
     
     static let transistionToReadingStateAction = GeneralUIAction<Book>(style: .normal, title: "Start") { book in
@@ -120,20 +148,4 @@ class BookReadingInformation {
     }
 }
 
-/// The availale reading progress states
-@objc enum BookReadState : Int32, CustomStringConvertible {
-    case reading = 1
-    case toRead = 2
-    case finished = 3
-    
-    var description: String {
-        switch self{
-        case .reading:
-            return "Reading"
-        case .toRead:
-            return "To Read"
-        case .finished:
-            return "Finished"
-        }
-    }
-}
+

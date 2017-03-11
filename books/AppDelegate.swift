@@ -9,6 +9,8 @@
 import UIKit
 import CoreSpotlight
 
+let productBundleIdentifier = "com.andrewbennet.books"
+ 
 var appDelegate: AppDelegate {
     return UIApplication.shared.delegate as! AppDelegate
 }
@@ -27,6 +29,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         return true
     }
+    
+    func application(_ application: UIApplication, willContinueUserActivityWithType userActivityType: String) -> Bool {
+        return userActivityType == CSSearchableItemActionType
+    }
 
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([Any]?) -> Void) -> Bool {
         if userActivity.activityType == CSSearchableItemActionType && userActivity.userInfo?[CSSearchableItemActivityIdentifier] is String {
@@ -34,10 +40,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             return true
         }
         return false
-    }
-    
-    func application(_ application: UIApplication, willContinueUserActivityWithType userActivityType: String) -> Bool {
-        return userActivityType == CSSearchableItemActionType
     }
     
     func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {

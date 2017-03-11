@@ -11,8 +11,8 @@ import MobileCoreServices
 
 class CoreSpotlightStack {
     
-    var domainIdentifier: String
-    var indexingAvailable: Bool
+    private var domainIdentifier: String
+    private var indexingAvailable: Bool
     
     init(domainIdentifier: String) {
         self.domainIdentifier = domainIdentifier
@@ -47,16 +47,18 @@ class CoreSpotlightStack {
      Updates the items' entries in the Spotlight index.
     */
     func updateItems(_ items: [SpotlightItem]){
+        guard indexingAvailable else { return }
         deindexItems(items)
         indexItems(items)
     }
 }
 
 class SpotlightItem {
-    var title: String
-    var description: String?
-    var thumbnailImageData: Data?
-    var uniqueIdentifier: String
+    
+    let title: String
+    let description: String?
+    let thumbnailImageData: Data?
+    let uniqueIdentifier: String
     
     init(uniqueIdentifier: String, title: String, description: String?, thumbnailImageData: Data?){
         self.uniqueIdentifier = uniqueIdentifier
