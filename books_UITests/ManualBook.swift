@@ -19,7 +19,7 @@ class books_UITests: XCTestCase {
     override func tearDown() {
         super.tearDown()
     }
-    
+
     /* text keeps getting scrambled. commented out until solution can be found.
     func testAddAndDeleteManualBook() {
         let app = XCUIApplication()

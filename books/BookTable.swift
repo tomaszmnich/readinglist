@@ -79,11 +79,12 @@ class BookTable: AutoUpdatingTableViewController {
         
         // If there is a detail view presented, pop back to the tabbed page.
         if appDelegate.splitViewController.detailIsPresented {
-            let _ = appDelegate.splitViewController.rootDetailViewController?.navigationController?.popToViewController(appDelegate.splitViewController.tabbedViewController, animated: false)
+            appDelegate.splitViewController.bookDetailsViewController?.viewModel = BookDetailsViewModel(book: book)
         }
-        
-        // Segue to the details view, with the cell corresponding to the book as the sender
-        self.performSegue(withIdentifier: "showDetail", sender: tableView.cellForRow(at: indexPathOfSelectedBook))
+        else{
+            // Segue to the details view, with the cell corresponding to the book as the sender
+            self.performSegue(withIdentifier: "showDetail", sender: tableView.cellForRow(at: indexPathOfSelectedBook))
+        }
         
         // Get rid of any modal controllers (e.g. edit views, etc)
         self.presentedViewController?.dismiss(animated: false, completion: nil)
