@@ -106,9 +106,9 @@ class books_UnitTests: XCTestCase {
         let present = booksStore.create(from: getTestBookMetadata(), readingInformation: BookReadingInformation.reading(started: today))
         
         try! fetchedResultsController.performFetch()
-        XCTAssertEqual(past, fetchedResultsController.object(at: IndexPath(item: 0, section: 0)))
+        XCTAssertEqual(future, fetchedResultsController.object(at: IndexPath(item: 0, section: 0)))
         XCTAssertEqual(present, fetchedResultsController.object(at: IndexPath(item: 1, section: 0)))
-        XCTAssertEqual(future, fetchedResultsController.object(at: IndexPath(item: 2, section: 0)))
+        XCTAssertEqual(past, fetchedResultsController.object(at: IndexPath(item: 2, section: 0)))
     }
     
     func testFinishedBookOrdering() {
@@ -134,7 +134,6 @@ class books_UnitTests: XCTestCase {
     
     func testHumanisedDateString() {
         XCTAssertEqual("Today", today.toHumanisedString())
-        XCTAssertEqual("Yesterday", yesterday.toHumanisedString())
     }
     
 }

@@ -62,9 +62,13 @@ class Settings: UITableViewController {
         appDelegate.booksStore.deleteAllData()
         
         for isbn in isbns {
-            GoogleBooksAPI.get(isbn: isbn.isbn) { metadata, error in
-                if let metadata = metadata {
-                    appDelegate.booksStore.create(from: metadata, readingInformation: isbn.readingInformation)
+            DispatchQueue.global(qos: .background).async {
+                GoogleBooksAPI.get(isbn: isbn.isbn) { metadata, error in
+                    DispatchQueue.main.async {
+                        if let metadata = metadata {
+                            appDelegate.booksStore.create(from: metadata, readingInformation: isbn.readingInformation)
+                        }
+                    }
                 }
             }
         }

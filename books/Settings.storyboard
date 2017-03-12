@@ -144,21 +144,21 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <attributedString key="attributedText">
-                            <fragment content="Reading List is developed by Andrew Bennet. The source code is freely available on GitHub. I hope you find it useful ">
+                            <fragment content="Reading List is developed by Andrew Bennet.  The source code is freely available on GitHub ">
                                 <attributes>
-                                    <font key="NSFont" size="14" name=".AppleSystemUIFont"/>
+                                    <font key="NSFont" size="16" name=".AppleSystemUIFont"/>
                                     <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" firstLineHeadIndent="8" headIndent="8" tighteningFactorForTruncation="0.0"/>
                                 </attributes>
                             </fragment>
                             <fragment content="🙂">
                                 <attributes>
-                                    <font key="NSFont" size="14" name="AppleColorEmoji"/>
+                                    <font key="NSFont" size="16" name=".AppleColorEmojiUI"/>
                                     <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" firstLineHeadIndent="8" headIndent="8" tighteningFactorForTruncation="0.0"/>
                                 </attributes>
                             </fragment>
                             <fragment content=" ">
                                 <attributes>
-                                    <font key="NSFont" size="14" name=".AppleSystemUIFont"/>
+                                    <font key="NSFont" size="16" name=".AppleSystemUIFont"/>
                                     <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" firstLineHeadIndent="8" headIndent="8" tighteningFactorForTruncation="0.0"/>
                                 </attributes>
                             </fragment>
