@@ -71,10 +71,11 @@ class BookDetails: UIViewController {
         readStateContainerView.layer.borderColor = UIColor.lightGray.cgColor
         view.backgroundColor = UIColor.white
         
-        // Initialise the viewModel to nil, so that by default a blank page is shown.
+        // Initialise the view, so that by default a blank page is shown.
         // This is required for starting the app in landscape mode, where this view is
         // shown without any books being selected.
-        viewModel = nil
+        view.isHidden = true
+        navigationItem.rightBarButtonItem?.isEnabled = false
         
         if let uiImage = imageView.image,
             let imageViewHeight = (imageView.constraints.filter{$0.firstAttribute == .height}).first?.constant,

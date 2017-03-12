@@ -7,12 +7,17 @@
 //
 
 import UIKit
+import SVProgressHUD
 
 class SplitViewController: UISplitViewController, UISplitViewControllerDelegate {
     
     override func viewDidLoad() {
         self.preferredDisplayMode = .allVisible
         self.delegate = self
+        
+        // Prepare the progress display style
+        SVProgressHUD.setDefaultAnimationType(.native)
+        SVProgressHUD.setDefaultMaskType(.black)
     }
     
     func splitViewController(_ splitViewController: UISplitViewController, collapseSecondary secondaryViewController: UIViewController, onto primaryViewController: UIViewController) -> Bool {

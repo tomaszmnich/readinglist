@@ -8,6 +8,7 @@
 
 import UIKit
 import Foundation
+import SVProgressHUD
 
 class Settings: UITableViewController {
 
@@ -58,19 +59,27 @@ class Settings: UITableViewController {
             // it can't happen here (not found at present)
             IsbnAndReadingInformation(isbn: "9780241310663", readingInfo: BookReadingInformation.toRead())
         ]
-        
+
+        SVProgressHUD.show(withStatus: "Loading")
         appDelegate.booksStore.deleteAllData()
         
+        let requestDispatchGroup = DispatchGroup()
+        
         for isbn in isbns {
+            requestDispatchGroup.enter()
             DispatchQueue.global(qos: .background).async {
                 GoogleBooksAPI.get(isbn: isbn.isbn) { metadata, error in
-                    DispatchQueue.main.async {
+                    requestDispatchGroup.leave()
+                    DispatchQueue.main.sync {
                         if let metadata = metadata {
                             appDelegate.booksStore.create(from: metadata, readingInformation: isbn.readingInformation)
                         }
                     }
                 }
             }
+        }
+        requestDispatchGroup.notify(queue: .main) {
+            SVProgressHUD.dismiss()
         }
     }
 }

@@ -142,10 +142,6 @@ class SearchByText: UIViewController, UISearchBarDelegate {
         if let selectedIndexPath = tableView.indexPathForSelectedRow {
             tableView.deselectRow(at: selectedIndexPath, animated: true)
         }
-        
-        // Prepare the progress display style
-        SVProgressHUD.setDefaultAnimationType(.native)
-        SVProgressHUD.setDefaultMaskType(.black)
     }
     
     func segueWhenCoverDownloaded(_ bookMetadata: BookMetadata, secondsWaited: Int) {

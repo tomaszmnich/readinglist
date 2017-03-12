@@ -44,14 +44,6 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         }
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        // Prepare the progress display style
-        SVProgressHUD.setDefaultAnimationType(.native)
-        SVProgressHUD.setDefaultMaskType(.black)
-    }
-    
     override func viewWillDisappear(_ animated: Bool) {
         if session?.isRunning == true {
             session!.stopRunning()
