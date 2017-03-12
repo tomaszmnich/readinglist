@@ -114,14 +114,14 @@ class books_UnitTests: XCTestCase {
     func testFinishedBookOrdering() {
         let fetchedResultsController = booksStore.fetchedResultsController(BookPredicate.readState(equalTo: .finished), initialSortDescriptors: BooksStore.standardSortOrder)
         
-        let past1 = booksStore.create(from: getTestBookMetadata(), readingInformation: BookReadingInformation.finished(started: yesterday, finished: yesterday))
-        let past2 = booksStore.create(from: getTestBookMetadata(), readingInformation: BookReadingInformation.finished(started: tomorrow, finished: yesterday))
+        let past1 = booksStore.create(from: getTestBookMetadata(), readingInformation: BookReadingInformation.finished(started: tomorrow, finished: yesterday))
+        let past2 = booksStore.create(from: getTestBookMetadata(), readingInformation: BookReadingInformation.finished(started: yesterday, finished: yesterday))
         
-        let future1 = booksStore.create(from: getTestBookMetadata(), readingInformation: BookReadingInformation.finished(started: yesterday, finished: tomorrow))
-        let future2 = booksStore.create(from: getTestBookMetadata(), readingInformation: BookReadingInformation.finished(started: tomorrow, finished: tomorrow))
+        let future1 = booksStore.create(from: getTestBookMetadata(), readingInformation: BookReadingInformation.finished(started: tomorrow, finished: tomorrow))
+        let future2 = booksStore.create(from: getTestBookMetadata(), readingInformation: BookReadingInformation.finished(started: yesterday, finished: tomorrow))
         
-        let present1 = booksStore.create(from: getTestBookMetadata(), readingInformation: BookReadingInformation.finished(started: yesterday, finished: today))
-        let present2 = booksStore.create(from: getTestBookMetadata(), readingInformation: BookReadingInformation.finished(started: tomorrow, finished: today))
+        let present1 = booksStore.create(from: getTestBookMetadata(), readingInformation: BookReadingInformation.finished(started: tomorrow, finished: today))
+        let present2 = booksStore.create(from: getTestBookMetadata(), readingInformation: BookReadingInformation.finished(started: yesterday, finished: today))
         
         try! fetchedResultsController.performFetch()
         XCTAssertEqual(future1, fetchedResultsController.object(at: IndexPath(item: 0, section: 0)))
