@@ -38,7 +38,7 @@ class BookTable: AutoUpdatingTableViewController {
         searchController.hidesNavigationBarDuringPresentation = false
         tableView.tableHeaderView = searchController.searchBar
         
-        // contentOffset will not change before the main runloop ends without queueing it, for iPad that is
+        // contentOffset will not change before the main run loop ends without queueing it, for splitable devices (iPhone Plus & iPad)
         DispatchQueue.main.async {
             self.tableView.contentOffset.y = searchController.searchBar.frame.size.height
         }

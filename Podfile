@@ -12,6 +12,7 @@ target 'books' do
   pod 'RxSwift', '~> 3.0'
   pod 'RxCocoa', '~> 3.0'
   pod 'RxSwiftUtilities', '~> 1.0'
+  pod 'SVProgressHUD', '~> 2.1'
 
   target 'books_UITests' do
     inherit! :search_paths
