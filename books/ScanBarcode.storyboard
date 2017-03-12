@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="rYQ-41-cfc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="rYQ-41-cfc">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -60,21 +60,15 @@
                                     <constraint firstAttribute="width" secondItem="710-zJ-iLP" secondAttribute="height" multiplier="2:1" id="bw1-bF-OIn"/>
                                 </constraints>
                             </view>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="4Wb-Fh-3wm">
-                                <rect key="frame" x="169" y="347" width="37" height="37"/>
-                                <color key="color" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="VIt-na-l7a" secondAttribute="trailing" id="Ifn-HB-v19"/>
-                            <constraint firstItem="4Wb-Fh-3wm" firstAttribute="centerX" secondItem="VIt-na-l7a" secondAttribute="centerX" id="OKF-FJ-Dg8"/>
                             <constraint firstItem="VIt-na-l7a" firstAttribute="leading" secondItem="Li1-Bc-Q61" secondAttribute="leading" id="Trq-9S-fSQ"/>
                             <constraint firstItem="za8-pr-DLM" firstAttribute="top" secondItem="VIt-na-l7a" secondAttribute="bottom" id="U2P-TF-Rsb"/>
                             <constraint firstItem="710-zJ-iLP" firstAttribute="centerX" secondItem="VIt-na-l7a" secondAttribute="centerX" id="Xh8-sC-A2p"/>
                             <constraint firstItem="710-zJ-iLP" firstAttribute="centerY" secondItem="VIt-na-l7a" secondAttribute="centerY" id="tKA-ms-Iut"/>
                             <constraint firstItem="710-zJ-iLP" firstAttribute="width" secondItem="VIt-na-l7a" secondAttribute="width" multiplier="3:4" id="vJw-tw-9FO"/>
-                            <constraint firstItem="4Wb-Fh-3wm" firstAttribute="centerY" secondItem="VIt-na-l7a" secondAttribute="centerY" id="w0F-SN-QFC"/>
                             <constraint firstItem="VIt-na-l7a" firstAttribute="top" secondItem="8uf-ya-Hu9" secondAttribute="bottom" id="wv6-dE-OPd"/>
                         </constraints>
                     </view>
@@ -89,10 +83,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="cameraPreviewView" destination="VIt-na-l7a" id="62h-so-ss3"/>
-                        <outlet property="previewBottomConstraint" destination="U2P-TF-Rsb" id="HWx-km-vRb"/>
                         <outlet property="previewOverlay" destination="710-zJ-iLP" id="qCX-qv-uzC"/>
-                        <outlet property="previewTopConstraint" destination="wv6-dE-OPd" id="cYE-Wi-Jp4"/>
-                        <outlet property="spinner" destination="4Wb-Fh-3wm" id="qxP-Xp-lta"/>
                         <segue destination="bN9-Cz-0Ly" kind="show" identifier="barcodeScanResult" id="tSI-ig-Qb0"/>
                     </connections>
                 </viewController>

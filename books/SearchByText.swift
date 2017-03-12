@@ -88,10 +88,6 @@ class SearchByText: UIViewController, UISearchBarDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Prepare the progress display style
-        SVProgressHUD.setDefaultAnimationType(.native)
-        SVProgressHUD.setDefaultMaskType(.black)
-        
         // The search bar delegate is used only to dismiss the keyboard when Done is pressed
         searchBar.returnKeyType = .done
         searchBar.delegate = self
@@ -141,9 +137,15 @@ class SearchByText: UIViewController, UISearchBarDelegate {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        
+        // Deselect any selected row
         if let selectedIndexPath = tableView.indexPathForSelectedRow {
             tableView.deselectRow(at: selectedIndexPath, animated: true)
         }
+        
+        // Prepare the progress display style
+        SVProgressHUD.setDefaultAnimationType(.native)
+        SVProgressHUD.setDefaultMaskType(.black)
     }
     
     func segueWhenCoverDownloaded(_ bookMetadata: BookMetadata, secondsWaited: Int) {

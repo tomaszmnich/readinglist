@@ -8,6 +8,7 @@
 
 import UIKit
 import AVFoundation
+import SVProgressHUD
 
 class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     
@@ -16,14 +17,10 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     var foundMetadata: BookMetadata?
     
     @IBOutlet weak var cameraPreviewView: UIView!
-    @IBOutlet weak var spinner: UIActivityIndicatorView!
     @IBOutlet weak var previewOverlay: UIView!
-    @IBOutlet weak var previewTopConstraint: NSLayoutConstraint!
-    @IBOutlet weak var previewBottomConstraint: NSLayoutConstraint!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        spinner.stopAnimating()
         
         // Setup the camera preview on another thread
         DispatchQueue.main.async {
@@ -40,14 +37,19 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        previewOverlay.isHidden = false
-        previewTopConstraint.constant = 0
-        previewBottomConstraint.constant = 0
         cameraPreviewView.layoutIfNeeded()
         
         if session?.isRunning == false {
             session!.startRunning()
         }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        // Prepare the progress display style
+        SVProgressHUD.setDefaultAnimationType(.native)
+        SVProgressHUD.setDefaultMaskType(.black)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -58,14 +60,15 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     
     private func setupAvSession() {
         let camera = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo)
+        
+        guard let input = try? AVCaptureDeviceInput(device: camera) else {
+            presentCameraSetupError()
+            return
+        }
+        
         if camera?.isFocusPointOfInterestSupported == true {
             try? camera!.lockForConfiguration()
             camera!.focusPointOfInterest = cameraPreviewView.center
-        }
-        
-        guard let input = try? AVCaptureDeviceInput(device: camera) else {
-            presentError()
-            return
         }
         
         let output = AVCaptureMetadataOutput()
@@ -73,7 +76,7 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         
         // Check that we can add the input and output to the session
         guard session!.canAddInput(input) && session!.canAddOutput(output) else {
-            presentError()
+            presentCameraSetupError()
             return
         }
         
@@ -123,55 +126,54 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
             
         // Since we have a result, stop the session and hide the preview
         session?.stopRunning()
-        previewTopConstraint.constant = cameraPreviewView.frame.height / 2
-        previewBottomConstraint.constant = cameraPreviewView.frame.height / 2
-        previewOverlay.isHidden = true
-        UIView.animate(withDuration: 0.3, animations: self.view.layoutIfNeeded) { _ in
-            self.spinner.startAnimating()
-        }
+        SVProgressHUD.show(withStatus: "Searching...")
         
-        // We've found an ISBN-13. Let's search for it online.
-        GoogleBooksAPI.get(isbn: avMetadata.stringValue) { result, error in
-            guard error == nil else {
-                self.onSearchError(error!)
-                return
-            }
-            guard let bookMetadata = result else {
-                self.presentInfoAlert(title: "No Results", message: "No matching books found online")
-                return
-            }
+        // We've found an ISBN-13. Let's search for it online in a background thread.
+        DispatchQueue.global(qos: .background).async {
+            GoogleBooksAPI.get(isbn: avMetadata.stringValue) { result, error in
+                
+                // Jump back to the main thread to process the result
+                DispatchQueue.main.async {
+                    SVProgressHUD.dismiss()
+                    
+                    guard error == nil else {
+                        self.onSearchError(error!)
+                        return
+                    }
+                    guard let bookMetadata = result else {
+                        self.presentInfoAlert(title: "No Results", message: "No matching books found online")
+                        return
+                    }
             
-            self.spinner.stopAnimating()
-            self.foundMetadata = bookMetadata
-            self.performSegue(withIdentifier: "barcodeScanResult", sender: self)
+                    self.foundMetadata = bookMetadata
+                    self.performSegue(withIdentifier: "barcodeScanResult", sender: self)
+                }
+            }
         }
     }
     
     func onSearchError(_ error: Error) {
-        spinner.stopAnimating()
-        
         var message: String!
         switch (error as NSError).code {
             case NSURLErrorNotConnectedToInternet,
                  NSURLErrorNetworkConnectionLost:
-                message = "No internet connection."
+                message = "There seems to be no internet connection."
             default:
-                message = "An error occurred."
+                message = "Something unexpected happened when searching online. Maybe try again?"
         }
-        presentInfoAlert(title: "Error", message: message)
+        presentInfoAlert(title: "Error ⚠️", message: message)
     }
     
     func presentInfoAlert(title: String, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
         alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: { _ in
-            self.spinner.stopAnimating()
             self.dismiss(animated: true, completion: nil)
         }))
         self.present(alert, animated: true, completion: nil)
     }
     
-    func presentError() {
-        presentInfoAlert(title: "Cannot Scan Barcode", message: "The camera could not be found.")
+    func presentCameraSetupError() {
+        presentInfoAlert(title: "Error ⚠️", message: "The camera could not be used. Sorry about that.")
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
