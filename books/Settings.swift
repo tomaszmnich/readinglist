@@ -12,7 +12,6 @@ import Foundation
 class Settings: UITableViewController {
 
     @IBOutlet weak var addTestDataCell: UITableViewCell!
-    @IBOutlet weak var deleteAllDataCell: UITableViewCell!
     
     override func viewDidLoad() {
         super.viewDidLoad()

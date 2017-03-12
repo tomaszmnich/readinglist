@@ -16,6 +16,18 @@ extension UIColor {
     }
 }
 
+extension NSMutableAttributedString {
+    
+    @discardableResult func hyperlinkText(_ textToLink: String, to linkURL: URL) -> Bool {
+        let foundRange = self.mutableString.range(of: textToLink)
+        if foundRange.location != NSNotFound {
+            self.addAttribute(NSLinkAttributeName, value: linkURL, range: foundRange)
+            return true
+        }
+        return false
+    }
+}
+
 public extension Date {
     init(dateString: String) {
         let dateStringFormatter = DateFormatter()
