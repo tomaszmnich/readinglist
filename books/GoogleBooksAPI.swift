@@ -10,9 +10,23 @@ import Foundation
 import SwiftyJSON
 import RxSwift
 
+enum Result<Value> {
+    case success(Value)
+    case failure(Error)
+    
+    var value: Value? {
+        switch self {
+        case let .success(value):
+            return value
+        case .failure:
+            return nil
+        }
+    }
+}
+
 class GoogleBooksAPI {
     
-    static func search(_ searchString: String) -> Observable<[BookMetadata]> {
+    static func search(_ searchString: String) -> Observable<Result<[BookMetadata]>> {
         return requestAndParseAndObserve(url: GoogleBooksRequest.search(searchString).url)
     }
     
@@ -45,16 +59,16 @@ class GoogleBooksAPI {
         searchRequest.resume()
     }
     
-    private static func requestAndParseAndObserve(url: URL) -> Observable<[BookMetadata]> {
-        return Observable<[BookMetadata]>.create { observer -> Disposable in
+    private static func requestAndParseAndObserve(url: URL) -> Observable<Result<[BookMetadata]>> {
+        return Observable<Result<[BookMetadata]>>.create { observer -> Disposable in
             
             let searchRequest = GoogleBooksAPI.requestAndParse(url: url) { bookMetadatas, error in
                 if let bookMetadatas = bookMetadatas {
-                    observer.onNext(bookMetadatas)
+                    observer.onNext(Result.success(bookMetadatas))
                     observer.onCompleted()
                 }
                 else if let error = error {
-                    observer.onError(error)
+                    observer.onNext(Result.failure(error))
                     observer.onCompleted()
                 }
             }

@@ -82,11 +82,19 @@ class SearchByText: UIViewController, UISearchBarDelegate {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var spinner: UIActivityIndicatorView!
     
+    var errorLabel: UILabel!
+    
     let disposeBag = DisposeBag()
     let indicator = ActivityIndicator()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        errorLabel = UILabel(frame: self.view.frame)
+        errorLabel.text = "⚠️ Connection issues!"
+        errorLabel.textAlignment = .center
+        errorLabel.isHidden = true
+        view.addSubview(errorLabel)
         
         // The search bar delegate is used only to dismiss the keyboard when Done is pressed
         searchBar.returnKeyType = .done
@@ -111,17 +119,26 @@ class SearchByText: UIViewController, UISearchBarDelegate {
             .observeOn(ConcurrentDispatchQueueScheduler(qos: .background))
             .flatMapLatest { searchText in
                 // Blank search terms produce empty array...
-                searchText.isEmptyOrWhitespace ? Observable.just([]) :
+                searchText.isEmptyOrWhitespace ? Observable.just(Result.success([])) :
                     
                     // Otherwise, search on the Google API
                     GoogleBooksAPI.search(searchText)
+                        .observeOn(MainScheduler.instance)
                         .trackActivity(self.indicator)
-                        .do(onError: { error in
-                            // handle errors - display error message?
-                        })
-                        .map { $0.map(SearchResultViewModel.init) }
             }
-            .observeOn(MainScheduler.instance)
+            .do(onNext: {
+                switch($0) {
+                case .success:
+                    self.errorLabel.isHidden = true
+                    break
+                case .failure:
+                    self.errorLabel.isHidden = false
+                    break
+                }
+            })
+            .map {
+                ($0.value ?? []).map(SearchResultViewModel.init)
+            }
             .asDriver(onErrorJustReturn: [])
             .drive(tableView.rx.items(cellIdentifier: "SearchResultCell", cellType: SearchResultCell.self)) { _, viewModel, cell in
                 cell.viewModel = viewModel
