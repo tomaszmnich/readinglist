@@ -110,7 +110,7 @@ class SearchByText: UIViewController, UISearchBarDelegate {
         indicator.drive(spinner.rx.isAnimating).addDisposableTo(disposeBag)
         
         // Map the search bar text to a google books search, and bind the result to the table cells
-        searchBar.rx.text
+        let results = searchBar.rx.text
             .orEmpty
             .throttle(1, scheduler: MainScheduler.instance)
             .distinctUntilChanged{ str1, str2 in
@@ -126,19 +126,17 @@ class SearchByText: UIViewController, UISearchBarDelegate {
                         .observeOn(MainScheduler.instance)
                         .trackActivity(self.indicator)
             }
-            .do(onNext: {
-                switch($0) {
-                case .success:
-                    self.errorLabel.isHidden = true
-                    break
-                case .failure:
-                    self.errorLabel.isHidden = false
-                    break
-                }
-            })
-            .map {
-                ($0.value ?? []).map(SearchResultViewModel.init)
-            }
+        
+        // Map the sucess/failure state to the hidden property of the error label
+        results.map{$0.isSuccess}
+            .asDriver(onErrorJustReturn: true)
+            .drive(self.errorLabel.rx.isHidden)
+            .addDisposableTo(disposeBag)
+
+        
+        // Map the actual results to SearchResultViewModel items (or empty if failure)
+        // and use them to drive the table cells
+        results.map{$0.successValue?.map(SearchResultViewModel.init) ?? []}
             .asDriver(onErrorJustReturn: [])
             .drive(tableView.rx.items(cellIdentifier: "SearchResultCell", cellType: SearchResultCell.self)) { _, viewModel, cell in
                 cell.viewModel = viewModel
@@ -162,6 +160,7 @@ class SearchByText: UIViewController, UISearchBarDelegate {
     }
     
     func segueWhenCoverDownloaded(_ bookMetadata: BookMetadata, secondsWaited: Int) {
+        // TODO: This should be re-written in reactive style...
         // If we have not yet downloaded the cover image, and we have not waited more than 6 seconds
         // This is not perfect - the first request may have failed and we are waiting for nothing...
         if bookMetadata.coverUrl != nil && bookMetadata.coverImage == nil && secondsWaited <= 6 {

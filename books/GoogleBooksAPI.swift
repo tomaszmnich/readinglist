@@ -14,11 +14,33 @@ enum Result<Value> {
     case success(Value)
     case failure(Error)
     
-    var value: Value? {
+    var isSuccess: Bool {
+        switch self {
+        case .success:
+            return true
+        case .failure:
+            return false
+        }
+    }
+    
+    var isFailure: Bool {
+        return !isSuccess
+    }
+    
+    var successValue: Value? {
         switch self {
         case let .success(value):
             return value
         case .failure:
+            return nil
+        }
+    }
+    
+    var failureError: Error? {
+        switch self {
+        case let .failure(error):
+            return error
+        case .success:
             return nil
         }
     }
