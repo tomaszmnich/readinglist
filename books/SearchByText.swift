@@ -113,9 +113,7 @@ class SearchByText: UIViewController, UISearchBarDelegate {
         let results = searchBar.rx.text
             .orEmpty
             .throttle(1, scheduler: MainScheduler.instance)
-            .distinctUntilChanged{ str1, str2 in
-                str1.trimming() == str2.trimming()
-            }
+            .distinctUntilChanged{$0.trimming() == $1.trimming()}
             .observeOn(ConcurrentDispatchQueueScheduler(qos: .background))
             .flatMapLatest { searchText in
                 // Blank search terms produce empty array...
@@ -129,10 +127,9 @@ class SearchByText: UIViewController, UISearchBarDelegate {
         
         // Map the sucess/failure state to the hidden property of the error label
         results.map{$0.isSuccess}
-            .asDriver(onErrorJustReturn: true)
+            .asDriver(onErrorJustReturn: false)
             .drive(self.errorLabel.rx.isHidden)
             .addDisposableTo(disposeBag)
-
         
         // Map the actual results to SearchResultViewModel items (or empty if failure)
         // and use them to drive the table cells
