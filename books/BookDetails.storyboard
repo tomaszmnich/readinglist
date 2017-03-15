@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="svF-c1-e4g">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -14,7 +17,7 @@
                         <viewControllerLayoutGuide type="bottom" id="yel-qD-x6K"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="EZk-RK-IhE">
-                        <rect key="frame" x="0.0" y="64" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WOs-nU-bp0">
@@ -56,7 +59,7 @@
                                                         <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
                                                         <state key="normal" title="Edit"/>
                                                         <connections>
-                                                            <segue destination="I2A-UO-0Si" kind="presentation" modalPresentationStyle="formSheet" id="9Jt-cD-ge3"/>
+                                                            <segue destination="V1o-Ej-YdK" kind="presentation" modalPresentationStyle="formSheet" id="HOK-k4-Mwb"/>
                                                         </connections>
                                                     </button>
                                                 </subviews>
@@ -138,12 +141,11 @@
                     <navigationItem key="navigationItem" id="YRx-69-dRa">
                         <barButtonItem key="rightBarButtonItem" systemItem="edit" id="ysf-NA-q2m">
                             <connections>
-                                <segue destination="hSG-hA-aNk" kind="presentation" modalPresentationStyle="formSheet" id="RY3-QS-RkD"/>
+                                <segue destination="JWo-Zy-Tgk" kind="presentation" modalPresentationStyle="formSheet" id="xqc-St-ytC"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4_7.fullscreen"/>
                     <connections>
                         <outlet property="authorsLabel" destination="pRN-sy-kyO" id="J5g-g2-3kf"/>
                         <outlet property="descriptionTextView" destination="mid-NB-7DT" id="R1o-rG-fOa"/>
@@ -157,21 +159,107 @@
             </objects>
             <point key="canvasLocation" x="-4018.4000000000001" y="969.26536731634189"/>
         </scene>
-        <!--EditBook-->
-        <scene sceneID="DkH-3o-pb3">
+        <!--Navigation Controller-->
+        <scene sceneID="pOg-xv-dOq">
             <objects>
-                <viewControllerPlaceholder storyboardName="EditBook" id="hSG-hA-aNk" sceneMemberID="viewController"/>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="32B-vE-unn" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <navigationController id="V1o-Ej-YdK" sceneMemberID="viewController">
+                    <nil key="simulatedStatusBarMetrics"/>
+                    <modalFormSheetSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="aXp-X1-AWS">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="oiR-dP-G8c" kind="relationship" relationship="rootViewController" id="ah9-tG-IQj"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="hBN-ts-AIN" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-3378" y="1000"/>
+            <point key="canvasLocation" x="-2937" y="560"/>
         </scene>
-        <!--EditReadState-->
-        <scene sceneID="7XF-3J-9h5">
+        <!--Edit Read State-->
+        <scene sceneID="gDZ-5w-k8I">
             <objects>
-                <viewControllerPlaceholder storyboardName="EditReadState" id="I2A-UO-0Si" sceneMemberID="viewController"/>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="JUN-qt-IhT" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <viewController id="oiR-dP-G8c" customClass="EditReadState" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="A1k-ZH-frX"/>
+                        <viewControllerLayoutGuide type="bottom" id="Xiu-wQ-gnP"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="9V7-yi-GRX">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="cck-Ji-kuc">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="iu8-JU-Fle">
+                            <connections>
+                                <action selector="cancelWasPressed:" destination="oiR-dP-G8c" id="6dw-NX-zmm"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="JSD-9I-kPY">
+                            <connections>
+                                <action selector="doneWasPressed:" destination="oiR-dP-G8c" id="hj0-V1-rmk"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="doneButton" destination="JSD-9I-kPY" id="U5s-93-TkT"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ig4-vA-E8y" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-3382" y="939"/>
+            <point key="canvasLocation" x="-2097" y="546"/>
+        </scene>
+        <!--Edit Book-->
+        <scene sceneID="mM5-9V-UxP">
+            <objects>
+                <viewController id="WYW-BA-34q" customClass="EditBook" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="xo3-kq-dYf"/>
+                        <viewControllerLayoutGuide type="bottom" id="3Ug-QF-jXU"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="St1-rQ-6Ha">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Edit Book" id="S0b-op-glK">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="yhj-wT-iTJ">
+                            <connections>
+                                <action selector="cancelButtonWasPressed:" destination="WYW-BA-34q" id="vcX-Rg-tZ0"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="4HG-yh-hAC">
+                            <connections>
+                                <action selector="doneButtonWasPressed:" destination="WYW-BA-34q" id="I7J-9r-89A"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="doneButton" destination="4HG-yh-hAC" id="p2g-br-MlO"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Lso-V8-voX" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2068" y="1287"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="80d-7T-d57">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="JWo-Zy-Tgk" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="iRV-6F-PTv">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="WYW-BA-34q" kind="relationship" relationship="rootViewController" id="aCZ-5M-xzO"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="M4m-lY-rDX" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2938" y="1287"/>
         </scene>
     </scenes>
     <resources>

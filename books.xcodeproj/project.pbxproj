@@ -23,7 +23,6 @@
 		4942348D1E70AFA100CEEB4C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 494234891E70AFA100CEEB4C /* Main.storyboard */; };
 		4942348E1E70AFA100CEEB4C /* SearchByText.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4942348A1E70AFA100CEEB4C /* SearchByText.storyboard */; };
 		4942348F1E70AFA100CEEB4C /* ScanBarcode.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4942348B1E70AFA100CEEB4C /* ScanBarcode.storyboard */; };
-		494234901E70AFA100CEEB4C /* EditReadState.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4942348C1E70AFA100CEEB4C /* EditReadState.storyboard */; };
 		494234931E70B24400CEEB4C /* BookDetails.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 494234921E70B24400CEEB4C /* BookDetails.storyboard */; };
 		4943DB761DBB9D92004CAF30 /* Settings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4943DB751DBB9D92004CAF30 /* Settings.storyboard */; };
 		4943DB791DBD5104004CAF30 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4943DB781DBD5104004CAF30 /* Settings.swift */; };
@@ -45,7 +44,6 @@
 		4994706A1DB42067008CB06E /* ReadingTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 499470691DB42067008CB06E /* ReadingTable.swift */; };
 		4994706C1DB421A2008CB06E /* FinishedTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4994706B1DB421A2008CB06E /* FinishedTable.swift */; };
 		49BDCC631CD2A00F00F20AAE /* BookMetadataForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BDCC621CD2A00F00F20AAE /* BookMetadataForm.swift */; };
-		49BDCC681CD4E72400F20AAE /* EditBook.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 49BDCC671CD4E72400F20AAE /* EditBook.storyboard */; };
 		49BDCC6C1CD6120400F20AAE /* NavWithReadState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BDCC6B1CD6120400F20AAE /* NavWithReadState.swift */; };
 		49C5339F1DB281A10043E50E /* BookPredicateBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C5339E1DB281A10043E50E /* BookPredicateBuilder.swift */; };
 		49D93AA51CAB16F800AE6611 /* CoreSpotlightStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49D93AA41CAB16F800AE6611 /* CoreSpotlightStack.swift */; };
@@ -94,7 +92,6 @@
 		494234891E70AFA100CEEB4C /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		4942348A1E70AFA100CEEB4C /* SearchByText.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SearchByText.storyboard; sourceTree = "<group>"; };
 		4942348B1E70AFA100CEEB4C /* ScanBarcode.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ScanBarcode.storyboard; sourceTree = "<group>"; };
-		4942348C1E70AFA100CEEB4C /* EditReadState.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = EditReadState.storyboard; sourceTree = "<group>"; };
 		494234921E70B24400CEEB4C /* BookDetails.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = BookDetails.storyboard; sourceTree = "<group>"; };
 		4943DB751DBB9D92004CAF30 /* Settings.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Settings.storyboard; sourceTree = "<group>"; };
 		4943DB781DBD5104004CAF30 /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
@@ -120,7 +117,6 @@
 		499470691DB42067008CB06E /* ReadingTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadingTable.swift; sourceTree = "<group>"; };
 		4994706B1DB421A2008CB06E /* FinishedTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FinishedTable.swift; sourceTree = "<group>"; };
 		49BDCC621CD2A00F00F20AAE /* BookMetadataForm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookMetadataForm.swift; sourceTree = "<group>"; };
-		49BDCC671CD4E72400F20AAE /* EditBook.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = EditBook.storyboard; sourceTree = "<group>"; };
 		49BDCC6B1CD6120400F20AAE /* NavWithReadState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavWithReadState.swift; sourceTree = "<group>"; };
 		49C5339E1DB281A10043E50E /* BookPredicateBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookPredicateBuilder.swift; sourceTree = "<group>"; };
 		49D93AA41CAB16F800AE6611 /* CoreSpotlightStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreSpotlightStack.swift; sourceTree = "<group>"; };
@@ -236,8 +232,6 @@
 				494234921E70B24400CEEB4C /* BookDetails.storyboard */,
 				4942348A1E70AFA100CEEB4C /* SearchByText.storyboard */,
 				4942348B1E70AFA100CEEB4C /* ScanBarcode.storyboard */,
-				4942348C1E70AFA100CEEB4C /* EditReadState.storyboard */,
-				49BDCC671CD4E72400F20AAE /* EditBook.storyboard */,
 				4943DB751DBB9D92004CAF30 /* Settings.storyboard */,
 				4936B5831D2C3A2C00600562 /* AddManually.storyboard */,
 				4968A2B11CB3E0BF00CBF3F0 /* LaunchScreen.storyboard */,
@@ -495,11 +489,9 @@
 				495C5D171BF1404D00E00C07 /* Assets.xcassets in Resources */,
 				4942348E1E70AFA100CEEB4C /* SearchByText.storyboard in Resources */,
 				4942348F1E70AFA100CEEB4C /* ScanBarcode.storyboard in Resources */,
-				49BDCC681CD4E72400F20AAE /* EditBook.storyboard in Resources */,
 				494234931E70B24400CEEB4C /* BookDetails.storyboard in Resources */,
 				4943DB761DBB9D92004CAF30 /* Settings.storyboard in Resources */,
 				4942348D1E70AFA100CEEB4C /* Main.storyboard in Resources */,
-				494234901E70AFA100CEEB4C /* EditReadState.storyboard in Resources */,
 				4936B5841D2C3A2C00600562 /* AddManually.storyboard in Resources */,
 				4968A2B21CB3E0BF00CBF3F0 /* LaunchScreen.storyboard in Resources */,
 			);
