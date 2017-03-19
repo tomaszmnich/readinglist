@@ -20,10 +20,11 @@ class EditReadState: ReadStateForm {
         
         navigationItem.title = bookToEdit.title
         
-        // Load the existing values on to the form when it's about to appear
+        // Load the existing values on to the form; if dates are missing, use the current date
+        // if the date entry field becomes visible
         readState = bookToEdit.readState
-        startedReading = bookToEdit.startedReading
-        finishedReading = bookToEdit.finishedReading
+        startedReading = bookToEdit.startedReading ?? Date()
+        finishedReading = bookToEdit.finishedReading ?? Date()
     }
     
     override func onChange() {
