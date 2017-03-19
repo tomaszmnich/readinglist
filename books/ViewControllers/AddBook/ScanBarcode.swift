@@ -115,7 +115,13 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     func captureOutput(_ captureOutput: AVCaptureOutput!, didOutputMetadataObjects metadataObjects: [Any]!, from connection: AVCaptureConnection!) {
         
         guard let avMetadata = metadataObjects.first as? AVMetadataMachineReadableCodeObject else { return }
-            
+        
+        // Check that the book hasn't already been added
+        if appDelegate.booksStore.isbnExists(avMetadata.stringValue) {
+            self.presentInfoAlert(title: "Already Added", message: "You have already added this book.")
+            return
+        }
+        
         // Since we have a result, stop the session and hide the preview
         session?.stopRunning()
         SVProgressHUD.show(withStatus: "Searching...")
@@ -136,7 +142,7 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
                         self.presentInfoAlert(title: "No Results", message: "No matching books found online")
                         return
                     }
-            
+                    
                     self.foundMetadata = bookMetadata
                     self.performSegue(withIdentifier: "barcodeScanResult", sender: self)
                 }
@@ -151,7 +157,7 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
                  NSURLErrorNetworkConnectionLost:
                 message = "There seems to be no internet connection."
             default:
-                message = "Something unexpected happened when searching online. Maybe try again?"
+                message = "Something went wrong when searching online. Maybe try again?"
         }
         presentInfoAlert(title: "Error ⚠️", message: message)
     }

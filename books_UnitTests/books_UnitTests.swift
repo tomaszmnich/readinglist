@@ -44,7 +44,7 @@ class books_UnitTests: XCTestCase {
         testBookMetadata.title = "Test Book Title \(currentTestBook)"
         testBookMetadata.authorList = "Test Book Authors \(currentTestBook)"
         testBookMetadata.bookDescription = "Test Book Description \(currentTestBook)"
-        testBookMetadata.isbn13 = "12345678910\(String(format: "%02d", currentTestBook))"
+        testBookMetadata.isbn13 = "1234567890\(String(format: "%03d", currentTestBook))"
         testBookMetadata.pageCount = 100 + currentTestBook
         testBookMetadata.publishedDate = Date(timeIntervalSince1970: 1488926352)
         return testBookMetadata
@@ -132,8 +132,15 @@ class books_UnitTests: XCTestCase {
         XCTAssertEqual(past2, fetchedResultsController.object(at: IndexPath(item: 5, section: 0)))
     }
     
+    func testIsbnDetection() {
+        let testBook = getTestBookMetadata()
+        XCTAssertFalse(booksStore.isbnExists(testBook.isbn13!))
+        booksStore.create(from: testBook, readingInformation: BookReadingInformation.toRead())
+        XCTAssertTrue(booksStore.isbnExists(testBook.isbn13!))
+    }
+    
     func testHumanisedDateString() {
-        XCTAssertEqual("Today", today.toHumanisedString())
+        XCTAssertEqual("Today", today.toShortPrettyString())
     }
     
 }

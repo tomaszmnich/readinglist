@@ -68,9 +68,28 @@ class BooksStore {
         do {
             let books = try coreDataStack.managedObjectContext.fetch(fetchRequest)
             return books.first?.sort as? Int
-        } catch {
+        }
+        catch {
             print("Error determining max sort")
             return nil
+        }
+    }
+    
+    /**
+     Returns whether a book with the supplied ISBN currently exists.
+    */
+    func isbnExists(_ isbn: String) -> Bool {
+        let fetchRequest = NSFetchRequest<Book>(entityName: self.bookEntityName)
+        fetchRequest.fetchLimit = 1
+        
+        fetchRequest.predicate = BookPredicate.isbnEqual(isbn: isbn)
+        do {
+            let books = try coreDataStack.managedObjectContext.fetch(fetchRequest)
+            return books.count == 1
+        }
+        catch {
+            print("Error determining whether ISBN exists")
+            return false
         }
     }
     

@@ -5,16 +5,15 @@
         <attribute name="bookDescription" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="coverImage" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES" syncable="YES"/>
         <attribute name="finishedReading" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="isbn13" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
+        <attribute name="isbn13" optional="YES" attributeType="String" regularExpressionString="\d{13}" indexed="YES" syncable="YES"/>
         <attribute name="pageCount" optional="YES" attributeType="Integer 32" minValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="publishedDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="readState" attributeType="Integer 32" usesScalarValueType="NO" indexed="YES" syncable="YES"/>
         <attribute name="sort" optional="YES" attributeType="Integer 32" usesScalarValueType="NO" indexed="YES" syncable="YES"/>
         <attribute name="startedReading" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="subtitle" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="title" attributeType="String" indexed="YES" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Book" positionX="-63" positionY="-18" width="128" height="225"/>
+        <element name="Book" positionX="-63" positionY="-18" width="128" height="210"/>
     </elements>
 </model>

@@ -18,13 +18,18 @@ class BookPredicate {
     private static let finishedReadingFieldName = "finishedReading"
     
     static let readStateFieldName = "readState"
+    static let isbnFieldName = "isbn13"
     
     static func readState(equalTo readState: BookReadState) -> NSPredicate {
-        return NSPredicate(fieldName: readStateFieldName, equalToInt: Int(readState.rawValue))
+        return NSPredicate(fieldName: readStateFieldName, equalTo: Int(readState.rawValue))
     }
     
     static func titleAndAuthor(searchString: String) -> NSPredicate {
         return NSPredicate.searchWithinFields(searchString, fieldNames: titleFieldName, authorFieldName)
+    }
+    
+    static func isbnEqual(isbn: String) -> NSPredicate {
+        return NSPredicate(fieldName: isbnFieldName, equalToText: isbn)
     }
     
     static let titleSort = NSSortDescriptor(key: titleFieldName, ascending: true)
