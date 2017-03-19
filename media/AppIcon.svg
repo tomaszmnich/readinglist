@@ -15,7 +15,7 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.91 r13725"
-   sodipodi:docname="book v1.svg">
+   sodipodi:docname="AppIcon.svg">
   <defs
      id="defs4">
     <inkscape:perspective
@@ -28,14 +28,14 @@
   </defs>
   <sodipodi:namedview
      id="base"
-     pagecolor="#ecf0f1"
+     pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1.0"
-     inkscape:pageopacity="0.94117647"
+     inkscape:pageopacity="1"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.4"
-     inkscape:cx="111.44945"
-     inkscape:cy="117.24165"
+     inkscape:zoom="1.979899"
+     inkscape:cx="25.378021"
+     inkscape:cy="60.098794"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -62,6 +62,13 @@
      inkscape:groupmode="layer"
      id="layer1"
      transform="translate(0,-827.36223)">
+    <rect
+       style="fill:#ecf0f1;fill-opacity:1;stroke:none"
+       id="rect4144"
+       width="224.28572"
+       height="224.28571"
+       x="0.7142899"
+       y="828.07654" />
     <path
        style="fill:#2574a9;fill-opacity:1;stroke:none"
        d="m 44.391597,884.23798 62.342813,26.95825 0,101.90217 -62.342813,-26.9582 z"
