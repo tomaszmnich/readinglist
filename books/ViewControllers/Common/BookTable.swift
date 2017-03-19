@@ -30,10 +30,10 @@ class BookTableViewCell: UITableViewCell, ConfigurableCell {
         authorsLabel.text = book.authorList
         bookCover.image = UIImage(optionalData: book.coverImage) ?? #imageLiteral(resourceName: "CoverPlaceholder")
         if book.readState == .reading {
-            readTimeLabel.text = book.startedReading!.toHumanisedString()
+            readTimeLabel.text = book.startedReading!.toShortPrettyString()
         }
         else if book.readState == .finished {
-            readTimeLabel.text = book.finishedReading!.toHumanisedString()
+            readTimeLabel.text = book.finishedReading!.toShortPrettyString()
         }
         else {
             readTimeLabel.text = nil

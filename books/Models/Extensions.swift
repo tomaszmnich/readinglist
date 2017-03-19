@@ -50,7 +50,7 @@ public extension Date {
         return formatter.string(from: self)
     }
     
-    func toHumanisedString() -> String {
+    func toShortPrettyString() -> String {
         let today = Date()
         
         // Replace the hour (time) of both dates with 00:00
@@ -59,9 +59,6 @@ public extension Date {
         
         let daysBetween = Calendar.current.dateComponents([.day], from: date1, to: date2).day!
         
-        if daysBetween < 0 {
-            return self.toString(withDateFormat: "d MMM")
-        }
         if daysBetween == 0 {
             return "Today"
         }

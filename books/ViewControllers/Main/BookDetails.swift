@@ -15,7 +15,8 @@ class BookDetailsViewModel {
     let title: String
     let authors: String?
     let description: String?
-    let readingState: String
+    let startedWhen: String
+    let finishedWhen: String
     let cover: UIImage
     
     init(book: Book) {
@@ -23,16 +24,8 @@ class BookDetailsViewModel {
         title = book.title
         authors = book.authorList
         description = book.bookDescription
-        readingState = {
-            switch book.readState {
-                case .toRead:
-                    return "Not Started"
-                case .reading:
-                    return "Started: \(book.startedReading!.toString(withDateFormat: "dd MMM yyyy"))"
-                case .finished:
-                    return "Read: \(book.startedReading!.toString(withDateFormat: "dd MMM yyyy")) - \(book.finishedReading!.toString(withDateFormat: "dd MMM yyyy"))"
-            }
-        }()
+        startedWhen = book.startedReading?.toString(withDateFormat: "d MMMM yyyy") ?? " — "
+        finishedWhen = book.finishedReading?.toString(withDateFormat: "d MMMM yyyy") ?? " — "
         cover = book.coverImage == nil ? #imageLiteral(resourceName: "CoverPlaceholder") : UIImage(data: book.coverImage!)!
     }
 }
@@ -42,10 +35,9 @@ class BookDetails: UIViewController {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var authorsLabel: UILabel!
     @IBOutlet weak var descriptionTextView: UITextView!
-    @IBOutlet weak var readStateLabel: UILabel!
+    @IBOutlet weak var finishedWhenLabel: UILabel!
+    @IBOutlet weak var startedWhenLabel: UILabel!
     @IBOutlet weak var imageView: UIImageView!
-    
-    @IBOutlet weak var readStateContainerView: UIView!
     
     var viewModel: BookDetailsViewModel? {
         didSet {
@@ -60,19 +52,19 @@ class BookDetails: UIViewController {
             titleLabel.text = viewModel.title
             authorsLabel.text = viewModel.authors
             descriptionTextView.text = viewModel.description
-            readStateLabel.text = viewModel.readingState
+            startedWhenLabel.text = viewModel.startedWhen
+            finishedWhenLabel.text = viewModel.finishedWhen
             imageView.image = viewModel.cover
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        readStateContainerView.layer.borderColor = UIColor.lightGray.cgColor
+
         view.backgroundColor = UIColor.white
         
         // Initialise the view, so that by default a blank page is shown.
-        // This is required for starting the app in landscape mode, where this view is
+        // This is required for starting the app in split-screen mode, where this view is
         // shown without any books being selected.
         view.isHidden = true
         navigationItem.rightBarButtonItem?.isEnabled = false
