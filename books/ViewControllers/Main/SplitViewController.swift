@@ -18,6 +18,7 @@ class SplitViewController: UISplitViewController, UISplitViewControllerDelegate 
         // Prepare the progress display style
         SVProgressHUD.setDefaultAnimationType(.native)
         SVProgressHUD.setDefaultMaskType(.black)
+        SVProgressHUD.setMinimumDismissTimeInterval(2)
     }
     
     func splitViewController(_ splitViewController: UISplitViewController, collapseSecondary secondaryViewController: UIViewController, onto primaryViewController: UIViewController) -> Bool {

@@ -142,7 +142,21 @@ class SearchByText: UIViewController, UISearchBarDelegate {
         
         // On cell selection, go to the next page
         tableView.rx.modelSelected(SearchResultViewModel.self).subscribe(onNext: { value in
-            self.segueWhenCoverDownloaded(value.searchResult, secondsWaited: 0)
+            
+            // Display an alert if the book already exists in the store
+            if let isbn = value.searchResult.isbn13, appDelegate.booksStore.isbnExists(isbn) {
+                let alert = UIAlertController(title: "Book Already Added", message: "The selected book has already been added to your reading list.", preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default))
+                self.present(alert, animated: true){
+                    // Deselect the row after dismissing the alert
+                    if let selectedRow = tableView.indexPathForSelectedRow {
+                        tableView.deselectRow(at: selectedRow, animated: true)
+                    }
+                }
+            }
+            else {
+                self.segueWhenCoverDownloaded(value.searchResult, secondsWaited: 0)
+            }
         })
         .addDisposableTo(disposeBag)
     }

@@ -118,7 +118,7 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         
         // Check that the book hasn't already been added
         if appDelegate.booksStore.isbnExists(avMetadata.stringValue) {
-            self.presentInfoAlert(title: "Already Added", message: "You have already added this book.")
+            SVProgressHUD.showInfo(withStatus: "You have already added this book")
             return
         }
         

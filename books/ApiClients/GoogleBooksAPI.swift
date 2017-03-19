@@ -60,7 +60,13 @@ class GoogleBooksAPI {
                 callback(nil, error)
                 return
             }
+
+            // Attach the original ISBN if there wasn't one in the result
+            if result.isbn13 == nil {
+                result.isbn13 = isbn
+            }
             
+            // If there is image URL information, grab the image and add that before running the callback
             supplementMetadataWithImage(result) {
                 callback(result, error)
             }
@@ -159,6 +165,9 @@ class GoogleBooksAPI {
             book.bookDescription = volumeInfo["description"].string
             book.authorList = volumeInfo["authors"].map{$1.rawString()!}.joined(separator: ", ")
             book.publishedDate = volumeInfo["publishedDate"].string?.toDateViaFormat("yyyy-MM-dd")
+            book.isbn13 = volumeInfo["industryIdentifiers"].array?.first(where: { json in
+                return json["type"].stringValue == "ISBN_13"
+            })?["identifier"].stringValue
             
             // Add a link at which a front cover image can be found.
             // The link seems to be equally accessible at https, and iOS apps don't seem to like
