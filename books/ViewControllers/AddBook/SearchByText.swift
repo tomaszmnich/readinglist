@@ -149,8 +149,8 @@ class SearchByText: UIViewController, UISearchBarDelegate {
                 alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default))
                 self.present(alert, animated: true){
                     // Deselect the row after dismissing the alert
-                    if let selectedRow = tableView.indexPathForSelectedRow {
-                        tableView.deselectRow(at: selectedRow, animated: true)
+                    if let selectedRow = self.tableView.indexPathForSelectedRow {
+                        self.tableView.deselectRow(at: selectedRow, animated: true)
                     }
                 }
             }
