@@ -173,26 +173,35 @@ class BookTable: AutoUpdatingTableViewController {
 extension BookTable : DZNEmptyDataSetSource {
     
     func image(forEmptyDataSet scrollView: UIScrollView!) -> UIImage! {
-        return UIImage(named: resultsFilterer.showingSearchResults ? "fa-search" : "fa-book")
+        return #imageLiteral(resourceName: "IconOnWhite")
     }
     
     func title(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
         let titleText: String!
         if resultsFilterer.showingSearchResults {
-            titleText = "No results"
+            titleText = "No Results"
         }
         else if readStates.contains(.reading) {
-            titleText = "You are not reading any books!"
+            titleText = "Reading"
         }
         else {
-            titleText = "You haven't yet finished a book. Get going!"
+            titleText = "Finished"
         }
         
-        return NSAttributedString(string: titleText, attributes: [NSFontAttributeName: UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline)])
+        return NSAttributedString(string: titleText, attributes: [NSFontAttributeName: UIFont.preferredFont(forTextStyle: UIFontTextStyle.title1)])
     }
     
     func description(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
-        let descriptionText = resultsFilterer.showingSearchResults ? "Try changing your search." : "Add a book by clicking the + button above."
+        let descriptionText: String
+        if resultsFilterer.showingSearchResults {
+            descriptionText = "Try changing your search, or add a new book by tapping the + button above."
+        }
+        else if readStates.contains(.reading) {
+            descriptionText = "There are no books in your reading list.\nAdd a book by tapping the + button above."
+        }
+        else {
+            descriptionText = "There are no books in your finished list.\nAdd a book by tapping the + button above."
+        }
         
         return NSAttributedString(string: descriptionText, attributes: [NSFontAttributeName: UIFont.preferredFont(forTextStyle: UIFontTextStyle.body)])
     }
