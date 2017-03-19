@@ -48,8 +48,6 @@
 		49C5339F1DB281A10043E50E /* BookPredicateBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C5339E1DB281A10043E50E /* BookPredicateBuilder.swift */; };
 		49D93AA51CAB16F800AE6611 /* CoreSpotlightStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49D93AA41CAB16F800AE6611 /* CoreSpotlightStack.swift */; };
 		49E95D0F1DD7D9EC00C215F8 /* GoogleBooksAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E95D0E1DD7D9EC00C215F8 /* GoogleBooksAPI.swift */; };
-		49FABF501E7F1E4200EB7F0F /* books_snapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49FABF4F1E7F1E4200EB7F0F /* books_snapshot.swift */; };
-		49FABF581E7F1ECC00EB7F0F /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49FABF571E7F1ECC00EB7F0F /* SnapshotHelper.swift */; };
 		49FE2ED51D6F675D00F04239 /* SearchByText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49FE2ED41D6F675D00F04239 /* SearchByText.swift */; };
 		7708F3CDFF22D3CFDB52BEAD /* Pods_books_UITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8992DFD9484D235BEDF65D56 /* Pods_books_UITests.framework */; };
 		E1FF6CADECF836FE7A0C7174 /* Pods_books_UnitTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 297D92A68CB2906FDBD31ED9 /* Pods_books_UnitTests.framework */; };
@@ -65,13 +63,6 @@
 			remoteInfo = books;
 		};
 		4962700E1DBF83840009CC3C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 495C5D041BF1404D00E00C07 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 495C5D0B1BF1404D00E00C07;
-			remoteInfo = books;
-		};
-		49FABF521E7F1E4200EB7F0F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 495C5D041BF1404D00E00C07 /* Project object */;
 			proxyType = 1;
@@ -131,10 +122,6 @@
 		49D93AA41CAB16F800AE6611 /* CoreSpotlightStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreSpotlightStack.swift; sourceTree = "<group>"; };
 		49E0C8931CA4945700703A9A /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
 		49E95D0E1DD7D9EC00C215F8 /* GoogleBooksAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleBooksAPI.swift; sourceTree = "<group>"; };
-		49FABF4D1E7F1E4200EB7F0F /* books_snapshot.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = books_snapshot.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		49FABF4F1E7F1E4200EB7F0F /* books_snapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = books_snapshot.swift; sourceTree = "<group>"; };
-		49FABF511E7F1E4200EB7F0F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		49FABF571E7F1ECC00EB7F0F /* SnapshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SnapshotHelper.swift; sourceTree = "<group>"; };
 		49FE2ED41D6F675D00F04239 /* SearchByText.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchByText.swift; sourceTree = "<group>"; };
 		76A2E2AAC7E93BC8BDDE2157 /* Pods-books.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-books.debug.xcconfig"; path = "Pods/Target Support Files/Pods-books/Pods-books.debug.xcconfig"; sourceTree = "<group>"; };
 		8992DFD9484D235BEDF65D56 /* Pods_books_UITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_books_UITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -167,13 +154,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				7708F3CDFF22D3CFDB52BEAD /* Pods_books_UITests.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		49FABF4A1E7F1E4200EB7F0F /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -284,7 +264,6 @@
 				495C5D0E1BF1404D00E00C07 /* books */,
 				4962700A1DBF83840009CC3C /* books_UITests */,
 				491612A31DCD20FA0086D7E5 /* books_UnitTests */,
-				49FABF4E1E7F1E4200EB7F0F /* books_snapshot */,
 				241740D919B869177546F852 /* Frameworks */,
 				14655047BD58646296558121 /* Pods */,
 				495C5D0D1BF1404D00E00C07 /* Products */,
@@ -297,7 +276,6 @@
 				495C5D0C1BF1404D00E00C07 /* Reading List.app */,
 				496270091DBF83840009CC3C /* books_UITests.xctest */,
 				491612A21DCD20FA0086D7E5 /* books_UnitTests.xctest */,
-				49FABF4D1E7F1E4200EB7F0F /* books_snapshot.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -382,16 +360,6 @@
 			path = Utilities;
 			sourceTree = "<group>";
 		};
-		49FABF4E1E7F1E4200EB7F0F /* books_snapshot */ = {
-			isa = PBXGroup;
-			children = (
-				49FABF571E7F1ECC00EB7F0F /* SnapshotHelper.swift */,
-				49FABF4F1E7F1E4200EB7F0F /* books_snapshot.swift */,
-				49FABF511E7F1E4200EB7F0F /* Info.plist */,
-			);
-			path = books_snapshot;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -457,31 +425,13 @@
 			productReference = 496270091DBF83840009CC3C /* books_UITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
-		49FABF4C1E7F1E4200EB7F0F /* books_snapshot */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 49FABF561E7F1E4200EB7F0F /* Build configuration list for PBXNativeTarget "books_snapshot" */;
-			buildPhases = (
-				49FABF491E7F1E4200EB7F0F /* Sources */,
-				49FABF4A1E7F1E4200EB7F0F /* Frameworks */,
-				49FABF4B1E7F1E4200EB7F0F /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				49FABF531E7F1E4200EB7F0F /* PBXTargetDependency */,
-			);
-			name = books_snapshot;
-			productName = books_snapshot;
-			productReference = 49FABF4D1E7F1E4200EB7F0F /* books_snapshot.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		495C5D041BF1404D00E00C07 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0820;
+				LastSwiftUpdateCheck = 0810;
 				LastUpgradeCheck = 0810;
 				ORGANIZATIONNAME = "Andrew Bennet";
 				TargetAttributes = {
@@ -499,12 +449,6 @@
 					};
 					496270081DBF83840009CC3C = {
 						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = YPDEV2E775;
-						ProvisioningStyle = Automatic;
-						TestTargetID = 495C5D0B1BF1404D00E00C07;
-					};
-					49FABF4C1E7F1E4200EB7F0F = {
-						CreatedOnToolsVersion = 8.2.1;
 						DevelopmentTeam = YPDEV2E775;
 						ProvisioningStyle = Automatic;
 						TestTargetID = 495C5D0B1BF1404D00E00C07;
@@ -527,7 +471,6 @@
 				495C5D0B1BF1404D00E00C07 /* books */,
 				496270081DBF83840009CC3C /* books_UITests */,
 				491612A11DCD20FA0086D7E5 /* books_UnitTests */,
-				49FABF4C1E7F1E4200EB7F0F /* books_snapshot */,
 			);
 		};
 /* End PBXProject section */
@@ -556,13 +499,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		496270071DBF83840009CC3C /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		49FABF4B1E7F1E4200EB7F0F /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -765,15 +701,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		49FABF491E7F1E4200EB7F0F /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				49FABF501E7F1E4200EB7F0F /* books_snapshot.swift in Sources */,
-				49FABF581E7F1ECC00EB7F0F /* SnapshotHelper.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -786,11 +713,6 @@
 			isa = PBXTargetDependency;
 			target = 495C5D0B1BF1404D00E00C07 /* books */;
 			targetProxy = 4962700E1DBF83840009CC3C /* PBXContainerItemProxy */;
-		};
-		49FABF531E7F1E4200EB7F0F /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 495C5D0B1BF1404D00E00C07 /* books */;
-			targetProxy = 49FABF521E7F1E4200EB7F0F /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -992,39 +914,6 @@
 			};
 			name = Release;
 		};
-		49FABF541E7F1E4200EB7F0F /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				DEVELOPMENT_TEAM = YPDEV2E775;
-				INFOPLIST_FILE = books_snapshot/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.andrewbennet.books-snapshot";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_VERSION = 3.0;
-				TEST_TARGET_NAME = books;
-			};
-			name = Debug;
-		};
-		49FABF551E7F1E4200EB7F0F /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				DEVELOPMENT_TEAM = YPDEV2E775;
-				INFOPLIST_FILE = books_snapshot/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.andrewbennet.books-snapshot";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
-				TEST_TARGET_NAME = books;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1063,14 +952,6 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
-		};
-		49FABF561E7F1E4200EB7F0F /* Build configuration list for PBXNativeTarget "books_snapshot" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				49FABF541E7F1E4200EB7F0F /* Debug */,
-				49FABF551E7F1E4200EB7F0F /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 
