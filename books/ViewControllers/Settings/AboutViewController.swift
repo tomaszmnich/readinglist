@@ -10,14 +10,16 @@ import Foundation
 import UIKit
 
 class AboutViewController : UIViewController {
-    @IBOutlet var textView: UITextView!
+    
+    @IBOutlet weak var appSourceText: UITextView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        textView.setContentOffset(CGPoint(x: 0, y: 0), animated: false)
-        let mutableText = NSMutableAttributedString(attributedString: textView.attributedText)
+        let mutableText = NSMutableAttributedString(attributedString: appSourceText.attributedText!)
         mutableText.hyperlinkText("GitHub", to: URL(string: "https://github.com/AndrewBennet/readinglist")!)
-        textView.attributedText = mutableText
+        appSourceText.attributedText = mutableText
+        appSourceText.textContainerInset = UIEdgeInsets.zero
+        appSourceText.textContainer.lineFragmentPadding = 0
     }
 }

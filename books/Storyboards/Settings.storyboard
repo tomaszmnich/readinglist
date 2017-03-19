@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Xjd-mh-KAZ">
-    <device id="retina4_7" orientation="portrait">
+    <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
@@ -13,21 +13,21 @@
             <objects>
                 <tableViewController title="Settings" clearsSelectionOnViewWillAppear="NO" id="Xjd-mh-KAZ" customClass="Settings" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="8" sectionFooterHeight="8" id="XO8-Rx-eXy">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
                             <tableViewSection id="Idf-Zw-QD4">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" textLabel="1sT-8b-Obn" style="IBUITableViewCellStyleDefault" id="tHR-Qd-tnK">
-                                        <rect key="frame" x="0.0" y="35" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="35" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="tHR-Qd-tnK" id="9Eq-oh-yPu">
-                                            <rect key="frame" x="0.0" y="0.0" width="342" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="287" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="About" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="1sT-8b-Obn">
-                                                    <rect key="frame" x="15" y="0.0" width="325" height="43"/>
+                                                    <rect key="frame" x="15" y="0.0" width="270" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
@@ -40,14 +40,14 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" textLabel="q85-7d-T3e" style="IBUITableViewCellStyleDefault" id="5ab-mO-VFa">
-                                        <rect key="frame" x="0.0" y="79" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="79" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="5ab-mO-VFa" id="frw-Pj-mMH">
-                                            <rect key="frame" x="0.0" y="0.0" width="342" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="287" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Attributions" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="q85-7d-T3e">
-                                                    <rect key="frame" x="15" y="0.0" width="325" height="43"/>
+                                                    <rect key="frame" x="15" y="0.0" width="270" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
@@ -67,14 +67,14 @@
                             <tableViewSection id="Sdh-GF-4EP">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="w78-xe-Rut">
-                                        <rect key="frame" x="0.0" y="155" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="155" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="w78-xe-Rut" id="5c8-rC-2Ab">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Use Test Data" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DH4-vm-tzk">
-                                                    <rect key="frame" x="8" y="8" width="359" height="27.5"/>
+                                                    <rect key="frame" x="8" y="8" width="304" height="27.5"/>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                                     <color key="textColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -127,7 +127,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="NDc-mV-o8s" kind="relationship" relationship="rootViewController" id="L1k-yu-Mzf"/>
+                        <segue destination="ve9-8D-f6x" kind="relationship" relationship="rootViewController" id="dkP-9M-w84"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7eX-t1-6ZY" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -135,50 +135,73 @@
             <point key="canvasLocation" x="1641" y="29"/>
         </scene>
         <!--About-->
-        <scene sceneID="uR9-ef-uyB">
+        <scene sceneID="i4y-Se-0Zw">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="HIL-0h-4aH" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <viewController id="NDc-mV-o8s" customClass="AboutViewController" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
-                    <textView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" usesAttributedText="YES" id="Y3h-T8-1Jl">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <viewController id="ve9-8D-f6x" customClass="AboutViewController" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="MaB-N2-p1i"/>
+                        <viewControllerLayoutGuide type="bottom" id="NjO-AC-4iM"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="cyP-Ah-qnT">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="IconCurved" translatesAutoresizingMaskIntoConstraints="NO" id="YKR-2r-0FQ">
+                                <rect key="frame" x="16" y="80" width="100" height="100"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="100" id="J7k-hX-Um0"/>
+                                    <constraint firstAttribute="width" constant="100" id="Jz3-iZ-79g"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Reading List" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l9h-r1-kQT">
+                                <rect key="frame" x="124" y="80" width="180" height="30"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="25"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Developed by Andrew Bennet" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="boH-bB-m7B">
+                                <rect key="frame" x="124" y="114" width="180" height="33.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" text="This app is open source - the source code is available on GitHub.  If you find this app useful, please leave a review 👍" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Ap6-Dh-Ikr">
+                                <rect key="frame" x="16" y="188" width="288" height="111.5"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <attributedString key="attributedText">
-                            <fragment content="Reading List is developed by Andrew Bennet.  The source code is freely available on GitHub ">
-                                <attributes>
-                                    <font key="NSFont" size="16" name=".AppleSystemUIFont"/>
-                                    <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" firstLineHeadIndent="8" headIndent="8" tighteningFactorForTruncation="0.0"/>
-                                </attributes>
-                            </fragment>
-                            <fragment content="🙂">
-                                <attributes>
-                                    <font key="NSFont" size="16" name=".AppleColorEmojiUI"/>
-                                    <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" firstLineHeadIndent="8" headIndent="8" tighteningFactorForTruncation="0.0"/>
-                                </attributes>
-                            </fragment>
-                            <fragment content=" ">
-                                <attributes>
-                                    <font key="NSFont" size="16" name=".AppleSystemUIFont"/>
-                                    <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" firstLineHeadIndent="8" headIndent="8" tighteningFactorForTruncation="0.0"/>
-                                </attributes>
-                            </fragment>
-                        </attributedString>
-                        <textInputTraits key="textInputTraits"/>
-                    </textView>
-                    <navigationItem key="navigationItem" title="About" id="GVF-Zk-ULF"/>
+                        <constraints>
+                            <constraint firstItem="Ap6-Dh-Ikr" firstAttribute="trailing" secondItem="l9h-r1-kQT" secondAttribute="trailing" id="EpY-HY-7uf"/>
+                            <constraint firstItem="boH-bB-m7B" firstAttribute="top" secondItem="l9h-r1-kQT" secondAttribute="bottom" constant="4" id="KXk-De-CDo"/>
+                            <constraint firstAttribute="trailing" secondItem="l9h-r1-kQT" secondAttribute="trailing" constant="16" id="O2J-Ln-3mC"/>
+                            <constraint firstItem="Ap6-Dh-Ikr" firstAttribute="leading" secondItem="YKR-2r-0FQ" secondAttribute="leading" id="QNQ-Sq-gDb"/>
+                            <constraint firstItem="YKR-2r-0FQ" firstAttribute="leading" secondItem="cyP-Ah-qnT" secondAttribute="leading" constant="16" id="TGW-Is-KMU"/>
+                            <constraint firstItem="l9h-r1-kQT" firstAttribute="top" secondItem="YKR-2r-0FQ" secondAttribute="top" id="Tb4-Uv-Erp"/>
+                            <constraint firstItem="boH-bB-m7B" firstAttribute="trailing" secondItem="l9h-r1-kQT" secondAttribute="trailing" id="X8l-IF-4mY"/>
+                            <constraint firstItem="l9h-r1-kQT" firstAttribute="leading" secondItem="YKR-2r-0FQ" secondAttribute="trailing" constant="8" id="Z4S-VE-lD2"/>
+                            <constraint firstItem="boH-bB-m7B" firstAttribute="leading" secondItem="l9h-r1-kQT" secondAttribute="leading" id="aa6-Cf-vJn"/>
+                            <constraint firstItem="Ap6-Dh-Ikr" firstAttribute="top" secondItem="YKR-2r-0FQ" secondAttribute="bottom" constant="8" id="rgr-v4-IY3"/>
+                            <constraint firstItem="YKR-2r-0FQ" firstAttribute="top" secondItem="MaB-N2-p1i" secondAttribute="bottom" constant="16" id="snf-GO-abJ"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="About" id="nBO-us-yH6"/>
                     <connections>
-                        <outlet property="textView" destination="Y3h-T8-1Jl" id="InS-Qb-2J0"/>
+                        <outlet property="appSourceText" destination="Ap6-Dh-Ikr" id="hX0-wS-Biv"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="mPx-JZ-6Wn" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2317.5999999999999" y="23.838080959520241"/>
+            <point key="canvasLocation" x="2405.625" y="27.464788732394368"/>
         </scene>
         <!--Attributions-->
         <scene sceneID="AQn-aB-NBm">
             <objects>
                 <viewController id="u8f-T2-ckJ" customClass="AttributionsViewController" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
                     <textView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" usesAttributedText="YES" id="xFq-OW-9gD">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <attributedString key="attributedText">
@@ -334,6 +357,24 @@ Cg
                                     <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" firstLineHeadIndent="8" headIndent="8" tighteningFactorForTruncation="0.0"/>
                                 </attributes>
                             </fragment>
+                            <fragment content="RxSwiftUtilities">
+                                <attributes>
+                                    <font key="NSFont" size="21" name="HelveticaNeue"/>
+                                    <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" firstLineHeadIndent="8" headIndent="8" tighteningFactorForTruncation="0.0"/>
+                                </attributes>
+                            </fragment>
+                            <fragment content=" ">
+                                <attributes>
+                                    <font key="NSFont" size="17" name="HelveticaNeue"/>
+                                    <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" firstLineHeadIndent="8" headIndent="8" tighteningFactorForTruncation="0.0"/>
+                                </attributes>
+                            </fragment>
+                            <fragment content="Copyright © 2016 Jesse Farless Provided under The MIT Licence  ">
+                                <attributes>
+                                    <font key="NSFont" size="14" name="HelveticaNeue"/>
+                                    <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" firstLineHeadIndent="8" headIndent="8" tighteningFactorForTruncation="0.0"/>
+                                </attributes>
+                            </fragment>
                             <fragment content="SVProgressHUD">
                                 <attributes>
                                     <font key="NSFont" size="21" name="HelveticaNeue"/>
@@ -370,10 +411,10 @@ Cg
                                 </attributes>
                             </fragment>
                             <fragment>
-                                <mutableString key="content">The MIT Licence
+                                <string key="content">The MIT Licence
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE</mutableString>
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE</string>
                                 <attributes>
                                     <font key="NSFont" size="14" name="CourierNewPSMT"/>
                                     <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" firstLineHeadIndent="8" headIndent="8" tighteningFactorForTruncation="0.0"/>
@@ -392,4 +433,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
             <point key="canvasLocation" x="2318" y="725"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="IconCurved" width="180" height="180"/>
+    </resources>
 </document>

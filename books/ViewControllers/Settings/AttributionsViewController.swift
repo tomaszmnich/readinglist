@@ -26,6 +26,7 @@ class AttributionsViewController : UIViewController {
         mutableText.hyperlinkText("SwiftyJSON", to: URL(string: "https://github.com/SwiftyJSON/SwiftyJSON")!)
         mutableText.hyperlinkText("RxSwift", to: URL(string: "https://github.com/ReactiveX/RxSwift")!)
         mutableText.hyperlinkText("SVProgressHUD", to: URL(string: "https://github.com/SVProgressHUD/SVProgressHUD")!)
+        mutableText.hyperlinkText("RxSwiftUtilities", to: URL(string: "https://github.com/RxSwiftCommunity/RxSwiftUtilities")!)
         
         textView.attributedText = mutableText
     }
