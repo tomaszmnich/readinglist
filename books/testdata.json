@@ -1,0 +1,27 @@
+[{
+    "title": "The Sellout",
+    "authors": "Paul Beatty",
+    "coverUrl": "https://images.gr-assets.com/books/1403430899l/22237161.jpg",
+    "started": "2017-02-17"
+},
+{
+    "title": "Keep The Aspidistra Flying",
+    "authors": "George Orwell",
+    "coverUrl": "https://www.theorwellprize.co.uk/wp/wp-content/uploads/2010/09/9780141194738.jpg",
+    "started": "2017-01-17",
+    "finished": "2017-02-11"
+},
+{
+    "title": "The Noise of Time",
+    "authors": "Julian Barnes",
+    "coverUrl": "https://images-na.ssl-images-amazon.com/images/I/51wBPUwJ9ML._SX331_BO1,204,203,200_.jpg",
+    "started": "2017-02-11",
+    "finished": "2017-02-14"
+},
+{
+    "title": "Fahrenheit 451",
+    "authors": "Ray Bradbury",
+    "coverUrl": "https://images-na.ssl-images-amazon.com/images/I/514VBCKNEFL.jpg",
+    "started": "2016-12-27",
+    "finished": "2017-01-17"
+}]
