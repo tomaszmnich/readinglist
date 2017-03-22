@@ -9,6 +9,7 @@
 import UIKit
 import Foundation
 import SVProgressHUD
+import SwiftyJSON
 
 class Settings: UITableViewController {
 
@@ -31,55 +32,42 @@ class Settings: UITableViewController {
     
     func loadTestData() {
         
-        class IsbnAndReadingInformation {
-            var readingInformation: BookReadingInformation
-            var isbn: String
-            init(isbn: String, readingInfo: BookReadingInformation){
-                self.isbn = isbn
-                self.readingInformation = readingInfo
-            }
-        }
-        
-        // Search for each book and add the result
-        let isbns = [
-            // fahrenheit 451
-            IsbnAndReadingInformation(isbn: "9780006546061", readingInfo: BookReadingInformation.finished(started: Date(dateString: "2016-12-27"), finished: Date(dateString: "2017-01-17"))),
-            // keep the aspidistra flying
-            IsbnAndReadingInformation(isbn: "9780141183725", readingInfo: BookReadingInformation.finished(started: Date(dateString: "2017-01-17"), finished: Date(dateString: "2017-02-11"))),
-            // the noise of time
-            IsbnAndReadingInformation(isbn: "9781784703325", readingInfo: BookReadingInformation.finished(started: Date(dateString: "2017-02-11"), finished: Date(dateString: "2017-02-14"))),
-            
-            // the sellout
-            IsbnAndReadingInformation(isbn: "9781786070159", readingInfo: BookReadingInformation.reading(started: Date(dateString: "2017-02-17"))),
-            
-            // the three body problem
-            IsbnAndReadingInformation(isbn: "9781784971571", readingInfo: BookReadingInformation.toRead()),
-            // cat's cradle
-            IsbnAndReadingInformation(isbn: "9780141189345", readingInfo: BookReadingInformation.toRead()),
-            // it can't happen here (not found at present)
-            IsbnAndReadingInformation(isbn: "9780241310663", readingInfo: BookReadingInformation.toRead())
-        ]
-
         SVProgressHUD.show(withStatus: "Loading")
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+
+        let testDataFile = Bundle.main.path(forResource: "testdata", ofType: "json")!
+        let testJsonData = JSON(data: try! NSData(contentsOfFile: testDataFile) as Data)
         appDelegate.booksStore.deleteAllData()
         
         let requestDispatchGroup = DispatchGroup()
+        var sortIndex = -1
         
-        for isbn in isbns {
+        for testBook in testJsonData.array! {
+            let parsedData = BookImport.fromJson(testBook)
+            
+            if parsedData.1.readState == .toRead {
+                sortIndex += 1
+            }
+            
             requestDispatchGroup.enter()
             DispatchQueue.global(qos: .background).async {
-                GoogleBooksAPI.get(isbn: isbn.isbn) { metadata, error in
-                    requestDispatchGroup.leave()
+                let thisSort = sortIndex
+                GoogleBooksAPI.supplementMetadataWithImage(parsedData.0) {
                     DispatchQueue.main.sync {
-                        if let metadata = metadata {
-                            appDelegate.booksStore.create(from: metadata, readingInformation: isbn.readingInformation)
+                        let book = appDelegate.booksStore.create(from: parsedData.0, readingInformation: parsedData.1)
+                        if book.readState == .toRead {
+                            book.sort = thisSort as NSNumber
+                            appDelegate.booksStore.save()
                         }
+                        requestDispatchGroup.leave()
                     }
                 }
             }
         }
+
         requestDispatchGroup.notify(queue: .main) {
             SVProgressHUD.dismiss()
+            UIApplication.shared.isNetworkActivityIndicatorVisible = false
         }
     }
 }

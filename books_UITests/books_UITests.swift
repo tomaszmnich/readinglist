@@ -31,7 +31,6 @@ class ReadingListApplication : XCUIApplication {
         
         clickTab(.settings)
         tables.cells.staticTexts["Use Test Data"].tap()
-        sleep(5)
         testDataAdded = true
     }
     
