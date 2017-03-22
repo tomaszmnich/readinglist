@@ -48,7 +48,11 @@ class Settings: UITableViewController {
             DispatchQueue.global(qos: .background).async {
                 GoogleBooksAPI.supplementMetadataWithImage(parsedData.0) {
                     DispatchQueue.main.sync {
-                        appDelegate.booksStore.create(from: parsedData.0, readingInformation: parsedData.1)
+                        let book = appDelegate.booksStore.create(from: parsedData.0, readingInformation: parsedData.1)
+                        if let sortIndex = book.sort {
+                            book.sort = sortIndex
+                            appDelegate.booksStore.save()
+                        }
                         requestDispatchGroup.leave()
                     }
                 }

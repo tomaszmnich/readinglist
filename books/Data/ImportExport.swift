@@ -11,10 +11,10 @@ import SwiftyJSON
 
 class BookImport {
     
-    static func fromJson(_ json: JSON) -> (BookMetadata, BookReadingInformation) {
+    static func fromJson(_ json: JSON) -> (BookMetadata, BookReadingInformation, Int?) {
         let bookMetadata = BookMetadata()
         bookMetadata.title = json["title"].stringValue
-        bookMetadata.authorList = json["authors"].stringValue
+        bookMetadata.authorList = json["author"].stringValue
         bookMetadata.bookDescription = json["description"].string
         if let coverUrlString = json["coverUrl"].string {
             bookMetadata.coverUrl = URL(string: coverUrlString)
@@ -39,6 +39,6 @@ class BookImport {
             bookReadingInformation = BookReadingInformation.toRead()
         }
         
-        return (bookMetadata, bookReadingInformation)
+        return (bookMetadata, bookReadingInformation, json["sort"].int)
     }
 }
