@@ -107,15 +107,20 @@ class BooksStore {
      Creates a new Book object, populates with the provided metadata, saves the
      object context, and adds the book to the Spotlight index.
     */
-    @discardableResult func create(from metadata: BookMetadata, readingInformation: BookReadingInformation) -> Book {
+    @discardableResult func create(from metadata: BookMetadata, readingInformation: BookReadingInformation, bookSortIfKnown: Int?) -> Book {
         let book = coreDataStack.createNew(entity: bookEntityName) as! Book
         book.populate(from: metadata)
         book.populate(from: readingInformation)
         
         // The sort index should be 1 more than our maximum, and only if this book is in the ToRead state
         if readingInformation.readState == .toRead {
-            let maxSort = self.maxSort() ?? -1
-            book.sort = NSNumber(value: maxSort + 1)
+            if let knownSort = bookSortIfKnown {
+                book.sort = NSNumber(value: knownSort)
+            }
+            else {
+                let maxSort = self.maxSort() ?? -1
+                book.sort = NSNumber(value: maxSort + 1)
+            }
         }
         
         save()

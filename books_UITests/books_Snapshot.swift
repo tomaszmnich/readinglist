@@ -18,6 +18,7 @@ class books_Snapshot: XCTestCase {
         let app = ReadingListApplication()
         setupSnapshot(app)
         app.launch()
+        app.addTestData()
     }
     
     override func tearDown() {
@@ -28,8 +29,15 @@ class books_Snapshot: XCTestCase {
         let app = ReadingListApplication()
         
         app.clickTab(.toRead)
-        snapshot("0EmptyToRead")
+        app.tables.cells.element(boundBy: 1).tap()
+        // Press back if not in split screen
+        if app.topNavBar.buttons.count >= 2 {
+            app.topNavBar.buttons.element(boundBy: 0).tap()
+        }
+        app.tables.element(boundBy: 0).swipeUp()
+        app.tables.element(boundBy: 0).swipeDown()
         
+        snapshot("0_ToReadList")
     }
 }
 

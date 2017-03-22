@@ -32,7 +32,7 @@ class CreateReadState: ReadStateForm {
         // Update the book metadata object and create a book from it.
         // Ignore the dates which are not relevant.
         let bookReadingInformation = BookReadingInformation(readState: readState, startedWhen: startedReading, finishedWhen: finishedReading)
-        appDelegate.booksStore.create(from: bookMetadata, readingInformation: bookReadingInformation)
+        appDelegate.booksStore.create(from: bookMetadata, readingInformation: bookReadingInformation, bookSortIfKnown: nil)
         
         self.navigationController?.dismiss(animated: true, completion: nil)
     }

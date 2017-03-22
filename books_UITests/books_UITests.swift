@@ -20,18 +20,14 @@ class ReadingListApplication : XCUIApplication {
         case enterManually = 2
     }
     
-    var testDataAdded = false
-    
     func clickTab(_ tab: tab) {
         tabBars.buttons.element(boundBy: UInt(tab.rawValue)).tap()
     }
     
-    func addTestDataIfNotAdded() {
-        guard testDataAdded == false else { return }
-        
+    func addTestData() {
         clickTab(.settings)
         tables.cells.staticTexts["Use Test Data"].tap()
-        testDataAdded = true
+        sleep(1)
     }
     
     func clickAddButton(addMethod: addMethod) {
@@ -56,7 +52,7 @@ class books_UITests: XCTestCase {
         app.launch()
 
         // Add some test data
-        app.addTestDataIfNotAdded()
+        app.addTestData()
     }
     
     override func tearDown() {
@@ -80,7 +76,7 @@ class books_UITests: XCTestCase {
         app.topNavBar.buttons["Next"].tap()
         app.topNavBar.buttons["Done"].tap()
         
-        sleep(1)
+        //sleep(1)
         XCTAssertEqual(app.tables.cells.count, UInt(initialNumberOfCells + 1))
     }
     

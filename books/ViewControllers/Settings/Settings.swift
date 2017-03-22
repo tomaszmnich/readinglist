@@ -32,7 +32,7 @@ class Settings: UITableViewController {
     
     func loadTestData() {
         
-        SVProgressHUD.show(withStatus: "Loading")
+        //SVProgressHUD.show(withStatus: "Loading")
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
 
         let testDataFile = Bundle.main.path(forResource: "testdata", ofType: "json")!
@@ -54,11 +54,7 @@ class Settings: UITableViewController {
                 let thisSort = sortIndex
                 GoogleBooksAPI.supplementMetadataWithImage(parsedData.0) {
                     DispatchQueue.main.sync {
-                        let book = appDelegate.booksStore.create(from: parsedData.0, readingInformation: parsedData.1)
-                        if book.readState == .toRead {
-                            book.sort = thisSort as NSNumber
-                            appDelegate.booksStore.save()
-                        }
+                        appDelegate.booksStore.create(from: parsedData.0, readingInformation: parsedData.1, bookSortIfKnown: thisSort)
                         requestDispatchGroup.leave()
                     }
                 }
@@ -66,7 +62,7 @@ class Settings: UITableViewController {
         }
 
         requestDispatchGroup.notify(queue: .main) {
-            SVProgressHUD.dismiss()
+            //SVProgressHUD.dismiss()
             UIApplication.shared.isNetworkActivityIndicatorVisible = false
         }
     }
