@@ -29,38 +29,56 @@
     "started": "2016-12-27",
     "finished": "2017-01-17"
 },
+ {
+    "title": "Your First Swift App",
+    "author": "Ash Furrow",
+    "coverUrl": "https://s3.amazonaws.com/titlepages.leanpub.com/yourfirstswiftapp/hero?1455119428",
+    "started": "2016-10-01",
+    "finished": "2016-10-14"
+ },
 {
     "title": "It Can't Happen Here",
     "author": "Sinclair Lewis",
     "description": "A vain, outlandish, anti-immigrant, fearmongering demagogue runs for President of the United States - and wins. Sinclair Lewis's chilling 1935 bestseller is the story of Buzz Windrip, 'Professional Common Man', who promises poor, angry voters that he will make America proud and prosperous once more, but takes the country down a far darker path. As the new regime slides into authoritarianism, newspaper editor Doremus Jessop can't believe it will last - but is he right? This cautionary tale of liberal complacency in the face of populist tyranny shows it really can happen here.",
-    "coverUrl": "https://d2t3xdwbh1v8qy.cloudfront.net/content/B01N0ZP3PG/resources/1309278362",
-    "sort": 1
+    "coverUrl": "https://d2t3xdwbh1v8qy.cloudfront.net/content/B01N0ZP3PG/resources/1309278362"
 },
 {
     "title": "The Three-Body Problem",
     "author": "Cixin Liu",
     "description": "1967: Ye Wenjie witnesses Red Guards beat her father to death during China's Cultural Revolution. This singular event will shape not only the rest of her life but also the future of mankind.",
-    "coverUrl": "https://d2t3xdwbh1v8qy.cloudfront.net/content/B00S8FCJCQ/resources/2032786453",
-    "sort": 2
+    "coverUrl": "https://d2t3xdwbh1v8qy.cloudfront.net/content/B00S8FCJCQ/resources/2032786453"
 },
+ {
+    "title": "Neuromancer",
+    "author": "William Gibson",
+    "coverUrl": "https://images-na.ssl-images-amazon.com/images/I/51B0Sg4oboL._SX323_BO1,204,203,200_.jpg"
+ },
  {
     "title": "A Wrinkle In Time",
     "author": "Madeleine L'Engle",
     "description": "When Charles Wallace Murry goes searching through a 'wrinkle in time' for his lost father, he finds himself on an evil planet where all life is enslaved by a huge pulsating brain known as 'It'. How Charles, his sister Meg and friend Calvin find and free his father makes this a very special and exciting mixture of fantasy and science fiction, which all the way through is dominated by the funny and mysterious trio of guardian angels known as Mrs Whatsit, Mrs Who and Mrs Which.",
-    "coverUrl": "https://upload.wikimedia.org/wikipedia/en/0/0b/WrinkleInTimePBA1.jpg",
-    "sort": 3
+    "coverUrl": "https://upload.wikimedia.org/wikipedia/en/0/0b/WrinkleInTimePBA1.jpg"
  },
  {
     "title": "Cat's Cradle",
     "author": "Kurt Vonnegut",
     "description": "Dr Felix Hoenikker, one of the founding 'fathers' of the atomic bomb, has left a deadly legacy to humanity. For he is the inventor of ice-nine, a lethal chemical capable of freezing the entire planet. Writer Jonah's search for his whereabouts leads him to Hoenikker's three eccentric children, to an island republic in the Caribbean where the absurd religion of Bokononism is practised, to love and to insanity. Told with deadpan humour and bitter irony, Kurt Vonnegut's cult tale of global destruction is a frightening and funny satire on the end of the world and the madness of mankind.",
-    "coverUrl": "https://images-na.ssl-images-amazon.com/images/I/51Pgb5PrjWL._SX324_BO1,204,203,200_.jpg",
-    "sort": 4
+    "coverUrl": "https://images-na.ssl-images-amazon.com/images/I/51Pgb5PrjWL._SX324_BO1,204,203,200_.jpg"
  },
  {
     "title": "Interpreter of Maladies Paperback",
     "author": "Jhumpa Lahiri",
     "description": "Navigating between the Indian traditions they've inherited and the baffling new world, the characters in Jhumpa Lahiri's elegant, touching stories seek love beyond the barriers of culture and generations.",
-    "coverUrl": "https://images-na.ssl-images-amazon.com/images/I/41ffYO-4WQL._SX330_BO1,204,203,200_.jpg",
-    "sort": 5
- }]
+    "coverUrl": "https://images-na.ssl-images-amazon.com/images/I/41ffYO-4WQL._SX330_BO1,204,203,200_.jpg"
+ },
+ {
+    "title": "The Heart Is a Lonely Hunter",
+    "author": "Carson McCullers",
+    "coverUrl": "https://upload.wikimedia.org/wikipedia/en/b/bf/HeartIsALonelyHunter.jpg"
+ },
+ {
+    "title": "A Farewell to Arms",
+    "author": "Ernest Hemingway",
+    "coverUrl": "https://images-na.ssl-images-amazon.com/images/I/51Y4P8CC38L._SX307_BO1,204,203,200_.jpg"
+ }
+]

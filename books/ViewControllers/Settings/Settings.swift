@@ -40,17 +40,23 @@ class Settings: UITableViewController {
         appDelegate.booksStore.deleteAllData()
         
         let requestDispatchGroup = DispatchGroup()
+        var sortIndex = -1
         
         for testBook in testJsonData.array! {
             let parsedData = BookImport.fromJson(testBook)
             
+            if parsedData.1.readState == .toRead {
+                sortIndex += 1
+            }
+            
             requestDispatchGroup.enter()
             DispatchQueue.global(qos: .background).async {
+                let thisSort = sortIndex
                 GoogleBooksAPI.supplementMetadataWithImage(parsedData.0) {
                     DispatchQueue.main.sync {
                         let book = appDelegate.booksStore.create(from: parsedData.0, readingInformation: parsedData.1)
-                        if let sortIndex = book.sort {
-                            book.sort = sortIndex
+                        if book.readState == .toRead {
+                            book.sort = thisSort as NSNumber
                             appDelegate.booksStore.save()
                         }
                         requestDispatchGroup.leave()
