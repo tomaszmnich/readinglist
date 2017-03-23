@@ -27,7 +27,7 @@ class ReadingListApplication : XCUIApplication {
     func addTestData() {
         clickTab(.settings)
         tables.cells.staticTexts["Use Test Data"].tap()
-        sleep(1)
+        sleep(10)
     }
     
     func clickAddButton(addMethod: addMethod) {

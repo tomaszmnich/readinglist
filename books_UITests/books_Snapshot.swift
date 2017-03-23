@@ -19,6 +19,10 @@ class books_Snapshot: XCTestCase {
         setupSnapshot(app)
         app.launch()
         app.addTestData()
+        
+        // There's a weird glitch with the search bar when books are first added. Restart the app the fix it.
+        app.terminate()
+        app.launch()
     }
     
     override func tearDown() {
@@ -34,8 +38,6 @@ class books_Snapshot: XCTestCase {
         if app.topNavBar.buttons.count >= 2 {
             app.topNavBar.buttons.element(boundBy: 0).tap()
         }
-        app.tables.element(boundBy: 0).swipeUp()
-        app.tables.element(boundBy: 0).swipeDown()
         
         snapshot("0_ToReadList")
     }
