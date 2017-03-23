@@ -47,6 +47,7 @@ class BookTable: AutoUpdatingTableViewController {
     var resultsFilterer: FetchedResultsFilterer<Book, BookPredicateBuilder>!
     var readStates: [BookReadState]!
     var editingNotification: EditingNotificationDelegate?
+    var searchController: UISearchController!
     
     override func viewDidLoad() {
         let readStatePredicate = NSPredicate.Or(readStates.map{BookPredicate.readState(equalTo: $0)})
@@ -58,7 +59,7 @@ class BookTable: AutoUpdatingTableViewController {
         tableUpdater = TableUpdater<Book, BookTableViewCell>(table: tableView, controller: resultsController)
         
         /// The UISearchController to which this UITableViewController will be connected.
-        let searchController = UISearchController(searchResultsController: nil)
+        searchController = UISearchController(searchResultsController: nil)
         let predicateBuilder = BookPredicateBuilder(readStatePredicate: readStatePredicate)
         resultsFilterer = FetchedResultsFilterer(uiSearchController: searchController, tableView: self.tableView, fetchedResultsController: resultsController, predicateBuilder: predicateBuilder)
         
@@ -70,7 +71,7 @@ class BookTable: AutoUpdatingTableViewController {
         
         // contentOffset will not change before the main run loop ends without queueing it, for splitable devices (iPhone Plus & iPad)
         DispatchQueue.main.async {
-            self.tableView.contentOffset.y = searchController.searchBar.frame.size.height
+            self.tableView.contentOffset.y = self.searchController.searchBar.frame.size.height
         }
         
         // We will manage the clearing of selections ourselves.
@@ -92,7 +93,16 @@ class BookTable: AutoUpdatingTableViewController {
         }
         
         super.viewDidAppear(animated)
-    }    
+    }
+    
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        let numberOfSections = super.numberOfSections(in: tableView)
+        
+        // Show/hide the search bar if there are no results
+        searchController.searchBar.isHidden = numberOfSections == 0
+
+        return numberOfSections
+    }
 
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         // Turn the section name into a BookReadState and use its description property
