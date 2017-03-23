@@ -6,7 +6,6 @@
 //  Copyright © 2017 Andrew Bennet. All rights reserved.
 //
 
-
 import XCTest
 
 class books_Snapshot: XCTestCase {
@@ -33,12 +32,15 @@ class books_Snapshot: XCTestCase {
         let app = ReadingListApplication()
         
         app.clickTab(.toRead)
-        app.tables.cells.element(boundBy: 1).tap()
-        // Press back if not in split screen
-        if app.topNavBar.buttons.count >= 2 {
-            app.topNavBar.buttons.element(boundBy: 0).tap()
+        
+        let isIpad = app.navigationBars.count == 2
+        
+        if isIpad {
+            XCUIDevice.shared().orientation = .landscapeLeft
+            app.tables.cells.element(boundBy: 1).tap()
         }
         
+        sleep(2)
         snapshot("0_ToReadList")
     }
 }

@@ -9,6 +9,11 @@
 import UIKit
 import CoreSpotlight
 
+#if DEBUG
+    // Include SimulatorStatusMagic only in debug mode; it's only needed for automated screenshots
+    import SimulatorStatusMagic
+#endif
+
 let productBundleIdentifier = "com.andrewbennet.books"
  
 var appDelegate: AppDelegate {
@@ -27,6 +32,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+
+        #if DEBUG
+            // In debug mode, when we are running via fastlane snapshot, override the simulator status bar
+            if UserDefaults.standard.bool(forKey: "FASTLANE_SNAPSHOT") {
+                SDStatusBarManager.sharedInstance().enableOverrides()
+            }
+        #endif
         return true
     }
     

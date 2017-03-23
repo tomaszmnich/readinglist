@@ -9,6 +9,7 @@ PODS:
   - RxSwiftUtilities (1.0.1):
     - RxCocoa (~> 3.0)
     - RxSwift (~> 3.0)
+  - SimulatorStatusMagic (1.9.3)
   - SVProgressHUD (2.1.2)
   - SwiftyJSON (3.1.4)
 
@@ -19,6 +20,7 @@ DEPENDENCIES:
   - RxCocoa (~> 3.0)
   - RxSwift (~> 3.0)
   - RxSwiftUtilities (~> 1.0)
+  - SimulatorStatusMagic
   - SVProgressHUD (~> 2.1)
   - SwiftyJSON (~> 3.1)
 
@@ -29,9 +31,10 @@ SPEC CHECKSUMS:
   RxCocoa: ccdf43101a70407097a29082f648ba1676075b30
   RxSwift: 46574f70d416b7923c237195939cc488a7fbf3a0
   RxSwiftUtilities: 57e77c17b885931c37aa038f114f14fd1f478ac2
+  SimulatorStatusMagic: 4703d78db62ff6419d889c8b2ed4ec38f9bba501
   SVProgressHUD: c404a55d78acbeb7ebb78b76d3faf986475a6994
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
 
-PODFILE CHECKSUM: 57a55b58ccbc7513f686abbc357dbed41e9a7242
+PODFILE CHECKSUM: 45824e72fa60e784f80897c22a9e9d1bb7d210ed
 
 COCOAPODS: 1.2.0
