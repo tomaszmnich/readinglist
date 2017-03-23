@@ -4,6 +4,9 @@ layout: default
 
 Reading List is an app for iPhone, iPad and iPod Touch, to track personal reading lists.
 
+<img src="https://raw.githubusercontent.com/AndrewBennet/readinglist/master/media/screenshots/en-US/iPhone7-0_ToReadList_framed.png"
+  alt="iPhone Screenshot" style="width: 280px;" />
+
 ## Reading List is useful if...
 
 * You want to keep a list of books you plan to read.
