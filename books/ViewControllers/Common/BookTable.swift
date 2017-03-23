@@ -66,6 +66,7 @@ class BookTable: AutoUpdatingTableViewController {
         // Search Controller UI decisions
         searchController.dimsBackgroundDuringPresentation = false
         searchController.searchBar.returnKeyType = .done
+        searchController.searchBar.placeholder = "Your Library"
         searchController.hidesNavigationBarDuringPresentation = false
         tableView.tableHeaderView = searchController.searchBar
         
