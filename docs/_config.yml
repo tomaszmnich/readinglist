@@ -7,5 +7,5 @@ description: Reading List, on iPhone, iPad and iPod touch, is an app to track an
 markdown: kramdown
 exclude: ["README.md"]
 sass:
-  sass_dir: docs/_sass
+  sass_dir: _sass
   style: compressed
