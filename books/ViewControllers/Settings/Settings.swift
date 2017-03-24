@@ -54,7 +54,7 @@ class Settings: UITableViewController {
                 let thisSort = sortIndex
                 GoogleBooksAPI.supplementMetadataWithImage(parsedData.0) {
                     DispatchQueue.main.sync {
-                        appDelegate.booksStore.create(from: parsedData.0, readingInformation: parsedData.1, bookSortIfKnown: thisSort)
+                        appDelegate.booksStore.create(from: parsedData.0, readingInformation: parsedData.1, bookSort: thisSort)
                         requestDispatchGroup.leave()
                     }
                 }
