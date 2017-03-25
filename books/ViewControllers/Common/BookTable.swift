@@ -100,7 +100,7 @@ class BookTable: AutoUpdatingTableViewController {
         let numberOfSections = super.numberOfSections(in: tableView)
         
         // Show/hide the search bar if there are no results
-        searchController.searchBar.isHidden = numberOfSections == 0
+        searchController.searchBar.isHidden = numberOfSections == 0 && !resultsFilterer.showingSearchResults
 
         return numberOfSections
     }

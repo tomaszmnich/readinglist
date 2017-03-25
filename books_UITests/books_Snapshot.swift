@@ -18,6 +18,8 @@ class books_Snapshot: XCTestCase {
         setupSnapshot(app)
         app.launch()
         app.addTestData()
+        print("Waiting 10 seconds")
+        sleep(10)
         
         // There's a weird glitch with the search bar when books are first added. Restart the app the fix it.
         app.terminate()
@@ -42,6 +44,18 @@ class books_Snapshot: XCTestCase {
         
         sleep(2)
         snapshot("0_ToReadList")
+        
+        app.clickTab(.finished)
+        if isIpad {
+            app.tables.staticTexts["Nineteen Eighty-Four"].tap()
+        }
+        app.tables.searchFields.element(boundBy: 0).tap()
+        app.typeText("Orwell")
+        app.buttons["Done"].tap()
+
+        sleep(1)
+        snapshot("1_SearchFinished")
+        
     }
 }
 
