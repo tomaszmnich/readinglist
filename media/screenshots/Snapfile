@@ -8,5 +8,6 @@ languages([
   "en-US"
 ])
 scheme "books_UITests"
-output_directory "./media/screenshots/"
+output_directory "./"
+workspace "../../books.xcworkspace"
 clear_previous_screenshots true
