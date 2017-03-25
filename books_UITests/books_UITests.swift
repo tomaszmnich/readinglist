@@ -16,6 +16,7 @@ class ReadingListApplication : XCUIApplication {
     }
     
     enum addMethod : Int {
+        case scanBarcode = 0
         case searchOnline = 1
         case enterManually = 2
     }

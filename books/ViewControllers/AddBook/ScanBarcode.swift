@@ -54,6 +54,13 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         let camera = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo)
         
         guard let input = try? AVCaptureDeviceInput(device: camera) else {
+            #if DEBUG
+                // In debug mode, when we are running via fastlane snapshot, just use an image of a barcode
+                if UserDefaults.standard.bool(forKey: "FASTLANE_SNAPSHOT") {
+                    useExampleBarcodeImage()
+                    return
+                }
+            #endif
             presentCameraSetupError()
             return
         }
@@ -179,4 +186,16 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
             createReadStateController.bookMetadata = foundMetadata
         }
     }
+    
+    #if DEBUG
+    
+    func useExampleBarcodeImage() {
+        let imageView = UIImageView(frame: view.frame)
+        imageView.contentMode = .scaleAspectFill
+        imageView.image = #imageLiteral(resourceName: "example_barcode.jpg")
+        view.addSubview(imageView)
+        imageView.addSubview(previewOverlay)
+    }
+    
+    #endif
 }

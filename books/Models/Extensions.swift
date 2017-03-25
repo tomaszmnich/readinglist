@@ -87,6 +87,13 @@ public extension Date {
     }
 }
 
+extension NSData {
+    static func fromMainBundle(resource: String, type: String) -> NSData {
+        let path = Bundle.main.path(forResource: resource, ofType: type)!
+        return try! NSData(contentsOfFile: path)
+    }
+}
+
 extension UIImage {
     convenience init?(optionalData: Data?) {
         if let data = optionalData {

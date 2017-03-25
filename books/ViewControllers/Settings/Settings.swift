@@ -39,8 +39,7 @@ class Settings: UITableViewController {
 
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
 
-        let testDataFile = Bundle.main.path(forResource: "example_books", ofType: "json")!
-        let testJsonData = JSON(data: try! NSData(contentsOfFile: testDataFile) as Data)
+        let testJsonData = JSON(data: NSData.fromMainBundle(resource: "example_books", type: "json") as Data)
         appDelegate.booksStore.deleteAllData()
         
         let requestDispatchGroup = DispatchGroup()

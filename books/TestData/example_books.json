@@ -57,6 +57,7 @@
  {
     "title": "Your First Swift App",
     "author": "Ash Furrow",
+    "description": "Want to write an iPhone app? Excited about experimenting with Swift? Both, but don't know where to start? Start here! I'll take you through everything from creating your first Xcode project to submitting to the App Store.",
     "coverUrl": "https://s3.amazonaws.com/titlepages.leanpub.com/yourfirstswiftapp/hero?1455119428",
     "started": "2016-10-01",
     "finished": "2016-10-14"

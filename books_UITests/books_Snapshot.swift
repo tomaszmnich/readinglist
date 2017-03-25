@@ -45,16 +45,26 @@ class books_Snapshot: XCTestCase {
         sleep(2)
         snapshot("0_ToReadList")
         
+        app.clickAddButton(addMethod: .scanBarcode)
+        sleep(1)
+        snapshot("1_ScanBarcode")
+        app.topNavBar.buttons.element(boundBy: 0).tap()
+        
         app.clickTab(.finished)
+        app.tables.staticTexts["Your First Swift App"].tap()
+        snapshot("2_BookDetails")
         if isIpad {
             app.tables.staticTexts["Nineteen Eighty-Four"].tap()
+        }
+        else {
+            app.topNavBar.buttons.element(boundBy: 0).tap()
         }
         app.tables.searchFields.element(boundBy: 0).tap()
         app.typeText("Orwell")
         app.buttons["Done"].tap()
 
         sleep(1)
-        snapshot("1_SearchFinished")
+        snapshot("3_SearchFinished")
         
     }
 }
