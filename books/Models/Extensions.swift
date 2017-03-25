@@ -50,6 +50,18 @@ public extension Date {
         return formatter.string(from: self)
     }
     
+    static func startOfToday() -> Date {
+        return Calendar.current.startOfDay(for: Date())
+    }
+    
+    func startOfDay() -> Date {
+        return Calendar.current.startOfDay(for: self)
+    }
+    
+    func compareIgnoringTime(_ other: Date) -> ComparisonResult {
+        return self.startOfDay().compare(other.startOfDay())
+    }
+    
     func toShortPrettyString() -> String {
         let today = Date()
         

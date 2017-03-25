@@ -22,8 +22,8 @@ class CreateReadState: ReadStateForm {
         
         // Set the read state on the form; add some default form values for the dates
         readState = (self.navigationController as! NavWithReadState).readState
-        startedReading = Date()
-        finishedReading = Date()
+        startedReading = Date.startOfToday()
+        finishedReading = Date.startOfToday()
     }
     
     @IBAction func doneWasPressed(_ sender: UIBarButtonItem) {

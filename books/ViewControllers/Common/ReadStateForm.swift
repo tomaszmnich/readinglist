@@ -18,51 +18,46 @@ class ReadStateForm: FormViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // READ STATE
-        let readStateSection = Section()
-        readStateSection.append(SegmentedRow<BookReadState>(readStateKey) {
+        // The three rows we need in this table
+        let readStateRow = SegmentedRow<BookReadState>(readStateKey) {
             $0.title = "Read State"
             $0.options = [.toRead, .reading, .finished]
             // Set a value here so we can be sure that the read state option is *never* null.
             $0.value = .toRead
-        }.onChange{_ in
-            self.onChange()
-        })
-        form.append(readStateSection)
-        
-        // STARTED READING
-        let startedReadingSection = Section() {
-            $0.hidden = Condition.function([readStateKey]) {
-                let readStateRow: SegmentedRow<BookReadState> = $0.rowBy(tag: self.readStateKey)!
-                return readStateRow.value == .toRead
-            }
         }
-        startedReadingSection.append(DateRow(dateStartedKey){
+        let startedReadingRow = DateRow(dateStartedKey){
             $0.title = "Started Reading"
-        }.onChange{_ in
-            self.onChange()
+            // Set a value here so we can be sure that the started date is *never* null.
+            $0.value = Date.startOfToday()
         }
-        .cellUpdate{ _, _ in
-            self.onChange()
-        })
-        form.append(startedReadingSection)
-        
-        // FINISHED READING
-        let finishedReadingSection = Section() {
-            $0.hidden = Condition.function([self.readStateKey]) {
-                let readStateRow: SegmentedRow<BookReadState> = $0.rowBy(tag: self.readStateKey)!
-                return readStateRow.value != .finished
-            }
-        }
-        finishedReadingSection.append(DateRow(dateFinishedKey){
+        let finishedReadingRow = DateRow(dateFinishedKey){
             $0.title = "Finished Reading"
-        }.onChange{_ in
-            self.onChange()
+            // Set a value here so we can be sure that the finished date is *never* null.
+            $0.value = Date.startOfToday()
         }
-        .cellUpdate{ _, _ in
-            self.onChange()
+        
+        // Add the rows to the form
+        appendRowToFormInSection(row: readStateRow, hiddenCondition: nil)
+        appendRowToFormInSection(row: startedReadingRow, hiddenCondition: Condition.function([readStateKey]) {_ in 
+            return readStateRow.value == .toRead
         })
-        form.append(finishedReadingSection)
+        appendRowToFormInSection(row: finishedReadingRow, hiddenCondition: Condition.function([readStateKey]) {_ in
+            return readStateRow.value != .finished
+        })
+        
+        // Add the change and update detection, now that they are on the form
+        readStateRow.onChange{_ in self.onChange() }
+        startedReadingRow.onChange{_ in self.onChange() }
+        startedReadingRow.cellUpdate{_ in self.onChange() }
+        finishedReadingRow.onChange{_ in self.onChange() }
+        finishedReadingRow.cellUpdate{_ in self.onChange() }
+    }
+    
+    func appendRowToFormInSection(row: BaseRow, hiddenCondition: Condition?) {
+        let newSection = Section()
+        newSection.append(row)
+        newSection.hidden = hiddenCondition
+        form.append(newSection)
     }
     
     func onChange() {
@@ -85,14 +80,17 @@ class ReadStateForm: FormViewController {
     }
     
     var isValid: Bool {
-        // Check that the relevant dates have been set.
+        // Check that the dates are ordered correctly and not in the future
         switch readState {
         case .toRead:
             return true
         case .reading:
-            return startedReading != nil
+            return startedReading != nil && startedReading!.compareIgnoringTime(Date()) != .orderedDescending
         case .finished:
-            return startedReading != nil && finishedReading != nil && startedReading!.compare(finishedReading!) != .orderedDescending
+            return startedReading != nil && finishedReading != nil
+            && startedReading!.compareIgnoringTime(Date()) != .orderedDescending
+            && finishedReading!.compareIgnoringTime(Date()) != .orderedDescending
+            && startedReading!.compareIgnoringTime(finishedReading!) != .orderedDescending
         }
     }
 }

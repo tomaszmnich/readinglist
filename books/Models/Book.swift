@@ -65,8 +65,8 @@ extension Book {
     
     func populate(from readingInformation: BookReadingInformation) {
         readState = readingInformation.readState
-        startedReading = readingInformation.startedReading
-        finishedReading = readingInformation.finishedReading
+        startedReading = readingInformation.startedReading?.startOfDay()
+        finishedReading = readingInformation.finishedReading?.startOfDay()
         // Wipe out the sort if we have moved out of this section
         if readState != .toRead {
             sort = nil
