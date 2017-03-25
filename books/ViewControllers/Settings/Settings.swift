@@ -24,18 +24,22 @@ class Settings: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        #if DEBUG
         if indexPath.section == 2 && indexPath.row == 0 {
             loadTestData()
         }
+        #endif
+        
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
+    #if DEBUG
     func loadTestData() {
-        
-        //SVProgressHUD.show(withStatus: "Loading")
+
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
 
-        let testDataFile = Bundle.main.path(forResource: "testdata", ofType: "json")!
+        let testDataFile = Bundle.main.path(forResource: "example_books", ofType: "json")!
         let testJsonData = JSON(data: try! NSData(contentsOfFile: testDataFile) as Data)
         appDelegate.booksStore.deleteAllData()
         
@@ -62,8 +66,8 @@ class Settings: UITableViewController {
         }
 
         requestDispatchGroup.notify(queue: .main) {
-            //SVProgressHUD.dismiss()
             UIApplication.shared.isNetworkActivityIndicatorVisible = false
         }
     }
+    #endif
 }

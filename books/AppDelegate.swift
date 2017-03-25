@@ -38,6 +38,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if UserDefaults.standard.bool(forKey: "FASTLANE_SNAPSHOT") {
                 SDStatusBarManager.sharedInstance().enableOverrides()
             }
+            else {
+                SDStatusBarManager.sharedInstance().disableOverrides()
+            }
         #endif
         return true
     }
