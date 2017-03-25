@@ -19,7 +19,9 @@ Reading List is an app for iPhone, iPad and iPod Touch, to track personal readin
 
 ## Open Source
 
-Reading List is free and open source, released under the [MIT Licence](https://github.com/AndrewBennet/readinglist/blob/master/LICENSE).
+Reading List is free and [open source](https://github.com/AndrewBennet/readinglist), released under the [MIT Licence](https://github.com/AndrewBennet/readinglist/blob/master/LICENSE).
+
+<img src="https://raw.githubusercontent.com/AndrewBennet/readinglist/master/media/App_Store_Badge.svg" style="height: 60px;">
 
 ## Author
 
