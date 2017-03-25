@@ -38,7 +38,6 @@ class books_Snapshot: XCTestCase {
         let isIpad = app.navigationBars.count == 2
         
         if isIpad {
-            XCUIDevice.shared().orientation = .landscapeLeft
             app.tables.cells.element(boundBy: 1).tap()
         }
         

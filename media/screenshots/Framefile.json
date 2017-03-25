@@ -1,0 +1,23 @@
+{
+  "default": {
+    "title": {
+      "color": "#444"
+    },
+    "background": "./background.jpg",
+    "padding": 20
+  },
+  "data": [
+    {
+      "filter": "ToReadList"
+    },
+    {
+      "filter": "ScanBarcode"
+    },
+    {
+      "filter": "BookDetails"
+    },
+    {
+      "filter": "SearchFinished"
+    }
+  ]
+}
