@@ -31,9 +31,9 @@ class books_UnitTests: XCTestCase {
         return component
     }
     
-    private let yesterday = Date().date(byAdding: books_UnitTests.days(-1))!
-    private let today = Date()
-    private let tomorrow = Date().date(byAdding: books_UnitTests.days(1))!
+    private let yesterday = Date.startOfToday().date(byAdding: books_UnitTests.days(-1))!
+    private let today = Date.startOfToday()
+    private let tomorrow = Date.startOfToday().date(byAdding: books_UnitTests.days(1))!
     
     var currentTestBook = 0
     
