@@ -25,8 +25,12 @@ class Settings: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
+        if indexPath.section == 0 && indexPath.row == 0 {
+            UIApplication.shared.openURL(URL(string: "https://andrewbennet.github.io/readinglist")!)
+        }
+        
         #if DEBUG
-        if indexPath.section == 2 && indexPath.row == 0 {
+        if indexPath.section == 1 && indexPath.row == 0 {
             loadTestData()
         }
         #endif
@@ -51,10 +55,10 @@ class Settings: UITableViewController {
             if parsedData.1.readState == .toRead {
                 sortIndex += 1
             }
+            let thisSort = sortIndex
             
             requestDispatchGroup.enter()
             DispatchQueue.global(qos: .background).async {
-                let thisSort = sortIndex
                 GoogleBooksAPI.supplementMetadataWithImage(parsedData.0) {
                     DispatchQueue.main.sync {
                         appDelegate.booksStore.create(from: parsedData.0, readingInformation: parsedData.1, bookSort: thisSort)
