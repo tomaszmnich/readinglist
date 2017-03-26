@@ -31,7 +31,6 @@
 		4943DB791DBD5104004CAF30 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4943DB781DBD5104004CAF30 /* Settings.swift */; };
 		494D96E21E71EDAE00299752 /* GeneralUIAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494D96E11E71EDAE00299752 /* GeneralUIAction.swift */; };
 		494D96E41E759D8900299752 /* AttributionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494D96E31E759D8900299752 /* AttributionsViewController.swift */; };
-		494D96E61E75A42700299752 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494D96E51E75A42700299752 /* AboutViewController.swift */; };
 		495879651BF7E76200000131 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 495879641BF7E76200000131 /* CoreDataStack.swift */; };
 		495C5D101BF1404D00E00C07 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 495C5D0F1BF1404D00E00C07 /* AppDelegate.swift */; };
 		495C5D171BF1404D00E00C07 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 495C5D161BF1404D00E00C07 /* Assets.xcassets */; };
@@ -105,7 +104,6 @@
 		4943DB781DBD5104004CAF30 /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		494D96E11E71EDAE00299752 /* GeneralUIAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneralUIAction.swift; sourceTree = "<group>"; };
 		494D96E31E759D8900299752 /* AttributionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AttributionsViewController.swift; sourceTree = "<group>"; };
-		494D96E51E75A42700299752 /* AboutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 		495879641BF7E76200000131 /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		495C5D0C1BF1404D00E00C07 /* Reading List.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Reading List.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		495C5D0F1BF1404D00E00C07 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -253,7 +251,6 @@
 		4943DB771DBD4F24004CAF30 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
-				494D96E51E75A42700299752 /* AboutViewController.swift */,
 				494D96E31E759D8900299752 /* AttributionsViewController.swift */,
 				4943DB781DBD5104004CAF30 /* Settings.swift */,
 			);
@@ -708,7 +705,6 @@
 				49097BA81CFB102B001AF1F9 /* FetchedResultsFilterer.swift in Sources */,
 				495C5D411BF1423900E00C07 /* Book.swift in Sources */,
 				49D93AA51CAB16F800AE6611 /* CoreSpotlightStack.swift in Sources */,
-				494D96E61E75A42700299752 /* AboutViewController.swift in Sources */,
 				4994706A1DB42067008CB06E /* ReadingTable.swift in Sources */,
 				49FE2ED51D6F675D00F04239 /* SearchByText.swift in Sources */,
 				494D96E21E71EDAE00299752 /* GeneralUIAction.swift in Sources */,

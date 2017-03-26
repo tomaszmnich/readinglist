@@ -61,10 +61,7 @@
                                                 </constraints>
                                             </view>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Finished:" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vgj-Kl-OeY">
-                                                <rect key="frame" x="51" y="282" width="65" height="18"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" constant="65" id="NCq-iq-cmH"/>
-                                                </constraints>
+                                                <rect key="frame" x="16" y="282" width="100" height="18"/>
                                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
                                                 <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -82,7 +79,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Started:" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Eej-CK-tuH">
-                                                <rect key="frame" x="59" y="260" width="57" height="18"/>
+                                                <rect key="frame" x="16" y="260" width="100" height="18"/>
                                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
                                                 <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -95,9 +92,9 @@
                                                 </constraints>
                                             </view>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BIl-ZT-9kC">
-                                                <rect key="frame" x="274" y="276" width="30" height="29"/>
+                                                <rect key="frame" x="256" y="276" width="48" height="29"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                <state key="normal" title="Edit"/>
+                                                <state key="normal" title="Update"/>
                                                 <connections>
                                                     <segue destination="V1o-Ej-YdK" kind="presentation" modalPresentationStyle="formSheet" id="MWa-NY-GL5"/>
                                                 </connections>
@@ -120,6 +117,7 @@
                                             <constraint firstItem="YTX-8q-xHR" firstAttribute="leading" secondItem="Bmm-uv-eym" secondAttribute="leading" id="RqH-wS-GxV"/>
                                             <constraint firstItem="YTX-8q-xHR" firstAttribute="top" secondItem="mid-NB-7DT" secondAttribute="top" id="WUF-tz-Knt"/>
                                             <constraint firstItem="BIl-ZT-9kC" firstAttribute="trailing" secondItem="mid-NB-7DT" secondAttribute="trailing" id="ZUK-wz-xoM"/>
+                                            <constraint firstItem="Vgj-Kl-OeY" firstAttribute="leading" secondItem="Eej-CK-tuH" secondAttribute="leading" id="ZVZ-rN-Ywy"/>
                                             <constraint firstAttribute="trailing" secondItem="vCB-hc-S8l" secondAttribute="trailing" constant="8" id="ZWw-cn-eO4"/>
                                             <constraint firstItem="YTX-8q-xHR" firstAttribute="height" secondItem="mid-NB-7DT" secondAttribute="height" id="cCm-5G-Be4"/>
                                             <constraint firstItem="Eej-CK-tuH" firstAttribute="trailing" secondItem="YTX-8q-xHR" secondAttribute="trailing" id="ded-tm-njV"/>
@@ -132,6 +130,7 @@
                                             <constraint firstItem="LEG-Lg-115" firstAttribute="centerY" secondItem="Eej-CK-tuH" secondAttribute="centerY" id="pIC-Zp-WqM"/>
                                             <constraint firstItem="pRN-sy-kyO" firstAttribute="trailing" secondItem="Bmm-uv-eym" secondAttribute="trailing" id="pVn-a6-PSl"/>
                                             <constraint firstItem="Vgj-Kl-OeY" firstAttribute="top" secondItem="Eej-CK-tuH" secondAttribute="bottom" constant="4" id="qkU-7z-30o"/>
+                                            <constraint firstItem="Eej-CK-tuH" firstAttribute="leading" secondItem="Bmm-uv-eym" secondAttribute="leading" id="tF1-KX-2b9"/>
                                             <constraint firstItem="BIl-ZT-9kC" firstAttribute="centerY" secondItem="mgp-Ew-WcN" secondAttribute="centerY" id="xdU-Ot-HYd"/>
                                             <constraint firstItem="pRN-sy-kyO" firstAttribute="top" secondItem="Bmm-uv-eym" secondAttribute="bottom" constant="2" id="y6J-fH-GKz"/>
                                         </constraints>
