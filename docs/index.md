@@ -14,8 +14,9 @@ Reading List is an app for iPhone, iPad and iPod Touch, to track personal readin
 
 ## Features
 
-* You want to keep a list of books you plan to read.
-* You want to record the start and finish dates of the books you do read.
+* Maintain a list of books you plan to read.
+* Record the start and finish dates of the books you do read.
+* Add books via online search, or barcode scanning
 
 ## Open Source
 
