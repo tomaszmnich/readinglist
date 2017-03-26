@@ -9,18 +9,22 @@
 import UIKit
 import CoreSpotlight
 
-protocol EditingNotificationDelegate {
-    func editingWasSet(editing: Bool, animated: Bool)
+protocol NavBarChangedDelegate {
+    func navBarChanged()
 }
 
-class TabbedViewController: UIViewController, UITabBarDelegate, EditingNotificationDelegate {
+protocol NavBarConfigurer: class {
+    func configureNavBar(_ navBar: UINavigationItem)
+    var navBarChangedDelegate: NavBarChangedDelegate! {get set}
+}
+
+class TabbedViewController: UIViewController, UITabBarDelegate, NavBarChangedDelegate {
 
     @IBOutlet weak var tabBar: UITabBar!
     @IBOutlet weak var readingTabView: UIView!
     @IBOutlet weak var finishedTabView: UIView!
     @IBOutlet weak var settingsTabView: UIView!
     
-    private var addButton: UIBarButtonItem!
     private var editButton: UIBarButtonItem!
     
     enum TabOption : Int {
@@ -36,16 +40,13 @@ class TabbedViewController: UIViewController, UITabBarDelegate, EditingNotificat
         // colours are not seen through the translucent bar when segueing from this view.
         navigationController!.view.backgroundColor = UIColor.white
         
-        // Construct the bar buttons in the controller, so we can control when they appear.
-        addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addWasPressed))
-        editButton = editButtonItem
-        
         // Set the tab bar delegate to this controller, and always start on tab 1.
         tabBar.delegate = self
         setSelectedTab(to: .toRead)
         
+        // All the child controllers should be NavBarConfigurers
         for childController in childViewControllers {
-            (childController as? BookTable)?.editingNotification = self
+            (childController as! NavBarConfigurer).navBarChangedDelegate = self
         }
     }
     
@@ -59,43 +60,6 @@ class TabbedViewController: UIViewController, UITabBarDelegate, EditingNotificat
     
     var selectedViewController: UIViewController {
         return childViewControllers[selectedTabOption.rawValue]
-    }
-    
-    func addWasPressed() {
-        func segueAction(title: String, identifier: String) -> UIAlertAction {
-            return UIAlertAction(title: title, style: .default){_ in
-                self.performSegue(withIdentifier: identifier, sender: self)
-            }
-        }
-        
-        let optionsAlert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        optionsAlert.addAction(segueAction(title: "Scan Barcode", identifier: "scanBarcode"))
-        optionsAlert.addAction(segueAction(title: "Search Online", identifier: "searchByText"))
-        optionsAlert.addAction(segueAction(title: "Enter Manually", identifier: "addManually"))
-        optionsAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        
-        // For iPad, set the popover presentation controller's source
-        if let popPresenter = optionsAlert.popoverPresentationController {
-            popPresenter.barButtonItem = addButton
-        }
-
-        self.present(optionsAlert, animated: true, completion: nil)
-    }
-    
-    override func setEditing(_ editing: Bool, animated: Bool) {
-        super.setEditing(editing, animated: animated)
-        
-        // Propagate the editing setting to the selected embedded view controller
-        if selectedViewController.isEditing != editing {
-            selectedViewController.setEditing(editing, animated: animated)
-        }
-    }
-    
-    func editingWasSet(editing: Bool, animated: Bool) {
-        // If a contained view controller notifies us of a change to the editing state, update *this* view controller
-        if self.isEditing != editing {
-            setEditing(editing, animated: animated)
-        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -117,32 +81,19 @@ class TabbedViewController: UIViewController, UITabBarDelegate, EditingNotificat
         (selectedViewController as! BookTable).triggerBookSelection(book)
     }
     
+    func navBarChanged() {
+        (selectedViewController as? NavBarConfigurer)?.configureNavBar(navigationItem)
+    }
+    
     func setSelectedTab(to tabOption: TabOption) {
+        // Update the actual tab bar item. This line should remain first, so that selectedViewController is updated
+        tabBar.selectedItem = tabBar.items![tabOption.rawValue]
+        
         // Hide all views except the one which corresponds to the selected tab
         readingTabView.isHidden = tabOption != .toRead
         finishedTabView.isHidden = tabOption != .finished
         settingsTabView.isHidden = tabOption != .settings
         
-        // Configure the navigation item
-        switch tabOption {
-        case .toRead:
-            navigationItem.title = "Reading"
-            navigationItem.rightBarButtonItem = addButton
-            navigationItem.leftBarButtonItem = editButton
-        case .finished:
-            navigationItem.title = "Finished"
-            navigationItem.rightBarButtonItem = addButton
-            navigationItem.leftBarButtonItem = editButton
-        default:
-            navigationItem.title = "Settings"
-            navigationItem.rightBarButtonItem = nil
-            navigationItem.leftBarButtonItem = nil
-        }
-        
-        // Update the actual tab bar item
-        tabBar.selectedItem = tabBar.items![tabOption.rawValue]
-        
-        // This view controller's editing flag should refelct the selected embedded view controller's flag
-        setEditing(selectedViewController.isEditing, animated: false)
+        navBarChanged()
     }
 }

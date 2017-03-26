@@ -11,7 +11,9 @@ import Foundation
 import SVProgressHUD
 import SwiftyJSON
 
-class Settings: UITableViewController {
+class Settings: UITableViewController, NavBarConfigurer {
+    
+    var navBarChangedDelegate: NavBarChangedDelegate!
 
     @IBOutlet weak var addTestDataCell: UITableViewCell!
     
@@ -21,6 +23,13 @@ class Settings: UITableViewController {
         #if !DEBUG
         addTestDataCell.isHidden = true
         #endif
+    }
+    
+    func configureNavBar(_ navBar: UINavigationItem) {
+        // Configure the navigation item
+        navBar.title = "Settings"
+        navBar.rightBarButtonItem = nil
+        navBar.leftBarButtonItem = nil
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

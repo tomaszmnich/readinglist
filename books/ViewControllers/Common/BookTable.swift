@@ -42,12 +42,16 @@ class BookTableViewCell: UITableViewCell, ConfigurableCell {
 }
 
 class BookTable: AutoUpdatingTableViewController {
-    
     var resultsController: NSFetchedResultsController<Book>!
     var resultsFilterer: FetchedResultsFilterer<Book, BookPredicateBuilder>!
     var readStates: [BookReadState]!
-    var editingNotification: EditingNotificationDelegate?
+    var navBarChangedDelegate: NavBarChangedDelegate!
     var searchController: UISearchController!
+    var addButton: UIBarButtonItem!
+    
+    /// Whether there are any books in this screen. Does not consider the impact of searching - there
+    /// may be no results on screen due to a search, but this property might still be true.
+    var anyBooksExist = true
     
     override func viewDidLoad() {
         let readStatePredicate = NSPredicate.Or(readStates.map{BookPredicate.readState(equalTo: $0)})
@@ -69,6 +73,9 @@ class BookTable: AutoUpdatingTableViewController {
         searchController.searchBar.placeholder = "Your Library"
         searchController.hidesNavigationBarDuringPresentation = false
         tableView.tableHeaderView = searchController.searchBar
+        
+        // Initialise the add button
+        addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addWasPressed))
         
         // contentOffset will not change before the main run loop ends without queueing it, for splitable devices (iPhone Plus & iPad)
         DispatchQueue.main.async {
@@ -99,8 +106,24 @@ class BookTable: AutoUpdatingTableViewController {
     override func numberOfSections(in tableView: UITableView) -> Int {
         let numberOfSections = super.numberOfSections(in: tableView)
         
-        // Show/hide the search bar if there are no results
-        searchController.searchBar.isHidden = numberOfSections == 0 && !resultsFilterer.showingSearchResults
+        // Remember whether we have any books
+        if !resultsFilterer.showingSearchResults {
+            let currentlyAnyBooks = numberOfSections != 0
+            if currentlyAnyBooks != anyBooksExist {
+                anyBooksExist = currentlyAnyBooks
+                searchController.searchBar.isHidden = !anyBooksExist
+                // If we hide the search bar, we should make sure the keyboard is gone too.
+                // This can happen in slightly tenious circumstances - if a user deletes or removes
+                // the last book on the screen whilst in a search mode, then dismisses the search, 
+                // brings it back, and then dismisses it again.
+                if searchController.searchBar.isHidden {
+                    DispatchQueue.main.async {
+                        self.searchController.searchBar.resignFirstResponder()
+                    }
+                }
+                navBarChangedDelegate?.navBarChanged()
+            }
+        }
 
         return numberOfSections
     }
@@ -144,11 +167,6 @@ class BookTable: AutoUpdatingTableViewController {
         return false
     }
     
-    override func setEditing(_ editing: Bool, animated: Bool) {
-        super.setEditing(editing, animated: animated)
-        editingNotification?.editingWasSet(editing: editing, animated: animated)
-    }
-    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let detailsViewController = (segue.destination as? UINavigationController)?.topViewController as? BookDetails,
             let cell = sender as? UITableViewCell,
@@ -156,6 +174,27 @@ class BookTable: AutoUpdatingTableViewController {
          
             detailsViewController.viewModel = BookDetailsViewModel(book: self.resultsController.object(at: selectedIndex))
         }
+    }
+
+    func addWasPressed() {
+        func segueAction(title: String, identifier: String) -> UIAlertAction {
+            return UIAlertAction(title: title, style: .default){_ in
+                self.parent!.performSegue(withIdentifier: identifier, sender: self)
+            }
+        }
+        
+        let optionsAlert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        optionsAlert.addAction(segueAction(title: "Scan Barcode", identifier: "scanBarcode"))
+        optionsAlert.addAction(segueAction(title: "Search Online", identifier: "searchByText"))
+        optionsAlert.addAction(segueAction(title: "Enter Manually", identifier: "addManually"))
+        optionsAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        
+        // For iPad, set the popover presentation controller's source
+        if let popPresenter = optionsAlert.popoverPresentationController {
+            popPresenter.barButtonItem = addButton
+        }
+        
+        self.present(optionsAlert, animated: true, completion: nil)
     }
     
     /// Returns the row actions to be used for a book in a given state

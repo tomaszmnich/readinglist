@@ -9,11 +9,17 @@
 import UIKit
 import DZNEmptyDataSet
 
-class FinishedTable: BookTable {
+class FinishedTable: BookTable, NavBarConfigurer {
 
     override func viewDidLoad() {
         readStates = [.finished]
         super.viewDidLoad()
+    }
+    
+    func configureNavBar(_ navBar: UINavigationItem) {
+        navBar.rightBarButtonItem = addButton
+        navBar.leftBarButtonItem = anyBooksExist ? editButtonItem : nil
+        navBar.title = "Finished"
     }
     
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {

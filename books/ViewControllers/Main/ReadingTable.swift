@@ -9,11 +9,17 @@
 import UIKit
 import DZNEmptyDataSet
 
-class ReadingTable: BookTable {
+class ReadingTable: BookTable, NavBarConfigurer {
 
     override func viewDidLoad() {
         readStates = [.toRead, .reading]
         super.viewDidLoad()
+    }
+    
+    func configureNavBar(_ navBar: UINavigationItem) {
+        navBar.rightBarButtonItem = addButton
+        navBar.leftBarButtonItem = anyBooksExist ? editButtonItem : nil
+        navBar.title = "Reading"
     }
     
     var toReadSectionIndex: Int? {
