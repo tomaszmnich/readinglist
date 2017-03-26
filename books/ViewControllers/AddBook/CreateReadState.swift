@@ -34,6 +34,7 @@ class CreateReadState: ReadStateForm {
         let bookReadingInformation = BookReadingInformation(readState: readState, startedWhen: startedReading, finishedWhen: finishedReading)
         appDelegate.booksStore.create(from: bookMetadata, readingInformation: bookReadingInformation)
         
+        appDelegate.splitViewController.tabbedViewController.setSelectedTab(to: readState == .finished ? .finished : .toRead)
         self.navigationController?.dismiss(animated: true, completion: nil)
     }
     

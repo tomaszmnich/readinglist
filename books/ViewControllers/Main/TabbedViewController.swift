@@ -117,7 +117,7 @@ class TabbedViewController: UIViewController, UITabBarDelegate, EditingNotificat
         (selectedViewController as! BookTable).triggerBookSelection(book)
     }
     
-    private func setSelectedTab(to tabOption: TabOption) {
+    func setSelectedTab(to tabOption: TabOption) {
         // Hide all views except the one which corresponds to the selected tab
         readingTabView.isHidden = tabOption != .toRead
         finishedTabView.isHidden = tabOption != .finished
