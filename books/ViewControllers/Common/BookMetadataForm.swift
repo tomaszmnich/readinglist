@@ -14,8 +14,6 @@ class BookMetadataForm: FormViewController {
     
     private let titleKey = "title"
     private let authorListKey = "author"
-    private let pageCountKey = "page-count"
-    private let publicationDateKey = "publication-date"
     private let descriptionKey = "description"
     private let imageKey = "image"
     
@@ -37,24 +35,18 @@ class BookMetadataForm: FormViewController {
         form.append(titleAuthorSection)
         
         // Page count and Publication date
-        let pagePublicationSection = Section()
-        pagePublicationSection.append(IntRow(pageCountKey) {
-            $0.title = "Number of Pages"
-        })
-        pagePublicationSection.append(DateRow(publicationDateKey) {
-            $0.title = "Publication Date"
-        })
-        pagePublicationSection.append(TextAreaRow(descriptionKey){
+        let descriptionSection = Section()
+        descriptionSection.append(TextAreaRow(descriptionKey){
             $0.placeholder = "Description"
         }.cellSetup{
             $0.0.height = {return 200}
         })
         
-        pagePublicationSection.append(ImageRow(imageKey){
+        descriptionSection.append(ImageRow(imageKey){
             $0.title = "Cover Image"
             $0.cell.height = {return 100}
         })
-        form.append(pagePublicationSection)
+        form.append(descriptionSection)
     }
     
     var titleField: String? {
@@ -65,16 +57,6 @@ class BookMetadataForm: FormViewController {
     var authorList: String? {
         get { return form.values()[authorListKey] as? String }
         set { form.setValues([authorListKey: newValue]) }
-    }
-    
-    var pageCount: Int? {
-        get { return form.values()[pageCountKey] as? Int }
-        set { form.setValues([pageCountKey: newValue]) }
-    }
-    
-    var publicationDate: Date? {
-        get { return form.values()[publicationDateKey] as? Date }
-        set { form.setValues([publicationDateKey: newValue]) }
     }
     
     var descriptionField: String? {

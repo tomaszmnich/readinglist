@@ -24,8 +24,6 @@ class CreateBook: BookMetadataForm {
             // Set the field values
             titleField = initialBookMetadata.title
             authorList = initialBookMetadata.authorList
-            pageCount = initialBookMetadata.pageCount
-            publicationDate = initialBookMetadata.publishedDate
             descriptionField = initialBookMetadata.bookDescription
             if let data = initialBookMetadata.coverImage {
                 image = UIImage(data: data)
@@ -51,8 +49,6 @@ class CreateBook: BookMetadataForm {
             finalBookMetadata.title = titleField!
             finalBookMetadata.authorList = authorList
             finalBookMetadata.bookDescription = descriptionField
-            finalBookMetadata.publishedDate = publicationDate
-            finalBookMetadata.pageCount = pageCount
             finalBookMetadata.coverImage = image == nil ? nil : UIImageJPEGRepresentation(image!, 0.7)
             
             createReadState.bookMetadata = finalBookMetadata
