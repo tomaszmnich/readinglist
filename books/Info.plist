@@ -25,9 +25,9 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>Uses the camera to scan book barcodes.</string>
+	<string>Used to scan book barcodes.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Can add photos as book covers.</string>
+	<string>Used to select book cover images.</string>
 	<key>UIApplicationShortcutItems</key>
 	<array>
 		<dict>
