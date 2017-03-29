@@ -34,15 +34,18 @@ class Settings: UITableViewController, NavBarConfigurer {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        if indexPath.section == 0 && indexPath.row == 0 {
+        switch (indexPath.section, indexPath.row) {
+        case (0, 0):
             UIApplication.shared.openURL(URL(string: "https://andrewbennet.github.io/readinglist")!)
+        case (1, 0):
+            #if DEBUG
+                if indexPath.section == 1 && indexPath.row == 0 {
+                    loadTestData()
+                }
+            #endif
+        default:
+            break
         }
-        
-        #if DEBUG
-        if indexPath.section == 1 && indexPath.row == 0 {
-            loadTestData()
-        }
-        #endif
         
         tableView.deselectRow(at: indexPath, animated: true)
     }
