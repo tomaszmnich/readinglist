@@ -63,22 +63,23 @@ public extension Date {
     }
     
     func toShortPrettyString() -> String {
-        let today = Date()
+        let today = Date.startOfToday()
+        let otherDate = startOfDay()
         
-        // Replace the hour (time) of both dates with 00:00
-        let date1 = Calendar.current.startOfDay(for: self)
-        let date2 = Calendar.current.startOfDay(for: today)
+        let thisYear = Calendar.current.dateComponents([.year], from: today).year!
+        let otherYear = Calendar.current.dateComponents([.year], from: otherDate).year!
         
-        let daysBetween = Calendar.current.dateComponents([.day], from: date1, to: date2).day!
+        let daysDifference = Calendar.current.dateComponents([.day], from: otherDate, to: today).day!
         
-        if daysBetween == 0 {
+        if daysDifference == 0 {
             return "Today"
         }
-        if daysBetween > 0 && daysBetween <= 5 {
+        if daysDifference > 0 && daysDifference <= 5 {
             return self.toString(withDateFormat: "EEE")
         }
         else {
-            return self.toString(withDateFormat: "d MMM")
+            // Use the format "12 Feb", or - if the date is not from this year - "12 Feb 2015"
+            return self.toString(withDateFormat: "d MMM\(thisYear == otherYear ? "" : " yyyy")")
         }
     }
     
