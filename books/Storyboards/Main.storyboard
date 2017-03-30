@@ -73,7 +73,7 @@
                                 <rect key="frame" x="0.0" y="618" width="375" height="49"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <items>
-                                    <tabBarItem title="Reading" image="courses" selectedImage="courses-filled" id="4aL-FN-K6X"/>
+                                    <tabBarItem title="To Read" image="courses" selectedImage="courses-filled" id="4aL-FN-K6X"/>
                                     <tabBarItem tag="1" title="Finished" image="to-do" selectedImage="to-do-filled" id="jiq-ma-a6a"/>
                                     <tabBarItem tag="2" title="Settings" image="settings" selectedImage="settings-filled" id="6sg-I5-RbP"/>
                                 </items>

@@ -222,37 +222,49 @@ class BookTable: AutoUpdatingTableViewController {
 /// DZNEmptyDataSetSource functions
 extension BookTable : DZNEmptyDataSetSource {
     
-    func image(forEmptyDataSet scrollView: UIScrollView!) -> UIImage! {
-        return #imageLiteral(resourceName: "IconOnWhite")
-    }
-    
+
     func title(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
         let titleText: String!
         if resultsFilterer.showingSearchResults {
-            titleText = "No Results"
+            titleText = "🔍 No Results"
         }
         else if readStates.contains(.reading) {
-            titleText = "Reading"
+            titleText = "📚 To Read"
         }
         else {
-            titleText = "Finished"
+            titleText = "✅ Finished"
         }
         
-        return NSAttributedString(string: titleText, attributes: [NSFontAttributeName: UIFont.preferredFont(forTextStyle: UIFontTextStyle.title1)])
+        return NSAttributedString(string: titleText, withFont: UIFont.systemFont(ofSize: 42, weight: UIFontWeightThin))
     }
     
     func description(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
-        let descriptionText: String
+        let bodyFont = UIFont.preferredFont(forTextStyle: .body)
+        let boldFont = UIFont.boldSystemFont(ofSize: bodyFont.pointSize)
+        
+        let descriptionText: NSMutableAttributedString
         if resultsFilterer.showingSearchResults {
-            descriptionText = "Try changing your search, or add a new book by tapping the + button above."
+            descriptionText = NSMutableAttributedString(string: "Try changing your search, or add a new book by tapping the ", withFont: bodyFont)
+                .chainAppend(string: "+", withFont: boldFont)
+                .chainAppend(string: " button above.", withFont: bodyFont)
         }
         else if readStates.contains(.reading) {
-            descriptionText = "There are no books in your reading list.\nAdd a book by tapping the + button above."
+            descriptionText = NSMutableAttributedString(string: "Books you add to your ", withFont: bodyFont)
+                .chainAppend(string: "To Read", withFont: boldFont)
+                .chainAppend(string: " list, or mark as currently ", withFont: bodyFont)
+                .chainAppend(string: "Reading", withFont: boldFont)
+                .chainAppend(string: ", will show up here.\n\nAdd a book by tapping the ", withFont: bodyFont)
+                .chainAppend(string: "+", withFont: boldFont)
+                .chainAppend(string: " button above.", withFont: bodyFont)
         }
         else {
-            descriptionText = "There are no books in your finished list.\nAdd a book by tapping the + button above."
+            descriptionText = NSMutableAttributedString(string: "Books you mark as ", withFont: bodyFont)
+                .chainAppend(string: "Finished", withFont: boldFont)
+                .chainAppend(string: " will show up here.\n\nAdd a book by tapping the ", withFont: bodyFont)
+                .chainAppend(string: "+", withFont: boldFont)
+                .chainAppend(string: " button above.", withFont: bodyFont)
         }
         
-        return NSAttributedString(string: descriptionText, attributes: [NSFontAttributeName: UIFont.preferredFont(forTextStyle: UIFontTextStyle.body)])
+        return descriptionText
     }
 }

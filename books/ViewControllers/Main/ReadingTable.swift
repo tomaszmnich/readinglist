@@ -19,7 +19,7 @@ class ReadingTable: BookTable, NavBarConfigurer {
     func configureNavBar(_ navBar: UINavigationItem) {
         navBar.rightBarButtonItem = addButton
         navBar.leftBarButtonItem = anyBooksExist ? editButtonItem : nil
-        navBar.title = "Reading"
+        navBar.title = "To Read"
     }
     
     var toReadSectionIndex: Int? {

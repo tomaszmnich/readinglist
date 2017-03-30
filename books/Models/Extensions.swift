@@ -16,6 +16,12 @@ extension UIColor {
     }
 }
 
+extension NSAttributedString {
+    convenience init(string: String, withFont font: UIFont) {
+        self.init(string: string, attributes: [NSFontAttributeName: font])
+    }
+}
+
 extension NSMutableAttributedString {
     
     @discardableResult func hyperlinkText(_ textToLink: String, to linkURL: URL) -> Bool {
@@ -25,6 +31,11 @@ extension NSMutableAttributedString {
             return true
         }
         return false
+    }
+
+    func chainAppend(string: String, withFont font: UIFont) -> NSMutableAttributedString {
+        self.append(NSAttributedString(string: string, withFont: font))
+        return self
     }
 }
 
