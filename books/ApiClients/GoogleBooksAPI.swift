@@ -134,7 +134,7 @@ class GoogleBooksAPI {
                 let encodedQuery = query.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
                 return URL(string: "/books/v1/volumes?q=\(encodedQuery)", relativeTo: GoogleBooksRequest.baseUrl)!
             case let .getIsbn(isbn):
-                return URL(string: "/books/v1/volumes?q=isbn:\(isbn)", relativeTo: GoogleBooksRequest.baseUrl)!
+                return URL(string: "/books/v1/volumes?q=ISBN:\(isbn)", relativeTo: GoogleBooksRequest.baseUrl)!
             }
         }
     }
