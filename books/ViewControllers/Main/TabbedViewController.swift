@@ -65,6 +65,11 @@ class TabbedViewController: UIViewController, UITabBarDelegate, NavBarChangedDel
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let navWithReadState = segue.destination as? NavWithReadState {
             navWithReadState.readState = selectedTabOption == .finished ? .finished : .toRead
+            
+            // If this is going to the SearchOnline page, and our sender was Text, prepopulate with that text
+            if let searchOnline = navWithReadState.topViewController as? SearchOnline, let searchText = sender as? String {
+                searchOnline.initialSearchString = searchText
+            }
         }
     }
     

@@ -24,7 +24,6 @@ class books_UnitTests: XCTestCase {
         booksStore = nil
     }
     
-    
     static func days(_ count: Int) -> DateComponents {
         var component = DateComponents()
         component.day = count
@@ -134,9 +133,9 @@ class books_UnitTests: XCTestCase {
     
     func testIsbnDetection() {
         let testBook = getTestBookMetadata()
-        XCTAssertFalse(booksStore.isbnExists(testBook.isbn13!))
+        XCTAssertNil(booksStore.get(isbn: testBook.isbn13!))
         booksStore.create(from: testBook, readingInformation: BookReadingInformation.toRead())
-        XCTAssertTrue(booksStore.isbnExists(testBook.isbn13!))
+        XCTAssertNotNil(booksStore.get(isbn: testBook.isbn13!))
     }
     
     func testHumanisedDateString() {

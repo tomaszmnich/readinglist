@@ -156,17 +156,24 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
                 DispatchQueue.main.async {
                     SVProgressHUD.dismiss()
                     
-                    guard error == nil else {
-                        self.onSearchError(error!)
-                        return
-                    }
-                    guard let bookMetadata = result else {
-                        self.presentInfoAlert(title: "No Results", message: "No matching books found online")
-                        return
-                    }
+                    guard error == nil else { self.onSearchError(error!); return }
                     
-                    self.foundMetadata = bookMetadata
-                    self.performSegue(withIdentifier: "barcodeScanResult", sender: self)
+                    if let bookMetadata = result {
+                        self.foundMetadata = bookMetadata
+                        self.performSegue(withIdentifier: "barcodeScanResult", sender: self)
+                    }
+                    else {
+                        let alert = UIAlertController(title: "No Exact Match", message: "We couldn't find an exact match. Would you like to do a more general search instead?", preferredStyle: UIAlertControllerStyle.alert)
+                        alert.addAction(UIAlertAction(title: "No", style: UIAlertActionStyle.default, handler: { _ in
+                            self.session?.startRunning()
+                        }))
+                        alert.addAction(UIAlertAction(title: "Yes", style: UIAlertActionStyle.default, handler: { _ in
+                            self.dismiss(animated: true){
+                                appDelegate.splitViewController.tabbedViewController.performSegue(withIdentifier: "searchByText", sender: isbn)
+                            }
+                        }))
+                        self.present(alert, animated: true, completion: nil)
+                    }
                 }
             }
         }
