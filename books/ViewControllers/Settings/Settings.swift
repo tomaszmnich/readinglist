@@ -36,12 +36,15 @@ class Settings: UITableViewController, NavBarConfigurer {
         
         switch (indexPath.section, indexPath.row) {
         case (0, 0):
-            UIApplication.shared.openURL(URL(string: "https://andrewbennet.github.io/readinglist")!)
+            // "About"
+            UIApplication.shared.openUrlPlatformSpecific(url: URL(string: "https://andrewbennet.github.io/readinglist")!)
         case (1, 0):
+            // "Rate"
+            UIApplication.shared.openUrlPlatformSpecific(url: URL(string: "itms-apps://itunes.apple.com/app/\(appleAppId)")!)
+        case (2, 0):
+            // "Use Test Data"
             #if DEBUG
-                if indexPath.section == 1 && indexPath.row == 0 {
-                    loadTestData()
-                }
+                loadTestData()
             #endif
         default:
             break
@@ -49,6 +52,7 @@ class Settings: UITableViewController, NavBarConfigurer {
         
         tableView.deselectRow(at: indexPath, animated: true)
     }
+
     
     #if DEBUG
     func loadTestData() {
