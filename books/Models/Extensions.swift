@@ -16,8 +16,8 @@ extension UIColor {
     }
 }
 
-extension NSAttributedString {
-    convenience init(string: String, withFont font: UIFont) {
+public extension NSAttributedString {
+    public convenience init(string: String, withFont font: UIFont) {
         self.init(string: string, attributes: [NSFontAttributeName: font])
     }
 }

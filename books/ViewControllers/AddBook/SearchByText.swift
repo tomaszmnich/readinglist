@@ -12,69 +12,7 @@ import RxSwift
 import RxCocoa
 import RxSwiftUtilities
 import SVProgressHUD
-
-/// A table cell used in the Search Online table
-class SearchResultCell : UITableViewCell {
-    @IBOutlet weak var titleOutlet: UILabel!
-    @IBOutlet weak var authorOutlet: UILabel!
-    @IBOutlet weak var imageOutlet: UIImageView!
-    
-    var disposeBag: DisposeBag?
-    
-    var viewModel: SearchResultViewModel? {
-        didSet {
-            guard let viewModel = viewModel else { return }
-            
-            titleOutlet.text = viewModel.title
-            authorOutlet.text = viewModel.author
-            
-            disposeBag = DisposeBag()
-            viewModel.coverImage.drive(imageOutlet.rx.image).addDisposableTo(disposeBag!)
-        }
-    }
-    
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        viewModel = nil
-        disposeBag = nil
-    }
-}
-
-/// The ViewModel corresponding to the SearchResultCell view
-class SearchResultViewModel {
-    
-    let searchResult: BookMetadata
-    let title: String
-    let author: String?
-    let coverImage: Driver<UIImage?>
-    
-    init(searchResult: BookMetadata) {
-        self.searchResult = searchResult
-        self.title = searchResult.title
-        self.author = searchResult.authorList
-        
-        // If we have a cover URL, we should use that to drive the cell image,
-        // and also store the data in the search result.
-        if let coverURL = searchResult.coverUrl {
-            
-            // Observe the the web request on a background thread
-            coverImage = URLSession.shared.rx.data(request: URLRequest(url: coverURL))
-                .observeOn(ConcurrentDispatchQueueScheduler(qos: .background))
-                .map(Optional.init)
-                .startWith(nil)
-                // Observe the results of web request on the main thread to update the search result cover image
-                .observeOn(MainScheduler.instance)
-                .do(onNext: {
-                    searchResult.coverImage = $0
-                })
-                .map(UIImage.init)
-                .asDriver(onErrorJustReturn: #imageLiteral(resourceName: "CoverPlaceholder"))
-        }
-        else {
-            coverImage = Driver.just(#imageLiteral(resourceName: "CoverPlaceholder"))
-        }
-    }
-}
+import DZNEmptyDataSet
 
 class SearchByText: UIViewController, UISearchBarDelegate {
     
@@ -87,14 +25,14 @@ class SearchByText: UIViewController, UISearchBarDelegate {
     let disposeBag = DisposeBag()
     let indicator = ActivityIndicator()
     
+    let defaultEmptyDataSet = DefaultEmptyDataSet()
+    let errorEmptyDataSet = ErrorEmptyDataSet()
+    let noResultsEmptyDataSet = NoResultsEmptyDataSet()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        errorLabel = UILabel(frame: self.view.frame)
-        errorLabel.text = "⚠️ Connection issues!"
-        errorLabel.textAlignment = .center
-        errorLabel.isHidden = true
-        view.addSubview(errorLabel)
+        tableView.emptyDataSetSource = defaultEmptyDataSet
         
         // The search bar delegate is used only to dismiss the keyboard when Done is pressed
         searchBar.returnKeyType = .done
@@ -110,30 +48,41 @@ class SearchByText: UIViewController, UISearchBarDelegate {
         indicator.drive(spinner.rx.isAnimating).addDisposableTo(disposeBag)
         
         // Map the search bar text to a google books search, and bind the result to the table cells
-        let results = searchBar.rx.text
+        let searchTextAndResults = searchBar.rx.text
             .orEmpty
             .throttle(1, scheduler: MainScheduler.instance)
             .distinctUntilChanged{$0.trimming() == $1.trimming()}
             .observeOn(ConcurrentDispatchQueueScheduler(qos: .background))
             .flatMapLatest { searchText in
                 // Blank search terms produce empty array...
-                searchText.isEmptyOrWhitespace ? Observable.just(Result.success([])) :
+                searchText.isEmptyOrWhitespace ? Observable.just((searchText, Result.success([]))) :
                     
                     // Otherwise, search on the Google API
                     GoogleBooksAPI.search(searchText)
                         .observeOn(MainScheduler.instance)
                         .trackActivity(self.indicator)
+                        .map { (searchText, $0) }
             }
         
         // Map the sucess/failure state to the hidden property of the error label
-        results.map{$0.isSuccess}
-            .asDriver(onErrorJustReturn: false)
-            .drive(self.errorLabel.rx.isHidden)
+        searchTextAndResults
+            .subscribe(onNext: {
+                if $0.0.isEmptyOrWhitespace {
+                    self.tableView.emptyDataSetSource = self.defaultEmptyDataSet
+                }
+                else if $0.1.isSuccess {
+                    self.tableView.emptyDataSetSource = self.noResultsEmptyDataSet
+                }
+                else {
+                    print("Error searching online: \($0.1.failureError.debugDescription)")
+                    self.tableView.emptyDataSetSource = self.errorEmptyDataSet
+                }
+            })
             .addDisposableTo(disposeBag)
         
         // Map the actual results to SearchResultViewModel items (or empty if failure)
         // and use them to drive the table cells
-        results.map{$0.successValue?.map(SearchResultViewModel.init) ?? []}
+        searchTextAndResults.map{$0.1.successValue?.map(SearchResultViewModel.init) ?? []}
             .asDriver(onErrorJustReturn: [])
             .drive(tableView.rx.items(cellIdentifier: "SearchResultCell", cellType: SearchResultCell.self)) { _, viewModel, cell in
                 cell.viewModel = viewModel
@@ -210,4 +159,107 @@ class SearchByText: UIViewController, UISearchBarDelegate {
         searchBar.resignFirstResponder()
         self.dismiss(animated: true, completion: nil)
     }
+    
+    /** 
+     Empty Data Set for when no searches have yet been performed
+    */
+    class DefaultEmptyDataSet : NSObject, DZNEmptyDataSetSource {
+        func title(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
+            return NSAttributedString(string: "🔍 Search Online", withFont: UIFont.systemFont(ofSize: 42, weight: UIFontWeightThin))
+        }
+        
+        func description(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
+            return NSAttributedString(string: "Type anything to start searching: a title, an author, an ISBN - or a mixture!", withFont: UIFont.preferredFont(forTextStyle: .body))
+        }
+    }
+    
+    /**
+     Empty Data Set for when a search was performed, but it returned no results
+    */
+    class NoResultsEmptyDataSet : NSObject, DZNEmptyDataSetSource {
+        func title(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
+            return NSAttributedString(string: "😞 No Results", withFont: UIFont.systemFont(ofSize: 42, weight: UIFontWeightThin))
+        }
+        
+        func description(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
+            return NSAttributedString(string: "We didn't find anything online which matched. Try changing your search string.", withFont: UIFont.preferredFont(forTextStyle: .body))
+        }
+    }
+    
+    /**
+     Empty Data Set for when an error occurred.
+    */
+    class ErrorEmptyDataSet : NSObject, DZNEmptyDataSetSource {
+        func title(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
+            return NSAttributedString(string: "⚠️ Error!", withFont: UIFont.systemFont(ofSize: 42, weight: UIFontWeightThin))
+        }
+        
+        func description(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
+            return NSAttributedString(string: "Something went wrong! It might be your Internet connection...", withFont: UIFont.preferredFont(forTextStyle: .body))
+        }
+    }
 }
+
+/// A table cell used in the Search Online table
+class SearchResultCell : UITableViewCell {
+    @IBOutlet weak var titleOutlet: UILabel!
+    @IBOutlet weak var authorOutlet: UILabel!
+    @IBOutlet weak var imageOutlet: UIImageView!
+    
+    var disposeBag: DisposeBag?
+    
+    var viewModel: SearchResultViewModel? {
+        didSet {
+            guard let viewModel = viewModel else { return }
+            
+            titleOutlet.text = viewModel.title
+            authorOutlet.text = viewModel.author
+            
+            disposeBag = DisposeBag()
+            viewModel.coverImage.drive(imageOutlet.rx.image).addDisposableTo(disposeBag!)
+        }
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        viewModel = nil
+        disposeBag = nil
+    }
+}
+
+/// The ViewModel corresponding to the SearchResultCell view
+class SearchResultViewModel {
+    
+    let searchResult: BookMetadata
+    let title: String
+    let author: String?
+    let coverImage: Driver<UIImage?>
+    
+    init(searchResult: BookMetadata) {
+        self.searchResult = searchResult
+        self.title = searchResult.title
+        self.author = searchResult.authorList
+        
+        // If we have a cover URL, we should use that to drive the cell image,
+        // and also store the data in the search result.
+        if let coverURL = searchResult.coverUrl {
+            
+            // Observe the the web request on a background thread
+            coverImage = URLSession.shared.rx.data(request: URLRequest(url: coverURL))
+                .observeOn(ConcurrentDispatchQueueScheduler(qos: .background))
+                .map(Optional.init)
+                .startWith(nil)
+                // Observe the results of web request on the main thread to update the search result cover image
+                .observeOn(MainScheduler.instance)
+                .do(onNext: {
+                    searchResult.coverImage = $0
+                })
+                .map(UIImage.init)
+                .asDriver(onErrorJustReturn: #imageLiteral(resourceName: "CoverPlaceholder"))
+        }
+        else {
+            coverImage = Driver.just(#imageLiteral(resourceName: "CoverPlaceholder"))
+        }
+    }
+}
+
