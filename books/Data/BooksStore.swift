@@ -51,6 +51,18 @@ class BooksStore {
     }
     
     /**
+     Returns a book with the specified ISBN. If there are more than, it is not specified which will be returned.
+    */
+    func get(isbn: String) -> Book? {
+        let fetchRequest = NSFetchRequest<Book>(entityName: self.bookEntityName)
+        fetchRequest.fetchLimit = 1
+        
+        fetchRequest.predicate = BookPredicate.isbnEqual(isbn: isbn)
+        let books = try? coreDataStack.managedObjectContext.fetch(fetchRequest)
+        return books?.first
+    }
+    
+    /**
      Adds or updates the book in the Spotlight index.
     */
     func updateSpotlightIndex(for book: Book) {
@@ -79,18 +91,7 @@ class BooksStore {
      Returns whether a book with the supplied ISBN currently exists.
     */
     func isbnExists(_ isbn: String) -> Bool {
-        let fetchRequest = NSFetchRequest<Book>(entityName: self.bookEntityName)
-        fetchRequest.fetchLimit = 1
-        
-        fetchRequest.predicate = BookPredicate.isbnEqual(isbn: isbn)
-        do {
-            let books = try coreDataStack.managedObjectContext.fetch(fetchRequest)
-            return books.count == 1
-        }
-        catch {
-            print("Error determining whether ISBN exists")
-            return false
-        }
+        return get(isbn: isbn) != nil
     }
     
     /**

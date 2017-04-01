@@ -145,8 +145,17 @@ class SearchByText: UIViewController, UISearchBarDelegate {
             
             // Display an alert if the book already exists in the store
             if let isbn = value.searchResult.isbn13, appDelegate.booksStore.isbnExists(isbn) {
-                let alert = UIAlertController(title: "Book Already Added", message: "The selected book has already been added to your reading list.", preferredStyle: UIAlertControllerStyle.alert)
-                alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default){ _ in
+                let alert = UIAlertController(title: "Book Already Added", message: "A book with the same ISBN has already been added to your reading list.", preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(UIAlertAction(title: "Add Duplicate", style: UIAlertActionStyle.default){ _ in
+                    self.segueWhenCoverDownloaded(value.searchResult, secondsWaited: 0)
+                })
+                alert.addAction(UIAlertAction(title: "Go To Existing Book", style: UIAlertActionStyle.default){ _ in
+                    self.dismiss(animated: true) {
+                        let matchingIsbnBook = appDelegate.booksStore.get(isbn: isbn)!
+                        appDelegate.splitViewController.tabbedViewController.simulateBookSelection(matchingIsbnBook)
+                    }
+                })
+                alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.default){ _ in
                     // Deselect the row after dismissing the alert
                     if let selectedRow = self.tableView.indexPathForSelectedRow {
                         self.tableView.deselectRow(at: selectedRow, animated: true)
