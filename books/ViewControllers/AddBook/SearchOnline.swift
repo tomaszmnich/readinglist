@@ -1,5 +1,5 @@
 //
-//  SearchByText.swift
+//  SearchOnline.swift
 //  books
 //
 //  Created by Andrew Bennet on 25/08/2016.
@@ -14,7 +14,7 @@ import RxSwiftUtilities
 import SVProgressHUD
 import DZNEmptyDataSet
 
-class SearchByText: UIViewController, UISearchBarDelegate {
+class SearchOnline: UIViewController, UISearchBarDelegate {
     
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
@@ -93,18 +93,15 @@ class SearchByText: UIViewController, UISearchBarDelegate {
         tableView.rx.modelSelected(SearchResultViewModel.self).subscribe(onNext: { value in
             
             // Display an alert if the book already exists in the store
-            if let isbn = value.searchResult.isbn13, appDelegate.booksStore.isbnExists(isbn) {
-                let alert = UIAlertController(title: "Book Already Added", message: "A book with the same ISBN has already been added to your reading list.", preferredStyle: UIAlertControllerStyle.alert)
-                alert.addAction(UIAlertAction(title: "Add Duplicate", style: UIAlertActionStyle.default){ _ in
+            if let isbn = value.searchResult.isbn13, let existingBook = appDelegate.booksStore.get(isbn: isbn) {
+                
+                let alert = duplicateBookAlertController(addDuplicateHandler: {
                     self.segueWhenCoverDownloaded(value.searchResult, secondsWaited: 0)
-                })
-                alert.addAction(UIAlertAction(title: "Go To Existing Book", style: UIAlertActionStyle.default){ _ in
+                }, goToExistingBookHander: {
                     self.dismiss(animated: true) {
-                        let matchingIsbnBook = appDelegate.booksStore.get(isbn: isbn)!
-                        appDelegate.splitViewController.tabbedViewController.simulateBookSelection(matchingIsbnBook)
+                        appDelegate.splitViewController.tabbedViewController.simulateBookSelection(existingBook)
                     }
-                })
-                alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.default){ _ in
+                }, cancelHandler: {
                     // Deselect the row after dismissing the alert
                     if let selectedRow = self.tableView.indexPathForSelectedRow {
                         self.tableView.deselectRow(at: selectedRow, animated: true)

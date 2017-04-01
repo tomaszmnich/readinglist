@@ -29,7 +29,7 @@
         <!--Search Online-->
         <scene sceneID="X5e-4E-ore">
             <objects>
-                <viewController id="coT-wT-mpQ" customClass="SearchByText" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="coT-wT-mpQ" customClass="SearchOnline" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="4rw-Hs-CL9"/>
                         <viewControllerLayoutGuide type="bottom" id="n0B-zH-dnZ"/>

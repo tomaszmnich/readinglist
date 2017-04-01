@@ -123,19 +123,34 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         
         guard let avMetadata = metadataObjects.first as? AVMetadataMachineReadableCodeObject else { return }
         
-        // Check that the book hasn't already been added
-        if appDelegate.booksStore.isbnExists(avMetadata.stringValue) {
-            SVProgressHUD.showInfo(withStatus: "You have already added this book")
-            return
-        }
-        
         // Since we have a result, stop the session and hide the preview
         session?.stopRunning()
+        
+        // Check that the book hasn't already been added
+        if let existingBook = appDelegate.booksStore.get(isbn: avMetadata.stringValue) {
+            let alert = duplicateBookAlertController(addDuplicateHandler: {
+                self.searchForFoundIsbn(isbn: avMetadata.stringValue)
+            }, goToExistingBookHander: {
+                self.dismiss(animated: true){
+                    appDelegate.splitViewController.tabbedViewController.simulateBookSelection(existingBook)
+                }
+            }, cancelHandler: {
+                self.session?.startRunning()
+            })
+            
+            self.present(alert, animated: true)
+        }
+        else {
+            searchForFoundIsbn(isbn: avMetadata.stringValue)
+        }
+    }
+    
+    func searchForFoundIsbn(isbn: String) {
         SVProgressHUD.show(withStatus: "Searching...")
         
         // We've found an ISBN-13. Let's search for it online in a background thread.
         DispatchQueue.global(qos: .background).async {
-            GoogleBooksAPI.get(isbn: avMetadata.stringValue) { result, error in
+            GoogleBooksAPI.get(isbn: isbn) { result, error in
                 
                 // Jump back to the main thread to process the result
                 DispatchQueue.main.async {

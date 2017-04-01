@@ -88,13 +88,6 @@ class BooksStore {
     }
     
     /**
-     Returns whether a book with the supplied ISBN currently exists.
-    */
-    func isbnExists(_ isbn: String) -> Bool {
-        return get(isbn: isbn) != nil
-    }
-    
-    /**
      Deletes the given book from the managed object context.
      Deindexes from Spotlight if necessary.
     */
