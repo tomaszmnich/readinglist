@@ -74,7 +74,7 @@ class SearchByText: UIViewController, UISearchBarDelegate {
                     self.tableView.emptyDataSetSource = self.noResultsEmptyDataSet
                 }
                 else {
-                    print("Error searching online: \($0.1.failureError.debugDescription)")
+                    NSLog("Error searching online: \($0.1.failureError.debugDescription)")
                     self.tableView.emptyDataSetSource = self.errorEmptyDataSet
                 }
             })
@@ -165,11 +165,15 @@ class SearchByText: UIViewController, UISearchBarDelegate {
     */
     class DefaultEmptyDataSet : NSObject, DZNEmptyDataSetSource {
         func title(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
-            return NSAttributedString(string: "🔍 Search Online", withFont: UIFont.systemFont(ofSize: 42, weight: UIFontWeightThin))
+            return NSAttributedString(string: "🔍 Search Online", withFont: UIFont.systemFont(ofSize: 36, weight: UIFontWeightThin))
         }
         
         func description(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
             return NSAttributedString(string: "Type anything to start searching: a title, an author, an ISBN - or a mixture!", withFont: UIFont.preferredFont(forTextStyle: .body))
+        }
+        
+        func verticalOffset(forEmptyDataSet scrollView: UIScrollView!) -> CGFloat {
+            return -scrollView.frame.size.height/4
         }
     }
     
@@ -178,11 +182,15 @@ class SearchByText: UIViewController, UISearchBarDelegate {
     */
     class NoResultsEmptyDataSet : NSObject, DZNEmptyDataSetSource {
         func title(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
-            return NSAttributedString(string: "😞 No Results", withFont: UIFont.systemFont(ofSize: 42, weight: UIFontWeightThin))
+            return NSAttributedString(string: "😞 No Results", withFont: UIFont.systemFont(ofSize: 36, weight: UIFontWeightThin))
         }
         
         func description(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
             return NSAttributedString(string: "We didn't find anything online which matched. Try changing your search string.", withFont: UIFont.preferredFont(forTextStyle: .body))
+        }
+        
+        func verticalOffset(forEmptyDataSet scrollView: UIScrollView!) -> CGFloat {
+            return -scrollView.frame.size.height/4
         }
     }
     
@@ -191,11 +199,15 @@ class SearchByText: UIViewController, UISearchBarDelegate {
     */
     class ErrorEmptyDataSet : NSObject, DZNEmptyDataSetSource {
         func title(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
-            return NSAttributedString(string: "⚠️ Error!", withFont: UIFont.systemFont(ofSize: 42, weight: UIFontWeightThin))
+            return NSAttributedString(string: "⚠️ Error!", withFont: UIFont.systemFont(ofSize: 36, weight: UIFontWeightThin))
         }
         
         func description(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
             return NSAttributedString(string: "Something went wrong! It might be your Internet connection...", withFont: UIFont.preferredFont(forTextStyle: .body))
+        }
+        
+        func verticalOffset(forEmptyDataSet scrollView: UIScrollView!) -> CGFloat {
+            return -scrollView.frame.size.height/4
         }
     }
 }

@@ -71,6 +71,7 @@ class BookTable: AutoUpdatingTableViewController {
         searchController.dimsBackgroundDuringPresentation = false
         searchController.searchBar.returnKeyType = .done
         searchController.searchBar.placeholder = "Your Library"
+        searchController.searchBar.searchBarStyle = .minimal
         searchController.hidesNavigationBarDuringPresentation = false
         tableView.tableHeaderView = searchController.searchBar
         
@@ -236,6 +237,17 @@ extension BookTable : DZNEmptyDataSetSource {
         }
         
         return NSAttributedString(string: titleText, withFont: UIFont.systemFont(ofSize: 42, weight: UIFontWeightThin))
+    }
+    
+    func verticalOffset(forEmptyDataSet scrollView: UIScrollView!) -> CGFloat {
+        // The No Results screen should be a bit higher up than the other screens,
+        // since the keyboard will often be up in this mode.
+        if resultsFilterer.showingSearchResults {
+            return -scrollView.frame.height / 4 + self.tableView.tableHeaderView!.frame.size.height / 2.0
+        }
+        else {
+            return 0
+        }
     }
     
     func description(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
