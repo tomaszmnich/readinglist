@@ -37,7 +37,7 @@ class Settings: UITableViewController, NavBarConfigurer {
         switch (indexPath.section, indexPath.row) {
         case (0, 0):
             // "About"
-            UIApplication.shared.openUrlPlatformSpecific(url: URL(string: "https://andrewbennet.github.io/readinglist")!)
+            UIApplication.shared.openUrlPlatformSpecific(url: URL(string: "https://andrewbennet.github.io/readinglist")!) 
         case (1, 0):
             // "Rate"
             UIApplication.shared.openUrlPlatformSpecific(url: URL(string: "itms-apps://itunes.apple.com/app/\(appleAppId)")!)

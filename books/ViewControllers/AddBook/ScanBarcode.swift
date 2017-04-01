@@ -22,7 +22,7 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Setup the camera preview on another thread
+        // Setup the camera preview asynchronously
         DispatchQueue.main.async {
             self.setupAvSession()
             self.previewOverlay.layer.borderColor = UIColor.red.cgColor
@@ -61,7 +61,7 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
                     return
                 }
             #endif
-            presentCameraSetupError()
+            presentCameraPermissionsAlert()
             return
         }
         
@@ -75,7 +75,7 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         
         // Check that we can add the input and output to the session
         guard session!.canAddInput(input) && session!.canAddOutput(output) else {
-            presentCameraSetupError()
+            presentInfoAlert(title: "Error ⚠️", message: "The camera could not be used. Sorry about that.")
             return
         }
         
@@ -164,7 +164,7 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
                     }
                     else {
                         let alert = UIAlertController(title: "No Exact Match", message: "We couldn't find an exact match. Would you like to do a more general search instead?", preferredStyle: UIAlertControllerStyle.alert)
-                        alert.addAction(UIAlertAction(title: "No", style: UIAlertActionStyle.default, handler: { _ in
+                        alert.addAction(UIAlertAction(title: "No", style: UIAlertActionStyle.cancel, handler: { _ in
                             self.session?.startRunning()
                         }))
                         alert.addAction(UIAlertAction(title: "Yes", style: UIAlertActionStyle.default, handler: { _ in
@@ -199,8 +199,18 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         self.present(alert, animated: true, completion: nil)
     }
     
-    func presentCameraSetupError() {
-        presentInfoAlert(title: "Error ⚠️", message: "The camera could not be used. Sorry about that.")
+    func presentCameraPermissionsAlert() {
+        let alert = UIAlertController(title: "Permission Required", message: "You'll need to change your settings to allow Reading List to use your device's camera.", preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "Settings", style: UIAlertActionStyle.default, handler: { _ in
+            if let appSettings = URL(string: UIApplicationOpenSettingsURLString), UIApplication.shared.canOpenURL(appSettings) {
+                UIApplication.shared.openUrlPlatformSpecific(url: appSettings)
+                self.dismiss(animated: false)
+            }
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: { _ in
+            self.dismiss(animated: true)
+        }))
+        self.present(alert, animated: true, completion: nil)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
