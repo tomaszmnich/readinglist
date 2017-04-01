@@ -20,7 +20,7 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var spinner: UIActivityIndicatorView!
     
-    var errorLabel: UILabel!
+    var initialSearchString: String?
     
     let disposeBag = DisposeBag()
     let indicator = ActivityIndicator()
@@ -37,9 +37,13 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
         // The search bar delegate is used only to dismiss the keyboard when Done is pressed
         searchBar.returnKeyType = .done
         searchBar.delegate = self
+        searchBar.text = initialSearchString
         
         // Bring up the keyboard
         searchBar.becomeFirstResponder()
+        
+        // Hide the keyboard when scrolling
+        tableView.keyboardDismissMode = .onDrag
         
         // Remove cell separators between blank cells
         tableView.tableFooterView = UIView()
