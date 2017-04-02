@@ -122,6 +122,7 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     func captureOutput(_ captureOutput: AVCaptureOutput!, didOutputMetadataObjects metadataObjects: [Any]!, from connection: AVCaptureConnection!) {
         
         guard let avMetadata = metadataObjects.first as? AVMetadataMachineReadableCodeObject else { return }
+        guard let _ = Isbn13.tryParse(inputString: avMetadata.stringValue) else { return }
         
         // Since we have a result, stop the session and hide the preview
         session?.stopRunning()

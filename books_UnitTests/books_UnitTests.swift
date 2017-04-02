@@ -142,4 +142,18 @@ class books_UnitTests: XCTestCase {
         XCTAssertEqual("Today", today.toShortPrettyString())
     }
     
+    func testIsbnParsing() {
+        // Wrong length
+        XCTAssertNil(Isbn13.tryParse(inputString: "12345"))
+        // Wrong prefix
+        XCTAssertNil(Isbn13.tryParse(inputString: "1234567891023"))
+        // Wrong check digit
+        XCTAssertNil(Isbn13.tryParse(inputString: "9781781100263"))
+        XCTAssertNil(Isbn13.tryParse(inputString: "978-1-78110-026-3"))
+        
+        // Correct
+        XCTAssertNotNil(Isbn13.tryParse(inputString: "9781781100264"))
+        XCTAssertNotNil(Isbn13.tryParse(inputString: "978-1-78110-026-4"))
+    }
+    
 }
