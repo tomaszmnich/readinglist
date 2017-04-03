@@ -128,13 +128,16 @@ class GoogleBooksAPI {
         // The base URL for GoogleBooks API v1 requests
         private static let baseUrl = URL(string: "https://www.googleapis.com")!
         
+        // Google Books API formatted fields parameter to request all fields we use
+        private static let allFieldsParameter = "items/volumeInfo(title,authors,publishedDate,description,pageCount,industryIdentifiers,imageLinks/thumbnail)"
+        
         var url: URL {
             switch self{
             case let .search(query):
                 let encodedQuery = query.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-                return URL(string: "/books/v1/volumes?q=\(encodedQuery)&maxResults=40", relativeTo: GoogleBooksRequest.baseUrl)!
+                return URL(string: "/books/v1/volumes?q=\(encodedQuery)&maxResults=40&fields=\(GoogleBooksRequest.allFieldsParameter)", relativeTo: GoogleBooksRequest.baseUrl)!
             case let .getIsbn(isbn):
-                return URL(string: "/books/v1/volumes?q=isbn:\(isbn)", relativeTo: GoogleBooksRequest.baseUrl)!
+                return URL(string: "/books/v1/volumes?q=isbn:\(isbn)&maxResults=1&fields=\(GoogleBooksRequest.allFieldsParameter)", relativeTo: GoogleBooksRequest.baseUrl)!
             }
         }
     }
