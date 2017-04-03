@@ -81,7 +81,7 @@ class books_UnitTests: XCTestCase {
         let book = booksStore.create(from: getTestBookMetadata(), readingInformation: toReadState)
         
         let reading = BookReadingInformation.reading(started: today)
-        booksStore.update(book: book, with: reading)
+        booksStore.update(book: book, withReadingInformation: reading)
         
         XCTAssertNil(book.sort)
     }
@@ -156,4 +156,11 @@ class books_UnitTests: XCTestCase {
         XCTAssertNotNil(Isbn13.tryParse(inputString: "978-1-78110-026-4"))
     }
     
+    func testCreatedDateSet() {
+        let beforeDate = Date()
+        let newBook = booksStore.create(from: getTestBookMetadata(), readingInformation: BookReadingInformation.finished(started: tomorrow, finished: yesterday))
+        let afterDate = Date()
+        XCTAssertEqual(newBook.createdWhen.compare(beforeDate), ComparisonResult.orderedDescending)
+        XCTAssertEqual(newBook.createdWhen.compare(afterDate), ComparisonResult.orderedAscending)
+    }
 }

@@ -72,7 +72,7 @@ class BooksStore {
     /**
      Gets the current maximum sort index in the books store
     */
-    func maxSort() -> Int? {
+    private func maxSort() -> Int? {
         let fetchRequest = NSFetchRequest<Book>(entityName: self.bookEntityName)
         fetchRequest.fetchLimit = 1
         
@@ -100,16 +100,20 @@ class BooksStore {
     /**
      Creates a new Book object, populates with the provided metadata, saves the
      object context, and adds the book to the Spotlight index.
-    */
-    @discardableResult func create(from metadata: BookMetadata, readingInformation: BookReadingInformation) -> Book {
+     */
+    @discardableResult func create(from metadata: BookMetadata, readingInformation: BookReadingInformation, bookSort: Int? = nil) -> Book {
         let book = coreDataStack.createNew(entity: bookEntityName) as! Book
+        book.createdWhen = Date()
         book.populate(from: metadata)
         book.populate(from: readingInformation)
-        
-        // The sort index should be 1 more than our maximum, and only if this book is in the ToRead state
-        if readingInformation.readState == .toRead {
-            let maxSort = self.maxSort() ?? -1
-            book.sort = NSNumber(value: maxSort + 1)
+        if readingInformation.readState == .toRead{
+            if let specifiedBookSort = bookSort {
+                book.sort = NSNumber(value: specifiedBookSort)
+            }
+            else {
+                let maxSort = self.maxSort() ?? -1
+                book.sort = NSNumber(value: maxSort + 1)
+            }
         }
         
         save()
@@ -118,42 +122,23 @@ class BooksStore {
     }
     
     /**
-     Creates a new Book object, populates with the provided metadata, saves the
-     object context, and adds the book to the Spotlight index.
-     */
-    @discardableResult func create(from metadata: BookMetadata, readingInformation: BookReadingInformation, bookSort: Int) -> Book {
-        let book = coreDataStack.createNew(entity: bookEntityName) as! Book
-        book.populate(from: metadata)
-        book.populate(from: readingInformation)
-        if readingInformation.readState == .toRead {
-            book.sort = NSNumber(value: bookSort)
-        }
-        
-        save()
-        updateSpotlightIndex(for: book)
-        return book
-    }
-    
-    /**
-        Updates the provided book with the provided metadata. Saves and reindexes in spotlight.
+        Updates the provided book with the provided metadata and reading information (whichever are provided).
+        Saves and reindexes in spotlight.
     */
-    func update(book: Book, with metadata: BookMetadata) {
-        book.populate(from: metadata)
-        save()
-        updateSpotlightIndex(for: book)
-    }
-    
-    /**
-        Updates the provided book with the provided reading information. Saves and reindexes in spotlight.
-     */
-    func update(book: Book, with readingInformation: BookReadingInformation) {
-        book.populate(from: readingInformation)
+    func update(book: Book, withMetadata metadata: BookMetadata? = nil, withReadingInformation readingInformation: BookReadingInformation? = nil) {
+        if let metadata = metadata {
+            book.populate(from: metadata)
+        }
+        if let readingInformation = readingInformation {
+            book.populate(from: readingInformation)
+        }
         save()
         updateSpotlightIndex(for: book)
     }
     
     /**
      Saves the managedObjectContext and suppresses any errors.
+     Is automatically called by the Update and Create functions.
     */
     func save() {
         // TODO: Find a way to make this method private, if possible
@@ -172,6 +157,9 @@ class BooksStore {
         NotificationCenter.default.addObserver(observer, selector: selector, name: NSNotification.Name.NSManagedObjectContextDidSave, object: coreDataStack.managedObjectContext)
     }
     
+    /**
+     Deletes **all** book objects from the persistent store.
+    */
     func deleteAllData() {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: bookEntityName)
         fetchRequest.returnsObjectsAsFaults = false

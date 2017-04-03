@@ -38,7 +38,7 @@ class EditReadState: ReadStateForm {
         let newReadStateInfo = BookReadingInformation(readState: readState, startedWhen: startedReading, finishedWhen: finishedReading)
         
         // Update the book
-        appDelegate.booksStore.update(book: bookToEdit, with: newReadStateInfo)
+        appDelegate.booksStore.update(book: bookToEdit, withReadingInformation: newReadStateInfo)
         
         self.navigationController?.dismiss(animated: true, completion: nil)
     }

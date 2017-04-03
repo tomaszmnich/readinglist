@@ -51,8 +51,10 @@ class CoreDataStack {
                 return NSInMemoryStoreType
             }
         }()
+        let persistentStoreOptions = [NSMigratePersistentStoresAutomaticallyOption: true,
+                                      NSInferMappingModelAutomaticallyOption: true]
         do {
-            try persistentStoreCoordinator.addPersistentStore(ofType: storeDescriptor, configurationName: nil, at: storeUrl, options: nil)
+            try persistentStoreCoordinator.addPersistentStore(ofType: storeDescriptor, configurationName: nil, at: storeUrl, options: persistentStoreOptions)
         }
         catch {
             print("Unresolved error adding persistent store: \(error)")

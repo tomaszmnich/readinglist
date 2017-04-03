@@ -30,6 +30,7 @@ class Book: NSManagedObject {
     // Other Metadata
     // TODO: Think about making this privately set, and managing its value internally
     @NSManaged var sort: NSNumber?
+    @NSManaged var createdWhen: Date
 }
 
 /// The availale reading progress states
@@ -81,12 +82,12 @@ extension Book {
     
     static let transistionToReadingStateAction = GeneralUIAction<Book>(style: .normal, title: "Start") { book in
         let reading = BookReadingInformation(readState: .reading, startedWhen: Date(), finishedWhen: nil)
-        appDelegate.booksStore.update(book: book, with: reading)
+        appDelegate.booksStore.update(book: book, withReadingInformation: reading)
     }
     
     static let transistionToFinishedStateAction = GeneralUIAction<Book>(style: .normal, title: "Finish") { book in
         let finished = BookReadingInformation(readState: .finished, startedWhen: book.startedReading!, finishedWhen: Date())
-        appDelegate.booksStore.update(book: book, with: finished)
+        appDelegate.booksStore.update(book: book, withReadingInformation: finished)
     }
     
     static let deleteAction = GeneralUIAction<Book>(style: .destructive, title: "Delete") { book in

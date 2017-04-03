@@ -73,7 +73,7 @@ class EditBook: BookMetadataForm {
         newMetadata.coverImage = image == nil ? nil : UIImageJPEGRepresentation(image!, 0.7)
         
         // Update the book
-        appDelegate.booksStore.update(book: bookToEdit, with: newMetadata)
+        appDelegate.booksStore.update(book: bookToEdit, withMetadata: newMetadata)
         dismiss()
     }
 }
