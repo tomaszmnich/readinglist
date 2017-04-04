@@ -169,6 +169,19 @@ extension String {
         dateFormatter.locale = Locale.current
         return dateFormatter.date(from: self)
     }
+    
+    func toCsvEscaped() -> String {
+        let charactersWhichRequireWrapping = CharacterSet(charactersIn: "\n,")
+        let wrapInQuotes = self.rangeOfCharacter(from: charactersWhichRequireWrapping) != nil
+        
+        // Replace " with ""
+        var escapedString = self.replacingOccurrences(of: "\"", with: "\"\"")
+
+        if wrapInQuotes {
+            escapedString = "\"\(escapedString)\""
+        }
+        return escapedString
+    }
 }
 
 extension NSPredicate {    

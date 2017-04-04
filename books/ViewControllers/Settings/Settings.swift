@@ -38,10 +38,13 @@ class Settings: UITableViewController, NavBarConfigurer {
         case (0, 0):
             // "About"
             UIApplication.shared.openUrlPlatformSpecific(url: URL(string: "https://andrewbennet.github.io/readinglist")!) 
-        case (1, 0):
+        case (0, 2):
             // "Rate"
             UIApplication.shared.openUrlPlatformSpecific(url: URL(string: "itms-apps://itunes.apple.com/app/\(appleAppId)")!)
-        case (2, 0):
+        
+        case (1, 0):
+            exportData()
+        case (1, 1):
             // "Use Test Data"
             #if DEBUG
                 loadTestData()
@@ -52,8 +55,49 @@ class Settings: UITableViewController, NavBarConfigurer {
         
         tableView.deselectRow(at: indexPath, animated: true)
     }
-
     
+    func exportData() {
+        SVProgressHUD.show(withStatus: "Generating...")
+        
+        DispatchQueue.main.async {
+            // Generate the CSV Document in memory
+            let exporter = CsvExporter(csvExport: Book.csvExport)
+            for book in appDelegate.booksStore.get(fetchRequest: appDelegate.booksStore.bookFetchRequest()) {
+                exporter.addData(data: book)
+            }
+            
+            // Write the document to a temporary file
+            let exportFileName = "Reading List Export - \(Date().toString(withDateFormat: "yyyy-MM-dd hh-mm")).csv"
+            let temporaryFilePath = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(exportFileName)
+            do {
+                try exporter.write(to: temporaryFilePath)
+            }
+            catch {
+                NSLog(error.localizedDescription)
+                SVProgressHUD.dismiss()
+                SVProgressHUD.showInfo(withStatus: "An error occurred.")
+                return
+            }
+            
+            // Present a dialog with the resulting file
+            let activityViewController = UIActivityViewController(activityItems: [temporaryFilePath], applicationActivities: [])
+            activityViewController.excludedActivityTypes = [
+                UIActivityType.assignToContact,
+                UIActivityType.saveToCameraRoll,
+                UIActivityType.postToFlickr,
+                UIActivityType.postToVimeo,
+                UIActivityType.postToTencentWeibo,
+                UIActivityType.postToTwitter,
+                UIActivityType.postToFacebook,
+                UIActivityType.openInIBooks
+            ]
+            
+            SVProgressHUD.dismiss()
+            self.present(activityViewController, animated: true, completion: nil)
+        }
+    }
+
+
     #if DEBUG
     func loadTestData() {
 
@@ -74,7 +118,7 @@ class Settings: UITableViewController, NavBarConfigurer {
             let thisSort = sortIndex
             
             requestDispatchGroup.enter()
-            DispatchQueue.global(qos: .background).async {
+            DispatchQueue.global(qos: .userInitiated).async {
                 GoogleBooksAPI.supplementMetadataWithImage(parsedData.0) {
                     DispatchQueue.main.sync {
                         appDelegate.booksStore.create(from: parsedData.0, readingInformation: parsedData.1, bookSort: thisSort)

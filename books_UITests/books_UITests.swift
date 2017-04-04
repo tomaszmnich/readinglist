@@ -121,4 +121,15 @@ class books_UITests: XCTestCase {
         sleep(1)
         XCTAssertEqual(app.tables.cells.count, UInt(bookCount - 1))
     }
+    
+    func testExportBook() {
+        let app = ReadingListApplication()
+        
+        app.clickTab(.settings)
+        app.tables.staticTexts["Export Data"].tap()
+        
+        sleep(2)
+        app.collectionViews.collectionViews.buttons["Add To iCloud Drive"].tap()
+        app.navigationBars["iCloud Drive"].buttons["Cancel"].tap()
+    }
 }

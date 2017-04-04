@@ -93,6 +93,17 @@ extension Book {
     static let deleteAction = GeneralUIAction<Book>(style: .destructive, title: "Delete") { book in
         appDelegate.booksStore.delete(book)
     }
+    
+    static let csvExport = CsvExport<Book>(columns:
+        CsvColumn<Book>(header: "Title", cellValue: {$0.title}),
+        CsvColumn<Book>(header: "Author", cellValue: {$0.authorList}),
+        CsvColumn<Book>(header: "ISBN-13", cellValue: {$0.isbn13}),
+        CsvColumn<Book>(header: "Page Count", cellValue: {$0.pageCount == nil ? nil : String(describing: $0.pageCount!)}),
+        CsvColumn<Book>(header: "Description", cellValue: {$0.bookDescription}),
+        CsvColumn<Book>(header: "Read State", cellValue: {$0.readState.description}),
+        CsvColumn<Book>(header: "Started Reading", cellValue: {$0.startedReading?.toString(withDateFormat: "yyyy-MM-dd")}),
+        CsvColumn<Book>(header: "Finished Reading", cellValue: {$0.finishedReading?.toString(withDateFormat: "yyyy-MM-dd")})
+    )
 }
 
 

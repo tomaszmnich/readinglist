@@ -22,10 +22,17 @@ class BooksStore {
     }
     
     /**
+     A NSFetchRequest for the Book entities
+    */
+    func bookFetchRequest() -> NSFetchRequest<Book> {
+        return NSFetchRequest<Book>(entityName: bookEntityName)
+    }
+    
+    /**
      Creates a NSFetchedResultsController to retrieve books in the given state.
     */
     func fetchedResultsController(_ initialPredicate: NSPredicate?, initialSortDescriptors: [NSSortDescriptor]?) -> NSFetchedResultsController<Book> {
-        let fetchRequest = NSFetchRequest<Book>(entityName: bookEntityName)
+        let fetchRequest = bookFetchRequest()
         fetchRequest.predicate = initialPredicate
         fetchRequest.sortDescriptors = initialSortDescriptors
         return NSFetchedResultsController(fetchRequest: fetchRequest,
@@ -60,6 +67,14 @@ class BooksStore {
         fetchRequest.predicate = BookPredicate.isbnEqual(isbn: isbn)
         let books = try? coreDataStack.managedObjectContext.fetch(fetchRequest)
         return books?.first
+    }
+    
+    /**
+     Returns the books retrieved by the specifed fetch request.
+    */
+    func get(fetchRequest: NSFetchRequest<Book>) -> [Book] {
+        let results = try? coreDataStack.managedObjectContext.fetch(fetchRequest)
+        return results ?? []
     }
     
     /**
