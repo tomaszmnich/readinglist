@@ -79,8 +79,14 @@ class CsvExporter<TData> {
         document = CsvExporter.convertToCsvLine(csvExport.headers())
     }
     
-    func addData(data: TData) {
+    func addData(_ data: TData) {
         document.append(CsvExporter.convertToCsvLine(csvExport.cellValues(data: data)))
+    }
+    
+    func addData(_ dataArray: [TData]) {
+        for data in dataArray {
+            document.append(CsvExporter.convertToCsvLine(csvExport.cellValues(data: data)))
+        }
     }
     
     private static func convertToCsvLine(_ cellValues: [String]) -> String {
@@ -88,6 +94,7 @@ class CsvExporter<TData> {
     }
     
     func write(to fileURL: URL) throws {
+        print(document)
         try document.write(to: fileURL, atomically: true, encoding: .utf8)
     }
 }

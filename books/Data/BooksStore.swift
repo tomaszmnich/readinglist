@@ -81,9 +81,16 @@ class BooksStore {
     /**
      Gets all of the books in the store
     */
-    func getAll() -> [Book] {
-        let books = try? coreDataStack.managedObjectContext.fetch(bookFetchRequest())
-        return books ?? []
+    func getAllAsync(callback: @escaping (([Book]) -> Void), onFail: @escaping ((Error) -> Void)) {
+        do {
+            try coreDataStack.managedObjectContext.execute(NSAsynchronousFetchRequest(fetchRequest: self.bookFetchRequest()) {
+                callback($0.finalResult ?? [])
+            })
+        }
+        catch {
+            print("Error fetching objects asyncronously")
+            onFail(error)
+        }
     }
     
     /**

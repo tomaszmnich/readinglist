@@ -15,14 +15,14 @@ import CSVImporter
 class Settings: UITableViewController, NavBarConfigurer, UIDocumentMenuDelegate, UIDocumentPickerDelegate {
     
     var navBarChangedDelegate: NavBarChangedDelegate!
-
+    
     @IBOutlet weak var addTestDataCell: UITableViewCell!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         #if !DEBUG
-        addTestDataCell.isHidden = true
+            addTestDataCell.isHidden = true
         #endif
     }
     
@@ -34,15 +34,16 @@ class Settings: UITableViewController, NavBarConfigurer, UIDocumentMenuDelegate,
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         
         switch (indexPath.section, indexPath.row) {
         case (0, 0):
             // "About"
-            UIApplication.shared.openUrlPlatformSpecific(url: URL(string: "https://andrewbennet.github.io/readinglist")!) 
+            UIApplication.shared.openUrlPlatformSpecific(url: URL(string: "https://andrewbennet.github.io/readinglist")!)
         case (0, 2):
             // "Rate"
             UIApplication.shared.openUrlPlatformSpecific(url: URL(string: "itms-apps://itunes.apple.com/app/\(appleAppId)")!)
-        
+            
         case (1, 0):
             exportData()
         case (1, 1):
@@ -55,19 +56,25 @@ class Settings: UITableViewController, NavBarConfigurer, UIDocumentMenuDelegate,
         default:
             break
         }
-        
-        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     func exportData() {
         SVProgressHUD.show(withStatus: "Generating...")
         
-        DispatchQueue.main.async {
-            // Generate the CSV Document in memory
-            let exporter = CsvExporter(csvExport: Book.csvExport)
-            for book in appDelegate.booksStore.getAll() {
-                exporter.addData(data: book)
-            }
+        let exporter = CsvExporter(csvExport: Book.csvExport)
+        
+        appDelegate.booksStore.getAllAsync(callback: {
+            exporter.addData($0)
+            self.renderAndServeCsvExport(exporter)
+        }, onFail: {
+            NSLog($0.localizedDescription)
+            SVProgressHUD.dismiss()
+            SVProgressHUD.showError(withStatus: "Error collecting data.")
+        })
+    }
+    
+    func renderAndServeCsvExport(_ exporter: CsvExporter<Book>) {
+        DispatchQueue.global(qos: .userInitiated).async {
             
             // Write the document to a temporary file
             let exportFileName = "Reading List Export - \(Date().toString(withDateFormat: "yyyy-MM-dd hh-mm")).csv"
@@ -77,26 +84,24 @@ class Settings: UITableViewController, NavBarConfigurer, UIDocumentMenuDelegate,
             }
             catch {
                 NSLog(error.localizedDescription)
-                SVProgressHUD.dismiss()
-                SVProgressHUD.showInfo(withStatus: "An error occurred.")
+                DispatchQueue.main.async {
+                    SVProgressHUD.dismiss()
+                    SVProgressHUD.showError(withStatus: "Error exporting data.")
+                }
                 return
             }
             
-            // Present a dialog with the resulting file
+            // Present a dialog with the resulting file (presenting it on the main thread, of course)
             let activityViewController = UIActivityViewController(activityItems: [temporaryFilePath], applicationActivities: [])
             activityViewController.excludedActivityTypes = [
-                UIActivityType.assignToContact,
-                UIActivityType.saveToCameraRoll,
-                UIActivityType.postToFlickr,
-                UIActivityType.postToVimeo,
-                UIActivityType.postToTencentWeibo,
-                UIActivityType.postToTwitter,
-                UIActivityType.postToFacebook,
-                UIActivityType.openInIBooks
+                UIActivityType.assignToContact, UIActivityType.saveToCameraRoll, UIActivityType.postToFlickr, UIActivityType.postToVimeo,
+                UIActivityType.postToTencentWeibo, UIActivityType.postToTwitter, UIActivityType.postToFacebook, UIActivityType.openInIBooks
             ]
             
-            SVProgressHUD.dismiss()
-            self.present(activityViewController, animated: true, completion: nil)
+            DispatchQueue.main.async {
+                SVProgressHUD.dismiss()
+                self.present(activityViewController, animated: true, completion: nil)
+            }
         }
     }
     
@@ -112,36 +117,39 @@ class Settings: UITableViewController, NavBarConfigurer, UIDocumentMenuDelegate,
     }
     
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentAt url: URL) {
-        
         SVProgressHUD.show(withStatus: "Importing")
-        let importer = CSVImporter<(BookMetadata, BookReadingInformation)>(path: url.path)
-        importer.startImportingRecords(structure: {_ in}, recordMapper: BookMetadata.csvImport)
-            .onFinish { readMetadata in
+        
+        DispatchQueue.global(qos: .userInitiated).async {
+            let importer = CSVImporter<(BookMetadata, BookReadingInformation)>(path: url.path)
+            let importResults = importer.importRecords(structure: {_ in}, recordMapper: BookMetadata.csvImport)
+            
+            DispatchQueue.main.async {
                 var duplicateBookCount = 0
-                for metadata in readMetadata {
-                    if let isbn13 = metadata.0.isbn13, appDelegate.booksStore.isbnExists(isbn13) {
+                for importResult in importResults {
+                    if let isbn13 = importResult.0.isbn13, appDelegate.booksStore.isbnExists(isbn13) {
                         duplicateBookCount += 1
                     }
                     else {
-                        appDelegate.booksStore.create(from: metadata.0, readingInformation: metadata.1)
+                        appDelegate.booksStore.create(from: importResult.0, readingInformation: importResult.1)
                     }
                 }
-                SVProgressHUD.dismiss()
                 
-                var statusMessage = "\(readMetadata.count - duplicateBookCount) books imported."
+                var statusMessage = "\(importResults.count - duplicateBookCount) books imported."
                 if duplicateBookCount != 0 {
-                     statusMessage += " \(duplicateBookCount) books ignored due to duplicate ISBN."
+                    statusMessage += " \(duplicateBookCount) books ignored due to duplicate ISBN."
                 }
                 SVProgressHUD.showInfo(withStatus: statusMessage)
             }
+        }
     }
-
-
+    
+    
+    
     #if DEBUG
     func loadTestData() {
-
+        
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-
+        
         let testJsonData = JSON(data: NSData.fromMainBundle(resource: "example_books", type: "json") as Data)
         appDelegate.booksStore.deleteAllData()
         
@@ -166,7 +174,7 @@ class Settings: UITableViewController, NavBarConfigurer, UIDocumentMenuDelegate,
                 }
             }
         }
-
+        
         requestDispatchGroup.notify(queue: .main) {
             UIApplication.shared.isNetworkActivityIndicatorVisible = false
         }

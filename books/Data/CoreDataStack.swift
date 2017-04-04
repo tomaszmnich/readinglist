@@ -11,6 +11,7 @@ import CoreData
 /**
  Standard CoreData boilerplate code.
  An instance of CoreDataStack can be held by a more specific accessing class.
+ Post iOS 10 this could potentially be replaced by NSPersistentContainer
 */
 class CoreDataStack {
     
