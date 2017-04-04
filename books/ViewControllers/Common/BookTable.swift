@@ -72,6 +72,7 @@ class BookTable: AutoUpdatingTableViewController {
         searchController.searchBar.returnKeyType = .done
         searchController.searchBar.placeholder = "Your Library"
         searchController.searchBar.searchBarStyle = .minimal
+        searchController.searchBar.backgroundColor = tableView.backgroundColor!
         searchController.hidesNavigationBarDuringPresentation = false
         tableView.tableHeaderView = searchController.searchBar
         
