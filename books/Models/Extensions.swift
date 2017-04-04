@@ -52,14 +52,14 @@ extension NSMutableAttributedString {
 }
 
 public extension Date {
-    init(dateString: String) {
+    init?(dateString: String?) {
         let dateStringFormatter = DateFormatter()
         dateStringFormatter.dateFormat = "yyyy-MM-dd"
         dateStringFormatter.locale = Locale(identifier: "en_US_POSIX")
-        let date = dateStringFormatter.date(from: dateString)!
+        guard let dateString = dateString, let date = dateStringFormatter.date(from: dateString) else { return nil }
         self.init(timeInterval: 0, since: date)
     }
-    
+
     func toString(withDateStyle dateStyle: DateFormatter.Style) -> String {
         let formatter = DateFormatter()
         formatter.dateStyle = dateStyle

@@ -133,9 +133,9 @@ class books_UnitTests: XCTestCase {
     
     func testIsbnDetection() {
         let testBook = getTestBookMetadata()
-        XCTAssertNil(booksStore.get(isbn: testBook.isbn13!))
+        XCTAssertFalse(booksStore.isbnExists(testBook.isbn13!))
         booksStore.create(from: testBook, readingInformation: BookReadingInformation.toRead())
-        XCTAssertNotNil(booksStore.get(isbn: testBook.isbn13!))
+        XCTAssertTrue(booksStore.isbnExists(testBook.isbn13!))
     }
     
     func testHumanisedDateString() {

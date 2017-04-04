@@ -10,7 +10,8 @@ import Foundation
 
 class Isbn13 {
     
-    static func tryParse(inputString: String) -> String? {
+    static func tryParse(inputString: String?) -> String? {
+        guard let inputString = inputString else { return nil }
         
         let sanitisedInput = inputString.replacingOccurrences(of: "-", with: "")
         guard sanitisedInput.characters.count == 13, sanitisedInput.hasPrefix("978") || sanitisedInput.hasPrefix("979"),

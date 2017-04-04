@@ -22,10 +22,12 @@ class BooksStore {
     }
     
     /**
-     A NSFetchRequest for the Book entities
+     A NSFetchRequest for the Book entities. Has a batch size of 1000 by default.
     */
-    func bookFetchRequest() -> NSFetchRequest<Book> {
-        return NSFetchRequest<Book>(entityName: bookEntityName)
+    private func bookFetchRequest() -> NSFetchRequest<Book> {
+        let fetchRequest = NSFetchRequest<Book>(entityName: bookEntityName)
+        fetchRequest.fetchBatchSize = 1000
+        return fetchRequest
     }
     
     /**
@@ -58,6 +60,13 @@ class BooksStore {
     }
     
     /**
+     Whether or not the provided ISBN exists in a book already.
+    */
+    func isbnExists(_ isbn: String) -> Bool {
+        return get(isbn: isbn) != nil
+    }
+    
+    /**
      Returns a book with the specified ISBN, if one exists.
     */
     func get(isbn: String) -> Book? {
@@ -70,11 +79,11 @@ class BooksStore {
     }
     
     /**
-     Returns the books retrieved by the specifed fetch request.
+     Gets all of the books in the store
     */
-    func get(fetchRequest: NSFetchRequest<Book>) -> [Book] {
-        let results = try? coreDataStack.managedObjectContext.fetch(fetchRequest)
-        return results ?? []
+    func getAll() -> [Book] {
+        let books = try? coreDataStack.managedObjectContext.fetch(bookFetchRequest())
+        return books ?? []
     }
     
     /**

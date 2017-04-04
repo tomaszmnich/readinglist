@@ -1,6 +1,9 @@
 PODS:
+  - CSVImporter (1.7.1):
+    - HandySwift (~> 2.0)
   - DZNEmptyDataSet (1.8.1)
   - Eureka (2.0.1)
+  - HandySwift (2.2.0)
   - ImageRow (1.0.0):
     - Eureka (~> 2.0.0-beta.1)
   - RxCocoa (3.2.0):
@@ -14,6 +17,7 @@ PODS:
   - SwiftyJSON (3.1.4)
 
 DEPENDENCIES:
+  - CSVImporter (~> 1.7)
   - DZNEmptyDataSet (~> 1.8)
   - Eureka (~> 2.0)
   - ImageRow (~> 1.0)
@@ -25,8 +29,10 @@ DEPENDENCIES:
   - SwiftyJSON (~> 3.1)
 
 SPEC CHECKSUMS:
+  CSVImporter: 9b7fb2a308977137d9a64e7898ec54168c38ce96
   DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
   Eureka: ae837bb1dfae0c07bc1bda7aeef87876eeb537c2
+  HandySwift: 7bc03858d1368483f79ae6563f58619cf7ef5505
   ImageRow: 1e37db26f61a0c4ad3bc9a3a803c32d968782857
   RxCocoa: ccdf43101a70407097a29082f648ba1676075b30
   RxSwift: 46574f70d416b7923c237195939cc488a7fbf3a0
@@ -35,6 +41,6 @@ SPEC CHECKSUMS:
   SVProgressHUD: c404a55d78acbeb7ebb78b76d3faf986475a6994
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
 
-PODFILE CHECKSUM: 45824e72fa60e784f80897c22a9e9d1bb7d210ed
+PODFILE CHECKSUM: b6d6207199fda37738d4d29724f4df33358c7f4c
 
 COCOAPODS: 1.2.0

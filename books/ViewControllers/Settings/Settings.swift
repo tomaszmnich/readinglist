@@ -10,8 +10,9 @@ import UIKit
 import Foundation
 import SVProgressHUD
 import SwiftyJSON
+import CSVImporter
 
-class Settings: UITableViewController, NavBarConfigurer {
+class Settings: UITableViewController, NavBarConfigurer, UIDocumentMenuDelegate, UIDocumentPickerDelegate {
     
     var navBarChangedDelegate: NavBarChangedDelegate!
 
@@ -45,6 +46,8 @@ class Settings: UITableViewController, NavBarConfigurer {
         case (1, 0):
             exportData()
         case (1, 1):
+            requestImport()
+        case (1, 2):
             // "Use Test Data"
             #if DEBUG
                 loadTestData()
@@ -62,7 +65,7 @@ class Settings: UITableViewController, NavBarConfigurer {
         DispatchQueue.main.async {
             // Generate the CSV Document in memory
             let exporter = CsvExporter(csvExport: Book.csvExport)
-            for book in appDelegate.booksStore.get(fetchRequest: appDelegate.booksStore.bookFetchRequest()) {
+            for book in appDelegate.booksStore.getAll() {
                 exporter.addData(data: book)
             }
             
@@ -95,6 +98,42 @@ class Settings: UITableViewController, NavBarConfigurer {
             SVProgressHUD.dismiss()
             self.present(activityViewController, animated: true, completion: nil)
         }
+    }
+    
+    func requestImport() {
+        let documentImport = UIDocumentMenuViewController.init(documentTypes: ["public.comma-separated-values-text"], in: .import)
+        documentImport.delegate = self
+        self.present(documentImport, animated: true)
+    }
+    
+    func documentMenu(_ documentMenu: UIDocumentMenuViewController, didPickDocumentPicker documentPicker: UIDocumentPickerViewController) {
+        documentPicker.delegate = self
+        self.present(documentPicker, animated: true, completion: nil)
+    }
+    
+    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentAt url: URL) {
+        
+        SVProgressHUD.show(withStatus: "Importing")
+        let importer = CSVImporter<(BookMetadata, BookReadingInformation)>(path: url.path)
+        importer.startImportingRecords(structure: {_ in}, recordMapper: BookMetadata.csvImport)
+            .onFinish { readMetadata in
+                var duplicateBookCount = 0
+                for metadata in readMetadata {
+                    if let isbn13 = metadata.0.isbn13, appDelegate.booksStore.isbnExists(isbn13) {
+                        duplicateBookCount += 1
+                    }
+                    else {
+                        appDelegate.booksStore.create(from: metadata.0, readingInformation: metadata.1)
+                    }
+                }
+                SVProgressHUD.dismiss()
+                
+                var statusMessage = "\(readMetadata.count - duplicateBookCount) books imported."
+                if duplicateBookCount != 0 {
+                     statusMessage += " \(duplicateBookCount) books ignored due to duplicate ISBN."
+                }
+                SVProgressHUD.showInfo(withStatus: statusMessage)
+            }
     }
 
 

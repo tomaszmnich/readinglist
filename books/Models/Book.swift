@@ -100,12 +100,10 @@ extension Book {
         CsvColumn<Book>(header: "ISBN-13", cellValue: {$0.isbn13}),
         CsvColumn<Book>(header: "Page Count", cellValue: {$0.pageCount == nil ? nil : String(describing: $0.pageCount!)}),
         CsvColumn<Book>(header: "Description", cellValue: {$0.bookDescription}),
-        CsvColumn<Book>(header: "Read State", cellValue: {$0.readState.description}),
         CsvColumn<Book>(header: "Started Reading", cellValue: {$0.startedReading?.toString(withDateFormat: "yyyy-MM-dd")}),
         CsvColumn<Book>(header: "Finished Reading", cellValue: {$0.finishedReading?.toString(withDateFormat: "yyyy-MM-dd")})
     )
 }
-
 
 
 /// A mutable, non-persistent representation of the metadata fields of a Book object.
@@ -119,6 +117,32 @@ class BookMetadata {
     var bookDescription: String?
     var coverUrl: URL?
     var coverImage: Data?
+    
+    static func csvImport(csvData: [String: String]) -> (BookMetadata, BookReadingInformation) {
+        
+        // TODO: Consider how to report errors in the data
+        let bookMetadata = BookMetadata()
+        bookMetadata.title = csvData["Title"] ?? ""
+        bookMetadata.authorList = csvData["Author"] ?? ""
+        bookMetadata.isbn13 = Isbn13.tryParse(inputString: csvData["ISBN-13"])
+        bookMetadata.pageCount = csvData["Page Count"] == nil ? nil : Int(csvData["Page Count"]!)
+        bookMetadata.bookDescription = csvData["Description"]
+        
+        let startedReading = Date(dateString: csvData["Started Reading"])
+        let finishedReading = Date(dateString: csvData["Finished Reading"])
+
+        let readingInformation: BookReadingInformation
+        if startedReading != nil && finishedReading != nil {
+            readingInformation = BookReadingInformation.finished(started: startedReading!, finished: finishedReading!)
+        }
+        else if startedReading != nil && finishedReading == nil {
+            readingInformation = BookReadingInformation.reading(started: startedReading!)
+        }
+        else {
+            readingInformation = BookReadingInformation.toRead()
+        }
+        return (bookMetadata, readingInformation)
+    }
 }
 
 /// A mutable, non-persistent representation of a the reading status of a Book object.

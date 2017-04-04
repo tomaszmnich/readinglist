@@ -133,6 +133,7 @@
 		49E0C8931CA4945700703A9A /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
 		49E455381E922C5D0034C95C /* books_2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = books_2.xcdatamodel; sourceTree = "<group>"; };
 		49E95D0E1DD7D9EC00C215F8 /* GoogleBooksAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleBooksAPI.swift; sourceTree = "<group>"; };
+		49EEF6861E943691003FF31E /* Reading List.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Reading List.entitlements"; sourceTree = "<group>"; };
 		49F386361E86A03F001F5D75 /* example_books.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = example_books.json; path = TestData/example_books.json; sourceTree = "<group>"; };
 		49F3863B1E86D64A001F5D75 /* example_barcode.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = example_barcode.jpg; path = TestData/example_barcode.jpg; sourceTree = "<group>"; };
 		49FE2ED41D6F675D00F04239 /* SearchOnline.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchOnline.swift; sourceTree = "<group>"; };
@@ -297,6 +298,7 @@
 		495C5D0E1BF1404D00E00C07 /* books */ = {
 			isa = PBXGroup;
 			children = (
+				49EEF6861E943691003FF31E /* Reading List.entitlements */,
 				495EE92B1C175C9A00EBBC6E /* ApiClients */,
 				4925007A1C0B1CFC00C149B5 /* Data */,
 				495879601BF7E6BC00000131 /* Models */,
@@ -473,6 +475,11 @@
 						DevelopmentTeam = YPDEV2E775;
 						LastSwiftMigration = 0800;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.iCloud = {
+								enabled = 1;
+							};
+						};
 					};
 					496270081DBF83840009CC3C = {
 						CreatedOnToolsVersion = 8.0;
@@ -880,6 +887,7 @@
 			baseConfigurationReference = 76A2E2AAC7E93BC8BDDE2157 /* Pods-books.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "books/Reading List.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = books/Info.plist;
@@ -898,6 +906,7 @@
 			baseConfigurationReference = BCE0CE831B8E4C2F1ABC627E /* Pods-books.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "books/Reading List.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer: Andrew Bennet (NSVAF8RDK6)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = books/Info.plist;
