@@ -9,18 +9,26 @@
 import Foundation
 import UIKit
 
-func duplicateBookAlertController(addDuplicateHandler: @escaping (Void) -> Void, goToExistingBookHander: @escaping (Void) -> Void, cancelHandler: @escaping (Void) -> Void) -> UIAlertController {
+func duplicateBookAlertController(_ book: Book, modalControllerToDismiss: UIViewController? = nil, cancel: @escaping (Void) -> Void) -> UIAlertController {
     
     let alert = UIAlertController(title: "Book Already Added", message: "A book with the same ISBN has already been added to your reading list.", preferredStyle: UIAlertControllerStyle.alert)
-    
-    alert.addAction(UIAlertAction(title: "Add Duplicate", style: UIAlertActionStyle.default){ _ in
-        addDuplicateHandler()
-    })
+
+    // "Go To Existing Book" option - dismiss the provided ViewController (if there is one), and then simulate the book selection
     alert.addAction(UIAlertAction(title: "Go To Existing Book", style: UIAlertActionStyle.default){ _ in
-        goToExistingBookHander()
+        if let modalControllerToDismiss = modalControllerToDismiss {
+            modalControllerToDismiss.dismiss(animated: true) {
+                appDelegate.splitViewController.tabbedViewController.simulateBookSelection(book)
+            }
+        }
+        else {
+            appDelegate.splitViewController.tabbedViewController.simulateBookSelection(book)
+        }
     })
-    alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.default){ _ in
-        cancelHandler()
+    
+    // "Cancel" should just envoke the callback
+    alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel){ _ in
+        cancel()
     })
+    
     return alert
 }

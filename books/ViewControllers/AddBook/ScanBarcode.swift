@@ -129,15 +129,9 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         
         // Check that the book hasn't already been added
         if let existingBook = appDelegate.booksStore.get(isbn: avMetadata.stringValue) {
-            let alert = duplicateBookAlertController(addDuplicateHandler: {
-                self.searchForFoundIsbn(isbn: avMetadata.stringValue)
-            }, goToExistingBookHander: {
-                self.dismiss(animated: true){
-                    appDelegate.splitViewController.tabbedViewController.simulateBookSelection(existingBook)
-                }
-            }, cancelHandler: {
+            let alert = duplicateBookAlertController(existingBook, modalControllerToDismiss: self) {
                 self.session?.startRunning()
-            })
+            }
             
             self.present(alert, animated: true)
         }

@@ -58,7 +58,7 @@ class BooksStore {
     }
     
     /**
-     Returns a book with the specified ISBN. If there are more than, it is not specified which will be returned.
+     Returns a book with the specified ISBN, if one exists.
     */
     func get(isbn: String) -> Book? {
         let fetchRequest = NSFetchRequest<Book>(entityName: self.bookEntityName)

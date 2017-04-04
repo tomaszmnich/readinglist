@@ -96,26 +96,20 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
         // On cell selection, go to the next page
         tableView.rx.modelSelected(SearchResultViewModel.self).subscribe(onNext: { value in
             
-            // Display an alert if the book already exists in the store
+            // Duplicate check
             if let isbn = value.searchResult.isbn13, let existingBook = appDelegate.booksStore.get(isbn: isbn) {
                 
-                let alert = duplicateBookAlertController(addDuplicateHandler: {
-                    self.segueWhenCoverDownloaded(value.searchResult, secondsWaited: 0)
-                }, goToExistingBookHander: {
-                    self.dismiss(animated: true) {
-                        appDelegate.splitViewController.tabbedViewController.simulateBookSelection(existingBook)
-                    }
-                }, cancelHandler: {
+                let alert = duplicateBookAlertController(existingBook, modalControllerToDismiss: self) {
                     // Deselect the row after dismissing the alert
                     if let selectedRow = self.tableView.indexPathForSelectedRow {
                         self.tableView.deselectRow(at: selectedRow, animated: true)
                     }
-                })
+                }
                 self.present(alert, animated: true)
+                return
             }
-            else {
-                self.segueWhenCoverDownloaded(value.searchResult, secondsWaited: 0)
-            }
+            
+            self.segueWhenCoverDownloaded(value.searchResult, secondsWaited: 0)
         })
         .addDisposableTo(disposeBag)
     }
