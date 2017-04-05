@@ -192,13 +192,19 @@ class BooksStore {
      Deletes **all** book objects from the persistent store.
     */
     func deleteAllData() {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: bookEntityName)
-        fetchRequest.returnsObjectsAsFaults = false
+        let deleteRequest = NSBatchDeleteRequest(fetchRequest: bookFetchRequest() as! NSFetchRequest<NSFetchRequestResult>)
+        deleteRequest.resultType = .resultTypeObjectIDs
         
-        let results = try! coreDataStack.managedObjectContext.fetch(fetchRequest)
-        for managedObject in results {
-            delete(managedObject as! Book)
+        do {
+            let result = try coreDataStack.managedObjectContext.execute(deleteRequest) as? NSBatchDeleteResult
+            save()
+            
+            // Notify the application that the objects in memory are stale and need to be refreshed
+            let objectIDArray = result?.result as? [NSManagedObjectID]
+            NSManagedObjectContext.mergeChanges(fromRemoteContextSave: [NSDeletedObjectsKey: objectIDArray as Any], into: [coreDataStack.managedObjectContext])
         }
-        save()
+        catch {
+            print("Error deleting data: \(error)")
+        }
     }
 }

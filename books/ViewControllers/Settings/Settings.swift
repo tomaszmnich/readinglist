@@ -49,6 +49,8 @@ class Settings: UITableViewController, NavBarConfigurer, UIDocumentMenuDelegate,
         case (1, 1):
             requestImport()
         case (1, 2):
+            deleteAllData()
+        case (1, 3):
             // "Use Test Data"
             #if DEBUG
                 loadTestData()
@@ -56,6 +58,29 @@ class Settings: UITableViewController, NavBarConfigurer, UIDocumentMenuDelegate,
         default:
             break
         }
+    }
+    
+    func deleteAllData() {
+        
+        // The CONFIRM DELETE action:
+        let confirmDelete = UIAlertController(title: "Final Warning", message: "This action is irreversible. Are you sure you want to continue?", preferredStyle: .alert)
+        confirmDelete.addAction(UIAlertAction(title: "Delete", style: .destructive) { _ in
+            appDelegate.booksStore.deleteAllData()
+            // Relayout the tables. Their empty data sets sometimes are in the wrong place after deleting everything.
+            // TODO: look into making this work better
+            appDelegate.splitViewController.tabbedViewController.readingTabView.layoutSubviews()
+            appDelegate.splitViewController.tabbedViewController.finishedTabView.layoutSubviews()
+        })
+        confirmDelete.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        
+        // The initial WARNING action
+        let areYouSure = UIAlertController(title: "Warning", message: "This will delete all books saved in the application. Are you sure you want to continue?", preferredStyle: .alert)
+        areYouSure.addAction(UIAlertAction(title: "Delete", style: .destructive) { _ in
+            self.present(confirmDelete, animated: true)
+        })
+        areYouSure.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        
+        self.present(areYouSure, animated: true)
     }
     
     func exportData() {
