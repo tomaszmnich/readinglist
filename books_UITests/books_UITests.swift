@@ -27,7 +27,7 @@ class ReadingListApplication : XCUIApplication {
     
     func addTestData() {
         clickTab(.settings)
-        tables.cells.staticTexts["Use Test Data"].tap()
+        tables.cells.staticTexts["Import Test Data"].tap()
     }
     
     func clickAddButton(addMethod: addMethod) {
@@ -38,18 +38,6 @@ class ReadingListApplication : XCUIApplication {
     var topNavBar: XCUIElement {
         get {
             return navigationBars.element(boundBy: UInt(navigationBars.count - 1))
-        }
-    }
-}
-
-extension XCUIElement {
-    func forceTap() {
-        if self.isHittable {
-            self.tap()
-        }
-        else {
-            let coordinate = self.coordinate(withNormalizedOffset: CGVector(dx:0.0, dy:0.0))
-            coordinate.tap()
         }
     }
 }
