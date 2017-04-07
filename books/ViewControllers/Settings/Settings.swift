@@ -53,7 +53,7 @@ class Settings: UITableViewController, NavBarConfigurer, UIDocumentMenuDelegate,
         case (1, 3):
             // "Use Test Data"
             #if DEBUG
-                loadTestData()
+                //loadTestData()
             #endif
         default:
             break
@@ -167,42 +167,4 @@ class Settings: UITableViewController, NavBarConfigurer, UIDocumentMenuDelegate,
             }
         }
     }
-    
-    
-    
-    #if DEBUG
-    func loadTestData() {
-        
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        
-        let testJsonData = JSON(data: NSData.fromMainBundle(resource: "example_books", type: "json") as Data)
-        appDelegate.booksStore.deleteAllData()
-        
-        let requestDispatchGroup = DispatchGroup()
-        var sortIndex = -1
-        
-        for testBook in testJsonData.array! {
-            let parsedData = BookImport.fromJson(testBook)
-            
-            if parsedData.1.readState == .toRead {
-                sortIndex += 1
-            }
-            let thisSort = sortIndex
-            
-            requestDispatchGroup.enter()
-            DispatchQueue.global(qos: .userInitiated).async {
-                GoogleBooksAPI.supplementMetadataWithImage(parsedData.0) {
-                    DispatchQueue.main.sync {
-                        appDelegate.booksStore.create(from: parsedData.0, readingInformation: parsedData.1, bookSort: thisSort)
-                        requestDispatchGroup.leave()
-                    }
-                }
-            }
-        }
-        
-        requestDispatchGroup.notify(queue: .main) {
-            UIApplication.shared.isNetworkActivityIndicatorVisible = false
-        }
-    }
-    #endif
 }

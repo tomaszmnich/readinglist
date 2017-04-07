@@ -23,7 +23,7 @@ class CreateBook: BookMetadataForm {
             
             // Set the field values
             titleField = initialBookMetadata.title
-            authorList = initialBookMetadata.authorList
+            authorList = initialBookMetadata.authors
             descriptionField = initialBookMetadata.bookDescription
             if let data = initialBookMetadata.coverImage {
                 image = UIImage(data: data)
@@ -45,9 +45,7 @@ class CreateBook: BookMetadataForm {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let createReadState = segue.destination as? CreateReadState {
             
-            let finalBookMetadata = initialBookMetadata ?? BookMetadata()
-            finalBookMetadata.title = titleField!
-            finalBookMetadata.authorList = authorList
+            let finalBookMetadata = initialBookMetadata ?? BookMetadata(title: titleField!, authors: authorList!)
             finalBookMetadata.bookDescription = descriptionField
             finalBookMetadata.coverImage = image == nil ? nil : UIImageJPEGRepresentation(image!, 0.7)
             

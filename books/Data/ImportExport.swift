@@ -13,13 +13,8 @@ import SwiftyJSON
 class BookImport {
     
     static func fromJson(_ json: JSON) -> (BookMetadata, BookReadingInformation) {
-        let bookMetadata = BookMetadata()
-        bookMetadata.title = json["title"].stringValue
-        bookMetadata.authorList = json["author"].stringValue
+        let bookMetadata = BookMetadata(title: json["title"].stringValue, authors: json["author"].stringValue)
         bookMetadata.bookDescription = json["description"].string
-        if let coverUrlString = json["coverUrl"].string {
-            bookMetadata.coverUrl = URL(string: coverUrlString)
-        }
         
         var startedWhen: Date? = nil, finishedWhen: Date? = nil
         if let startedString = json["started"].string {

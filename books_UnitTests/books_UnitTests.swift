@@ -39,9 +39,7 @@ class books_UnitTests: XCTestCase {
     /// Gets a fully populated BookMetadata object. Increments the ISBN by 1 each time.
     private func getTestBookMetadata() -> BookMetadata {
         currentTestBook += 1
-        let testBookMetadata = BookMetadata()
-        testBookMetadata.title = "Test Book Title \(currentTestBook)"
-        testBookMetadata.authorList = "Test Book Authors \(currentTestBook)"
+        let testBookMetadata = BookMetadata(googleBooksId: "ABC123\(currentTestBook)", title: "Test Book Title \(currentTestBook)", authors: "Test Book Authors \(currentTestBook)")
         testBookMetadata.bookDescription = "Test Book Description \(currentTestBook)"
         testBookMetadata.isbn13 = "1234567890\(String(format: "%03d", currentTestBook))"
         testBookMetadata.pageCount = 100 + currentTestBook
@@ -58,7 +56,7 @@ class books_UnitTests: XCTestCase {
         
         // Test that the metadata is all the same
         XCTAssertEqual(testBookMetadata.title, book.title)
-        XCTAssertEqual(testBookMetadata.authorList, book.authorList)
+        XCTAssertEqual(testBookMetadata.authors, book.authorList)
         XCTAssertEqual(testBookMetadata.bookDescription, book.bookDescription)
         XCTAssertEqual(testBookMetadata.isbn13, book.isbn13)
         XCTAssertEqual(testBookMetadata.pageCount, book.pageCount as? Int)

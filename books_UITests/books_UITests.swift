@@ -82,7 +82,7 @@ class books_UITests: XCTestCase {
         XCTAssertEqual(app.tables.cells.count, UInt(initialNumberOfCells + 1))
     }
     
-    func testEditBook() {
+    /*func testEditBook() {
         let app = ReadingListApplication()
         
         app.clickTab(.toRead)
@@ -92,7 +92,7 @@ class books_UITests: XCTestCase {
         app.textFields.element(boundBy: 0).tap()
         app.typeText("changed!")
         app.topNavBar.buttons["Done"].tap()
-    }
+    }*/
     
     func testDeleteBook() {
         let app = ReadingListApplication()

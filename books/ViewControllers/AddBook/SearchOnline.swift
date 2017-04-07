@@ -62,7 +62,7 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
                 searchText.isEmptyOrWhitespace ? Observable.just((searchText, Result.success([]))) :
                     
                     // Otherwise, search on the Google API
-                    GoogleBooksAPI.search(searchText)
+                    GoogleBooksAPI.searchText(searchText)
                         .observeOn(MainScheduler.instance)
                         .trackActivity(self.indicator)
                         .map { (searchText, $0) }
@@ -94,24 +94,9 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
             .addDisposableTo(disposeBag)
         
         // On cell selection, go to the next page
-        tableView.rx.modelSelected(SearchResultViewModel.self).subscribe(onNext: { value in
-            
-            // Duplicate check
-            if let isbn = value.searchResult.isbn13, let existingBook = appDelegate.booksStore.get(isbn: isbn) {
-                
-                let alert = duplicateBookAlertController(existingBook, modalControllerToDismiss: self) {
-                    // Deselect the row after dismissing the alert
-                    if let selectedRow = self.tableView.indexPathForSelectedRow {
-                        self.tableView.deselectRow(at: selectedRow, animated: true)
-                    }
-                }
-                self.present(alert, animated: true)
-                return
-            }
-            
-            self.segueWhenCoverDownloaded(value.searchResult, secondsWaited: 0)
-        })
-        .addDisposableTo(disposeBag)
+        tableView.rx.modelSelected(SearchResultViewModel.self)
+            .subscribe(onNext: onModelSelected)
+            .addDisposableTo(disposeBag)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -123,19 +108,35 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
         }
     }
     
-    func segueWhenCoverDownloaded(_ bookMetadata: BookMetadata, secondsWaited: Int) {
-        // TODO: This should be re-written in reactive style...
-        // If we have not yet downloaded the cover image, and we have not waited more than 6 seconds
-        // This is not perfect - the first request may have failed and we are waiting for nothing...
-        if bookMetadata.coverUrl != nil && bookMetadata.coverImage == nil && secondsWaited <= 6 {
-            SVProgressHUD.show(withStatus: "Loading...")
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
-                self.segueWhenCoverDownloaded(bookMetadata, secondsWaited: secondsWaited + 1)
+    func onModelSelected(_ model: SearchResultViewModel) {
+        // Duplicate check
+        if let isbn = model.searchResult.isbn13, let existingBook = appDelegate.booksStore.get(isbn: isbn) {
+            
+            let alert = duplicateBookAlertController(existingBook, modalControllerToDismiss: self) {
+                // Deselect the row after dismissing the alert
+                if let selectedRow = self.tableView.indexPathForSelectedRow {
+                    self.tableView.deselectRow(at: selectedRow, animated: true)
+                }
             }
+            self.present(alert, animated: true)
         }
         else {
-            SVProgressHUD.dismiss()
-            self.performSegue(withIdentifier: "searchResultSelected", sender: bookMetadata)
+            self.fetchAndSegue(searchResult: model.searchResult)
+        }
+    }
+
+    func fetchAndSegue(searchResult: GoogleBooksSearchResult) {
+        SVProgressHUD.show(withStatus: "Loading...")
+        DispatchQueue.global(qos: .userInitiated).async {
+            GoogleBooksAPI.fetch(googleBooksId: searchResult.id) { result in
+                SVProgressHUD.dismiss()
+                if result.isSuccess {
+                    self.performSegue(withIdentifier: "searchResultSelected", sender: result.successValue!)
+                }
+                else {
+                    SVProgressHUD.showError(withStatus: "ERROR")
+                }
+            }
         }
     }
     
@@ -237,30 +238,27 @@ class SearchResultCell : UITableViewCell {
 /// The ViewModel corresponding to the SearchResultCell view
 class SearchResultViewModel {
     
-    let searchResult: BookMetadata
+    let searchResult: GoogleBooksSearchResult
     let title: String
     let author: String?
     let coverImage: Driver<UIImage?>
     
-    init(searchResult: BookMetadata) {
+    init(searchResult: GoogleBooksSearchResult) {
         self.searchResult = searchResult
         self.title = searchResult.title
-        self.author = searchResult.authorList
+        self.author = searchResult.authors
         
         // If we have a cover URL, we should use that to drive the cell image,
         // and also store the data in the search result.
-        if let coverURL = searchResult.coverUrl {
+        if let coverURL = searchResult.thumbnailCoverUrl {
             
             // Observe the the web request on a background thread
             coverImage = URLSession.shared.rx.data(request: URLRequest(url: coverURL))
-                .observeOn(ConcurrentDispatchQueueScheduler(qos: .background))
+                .observeOn(ConcurrentDispatchQueueScheduler(qos: .userInitiated))
                 .map(Optional.init)
                 .startWith(nil)
                 // Observe the results of web request on the main thread to update the search result cover image
                 .observeOn(MainScheduler.instance)
-                .do(onNext: {
-                    searchResult.coverImage = $0
-                })
                 .map(UIImage.init)
                 .asDriver(onErrorJustReturn: #imageLiteral(resourceName: "CoverPlaceholder"))
         }

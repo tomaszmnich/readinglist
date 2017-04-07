@@ -140,6 +140,26 @@ extension JSON {
     }
 }
 
+extension URL {
+    init?(optionalString: String?) {
+        guard let string = optionalString else { return nil }
+        self.init(string: string)
+    }
+    
+    func toHttps() -> URL {
+        var urlComponents = URLComponents.init(url: self, resolvingAgainstBaseURL: false)!
+        urlComponents.scheme = "https"
+        return urlComponents.url!
+    }
+}
+
+extension URLComponents {
+    init?(optionalString: String?) {
+        guard let string = optionalString else { return nil }
+        self.init(string: string)
+    }
+}
+
 extension String {
     /// Return whether the string contains any characters which are not whitespace.
     var isEmptyOrWhitespace: Bool {

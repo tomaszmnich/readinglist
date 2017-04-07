@@ -145,15 +145,15 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         
         // We've found an ISBN-13. Let's search for it online in a background thread.
         DispatchQueue.global(qos: .background).async {
-            GoogleBooksAPI.get(isbn: isbn) { result, error in
+            GoogleBooksAPI.fetchIsbn(isbn) { result in
                 
                 // Jump back to the main thread to process the result
                 DispatchQueue.main.async {
                     SVProgressHUD.dismiss()
                     
-                    guard error == nil else { self.onSearchError(error!); return }
+                    guard result.isSuccess else { self.onSearchError(result.failureError!); return }
                     
-                    if let bookMetadata = result {
+                    if let bookMetadata = result.successValue {
                         self.foundMetadata = bookMetadata
                         self.performSegue(withIdentifier: "barcodeScanResult", sender: self)
                     }

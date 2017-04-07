@@ -21,7 +21,7 @@ class BookTableViewCell: UITableViewCell, ConfigurableCell {
     
     func configureFrom(_ book: BookMetadata) {
         titleLabel.text = book.title
-        authorsLabel.text = book.authorList
+        authorsLabel.text = book.authors
         bookCover.image = UIImage(optionalData: book.coverImage)
     }
     

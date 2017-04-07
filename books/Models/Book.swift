@@ -56,7 +56,7 @@ extension Book {
 
     func populate(from metadata: BookMetadata) {
         title = metadata.title
-        authorList = metadata.authorList
+        authorList = metadata.authors
         isbn13 = metadata.isbn13
         pageCount = metadata.pageCount as NSNumber?
         publishedDate = metadata.publishedDate
@@ -109,21 +109,36 @@ extension Book {
 /// A mutable, non-persistent representation of the metadata fields of a Book object.
 /// Useful for maintaining in-creation books, or books being edited.
 class BookMetadata {
-    var title: String!
-    var isbn13: String?
-    var authorList: String?
+    let googleBooksId: String?
+    var title: String
+    var authors: String
     var pageCount: Int?
     var publishedDate: Date?
     var bookDescription: String?
-    var coverUrl: URL?
+    var isbn13: String?
     var coverImage: Data?
+    
+    init(googleBooksId: String? = nil, title: String, authors: String) {
+        self.googleBooksId = googleBooksId
+        self.title = title
+        self.authors = authors
+    }
+    
+    init(book: Book) {
+        self.title = book.title
+        self.authors = book.authorList!
+        self.bookDescription = book.bookDescription
+        self.pageCount = book.pageCount as? Int
+        self.publishedDate = book.publishedDate
+        self.coverImage = book.coverImage
+        self.isbn13 = book.isbn13
+        self.googleBooksId = nil
+    }
     
     static func csvImport(csvData: [String: String]) -> (BookMetadata, BookReadingInformation) {
         
         // TODO: Consider how to report errors in the data
-        let bookMetadata = BookMetadata()
-        bookMetadata.title = csvData["Title"] ?? ""
-        bookMetadata.authorList = csvData["Author"] ?? ""
+        let bookMetadata = BookMetadata(title: csvData["Title"] ?? "", authors: csvData["Author"] ?? "")
         bookMetadata.isbn13 = Isbn13.tryParse(inputString: csvData["ISBN-13"])
         bookMetadata.pageCount = csvData["Page Count"] == nil ? nil : Int(csvData["Page Count"]!)
         bookMetadata.bookDescription = csvData["Description"]
