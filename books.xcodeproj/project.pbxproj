@@ -56,6 +56,7 @@
 		49E95D0F1DD7D9EC00C215F8 /* GoogleBooksAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E95D0E1DD7D9EC00C215F8 /* GoogleBooksAPI.swift */; };
 		49F386391E86A12B001F5D75 /* example_books.json in Resources */ = {isa = PBXBuildFile; fileRef = 49F386361E86A03F001F5D75 /* example_books.json */; };
 		49F3863C1E86D64A001F5D75 /* example_barcode.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 49F3863B1E86D64A001F5D75 /* example_barcode.jpg */; };
+		49F6AC651E98F36B000B7D17 /* ImportDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F6AC641E98F36B000B7D17 /* ImportDataViewController.swift */; };
 		49FE2ED51D6F675D00F04239 /* SearchOnline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49FE2ED41D6F675D00F04239 /* SearchOnline.swift */; };
 		7708F3CDFF22D3CFDB52BEAD /* Pods_books_UITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8992DFD9484D235BEDF65D56 /* Pods_books_UITests.framework */; };
 		E1FF6CADECF836FE7A0C7174 /* Pods_books_UnitTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 297D92A68CB2906FDBD31ED9 /* Pods_books_UnitTests.framework */; };
@@ -140,6 +141,7 @@
 		49EEF6861E943691003FF31E /* Reading List.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Reading List.entitlements"; sourceTree = "<group>"; };
 		49F386361E86A03F001F5D75 /* example_books.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = example_books.json; path = TestData/example_books.json; sourceTree = "<group>"; };
 		49F3863B1E86D64A001F5D75 /* example_barcode.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = example_barcode.jpg; path = TestData/example_barcode.jpg; sourceTree = "<group>"; };
+		49F6AC641E98F36B000B7D17 /* ImportDataViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImportDataViewController.swift; sourceTree = "<group>"; };
 		49FE2ED41D6F675D00F04239 /* SearchOnline.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchOnline.swift; sourceTree = "<group>"; };
 		76A2E2AAC7E93BC8BDDE2157 /* Pods-books.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-books.debug.xcconfig"; path = "Pods/Target Support Files/Pods-books/Pods-books.debug.xcconfig"; sourceTree = "<group>"; };
 		8992DFD9484D235BEDF65D56 /* Pods_books_UITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_books_UITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -265,6 +267,7 @@
 			children = (
 				494D96E31E759D8900299752 /* AttributionsViewController.swift */,
 				4943DB781DBD5104004CAF30 /* Settings.swift */,
+				49F6AC641E98F36B000B7D17 /* ImportDataViewController.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -723,6 +726,7 @@
 				49E95D0F1DD7D9EC00C215F8 /* GoogleBooksAPI.swift in Sources */,
 				4905D85E1C135AB500F57B3C /* books.xcdatamodeld in Sources */,
 				493056431DB1561C0086FDAD /* TableUpdater.swift in Sources */,
+				49F6AC651E98F36B000B7D17 /* ImportDataViewController.swift in Sources */,
 				495879651BF7E76200000131 /* CoreDataStack.swift in Sources */,
 				499470681DB40D22008CB06E /* TabbedViewController.swift in Sources */,
 				4973C7A31E905A04001CFABC /* Isbn13.swift in Sources */,

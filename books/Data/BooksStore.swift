@@ -70,6 +70,9 @@ class BooksStore {
      Returns the first found book with matching GoogleBooks ID or ISBN
     */
     func getIfExists(googleBooksId: String? = nil, isbn: String?) -> Book? {
+        // if both are nil, leave early
+        guard googleBooksId != nil || isbn != nil else { return nil }
+        
         let fetchRequest = NSFetchRequest<Book>(entityName: self.bookEntityName)
         fetchRequest.fetchLimit = 1
         
@@ -79,6 +82,13 @@ class BooksStore {
         fetchRequest.predicate = NSPredicate.Or([googleBooksPredicate, isbnPredicate])
         let books = try? coreDataStack.managedObjectContext.fetch(fetchRequest)
         return books?.first
+    }
+    
+    /**
+     Returns the number of books in the BooksStore
+    */
+    func bookCount() -> Int {
+        return (try? coreDataStack.managedObjectContext.count(for: bookFetchRequest())) ?? 0
     }
     
     /**

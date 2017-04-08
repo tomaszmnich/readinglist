@@ -9,10 +9,8 @@
 import UIKit
 import Foundation
 import SVProgressHUD
-import SwiftyJSON
-import CSVImporter
 
-class Settings: UITableViewController, NavBarConfigurer, UIDocumentMenuDelegate, UIDocumentPickerDelegate {
+class Settings: UITableViewController, NavBarConfigurer {
     
     var navBarChangedDelegate: NavBarChangedDelegate!
     
@@ -46,8 +44,6 @@ class Settings: UITableViewController, NavBarConfigurer, UIDocumentMenuDelegate,
             
         case (1, 0):
             exportData()
-        case (1, 1):
-            requestImport()
         case (1, 2):
             deleteAllData()
         case (1, 3):
@@ -126,44 +122,6 @@ class Settings: UITableViewController, NavBarConfigurer, UIDocumentMenuDelegate,
             DispatchQueue.main.async {
                 SVProgressHUD.dismiss()
                 self.present(activityViewController, animated: true, completion: nil)
-            }
-        }
-    }
-    
-    func requestImport() {
-        let documentImport = UIDocumentMenuViewController.init(documentTypes: ["public.comma-separated-values-text"], in: .import)
-        documentImport.delegate = self
-        self.present(documentImport, animated: true)
-    }
-    
-    func documentMenu(_ documentMenu: UIDocumentMenuViewController, didPickDocumentPicker documentPicker: UIDocumentPickerViewController) {
-        documentPicker.delegate = self
-        self.present(documentPicker, animated: true, completion: nil)
-    }
-    
-    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentAt url: URL) {
-        SVProgressHUD.show(withStatus: "Importing")
-        
-        DispatchQueue.global(qos: .userInitiated).async {
-            let importer = CSVImporter<(BookMetadata, BookReadingInformation)>(path: url.path)
-            let importResults = importer.importRecords(structure: {_ in}, recordMapper: BookMetadata.csvImport)
-            
-            DispatchQueue.main.async {
-                var duplicateBookCount = 0
-                for importResult in importResults {
-                    if let isbn13 = importResult.0.isbn13, appDelegate.booksStore.getIfExists(isbn: isbn13) != nil {
-                        duplicateBookCount += 1
-                    }
-                    else {
-                        appDelegate.booksStore.create(from: importResult.0, readingInformation: importResult.1)
-                    }
-                }
-                
-                var statusMessage = "\(importResults.count - duplicateBookCount) books imported."
-                if duplicateBookCount != 0 {
-                    statusMessage += " \(duplicateBookCount) books ignored due to duplicate ISBN."
-                }
-                SVProgressHUD.showInfo(withStatus: statusMessage)
             }
         }
     }

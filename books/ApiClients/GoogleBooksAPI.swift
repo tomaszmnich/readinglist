@@ -178,9 +178,9 @@ class GoogleBooksAPI {
             var result = GoogleBooksSearchResult(id: id, title: title, authors: singleAuthorListString)
             
             result.thumbnailCoverUrl = URL(optionalString: item["volumeInfo","imageLinks","thumbnail"].string)?.toHttps()
-            /*result.isbn13 = item["volumeInfo","industryIdentifiers"].array?.first(where: { json in
+            result.isbn13 = item["volumeInfo","industryIdentifiers"].array?.first(where: { json in
                 return json["type"].stringValue == "ISBN_13"
-            })?["identifier"].stringValue*/
+            })?["identifier"].stringValue
             
             return result
         }

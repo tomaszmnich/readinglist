@@ -89,7 +89,6 @@ class CsvExporter<TData> {
     }
     
     func write(to fileURL: URL) throws {
-        print(document)
         try document.write(to: fileURL, atomically: true, encoding: .utf8)
     }
 }
