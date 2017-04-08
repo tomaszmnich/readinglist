@@ -39,6 +39,7 @@ class ImportDataViewController : FormViewController, UIDocumentPickerDelegate, U
     func requestImport(cell: ButtonCellOf<String>, row: ButtonRow) {
         let documentImport = UIDocumentMenuViewController.init(documentTypes: ["public.comma-separated-values-text"], in: .import)
         documentImport.delegate = self
+        // TODO: This fails on iPad
         self.present(documentImport, animated: true)
     }
     

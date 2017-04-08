@@ -119,6 +119,14 @@ class Settings: UITableViewController, NavBarConfigurer {
                 UIActivityType.postToTencentWeibo, UIActivityType.postToTwitter, UIActivityType.postToFacebook, UIActivityType.openInIBooks
             ]
             
+            // TODO: this comes out at the wrong place
+            if let popPresenter = activityViewController.popoverPresentationController {
+                let frame = self.tableView.rectForRow(at: IndexPath(item: 0, section: 1))
+                let cell = self.tableView.cellForRow(at: IndexPath(item: 0, section: 1))
+                popPresenter.sourceRect = self.tableView.convert(frame, to: self.view)
+                popPresenter.sourceView = cell
+            }
+            
             DispatchQueue.main.async {
                 SVProgressHUD.dismiss()
                 self.present(activityViewController, animated: true, completion: nil)
