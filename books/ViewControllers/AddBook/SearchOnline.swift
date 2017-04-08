@@ -25,14 +25,12 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
     let disposeBag = DisposeBag()
     let indicator = ActivityIndicator()
     
-    let defaultEmptyDataSet = DefaultEmptyDataSet()
-    let errorEmptyDataSet = ErrorEmptyDataSet()
-    let noResultsEmptyDataSet = NoResultsEmptyDataSet()
+    let emptyDataSet = EmptyDataSet()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.emptyDataSetSource = defaultEmptyDataSet
+        tableView.emptyDataSetSource = emptyDataSet
         
         // The search bar delegate is used only to dismiss the keyboard when Done is pressed
         searchBar.returnKeyType = .done
@@ -56,7 +54,7 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
             .orEmpty
             .throttle(1, scheduler: MainScheduler.instance)
             .distinctUntilChanged{$0.trimming() == $1.trimming()}
-            .observeOn(ConcurrentDispatchQueueScheduler(qos: .background))
+            .observeOn(ConcurrentDispatchQueueScheduler(qos: .userInteractive))
             .flatMapLatest { searchText in
                 // Blank search terms produce empty array...
                 searchText.isEmptyOrWhitespace ? Observable.just((searchText, Result.success([]))) :
@@ -68,18 +66,18 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
                         .map { (searchText, $0) }
             }
         
-        // Map the sucess/failure state to the hidden property of the error label
+        // Map the sucess/failure state to the reason property on the empty data set
         searchTextAndResults
             .subscribe(onNext: {
                 if $0.0.isEmptyOrWhitespace {
-                    self.tableView.emptyDataSetSource = self.defaultEmptyDataSet
+                    self.emptyDataSet.reason = .noSearch
                 }
                 else if $0.1.isSuccess {
-                    self.tableView.emptyDataSetSource = self.noResultsEmptyDataSet
+                    self.emptyDataSet.reason = .noResults
                 }
                 else {
                     NSLog("Error searching online: \($0.1.failureError.debugDescription)")
-                    self.tableView.emptyDataSetSource = self.errorEmptyDataSet
+                    self.emptyDataSet.reason = .error
                 }
             })
             .addDisposableTo(disposeBag)
@@ -159,47 +157,40 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
     /** 
      Empty Data Set for when no searches have yet been performed
     */
-    class DefaultEmptyDataSet : NSObject, DZNEmptyDataSetSource {
+    class EmptyDataSet : NSObject, DZNEmptyDataSetSource {
+        
+        enum emptySetReason {
+            case noSearch
+            case noResults
+            case error
+        }
+        
+        var reason = emptySetReason.noSearch
+        
         func title(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
-            return NSAttributedString(string: "🔍 Search Online", withFont: UIFont.systemFont(ofSize: 36, weight: UIFontWeightThin))
+            let reasonString: String
+            switch reason {
+            case .noSearch:
+                reasonString = "🔍 Search Online"
+            case .noResults:
+                reasonString = "😞 No Results"
+            case .error:
+                reasonString = "⚠️ Error!"
+            }
+            return NSAttributedString(string: reasonString, withFont: UIFont.systemFont(ofSize: 36, weight: UIFontWeightThin))
         }
         
         func description(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
-            return NSAttributedString(string: "Type anything to start searching: a title, an author, an ISBN - or a mixture!", withFont: UIFont.preferredFont(forTextStyle: .body))
-        }
-        
-        func verticalOffset(forEmptyDataSet scrollView: UIScrollView!) -> CGFloat {
-            return -scrollView.frame.size.height/4
-        }
-    }
-    
-    /**
-     Empty Data Set for when a search was performed, but it returned no results
-    */
-    class NoResultsEmptyDataSet : NSObject, DZNEmptyDataSetSource {
-        func title(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
-            return NSAttributedString(string: "😞 No Results", withFont: UIFont.systemFont(ofSize: 36, weight: UIFontWeightThin))
-        }
-        
-        func description(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
-            return NSAttributedString(string: "We didn't find anything online which matched. Try changing your search string.", withFont: UIFont.preferredFont(forTextStyle: .body))
-        }
-        
-        func verticalOffset(forEmptyDataSet scrollView: UIScrollView!) -> CGFloat {
-            return -scrollView.frame.size.height/4
-        }
-    }
-    
-    /**
-     Empty Data Set for when an error occurred.
-    */
-    class ErrorEmptyDataSet : NSObject, DZNEmptyDataSetSource {
-        func title(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
-            return NSAttributedString(string: "⚠️ Error!", withFont: UIFont.systemFont(ofSize: 36, weight: UIFontWeightThin))
-        }
-        
-        func description(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
-            return NSAttributedString(string: "Something went wrong! It might be your Internet connection...", withFont: UIFont.preferredFont(forTextStyle: .body))
+            let descriptionString: String
+            switch reason {
+            case .noSearch:
+                descriptionString = "Type anything to start searching: a title, an author, an ISBN - or a mixture!"
+            case .noResults:
+                descriptionString =  "We didn't find anything online which matched. Try changing your search string."
+            case .error:
+                descriptionString = "Something went wrong! It might be your Internet connection..."
+            }
+            return NSAttributedString(string: descriptionString, withFont: UIFont.preferredFont(forTextStyle: .body))
         }
         
         func verticalOffset(forEmptyDataSet scrollView: UIScrollView!) -> CGFloat {
@@ -240,31 +231,26 @@ class SearchResultViewModel {
     
     let searchResult: GoogleBooksSearchResult
     let title: String
-    let author: String?
+    let author: String
     let coverImage: Driver<UIImage?>
     
     init(searchResult: GoogleBooksSearchResult) {
         self.searchResult = searchResult
         self.title = searchResult.title
         self.author = searchResult.authors
+
+        // If we have a cover URL, we should use that to drive the cell image
+        guard let coverURL = searchResult.thumbnailCoverUrl else { coverImage = Driver.just(#imageLiteral(resourceName: "CoverPlaceholder")); return }
         
-        // If we have a cover URL, we should use that to drive the cell image,
-        // and also store the data in the search result.
-        if let coverURL = searchResult.thumbnailCoverUrl {
-            
-            // Observe the the web request on a background thread
-            coverImage = URLSession.shared.rx.data(request: URLRequest(url: coverURL))
-                .observeOn(ConcurrentDispatchQueueScheduler(qos: .userInitiated))
-                .map(Optional.init)
-                .startWith(nil)
-                // Observe the results of web request on the main thread to update the search result cover image
-                .observeOn(MainScheduler.instance)
-                .map(UIImage.init)
-                .asDriver(onErrorJustReturn: #imageLiteral(resourceName: "CoverPlaceholder"))
-        }
-        else {
-            coverImage = Driver.just(#imageLiteral(resourceName: "CoverPlaceholder"))
-        }
+        // Observe the the web request on a background thread
+        coverImage = URLSession.shared.rx.data(request: URLRequest(url: coverURL))
+            .observeOn(ConcurrentDispatchQueueScheduler(qos: .userInteractive))
+            .map(Optional.init)
+            .startWith(nil)
+            // Observe the results of web request on the main thread to update the search result cover image
+            .observeOn(MainScheduler.instance)
+            .map(UIImage.init)
+            .asDriver(onErrorJustReturn: #imageLiteral(resourceName: "CoverPlaceholder"))
     }
 }
 
