@@ -30,7 +30,7 @@ class ImportDataViewController : FormViewController, UIDocumentPickerDelegate, U
         
         let selectDocumentSection = Section(footer: "Import books from a CSV file.")
         selectDocumentSection.append(ButtonRow(selectDocumentKey) {
-            $0.title = "Select Document"
+            $0.title = "Import Books"
             $0.onCellSelection(self.requestImport)
         })
         form.append(selectDocumentSection)
@@ -39,7 +39,11 @@ class ImportDataViewController : FormViewController, UIDocumentPickerDelegate, U
     func requestImport(cell: ButtonCellOf<String>, row: ButtonRow) {
         let documentImport = UIDocumentMenuViewController.init(documentTypes: ["public.comma-separated-values-text"], in: .import)
         documentImport.delegate = self
-        // TODO: This fails on iPad
+        if let popPresenter = documentImport.popoverPresentationController {
+            popPresenter.sourceRect = cell.contentView.bounds
+            popPresenter.sourceView = cell.contentView
+            popPresenter.permittedArrowDirections = .up
+        }
         self.present(documentImport, animated: true)
     }
     
