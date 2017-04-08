@@ -1,0 +1,113 @@
+{
+    "kind": "books#volume",
+    "id": "ISQcDAAAQBAJ",
+    "etag": "l6CdIyFaqns",
+    "selfLink": "https://www.googleapis.com/books/v1/volumes/ISQcDAAAQBAJ",
+    "volumeInfo": {
+        "title": "The Sellout",
+        "authors": [
+                    "Paul Beatty"
+                    ],
+        "publisher": "Oneworld Publications",
+        "publishedDate": "2016-03-24",
+        "description": "\u003cb\u003e**WINNER OF THE MAN BOOKER PRIZE 2016**\u003c/b\u003e\u003cbr\u003e\u003cbr\u003e‘Outrageous, hilarious and profound.’ Simon Schama, \u003ci\u003eFinancial Times\u003c/i\u003e\u003cbr\u003e‘The longer you stare at Beatty’s pages, the smarter you’ll get.’ \u003ci\u003eThe Guardian\u003c/i\u003e\u003cbr\u003e‘The most badass first 100 pages of an American novel I’ve read.’ \u003ci\u003eThe New York Times\u003c/i\u003e\u003cbr\u003e\u003cbr\u003eA biting satire about a young man's isolated upbringing and the race trial that sends him to the Supreme Court, The Sellout showcases a comic genius at the top of his game.\u003cbr\u003e\u003cbr\u003eBorn in Dickens on the southern outskirts of Los Angeles, the narrator of The Sellout spent his childhood as the subject in his father's racially charged psychological studies. He is told that his father’s work will lead to a memoir that will solve their financial woes. But when his father is killed in a drive-by shooting, he discovers there never was a memoir. All that’s left is a bill for a drive-through funeral.\u003cbr\u003e\u003cbr\u003eWhat’s more, Dickens has literally been wiped off the map to save California from further embarrassment. Fuelled by despair, the narrator sets out to right this wrong with the most outrageous action conceivable: reinstating slavery and segregating the local high school, which lands him in the Supreme Court.\u003cbr\u003e",
+        "industryIdentifiers": [
+                                {
+                                "type": "ISBN_10",
+                                "identifier": "1786070162"
+                                },
+                                {
+                                "type": "ISBN_13",
+                                "identifier": "9781786070166"
+                                }
+                                ],
+        "readingModes": {
+            "text": true,
+            "image": true
+        },
+        "pageCount": 304,
+        "printedPageCount": 300,
+        "dimensions": {
+            "height": "20.00 cm"
+        },
+        "printType": "BOOK",
+        "categories": [
+                       "Fiction / Satire"
+                       ],
+        "averageRating": 2.0,
+        "ratingsCount": 1,
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": true,
+        "contentVersion": "2.7.7.0.preview.3",
+        "panelizationSummary": {
+            "containsEpubBubbles": false,
+            "containsImageBubbles": false
+        },
+        "imageLinks": {
+            "smallThumbnail": "http://books.google.com/books/content?id=ISQcDAAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&imgtk=AFLRE71CGqlqfNV-pW5vVQdteZSyOpNbmIq7Rgjg2OSC7jEeowgnPMNQSt6yW9Ks_3HV30SA886VeNXbcbA_AxI6u3u-o0UV3KuAoXWx8kGoRf1g29AA3tYR80MdRCQhGmxEqTHfE7qa&source=gbs_api",
+            "thumbnail": "http://books.google.com/books/content?id=ISQcDAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&imgtk=AFLRE70b-yCEQZTJVtqoV4UhGnbiOXtQv1aPXLLbk7hi4tD8N2R3SIFRJ3b_IkxDTiS02c0ZVLQIvTDvN_bLgvswnBnoHfzx2plQKPPIwBvqxisU-SmYTe2Yt7ppwu6CKR-Da4FpE_hp&source=gbs_api",
+            "small": "http://books.google.com/books/content?id=ISQcDAAAQBAJ&printsec=frontcover&img=1&zoom=2&edge=curl&imgtk=AFLRE71bEzJN07BwAH-Z0P8FzRFQF-qt_BiuABQsTjKQK9dWRAYQlC6DDYNGfCLJxFaBD99_Ilk2FUppVJHxPNCsBcCPrqB0xZijr9pxJPR77rCr0i0_TKLSZTEIo3789cgpk9xzwISm&source=gbs_api",
+            "medium": "http://books.google.com/books/content?id=ISQcDAAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&imgtk=AFLRE72heTrQqcmz7dUzml98QhTgn_n7IhttEftR5KOnNYHx9p3g-DsLJjBWr1Jice-KI6bx_iaVBXNmly7I1Pv2RYu7CjQ4MIrT6RjRlBqhIDxwjiR5yM4SYCvYqOo10ECvif8SqSUl&source=gbs_api",
+            "large": "http://books.google.com/books/content?id=ISQcDAAAQBAJ&printsec=frontcover&img=1&zoom=4&edge=curl&imgtk=AFLRE70UcuZUCaRopzhB054oDQbrJA7FFNYUC3ofJCnwCuFDZ1LjEvYoLxl6w0YfzbvA14npssa7Vo5VKjWfqsn3KA041jvK4e2cicXN4zuLNCxd2FIlczKRQDkQKxEd_PHjYiWa2nzo&source=gbs_api",
+            "extraLarge": "http://books.google.com/books/content?id=ISQcDAAAQBAJ&printsec=frontcover&img=1&zoom=6&edge=curl&imgtk=AFLRE70AyjL9FIu3OtXL7DKXsPZU_5X0Jsk4eiiKFIoLU5ktQeQQwCtp3Z2k37lWGl7Tync_b08vTOhLuH-kO4taG4Z7XgChcpcPbbuwtDgriI1CFtChW7Oe51wkspb2VilR_iKYkpMa&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.co.uk/books?id=ISQcDAAAQBAJ&hl=&source=gbs_api",
+        "infoLink": "https://play.google.com/store/books/details?id=ISQcDAAAQBAJ&source=gbs_api",
+        "canonicalVolumeLink": "https://market.android.com/details?id=book-ISQcDAAAQBAJ"
+    },
+    "layerInfo": {
+        "layers": [
+                   {
+                   "layerId": "geo",
+                   "volumeAnnotationsVersion": "10"
+                   }
+                   ]
+    },
+    "saleInfo": {
+        "country": "GB",
+        "saleability": "FOR_SALE",
+        "isEbook": true,
+        "listPrice": {
+            "amount": 10.79,
+            "currencyCode": "GBP"
+        },
+        "retailPrice": {
+            "amount": 5.69,
+            "currencyCode": "GBP"
+        },
+        "buyLink": "https://play.google.com/store/books/details?id=ISQcDAAAQBAJ&rdid=book-ISQcDAAAQBAJ&rdot=1&source=gbs_api",
+        "offers": [
+                   {
+                   "finskyOfferType": 1,
+                   "listPrice": {
+                   "amountInMicros": 1.079E7,
+                   "currencyCode": "GBP"
+                   },
+                   "retailPrice": {
+                   "amountInMicros": 5690000.0,
+                   "currencyCode": "GBP"
+                   },
+                   "giftable": true
+                   }
+                   ]
+    },
+    "accessInfo": {
+        "country": "GB",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+            "isAvailable": true,
+            "acsTokenLink": "http://books.google.co.uk/books/download/The_Sellout-sample-epub.acsm?id=ISQcDAAAQBAJ&format=epub&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "pdf": {
+            "isAvailable": true,
+            "acsTokenLink": "http://books.google.co.uk/books/download/The_Sellout-sample-pdf.acsm?id=ISQcDAAAQBAJ&format=pdf&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "webReaderLink": "http://books.google.co.uk/books/reader?id=ISQcDAAAQBAJ&hl=&printsec=frontcover&output=reader&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+    }
+}

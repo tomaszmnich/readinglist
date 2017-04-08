@@ -8,6 +8,7 @@
 
 import XCTest
 import Foundation
+import SwiftyJSON
 @testable import Reading_List
 
 class books_UnitTests: XCTestCase {
@@ -160,5 +161,40 @@ class books_UnitTests: XCTestCase {
         let afterDate = Date()
         XCTAssertEqual(newBook.createdWhen.compare(beforeDate), ComparisonResult.orderedDescending)
         XCTAssertEqual(newBook.createdWhen.compare(afterDate), ComparisonResult.orderedAscending)
+    }
+    
+    func testGoogleBooksFetchParsing() {
+        let bundle = Bundle(for: type(of: self))
+        let path = bundle.path(forResource: "GoogleBooksFetchResult", ofType: "json")!
+        let json = JSON(NSData(contentsOfFile: path)!)
+        
+        let parseResult = GoogleBooksAPI.GoogleBooksParser.parseFetchResults(json)
+        XCTAssertNotNil(parseResult.0)
+        XCTAssertNotNil(parseResult.1)
+        XCTAssertEqual("The Sellout", parseResult.0!.title)
+        XCTAssertEqual("Paul Beatty", parseResult.0!.authors)
+        XCTAssertEqual(304, parseResult.0!.pageCount)
+        XCTAssertEqual("9781786070166", parseResult.0!.isbn13)
+        XCTAssertNotNil(parseResult.0!.bookDescription)
+    }
+    
+    func testGoogleBooksSearchParsing() {
+        let bundle = Bundle(for: type(of: self))
+        let path = bundle.path(forResource: "GoogleBooksSearchResult", ofType: "json")!
+        let json = JSON(NSData(contentsOfFile: path)!)
+        
+        let parseResult = GoogleBooksAPI.GoogleBooksParser.parseSearchResults(json)
+        // There are 3 results with no author, which we expect to not show up in the list. Hence: 37.
+        XCTAssertEqual(37, parseResult.count)
+        for result in parseResult {
+            // Everything must have an ID
+            XCTAssertNotNil(result.id)
+        }
+        
+        let resultsWithIsbn = parseResult.filter{$0.isbn13 != nil}.count
+        XCTAssertEqual(29, resultsWithIsbn)
+        
+        let resultsWithCover = parseResult.filter{$0.thumbnailCoverUrl != nil}.count
+        XCTAssertEqual(32, resultsWithCover)
     }
 }

@@ -141,7 +141,7 @@ class GoogleBooksAPI {
         // The base URL for GoogleBooks API v1 requests
         private static let baseUrl = URL(string: "https://www.googleapis.com")!
         
-        private static let searchResultFields = "items(id,volumeInfo(title,authors,imageLinks/thumbnail))"
+        private static let searchResultFields = "items(id,volumeInfo(title,authors,industryIdentifiers,imageLinks/thumbnail))"
         
         var url: URL {
             switch self{
