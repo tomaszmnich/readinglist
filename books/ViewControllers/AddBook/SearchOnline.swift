@@ -54,7 +54,7 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
             .orEmpty
             .throttle(1, scheduler: MainScheduler.instance)
             .distinctUntilChanged{$0.trimming() == $1.trimming()}
-            .observeOn(ConcurrentDispatchQueueScheduler(qos: .userInteractive))
+            .observeOn(ConcurrentDispatchQueueScheduler(qos: .userInitiated))
             .flatMapLatest { searchText in
                 // Blank search terms produce empty array...
                 searchText.isEmptyOrWhitespace ? Observable.just((searchText, Result.success([]))) :
@@ -132,7 +132,7 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
                     self.performSegue(withIdentifier: "searchResultSelected", sender: result.successValue!)
                 }
                 else {
-                    SVProgressHUD.showError(withStatus: "ERROR")
+                    SVProgressHUD.showError(withStatus: "An error occurred. Please try again later.")
                 }
             }
         }
@@ -244,7 +244,7 @@ class SearchResultViewModel {
         
         // Observe the the web request on a background thread
         coverImage = URLSession.shared.rx.data(request: URLRequest(url: coverURL))
-            .observeOn(ConcurrentDispatchQueueScheduler(qos: .userInteractive))
+            .observeOn(ConcurrentDispatchQueueScheduler(qos: .userInitiated))
             .map(Optional.init)
             .startWith(nil)
             // Observe the results of web request on the main thread to update the search result cover image

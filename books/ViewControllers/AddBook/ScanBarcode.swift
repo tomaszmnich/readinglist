@@ -144,7 +144,7 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         SVProgressHUD.show(withStatus: "Searching...")
         
         // We've found an ISBN-13. Let's search for it online in a background thread.
-        DispatchQueue.global(qos: .background).async {
+        DispatchQueue.global(qos: .userInitiated).async {
             GoogleBooksAPI.fetchIsbn(isbn) { result in
                 
                 // Jump back to the main thread to process the result
