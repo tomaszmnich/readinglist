@@ -215,12 +215,12 @@ extension NSPredicate {
         }
     }
     
-    convenience init(fieldName: String, equalTo: Int) {
-        self.init(format: "\(fieldName) == %d", equalTo)
+    convenience init(intFieldName: String, equalTo: Int) {
+        self.init(format: "\(intFieldName) == %d", equalTo)
     }
     
-    convenience init(fieldName: String, equalToText: String) {
-        self.init(format: "\(fieldName) == %@", equalToText)
+    convenience init(stringFieldName: String, equalTo: String) {
+        self.init(format: "\(stringFieldName) == %@", equalTo)
     }
     
     convenience init(fieldName: String, containsSubstring: String) {

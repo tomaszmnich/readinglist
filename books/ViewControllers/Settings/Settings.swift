@@ -151,7 +151,7 @@ class Settings: UITableViewController, NavBarConfigurer, UIDocumentMenuDelegate,
             DispatchQueue.main.async {
                 var duplicateBookCount = 0
                 for importResult in importResults {
-                    if let isbn13 = importResult.0.isbn13, appDelegate.booksStore.isbnExists(isbn13) {
+                    if let isbn13 = importResult.0.isbn13, appDelegate.booksStore.getIfExists(isbn: isbn13) != nil {
                         duplicateBookCount += 1
                     }
                     else {

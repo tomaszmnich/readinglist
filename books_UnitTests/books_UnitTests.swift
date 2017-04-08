@@ -56,6 +56,7 @@ class books_UnitTests: XCTestCase {
         let book = booksStore.create(from: testBookMetadata, readingInformation: readingInformation)
         
         // Test that the metadata is all the same
+        XCTAssertEqual(testBookMetadata.googleBooksId, book.googleBooksId)
         XCTAssertEqual(testBookMetadata.title, book.title)
         XCTAssertEqual(testBookMetadata.authors, book.authorList)
         XCTAssertEqual(testBookMetadata.bookDescription, book.bookDescription)
@@ -132,9 +133,9 @@ class books_UnitTests: XCTestCase {
     
     func testIsbnDetection() {
         let testBook = getTestBookMetadata()
-        XCTAssertFalse(booksStore.isbnExists(testBook.isbn13!))
+        XCTAssertNil(booksStore.getIfExists(isbn: testBook.isbn13))
         booksStore.create(from: testBook, readingInformation: BookReadingInformation.toRead())
-        XCTAssertTrue(booksStore.isbnExists(testBook.isbn13!))
+        XCTAssertNotNil(booksStore.getIfExists(isbn: testBook.isbn13))
     }
     
     func testHumanisedDateString() {

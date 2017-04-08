@@ -128,7 +128,7 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         session?.stopRunning()
         
         // Check that the book hasn't already been added
-        if let existingBook = appDelegate.booksStore.get(isbn: avMetadata.stringValue) {
+        if let existingBook = appDelegate.booksStore.getIfExists(isbn: avMetadata.stringValue) {
             let alert = duplicateBookAlertController(existingBook, modalControllerToDismiss: self) {
                 self.session?.startRunning()
             }
@@ -147,28 +147,35 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         DispatchQueue.global(qos: .userInitiated).async {
             GoogleBooksAPI.fetchIsbn(isbn) { result in
                 
-                // Jump back to the main thread to process the result
-                DispatchQueue.main.async {
-                    SVProgressHUD.dismiss()
-                    
-                    guard result.isSuccess else { self.onSearchError(result.failureError!); return }
-                    
-                    if let bookMetadata = result.successValue {
+                SVProgressHUD.dismiss()
+                
+                guard result.isSuccess else { self.onSearchError(result.failureError!); return }
+                
+                if let bookMetadata = result.successValue {
+                    // We may now have a book which matches the Google Books ID (but didn't match the ISBN), so check again
+                    if let existingBook = appDelegate.booksStore.getIfExists(googleBooksId: bookMetadata?.googleBooksId, isbn: bookMetadata?.isbn13) {
+                        let alert = duplicateBookAlertController(existingBook, modalControllerToDismiss: self) {
+                            self.session?.startRunning()
+                        }
+                        
+                        self.present(alert, animated: true)
+                    }
+                    else {
                         self.foundMetadata = bookMetadata
                         self.performSegue(withIdentifier: "barcodeScanResult", sender: self)
                     }
-                    else {
-                        let alert = UIAlertController(title: "No Exact Match", message: "We couldn't find an exact match. Would you like to do a more general search instead?", preferredStyle: UIAlertControllerStyle.alert)
-                        alert.addAction(UIAlertAction(title: "No", style: UIAlertActionStyle.cancel, handler: { _ in
-                            self.session?.startRunning()
-                        }))
-                        alert.addAction(UIAlertAction(title: "Yes", style: UIAlertActionStyle.default, handler: { _ in
-                            self.dismiss(animated: true){
-                                appDelegate.splitViewController.tabbedViewController.performSegue(withIdentifier: "searchByText", sender: isbn)
-                            }
-                        }))
-                        self.present(alert, animated: true, completion: nil)
-                    }
+                }
+                else {
+                    let alert = UIAlertController(title: "No Exact Match", message: "We couldn't find an exact match. Would you like to do a more general search instead?", preferredStyle: UIAlertControllerStyle.alert)
+                    alert.addAction(UIAlertAction(title: "No", style: UIAlertActionStyle.cancel, handler: { _ in
+                        self.session?.startRunning()
+                    }))
+                    alert.addAction(UIAlertAction(title: "Yes", style: UIAlertActionStyle.default, handler: { _ in
+                        self.dismiss(animated: true){
+                            appDelegate.splitViewController.tabbedViewController.performSegue(withIdentifier: "searchByText", sender: isbn)
+                        }
+                    }))
+                    self.present(alert, animated: true, completion: nil)
                 }
             }
         }

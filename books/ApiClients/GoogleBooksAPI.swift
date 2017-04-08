@@ -75,7 +75,8 @@ class GoogleBooksAPI {
     }
     
     /**
-     Searches on Google Books for the given search string, and calls the callback when a result is received
+     Searches on Google Books for the given search string, and calls the callback when a result is received.
+     Runs the callback on the Main DispatchQueue.
      */
     static func fetchIsbn(_ isbn: String, callback: @escaping (Result<BookMetadata?>) -> Void) {
         let request = GoogleBooksRequest.searchIsbn(isbn)
@@ -177,9 +178,9 @@ class GoogleBooksAPI {
             var result = GoogleBooksSearchResult(id: id, title: title, authors: singleAuthorListString)
             
             result.thumbnailCoverUrl = URL(optionalString: item["volumeInfo","imageLinks","thumbnail"].string)?.toHttps()
-            result.isbn13 = item["volumeInfo","industryIdentifiers"].array?.first(where: { json in
+            /*result.isbn13 = item["volumeInfo","industryIdentifiers"].array?.first(where: { json in
                 return json["type"].stringValue == "ISBN_13"
-            })?["identifier"].stringValue
+            })?["identifier"].stringValue*/
             
             return result
         }

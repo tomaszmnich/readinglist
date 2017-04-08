@@ -17,6 +17,7 @@ class Book: NSManagedObject {
     @NSManaged fileprivate(set) var title: String
     @NSManaged fileprivate(set) var authorList: String?
     @NSManaged fileprivate(set) var isbn13: String?
+    @NSManaged fileprivate(set) var googleBooksId: String?
     @NSManaged fileprivate(set) var pageCount: NSNumber?
     @NSManaged fileprivate(set) var publishedDate: Date?
     @NSManaged fileprivate(set) var bookDescription: String?
@@ -58,6 +59,7 @@ extension Book {
         title = metadata.title
         authorList = metadata.authors
         isbn13 = metadata.isbn13
+        googleBooksId = metadata.googleBooksId
         pageCount = metadata.pageCount as NSNumber?
         publishedDate = metadata.publishedDate
         bookDescription = metadata.bookDescription
@@ -95,9 +97,10 @@ extension Book {
     }
     
     static let csvExport = CsvExport<Book>(columns:
+        CsvColumn<Book>(header: "ISBN-13", cellValue: {$0.isbn13}),
+        CsvColumn<Book>(header: "Google Books ID", cellValue: {$0.googleBooksId}),
         CsvColumn<Book>(header: "Title", cellValue: {$0.title}),
         CsvColumn<Book>(header: "Author", cellValue: {$0.authorList}),
-        CsvColumn<Book>(header: "ISBN-13", cellValue: {$0.isbn13}),
         CsvColumn<Book>(header: "Page Count", cellValue: {$0.pageCount == nil ? nil : String(describing: $0.pageCount!)}),
         CsvColumn<Book>(header: "Description", cellValue: {$0.bookDescription}),
         CsvColumn<Book>(header: "Started Reading", cellValue: {$0.startedReading?.toString(withDateFormat: "yyyy-MM-dd")}),
@@ -132,7 +135,7 @@ class BookMetadata {
         self.publishedDate = book.publishedDate
         self.coverImage = book.coverImage
         self.isbn13 = book.isbn13
-        self.googleBooksId = nil
+        self.googleBooksId = book.googleBooksId
     }
     
     static func csvImport(csvData: [String: String]) -> (BookMetadata, BookReadingInformation) {

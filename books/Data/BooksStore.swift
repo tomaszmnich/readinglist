@@ -60,20 +60,23 @@ class BooksStore {
     }
     
     /**
-     Whether or not the provided ISBN exists in a book already.
+     Returns a book with the specified GoogleBooks ID or ISBN, if one exists.
     */
-    func isbnExists(_ isbn: String) -> Bool {
-        return get(isbn: isbn) != nil
+    func getIfExists(searchResult: GoogleBooksSearchResult) -> Book? {
+        return getIfExists(googleBooksId: searchResult.id, isbn: searchResult.isbn13)
     }
     
     /**
-     Returns a book with the specified ISBN, if one exists.
+     Returns the first found book with matching GoogleBooks ID or ISBN
     */
-    func get(isbn: String) -> Book? {
+    func getIfExists(googleBooksId: String? = nil, isbn: String?) -> Book? {
         let fetchRequest = NSFetchRequest<Book>(entityName: self.bookEntityName)
         fetchRequest.fetchLimit = 1
         
-        fetchRequest.predicate = BookPredicate.isbnEqual(isbn: isbn)
+        let googleBooksPredicate = googleBooksId == nil ? NSPredicate(boolean: false) : BookPredicate.googleBooksIdEqual(to: googleBooksId!)
+        let isbnPredicate = isbn == nil ? NSPredicate(boolean: false) : BookPredicate.isbnEqual(to: isbn!)
+        
+        fetchRequest.predicate = NSPredicate.Or([googleBooksPredicate, isbnPredicate])
         let books = try? coreDataStack.managedObjectContext.fetch(fetchRequest)
         return books?.first
     }
