@@ -105,17 +105,17 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     }
     
     private func setVideoOrientation() {
-        if let connection = self.previewLayer?.connection, connection.isVideoOrientationSupported {
-            switch UIDevice.current.orientation {
-            case .landscapeRight:
-                connection.videoOrientation = AVCaptureVideoOrientation.landscapeLeft
-            case .landscapeLeft:
-                connection.videoOrientation = AVCaptureVideoOrientation.landscapeRight
-            case .portraitUpsideDown:
-                connection.videoOrientation = AVCaptureVideoOrientation.portraitUpsideDown
-            default:
-                connection.videoOrientation = AVCaptureVideoOrientation.portrait
-            }
+        guard let connection = self.previewLayer?.connection, connection.isVideoOrientationSupported else { return }
+        
+        switch UIDevice.current.orientation {
+        case .landscapeRight:
+            connection.videoOrientation = AVCaptureVideoOrientation.landscapeLeft
+        case .landscapeLeft:
+            connection.videoOrientation = AVCaptureVideoOrientation.landscapeRight
+        case .portraitUpsideDown:
+            connection.videoOrientation = AVCaptureVideoOrientation.portraitUpsideDown
+        default:
+            connection.videoOrientation = AVCaptureVideoOrientation.portrait
         }
     }
     
@@ -143,9 +143,9 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     func searchForFoundIsbn(isbn: String) {
         SVProgressHUD.show(withStatus: "Searching...")
         
-        // We've found an ISBN-13. Let's search for it online in a background thread.
-        DispatchQueue.global(qos: .userInitiated).async {
-            GoogleBooksAPI.fetchIsbn(isbn) { result in
+        // We've found an ISBN-13. Let's search for it online
+        GoogleBooksAPI.fetchIsbn(isbn) { result in
+            DispatchQueue.main.async {
                 
                 SVProgressHUD.dismiss()
                 

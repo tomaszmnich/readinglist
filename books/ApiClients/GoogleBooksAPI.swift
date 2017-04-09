@@ -46,89 +46,104 @@ enum Result<Value> {
     }
 }
 
-class GoogleBooksAPI {
-    
-    /**
-     Searches on Google Books for the given search string, and calls the callback when a result is received
-    */
-    static func searchText(_ text: String, callback: @escaping (Result<[GoogleBooksSearchResult]>) -> Void) -> URLSessionDataTask {
-        let request = GoogleBooksRequest.searchText(text)
-        return requestJson(from: request.url) { json, error in
-            guard let json = json, error == nil else { callback(Result.failure(error!)); return }
-            callback(Result.success(GoogleBooksParser.parseSearchResults(json)))
-        }
-    }
-    
-    /**
-     Observable version of searchText function.
-    */
-    static func searchText(_ text: String) -> Observable<Result<[GoogleBooksSearchResult]>> {
-        return Observable<Result<[GoogleBooksSearchResult]>>.create { observer -> Disposable in
-            let searchRequest = searchText(text) { result in
+extension Observable {
+    static func createFrom<E>(dataTaskCreator: @escaping (@escaping (E) -> Void) -> URLSessionDataTask) -> Observable<E> {
+        return Observable<E>.create { observer -> Disposable in
+            let dataTask = dataTaskCreator { result in
                 observer.onNext(result)
                 observer.onCompleted()
             }
             return Disposables.create {
-                searchRequest.cancel()
+                dataTask.cancel()
             }
+        }
+    }
+}
+
+class GoogleBooksAPI {
+    
+    static func searchTextObservable(_ text: String) -> Observable<Result<GoogleBooksSearchResultPage>> {
+        return Observable<Result<GoogleBooksSearchResultPage>>.createFrom { callback -> URLSessionDataTask in
+            return GoogleBooksAPI.searchText(text, callback: callback)
+        }
+    }
+    
+    /**
+     Searches on Google Books for the given search string, and calls the callback when a result is received
+    */
+    static func searchText(_ text: String, callback: @escaping (Result<GoogleBooksSearchResultPage>) -> Void) -> URLSessionDataTask {
+        return requestJson(from: GoogleBooksRequest.searchText(text).url) { result in
+            guard result.isSuccess else { callback(Result.failure(result.failureError!)); return }
+            let results = GoogleBooksParser.parseSearchResults(result.successValue!)
+            callback(Result.success(GoogleBooksSearchResultPage(searchText: text, results: results)))
         }
     }
     
     /**
      Searches on Google Books for the given search string, and calls the callback when a result is received.
-     Runs the callback on the Main DispatchQueue.
      */
     static func fetchIsbn(_ isbn: String, callback: @escaping (Result<BookMetadata?>) -> Void) {
-        let request = GoogleBooksRequest.searchIsbn(isbn)
-        requestJson(from: request.url) { json, error in
-            guard let json = json, error == nil else { callback(Result.failure(error!)); return }
-            guard let searchResult = GoogleBooksParser.parseSearchResults(json).first else { callback(Result.success(nil)); return }
+        requestJson(from: GoogleBooksRequest.searchIsbn(isbn).url) { result in
+            guard result.isSuccess else { callback(Result.failure(result.failureError!)); return }
+            guard let searchResult = GoogleBooksParser.parseSearchResults(result.successValue!).first else { callback(Result.success(nil)); return }
             
             GoogleBooksAPI.fetch(googleBooksId: searchResult.id, callback: callback)
         }
     }
     
     /**
-     Fetches the specified book from Google Books. Runs the callback on the Main DispatchQueue
+     Fetches the specified book from Google Books.
      */
     static func fetch(googleBooksId: String, callback: @escaping (Result<BookMetadata?>) -> Void) {
-        let request = GoogleBooksRequest.fetch(googleBooksId)
-        let dispatchGroup = DispatchGroup()
-        
-        requestJson(from: request.url, dispatchGroup: dispatchGroup) { json, error in
-            guard let json = json, error == nil else { callback(Result.failure(error!)); return }
-            let fetchResult = GoogleBooksParser.parseFetchResults(json)
-            guard let fetchedMetadata = fetchResult.0 else { callback(Result.success(nil)); return }
+        requestJson(from: GoogleBooksRequest.fetch(googleBooksId).url) { result in
+            guard result.isSuccess else { callback(Result.failure(result.failureError!)); return }
+            let parseResult = GoogleBooksParser.parseFetchResults(result.successValue!)
+            guard let parsedMetadata = parseResult.0 else { callback(Result.success(nil)); return }
             
-            if let coverUrl = fetchResult.1 {
-                GoogleBooksAPI.requestData(from: coverUrl, dispatchGroup: dispatchGroup) { data, error in
-                    fetchedMetadata.coverImage = data
+            // TODO: it would be better if we had a GoogleBooksFetchResult object which had a non-nil ID and held the cover URLs.
+            // Also, constructing the URL manually is better, as we can remove the corner fold artifact
+            if let coverUrl = parseResult.1 {
+                GoogleBooksAPI.requestData(from: coverUrl) { result in
+                    parsedMetadata.coverImage = result.successValue
+                    callback(Result.success(parsedMetadata))
                 }
             }
-            
-            dispatchGroup.notify(queue: .main) {
-                callback(Result.success(fetchedMetadata))
+            else {
+                callback(Result.success(parsedMetadata))
             }
         }
     }
     
-    @discardableResult private static func requestJson(from url: URL, dispatchGroup: DispatchGroup? = nil, callback: @escaping (JSON?, Error?) -> Void) -> URLSessionDataTask {
-        let webRequest = URLSession.shared.dataTask(with: url) { (data, _, error) in
-            let json = JSON(optionalData: data)
-            callback(json, error)
-            dispatchGroup?.leave()
+    /**
+     Gets the cover image data for the book corresponding to the Google Books ID (if exists).
+    */
+    static func getCover(googleBooksId: String, callback: @escaping (Result<Data>) -> Void) {
+        requestData(from: GoogleBooksRequest.downloadCoverById(googleBooksId).url) { result in
+            callback(result)
         }
-        dispatchGroup?.enter()
+    }
+    
+    enum RequestError: Error {
+        case noJsonData
+        case noData
+    }
+    
+    @discardableResult private static func requestJson(from url: URL, callback: @escaping (Result<JSON>) -> Void) -> URLSessionDataTask {
+        let webRequest = URLSession.shared.dataTask(with: url) { (data, _, error) in
+            guard error == nil else { callback(Result.failure(error!)); return }
+            guard let json = JSON(optionalData: data) else { callback(Result.failure(RequestError.noJsonData)); return }
+            callback(Result<JSON>.success(json))
+        }
         webRequest.resume()
         return webRequest
     }
     
-    @discardableResult private static func requestData(from url: URL, dispatchGroup: DispatchGroup? = nil, callback: @escaping (Data?, Error?) -> Void) -> URLSessionDataTask {
+    @discardableResult private static func requestData(from url: URL, callback: @escaping (Result<Data>) -> Void) -> URLSessionDataTask {
         let webRequest = URLSession.shared.dataTask(with: url) { (data, _, error) in
-            callback(data, error)
-            dispatchGroup?.leave()
+            guard error == nil else { callback(Result.failure(error!)); return }
+            guard let data = data else { callback(Result.failure(RequestError.noData)); return }
+            callback(Result<Data>.success(data))
         }
-        dispatchGroup?.enter()
         webRequest.resume()
         return webRequest
     }
@@ -138,9 +153,11 @@ class GoogleBooksAPI {
         case searchText(String)
         case searchIsbn(String)
         case fetch(String)
+        case downloadCoverById(String)
         
         // The base URL for GoogleBooks API v1 requests
-        private static let baseUrl = URL(string: "https://www.googleapis.com")!
+        private static let apiBaseUrl = URL(string: "https://www.googleapis.com")!
+        private static let googleBooksBaseUrl = URL(string: "https://books.google.com")!
         
         private static let searchResultFields = "items(id,volumeInfo(title,authors,industryIdentifiers,imageLinks/thumbnail))"
         
@@ -148,13 +165,16 @@ class GoogleBooksAPI {
             switch self{
             case let .searchText(searchString):
                 let encodedQuery = searchString.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-                return URL(string: "/books/v1/volumes?q=\(encodedQuery)&maxResults=40&fields=\(GoogleBooksRequest.searchResultFields)", relativeTo: GoogleBooksRequest.baseUrl)!
+                return URL(string: "/books/v1/volumes?q=\(encodedQuery)&maxResults=40&fields=\(GoogleBooksRequest.searchResultFields)", relativeTo: GoogleBooksRequest.apiBaseUrl)!
                 
             case let .searchIsbn(isbn):
-                return URL(string: "/books/v1/volumes?q=isbn:\(isbn)&maxResults=1&fields=\(GoogleBooksRequest.searchResultFields)", relativeTo: GoogleBooksRequest.baseUrl)!
+                return URL(string: "/books/v1/volumes?q=isbn:\(isbn)&maxResults=1&fields=\(GoogleBooksRequest.searchResultFields)", relativeTo: GoogleBooksRequest.apiBaseUrl)!
                 
             case let .fetch(id):
-                return URL(string: "/books/v1/volumes/\(id)", relativeTo: GoogleBooksRequest.baseUrl)!
+                return URL(string: "/books/v1/volumes/\(id)", relativeTo: GoogleBooksRequest.apiBaseUrl)!
+            
+            case let .downloadCoverById(googleBooksId):
+                return URL(string: "/books/content?id=\(googleBooksId)&printsec=frontcover&img=1&zoom=2", relativeTo: GoogleBooksRequest.googleBooksBaseUrl)!
             }
         }
     }
@@ -206,6 +226,20 @@ class GoogleBooksAPI {
 
             return (result, smallCoverUrl)
         }
+    }
+}
+
+class GoogleBooksSearchResultPage {
+    let searchResults: [GoogleBooksSearchResult]
+    let searchText: String
+    
+    init(searchText: String, results: [GoogleBooksSearchResult]) {
+        self.searchText = searchText
+        self.searchResults = results
+    }
+    
+    static func empty(searchText: String) -> GoogleBooksSearchResultPage {
+        return GoogleBooksSearchResultPage(searchText: searchText, results: [])
     }
 }
 

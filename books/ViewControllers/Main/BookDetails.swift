@@ -26,7 +26,12 @@ class BookDetailsViewModel {
         description = book.bookDescription
         startedWhen = book.startedReading?.toString(withDateFormat: "d MMMM yyyy") ?? " — "
         finishedWhen = book.finishedReading?.toString(withDateFormat: "d MMMM yyyy") ?? " — "
-        cover = book.coverImage == nil ? #imageLiteral(resourceName: "CoverPlaceholder") : UIImage(data: book.coverImage!)!
+        if let coverData = book.coverImage, let image = UIImage(data: coverData) {
+            cover = image
+        }
+        else {
+           cover = #imageLiteral(resourceName: "CoverPlaceholder")
+        }
     }
 }
 

@@ -23,8 +23,7 @@ class ImportDataViewController : FormViewController, UIDocumentPickerDelegate, U
         let downloadImagesSection = Section(footer: "If enabled, book covers will be downloaded where the import document has either an ISBN-13 or a Google Books ID.")
         downloadImagesSection.append(SwitchRow(downloadImagesKey) {
             $0.title = "Download Images"
-            $0.value = false
-            $0.disabled = Condition(booleanLiteral: true)
+            $0.value = true
         })
         form.append(downloadImagesSection)
         
@@ -37,7 +36,7 @@ class ImportDataViewController : FormViewController, UIDocumentPickerDelegate, U
     }
     
     func requestImport(cell: ButtonCellOf<String>, row: ButtonRow) {
-        let documentImport = UIDocumentMenuViewController.init(documentTypes: ["public.comma-separated-values-text"], in: .import)
+        let documentImport = UIDocumentMenuViewController(documentTypes: ["public.comma-separated-values-text"], in: .import)
         documentImport.delegate = self
         if let popPresenter = documentImport.popoverPresentationController {
             popPresenter.sourceRect = cell.contentView.bounds
@@ -55,42 +54,83 @@ class ImportDataViewController : FormViewController, UIDocumentPickerDelegate, U
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentAt url: URL) {
         SVProgressHUD.show(withStatus: "Importing")
         
-        DispatchQueue.global(qos: .userInitiated).async {
-            let importer = CSVImporter<(BookMetadata?, BookReadingInformation?)>(path: url.path, workQosClass: .userInitiated)
-            let importResults = importer.importRecords(structure: { headers in
-                if !headers.contains("Title") || !headers.contains("Author") {
-                    print("Missing Title or Author column")
-                }
-            }, recordMapper: BookMetadata.csvImport)
-            
-            DispatchQueue.main.async {
-                var duplicateBookCount = 0
-                var invalidDataCount = 0
-                var createdBooksCount = 0
-                for importResult in importResults {
-                    if let bookMetadata = importResult.0, let readingInfo = importResult.1 {
-                        
-                        if appDelegate.booksStore.getIfExists(googleBooksId: bookMetadata.googleBooksId, isbn: bookMetadata.isbn13) != nil {
-                            duplicateBookCount += 1
-                        }
-                        else {
-                            appDelegate.booksStore.create(from: bookMetadata, readingInformation: readingInfo)
-                            createdBooksCount += 1
-                        }
-                    }
-                    else {
-                        invalidDataCount += 1
-                    }
-                }
+        // We may want to download book cover images
+        let shouldDownloadBookCovers = form.values()[downloadImagesKey] as! Bool
+        
+        let importer = CSVImporter<(BookMetadata?, BookReadingInformation?)>(path: url.path, workQosClass: .userInitiated)
+        
+        let importResults = importer.importRecords(structure: { headers in
+            // TODO: Ideally we could throw an error and not import the document if there are bad rows...
+            if !headers.contains("Title") || !headers.contains("Author") {
+                print("Missing Title or Author column")
+            }
+        }, recordMapper: BookMetadata.csvImport)
+        
+        // Keep track of the potentially numerous calls
+        let dispatchGroup = DispatchGroup()
                 
-                var statusMessage = "\(createdBooksCount) books imported."
-                if duplicateBookCount != 0 {
-                    statusMessage += " \(duplicateBookCount) rows ignored due pre-existing data."
+        var duplicateBookCount = 0
+        var invalidDataCount = 0
+        var createdBooksCount = 0
+        
+        dispatchGroup.enter()
+        for importResult in importResults {
+            guard let bookMetadata = importResult.0, let readingInfo = importResult.1 else { invalidDataCount += 1; continue }
+            
+            guard appDelegate.booksStore.getIfExists(googleBooksId: bookMetadata.googleBooksId, isbn: bookMetadata.isbn13) == nil else {
+                duplicateBookCount += 1
+                continue
+            }
+            
+            if shouldDownloadBookCovers {
+                trySupplementBookMetadataWithCover(bookMetadata, readingInfo: readingInfo, webCallsDispatchGroup: dispatchGroup)
+            }
+            else {
+                appDelegate.booksStore.create(from: bookMetadata, readingInformation: readingInfo)
+            }
+            createdBooksCount += 1
+        }
+        dispatchGroup.leave()
+        
+        dispatchGroup.notify(queue: .main) {
+            var statusMessage = "\(createdBooksCount) books imported."
+            if duplicateBookCount != 0 {
+                statusMessage += " \(duplicateBookCount) rows ignored due pre-existing data."
+            }
+            if invalidDataCount != 0 {
+                statusMessage += " \(invalidDataCount) rows ignored due to invalid data."
+            }
+            SVProgressHUD.showInfo(withStatus: statusMessage)
+        }
+    }
+    
+    func trySupplementBookMetadataWithCover(_ bookMetadata: BookMetadata, readingInfo: BookReadingInformation, webCallsDispatchGroup dispatchGroup: DispatchGroup) {
+        // GoogleBooks ID takes priority over ISBN.
+        if let googleBookdId = bookMetadata.googleBooksId {
+            dispatchGroup.enter()
+            GoogleBooksAPI.getCover(googleBooksId: googleBookdId) { result in
+                DispatchQueue.main.async {
+                    bookMetadata.coverImage = result.successValue
+                    appDelegate.booksStore.create(from: bookMetadata, readingInformation: readingInfo)
+                    dispatchGroup.leave()
                 }
-                if invalidDataCount != 0 {
-                    statusMessage += " \(invalidDataCount) rows ignored due to invalid data."
+            }
+        }
+            // but we'll try the ISBN is there was no Google Books ID
+        else if let isbn = bookMetadata.isbn13 {
+            dispatchGroup.enter()
+            GoogleBooksAPI.fetchIsbn(isbn) { result in
+                
+                // If there was no Google Books ID for the ISBN search, then we can't get a cover.
+                guard let googleBooksId = result.successValue??.googleBooksId else { dispatchGroup.leave(); return }
+                
+                GoogleBooksAPI.getCover(googleBooksId: googleBooksId){ coverResult in
+                    DispatchQueue.main.async {
+                        bookMetadata.coverImage = coverResult.successValue
+                        appDelegate.booksStore.create(from: bookMetadata, readingInformation: readingInfo)
+                        dispatchGroup.leave()
+                    }
                 }
-                SVProgressHUD.showInfo(withStatus: statusMessage)
             }
         }
     }

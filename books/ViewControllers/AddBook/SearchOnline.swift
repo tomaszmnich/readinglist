@@ -57,34 +57,33 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
             .observeOn(ConcurrentDispatchQueueScheduler(qos: .userInitiated))
             .flatMapLatest { searchText in
                 // Blank search terms produce empty array...
-                searchText.isEmptyOrWhitespace ? Observable.just((searchText, Result.success([]))) :
+                searchText.isEmptyOrWhitespace ? Observable.just(Result.success(GoogleBooksSearchResultPage.empty(searchText: searchText))) :
                     
                     // Otherwise, search on the Google API
-                    GoogleBooksAPI.searchText(searchText)
+                    GoogleBooksAPI.searchTextObservable(searchText)
                         .observeOn(MainScheduler.instance)
                         .trackActivity(self.indicator)
-                        .map { (searchText, $0) }
-            }
+        }
         
         // Map the sucess/failure state to the reason property on the empty data set
         searchTextAndResults
-            .subscribe(onNext: {
-                if $0.0.isEmptyOrWhitespace {
+            .subscribe(onNext: { resultPage in
+                if resultPage.isFailure {
+                    NSLog("Error searching online: \(resultPage.failureError!.localizedDescription)")
+                    self.emptyDataSet.reason = .error
+                }
+                else if resultPage.successValue!.searchText.isEmptyOrWhitespace {
                     self.emptyDataSet.reason = .noSearch
                 }
-                else if $0.1.isSuccess {
-                    self.emptyDataSet.reason = .noResults
-                }
                 else {
-                    NSLog("Error searching online: \($0.1.failureError.debugDescription)")
-                    self.emptyDataSet.reason = .error
+                    self.emptyDataSet.reason = .noResults
                 }
             })
             .addDisposableTo(disposeBag)
         
         // Map the actual results to SearchResultViewModel items (or empty if failure)
         // and use them to drive the table cells
-        searchTextAndResults.map{$0.1.successValue?.map(SearchResultViewModel.init) ?? []}
+        searchTextAndResults.map { ($0.successValue?.searchResults ?? []).map(SearchResultViewModel.init) }
             .asDriver(onErrorJustReturn: [])
             .drive(tableView.rx.items(cellIdentifier: "SearchResultCell", cellType: SearchResultCell.self)) { _, viewModel, cell in
                 cell.viewModel = viewModel
@@ -125,8 +124,8 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
 
     func fetchAndSegue(searchResult: GoogleBooksSearchResult) {
         SVProgressHUD.show(withStatus: "Loading...")
-        DispatchQueue.global(qos: .userInitiated).async {
-            GoogleBooksAPI.fetch(googleBooksId: searchResult.id) { result in
+        GoogleBooksAPI.fetch(googleBooksId: searchResult.id) { result in
+            DispatchQueue.main.async {
                 SVProgressHUD.dismiss()
                 if result.isSuccess {
                     self.performSegue(withIdentifier: "searchResultSelected", sender: result.successValue!)
