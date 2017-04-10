@@ -50,29 +50,29 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
         indicator.drive(spinner.rx.isAnimating).addDisposableTo(disposeBag)
         
         // Map the search bar text to a google books search, and bind the result to the table cells
-        let searchTextAndResults = searchBar.rx.text
+        let searchResultsPage = searchBar.rx.text
             .orEmpty
             .throttle(1, scheduler: MainScheduler.instance)
             .distinctUntilChanged{$0.trimming() == $1.trimming()}
             .observeOn(ConcurrentDispatchQueueScheduler(qos: .userInitiated))
             .flatMapLatest { searchText in
                 // Blank search terms produce empty array...
-                searchText.isEmptyOrWhitespace ? Observable.just(Result.success(GoogleBooksSearchResultPage.empty(searchText: searchText))) :
+                searchText.isEmptyOrWhitespace ? Observable.just(GoogleBooks.SearchResultsPage.empty(fromSearchText: searchText)) :
                     
                     // Otherwise, search on the Google API
-                    GoogleBooksAPI.searchTextObservable(searchText)
+                    GoogleBooks.searchTextObservable(searchText)
                         .observeOn(MainScheduler.instance)
                         .trackActivity(self.indicator)
         }
         
         // Map the sucess/failure state to the reason property on the empty data set
-        searchTextAndResults
+        searchResultsPage
             .subscribe(onNext: { resultPage in
-                if resultPage.isFailure {
-                    NSLog("Error searching online: \(resultPage.failureError!.localizedDescription)")
+                if !resultPage.searchResults.isSuccess {
+                    NSLog("Error searching online: \(resultPage.searchResults.error!.localizedDescription)")
                     self.emptyDataSet.reason = .error
                 }
-                else if resultPage.successValue!.searchText.isEmptyOrWhitespace {
+                else if resultPage.searchText.isEmptyOrWhitespace {
                     self.emptyDataSet.reason = .noSearch
                 }
                 else {
@@ -83,7 +83,7 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
         
         // Map the actual results to SearchResultViewModel items (or empty if failure)
         // and use them to drive the table cells
-        searchTextAndResults.map { ($0.successValue?.searchResults ?? []).map(SearchResultViewModel.init) }
+        searchResultsPage.map { ($0.searchResults.value ?? []).map(SearchResultViewModel.init) }
             .asDriver(onErrorJustReturn: [])
             .drive(tableView.rx.items(cellIdentifier: "SearchResultCell", cellType: SearchResultCell.self)) { _, viewModel, cell in
                 cell.viewModel = viewModel
@@ -122,13 +122,13 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
         }
     }
 
-    func fetchAndSegue(searchResult: GoogleBooksSearchResult) {
+    func fetchAndSegue(searchResult: GoogleBooks.SearchResult) {
         SVProgressHUD.show(withStatus: "Loading...")
-        GoogleBooksAPI.fetch(googleBooksId: searchResult.id) { result in
+        GoogleBooks.fetch(googleBooksId: searchResult.id) { result in
             DispatchQueue.main.async {
                 SVProgressHUD.dismiss()
-                if result.isSuccess {
-                    self.performSegue(withIdentifier: "searchResultSelected", sender: result.successValue!)
+                if result.result.isSuccess, let fetchResult = result.result.value! {
+                    self.performSegue(withIdentifier: "searchResultSelected", sender: fetchResult)
                 }
                 else {
                     SVProgressHUD.showError(withStatus: "An error occurred. Please try again later.")
@@ -143,8 +143,8 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let createReadState = segue.destination as? CreateReadState, let bookMetadata = sender as? BookMetadata {
-            createReadState.bookMetadata = bookMetadata
+        if let createReadState = segue.destination as? CreateReadState, let fetchResult = sender as? GoogleBooks.FetchResult {
+            createReadState.bookMetadata = fetchResult.toBookMetadata()
         }
     }
     
@@ -228,12 +228,12 @@ class SearchResultCell : UITableViewCell {
 /// The ViewModel corresponding to the SearchResultCell view
 class SearchResultViewModel {
     
-    let searchResult: GoogleBooksSearchResult
+    let searchResult: GoogleBooks.SearchResult
     let title: String
     let author: String
     let coverImage: Driver<UIImage?>
     
-    init(searchResult: GoogleBooksSearchResult) {
+    init(searchResult: GoogleBooks.SearchResult) {
         self.searchResult = searchResult
         self.title = searchResult.title
         self.author = searchResult.authors

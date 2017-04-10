@@ -62,14 +62,14 @@ class BooksStore {
     /**
      Returns a book with the specified GoogleBooks ID or ISBN, if one exists.
     */
-    func getIfExists(searchResult: GoogleBooksSearchResult) -> Book? {
+    func getIfExists(searchResult: GoogleBooks.SearchResult) -> Book? {
         return getIfExists(googleBooksId: searchResult.id, isbn: searchResult.isbn13)
     }
     
     /**
      Returns the first found book with matching GoogleBooks ID or ISBN
     */
-    func getIfExists(googleBooksId: String? = nil, isbn: String?) -> Book? {
+    func getIfExists(googleBooksId: String? = nil, isbn: String? = nil) -> Book? {
         // if both are nil, leave early
         guard googleBooksId != nil || isbn != nil else { return nil }
         

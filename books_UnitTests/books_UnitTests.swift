@@ -169,14 +169,13 @@ class books_UnitTests: XCTestCase {
         let path = bundle.path(forResource: "GoogleBooksFetchResult", ofType: "json")!
         let json = JSON(NSData(contentsOfFile: path)!)
         
-        let parseResult = GoogleBooksAPI.GoogleBooksParser.parseFetchResults(json)
-        XCTAssertNotNil(parseResult.0)
-        XCTAssertNotNil(parseResult.1)
-        XCTAssertEqual("The Sellout", parseResult.0!.title)
-        XCTAssertEqual("Paul Beatty", parseResult.0!.authors)
-        XCTAssertEqual(304, parseResult.0!.pageCount)
-        XCTAssertEqual("9781786070166", parseResult.0!.isbn13)
-        XCTAssertNotNil(parseResult.0!.bookDescription)
+        let parseResult = GoogleBooks.Parser.parseFetchResults(json)
+        XCTAssertNotNil(parseResult)
+        XCTAssertEqual("The Sellout", parseResult!.title)
+        XCTAssertEqual("Paul Beatty", parseResult!.authors)
+        XCTAssertEqual(304, parseResult!.pageCount)
+        XCTAssertEqual("9781786070166", parseResult!.isbn13)
+        XCTAssertNotNil(parseResult!.description)
     }
     
     func testGoogleBooksSearchParsing() {
@@ -184,7 +183,7 @@ class books_UnitTests: XCTestCase {
         let path = bundle.path(forResource: "GoogleBooksSearchResult", ofType: "json")!
         let json = JSON(NSData(contentsOfFile: path)!)
         
-        let parseResult = GoogleBooksAPI.GoogleBooksParser.parseSearchResults(json)
+        let parseResult = GoogleBooks.Parser.parseSearchResults(json)
         // There are 3 results with no author, which we expect to not show up in the list. Hence: 37.
         XCTAssertEqual(37, parseResult.count)
         for result in parseResult {

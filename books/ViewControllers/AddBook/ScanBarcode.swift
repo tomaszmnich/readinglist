@@ -141,19 +141,31 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     }
     
     func searchForFoundIsbn(isbn: String) {
+        // Before we bring up the spinner, let's check whether the ISBN already exists
+        if let existingBook = appDelegate.booksStore.getIfExists(isbn: isbn) {
+            let alert = duplicateBookAlertController(existingBook, modalControllerToDismiss: self) {
+                self.session?.startRunning()
+            }
+            
+            self.present(alert, animated: true)
+            return
+        }
+
+        // We're going to be doing a search online, so bring up a spinner
         SVProgressHUD.show(withStatus: "Searching...")
-        
-        // We've found an ISBN-13. Let's search for it online
-        GoogleBooksAPI.fetchIsbn(isbn) { result in
+        GoogleBooks.fetchIsbn(isbn) { result in
             DispatchQueue.main.async {
                 
                 SVProgressHUD.dismiss()
                 
-                guard result.isSuccess else { self.onSearchError(result.failureError!); return }
+                guard result.result.isSuccess else { self.onSearchError(result.result.error!); return }
                 
-                if let bookMetadata = result.successValue {
+                // We have to unwrap once to get the inner Optional. This is a bit weird, but it's because our Result object _can_ legitimately
+                // take nil in the success case, so we end up wrapping the optional fetch result in another optional.
+                if let fetchResult = result.result.value! {
+                    
                     // We may now have a book which matches the Google Books ID (but didn't match the ISBN), so check again
-                    if let existingBook = appDelegate.booksStore.getIfExists(googleBooksId: bookMetadata?.googleBooksId, isbn: bookMetadata?.isbn13) {
+                    if let existingBook = appDelegate.booksStore.getIfExists(googleBooksId: fetchResult.id) {
                         let alert = duplicateBookAlertController(existingBook, modalControllerToDismiss: self) {
                             self.session?.startRunning()
                         }
@@ -161,7 +173,8 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
                         self.present(alert, animated: true)
                     }
                     else {
-                        self.foundMetadata = bookMetadata
+                        // If there is no duplicate, we can safely go to the next page
+                        self.foundMetadata = fetchResult.toBookMetadata()
                         self.performSegue(withIdentifier: "barcodeScanResult", sender: self)
                     }
                 }
