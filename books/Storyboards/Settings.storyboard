@@ -131,14 +131,18 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" textLabel="WyI-tc-hdS" style="IBUITableViewCellStyleDefault" id="zcL-5i-M0d">
-                                        <rect key="frame" x="0.0" y="345" width="320" height="44"/>
+                                </cells>
+                            </tableViewSection>
+                            <tableViewSection headerTitle="Debug" id="K29-za-7go">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" textLabel="wK8-az-CPc" style="IBUITableViewCellStyleDefault" id="UJN-4s-R7o">
+                                        <rect key="frame" x="0.0" y="391" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="zcL-5i-M0d" id="lAc-4n-aig">
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="UJN-4s-R7o" id="ee4-wI-CHA">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Import Test Data" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="WyI-tc-hdS">
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Import Test Data" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="wK8-az-CPc">
                                                     <rect key="frame" x="15" y="0.0" width="290" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -158,7 +162,7 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="Root View Controller" id="dAh-ED-Nhz"/>
                     <connections>
-                        <outlet property="addTestDataCell" destination="w78-xe-Rut" id="mYV-Sw-FQu"/>
+                        <outlet property="addTestDataCell" destination="UJN-4s-R7o" id="U2P-03-knb"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="I2D-fm-I5J" userLabel="First Responder" sceneMemberID="firstResponder"/>

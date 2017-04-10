@@ -8,34 +8,71 @@
 
 import Foundation
 import SwiftyJSON
+import CSVImporter
 
-// TODO: remove JSON import, replace with native CSV import
 class BookImport {
     
-    static func fromJson(_ json: JSON) -> (BookMetadata, BookReadingInformation) {
-        let bookMetadata = BookMetadata(title: json["title"].stringValue, authors: json["author"].stringValue)
-        bookMetadata.bookDescription = json["description"].string
+    /// Callback sends imported count, duplicate count, and invalid count.
+    static func importFrom(csvFile: URL, supplementBooks: Bool, callback: @escaping (Int, Int, Int) -> Void) {
+        let importer = CSVImporter<(BookMetadata, BookReadingInformation)?>(path: csvFile.path, workQosClass: .userInitiated)
         
-        var startedWhen: Date? = nil, finishedWhen: Date? = nil
-        if let startedString = json["started"].string {
-            startedWhen = Date(dateString: startedString)
-        }
-        if let finishedString = json["finished"].string {
-            finishedWhen = Date(dateString: finishedString)
+        let importResults = importer.importRecords(structure: { headers in
+            // TODO: Ideally we could throw an error and not import the document if there are bad rows...
+            if !headers.contains("Title") || !headers.contains("Author") {
+                print("Missing Title or Author column")
+            }
+        }, recordMapper: BookMetadata.csvImport)
+        
+        let validEntries = importResults.flatMap{ $0 }
+        let deduplicatedEntries = validEntries.filter {
+            appDelegate.booksStore.getIfExists(googleBooksId: $0.0.googleBooksId, isbn: $0.0.isbn13) == nil
         }
         
-        let bookReadingInformation: BookReadingInformation
-        if finishedWhen != nil {
-            bookReadingInformation = BookReadingInformation.finished(started: startedWhen!, finished: finishedWhen!)
+        // Keep track of the potentially numerous calls
+        let dispatchGroup = DispatchGroup()
+        for entry in deduplicatedEntries {
+            dispatchGroup.enter()
+            
+            if supplementBooks {
+                supplementBook(entry.0, readingInfo: entry.1) {
+                    DispatchQueue.main.async {
+                        appDelegate.booksStore.create(from: entry.0, readingInformation: entry.1)
+                        dispatchGroup.leave()
+                    }
+                }
+            }
+            else {
+                appDelegate.booksStore.create(from: entry.0, readingInformation: entry.1)
+                dispatchGroup.leave()
+            }
         }
-        else if startedWhen != nil {
-            bookReadingInformation = BookReadingInformation.reading(started: startedWhen!)
+        
+        dispatchGroup.notify(queue: .main) {
+            callback(deduplicatedEntries.count, validEntries.count - deduplicatedEntries.count, importResults.count - validEntries.count)
+        }
+    }
+    
+    static func supplementBook(_ bookMetadata: BookMetadata, readingInfo: BookReadingInformation, callback: @escaping (Void) -> Void) {
+        
+        func getCoverCallback(coverResult: Result<Data?>) {
+            if coverResult.isSuccess, let coverImage = coverResult.value! {
+                bookMetadata.coverImage = coverImage
+            }
+            callback()
+        }
+        
+        // GoogleBooks ID takes priority over ISBN.
+        if let googleBookdId = bookMetadata.googleBooksId {
+            GoogleBooks.getCover(googleBooksId: googleBookdId, callback: getCoverCallback)
+        }
+            // but we'll try the ISBN is there was no Google Books ID
+            // TODO: would be nice to supplement with GBID too
+        else if let isbn = bookMetadata.isbn13 {
+            GoogleBooks.getCover(isbn: isbn, callback: getCoverCallback)
         }
         else {
-            bookReadingInformation = BookReadingInformation.toRead()
+            callback()
         }
-        
-        return (bookMetadata, bookReadingInformation)
     }
 }
 
@@ -80,12 +117,12 @@ class CsvExporter<TData> {
     
     func addData(_ dataArray: [TData]) {
         for data in dataArray {
-            document.append(CsvExporter.convertToCsvLine(csvExport.cellValues(data: data)))
+            addData(data)
         }
     }
     
     private static func convertToCsvLine(_ cellValues: [String]) -> String {
-        return cellValues.map{$0.toCsvEscaped()}.joined(separator: ",") + "\n"
+        return cellValues.map{ $0.toCsvEscaped() }.joined(separator: ",") + "\n"
     }
     
     func write(to fileURL: URL) throws {
