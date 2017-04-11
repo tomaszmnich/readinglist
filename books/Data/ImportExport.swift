@@ -28,21 +28,34 @@ class BookImport {
             appDelegate.booksStore.getIfExists(googleBooksId: $0.0.googleBooksId, isbn: $0.0.isbn13) == nil
         }
         
+        // Grab the current maximum sort, so that we can add the new books after it
+        var sortIndex = appDelegate.booksStore.maxSort() ?? -1
+        
         // Keep track of the potentially numerous calls
         let dispatchGroup = DispatchGroup()
         for entry in deduplicatedEntries {
             dispatchGroup.enter()
             
+            // Increment the sort index if this is a ToRead book.
+            let specifiedSort: Int?
+            if entry.1.readState == .toRead {
+                sortIndex += 1
+                specifiedSort = sortIndex
+            }
+            else {
+                specifiedSort = nil
+            }
+
             if supplementBooks {
                 supplementBook(entry.0, readingInfo: entry.1) {
                     DispatchQueue.main.async {
-                        appDelegate.booksStore.create(from: entry.0, readingInformation: entry.1)
+                        appDelegate.booksStore.create(from: entry.0, readingInformation: entry.1, bookSort: specifiedSort)
                         dispatchGroup.leave()
                     }
                 }
             }
             else {
-                appDelegate.booksStore.create(from: entry.0, readingInformation: entry.1)
+                appDelegate.booksStore.create(from: entry.0, readingInformation: entry.1, bookSort: specifiedSort)
                 dispatchGroup.leave()
             }
         }

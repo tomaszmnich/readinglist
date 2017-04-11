@@ -102,7 +102,7 @@ class BooksStore {
     /**
      Gets the current maximum sort index in the books store
     */
-    private func maxSort() -> Int? {
+    func maxSort() -> Int? {
         let fetchRequest = NSFetchRequest<Book>(entityName: self.bookEntityName)
         fetchRequest.fetchLimit = 1
         
