@@ -153,45 +153,51 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
 
         // We're going to be doing a search online, so bring up a spinner
         SVProgressHUD.show(withStatus: "Searching...")
-        GoogleBooks.fetchIsbn(isbn) { result in
+        GoogleBooks.fetchIsbn(isbn) { resultPage in
             DispatchQueue.main.async {
                 
                 SVProgressHUD.dismiss()
                 
-                guard result.result.isSuccess else { self.onSearchError(result.result.error!); return }
-                
-                // We have to unwrap once to get the inner Optional. This is a bit weird, but it's because our Result object _can_ legitimately
-                // take nil in the success case, so we end up wrapping the optional fetch result in another optional.
-                if let fetchResult = result.result.value! {
-                    
-                    // We may now have a book which matches the Google Books ID (but didn't match the ISBN), so check again
-                    if let existingBook = appDelegate.booksStore.getIfExists(googleBooksId: fetchResult.id) {
-                        let alert = duplicateBookAlertController(existingBook, modalControllerToDismiss: self) {
-                            self.session?.startRunning()
-                        }
-                        
-                        self.present(alert, animated: true)
+                guard resultPage.result.isSuccess else {
+                    let error = resultPage.result.error!
+                    if (error as? GoogleBooks.FetchResultPage.FetchError) == .noResult {
+                        self.presentNoExactMatchAlert(forIsbn: isbn)
                     }
                     else {
-                        // If there is no duplicate, we can safely go to the next page
-                        self.foundMetadata = fetchResult.toBookMetadata()
-                        self.performSegue(withIdentifier: "barcodeScanResult", sender: self)
+                        self.onSearchError(error)
                     }
+                    return
+                }
+                
+                let fetchResult = resultPage.result.value!
+                // We may now have a book which matches the Google Books ID (but didn't match the ISBN), so check again
+                if let existingBook = appDelegate.booksStore.getIfExists(googleBooksId: fetchResult.id) {
+                    let alert = duplicateBookAlertController(existingBook, modalControllerToDismiss: self) {
+                        self.session?.startRunning()
+                    }
+                    
+                    self.present(alert, animated: true)
                 }
                 else {
-                    let alert = UIAlertController(title: "No Exact Match", message: "We couldn't find an exact match. Would you like to do a more general search instead?", preferredStyle: UIAlertControllerStyle.alert)
-                    alert.addAction(UIAlertAction(title: "No", style: UIAlertActionStyle.cancel, handler: { _ in
-                        self.session?.startRunning()
-                    }))
-                    alert.addAction(UIAlertAction(title: "Yes", style: UIAlertActionStyle.default, handler: { _ in
-                        self.dismiss(animated: true){
-                            appDelegate.splitViewController.tabbedViewController.performSegue(withIdentifier: "searchByText", sender: isbn)
-                        }
-                    }))
-                    self.present(alert, animated: true, completion: nil)
+                    // If there is no duplicate, we can safely go to the next page
+                    self.foundMetadata = fetchResult.toBookMetadata()
+                    self.performSegue(withIdentifier: "barcodeScanResult", sender: self)
                 }
             }
         }
+    }
+    
+    func presentNoExactMatchAlert(forIsbn isbn: String) {
+        let alert = UIAlertController(title: "No Exact Match", message: "We couldn't find an exact match. Would you like to do a more general search instead?", preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "No", style: UIAlertActionStyle.cancel, handler: { _ in
+            self.session?.startRunning()
+        }))
+        alert.addAction(UIAlertAction(title: "Yes", style: UIAlertActionStyle.default, handler: { _ in
+            self.dismiss(animated: true){
+                appDelegate.splitViewController.tabbedViewController.performSegue(withIdentifier: "searchByText", sender: isbn)
+            }
+        }))
+        self.present(alert, animated: true, completion: nil)
     }
     
     func onSearchError(_ error: Error) {

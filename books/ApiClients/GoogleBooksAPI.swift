@@ -105,7 +105,7 @@ class GoogleBooks {
             }
             
             let results = Parser.parseSearchResults(result.value!)
-            guard let id = results.first?.id else { callback(FetchResultPage(nil, fromRequest: request)); return }
+            guard let id = results.first?.id else { callback(FetchResultPage.empty(fromRequest: request)); return }
             GoogleBooks.fetch(googleBooksId: id, callback: callback)
         }
     }
@@ -125,62 +125,35 @@ class GoogleBooks {
             }
             
             guard let result = Parser.parseFetchResults(result.value!) else {
-                callback(FetchResultPage(nil, fromRequest: request))
+                callback(FetchResultPage.empty(fromRequest: request))
                 return
             }
             
-            getBestCover(forFetchResult: result) { coverResult in
-                if coverResult.isSuccess, let coverData = coverResult.value! {
-                    result.coverImage = coverData
+            getCover(googleBooksId: result.id) { coverResult in
+                if coverResult.isSuccess {
+                    result.coverImage = coverResult.value!
                 }
                 callback(FetchResultPage(result, fromRequest: request))
             }
         }
     }
     
-    private static func getBestCover(forFetchResult fetchResult: FetchResult, callback: @escaping (Result<Data?>) -> Void) {
-        let coverRequest: Request?
-        if fetchResult.hasSmallImage {
-            coverRequest = Request.coverImage(fetchResult.id, .small)
-        }
-        else if fetchResult.hasThumbnailImage {
-            coverRequest = Request.coverImage(fetchResult.id, .thumbnail)
-        }
-        else {
-            coverRequest = nil
-        }
-        
-        if coverRequest != nil {
-            GoogleBooks.requestData(from: coverRequest!.url) { coverResult in
-                callback(coverResult.toOptional())
-            }
-        }
-        else {
-            #if DEBUG
-                print("No cover URL for GBID: \(fetchResult.id)")
-            #endif
-            callback(Result.success(nil))
-        }
-    }
-    
     /**
      Gets the cover image data for the book corresponding to the Google Books ID (if exists).
     */
-    static func getCover(googleBooksId: String, callback: @escaping (Result<Data?>) -> Void) {
-        GoogleBooks.fetch(googleBooksId: googleBooksId) { fetchResult in
-            guard fetchResult.result.isSuccess else { callback(Result.failure(fetchResult.result.error!)); return }
-            
-            getBestCover(forFetchResult: fetchResult.result.value!!) { coverResult in
-                callback(coverResult)
-            }
-        }
+    static func getCover(googleBooksId: String, callback: @escaping (Result<Data>) -> Void) {
+        // Just use the thumbnail cover images for now
+        let coverRequest = Request.coverImage(googleBooksId, .thumbnail)
+        requestData(from: coverRequest.url, callback: callback)
     }
     
-    static func getCover(isbn: String, callback: @escaping (Result<Data?>) -> Void) {
+    static func getCover(isbn: String, callback: @escaping (Result<Data>) -> Void) {
+        // If we are going by the ISBN, fetch the result first
+        // TODO: this could become redundant if we supplement ISBN -> GBID first.
         GoogleBooks.fetchIsbn(isbn) { fetchResult in
             guard fetchResult.result.isSuccess else { callback(Result.failure(fetchResult.result.error!)); return }
             
-            getBestCover(forFetchResult: fetchResult.result.value!!) { coverResult in
+            getCover(googleBooksId: fetchResult.result.value!.id) { coverResult in
                 callback(coverResult)
             }
         }
@@ -369,20 +342,24 @@ class GoogleBooks {
     }
     
     class FetchResultPage {
-        let request: Request
-        let result: Result<FetchResult?>
+        enum FetchError: Error {
+            case noResult
+        }
         
-        init(_ result: Result<FetchResult?>, fromRequest request: Request) {
+        let request: Request
+        let result: Result<FetchResult>
+        
+        init(_ result: Result<FetchResult>, fromRequest request: Request) {
             self.request = request
             self.result = result
         }
         
-        convenience init(_ result: FetchResult?, fromRequest request: Request) {
+        convenience init(_ result: FetchResult, fromRequest request: Request) {
             self.init(Result.success(result), fromRequest: request)
         }
         
         static func empty(fromRequest request: Request) -> FetchResultPage {
-            return FetchResultPage(Result.success(nil), fromRequest: request)
+            return FetchResultPage(Result.failure(FetchError.noResult), fromRequest: request)
         }
         
         static func error(_ error: Error, fromRequest request: Request) -> FetchResultPage {

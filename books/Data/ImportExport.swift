@@ -54,9 +54,9 @@ class BookImport {
     
     static func supplementBook(_ bookMetadata: BookMetadata, readingInfo: BookReadingInformation, callback: @escaping (Void) -> Void) {
         
-        func getCoverCallback(coverResult: Result<Data?>) {
-            if coverResult.isSuccess, let coverImage = coverResult.value! {
-                bookMetadata.coverImage = coverImage
+        func getCoverCallback(coverResult: Result<Data>) {
+            if coverResult.isSuccess {
+                bookMetadata.coverImage = coverResult.value!
             }
             callback()
         }

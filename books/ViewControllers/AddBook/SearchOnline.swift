@@ -124,11 +124,11 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
 
     func fetchAndSegue(searchResult: GoogleBooks.SearchResult) {
         SVProgressHUD.show(withStatus: "Loading...")
-        GoogleBooks.fetch(googleBooksId: searchResult.id) { result in
+        GoogleBooks.fetch(googleBooksId: searchResult.id) { resultPage in
             DispatchQueue.main.async {
                 SVProgressHUD.dismiss()
-                if result.result.isSuccess, let fetchResult = result.result.value! {
-                    self.performSegue(withIdentifier: "searchResultSelected", sender: fetchResult)
+                if resultPage.result.isSuccess {
+                    self.performSegue(withIdentifier: "searchResultSelected", sender: resultPage.result.value!)
                 }
                 else {
                     SVProgressHUD.showError(withStatus: "An error occurred. Please try again later.")

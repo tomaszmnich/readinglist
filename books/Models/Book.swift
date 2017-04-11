@@ -141,10 +141,10 @@ class BookMetadata {
     static func csvImport(csvData: [String: String]) -> (BookMetadata, BookReadingInformation)? {
         
         guard let title = csvData["Title"], let authors = csvData["Author"] else { return nil }
-        let bookMetadata = BookMetadata(googleBooksId: csvData["Google Books ID"], title: title, authors: authors)
+        let bookMetadata = BookMetadata(googleBooksId: csvData["Google Books ID"]?.nilIfWhitespace(), title: title, authors: authors)
         bookMetadata.isbn13 = Isbn13.tryParse(inputString: csvData["ISBN-13"])
         bookMetadata.pageCount = csvData["Page Count"] == nil ? nil : Int(csvData["Page Count"]!)
-        bookMetadata.bookDescription = csvData["Description"]
+        bookMetadata.bookDescription = csvData["Description"]?.nilIfWhitespace()
         
         let startedReading = Date(dateString: csvData["Started Reading"])
         let finishedReading = Date(dateString: csvData["Finished Reading"])

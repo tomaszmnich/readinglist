@@ -30,7 +30,6 @@ class books_Snapshot: XCTestCase {
         super.tearDown()
     }
     
-    /*
     func testSnapshot() {
         let app = ReadingListApplication()
         
@@ -66,6 +65,6 @@ class books_Snapshot: XCTestCase {
         sleep(1)
         snapshot("3_SearchFinished")
         
-    }*/
+    }
 }
 

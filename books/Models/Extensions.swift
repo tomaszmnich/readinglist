@@ -166,6 +166,10 @@ extension String {
         return self.trimming().isEmpty
     }
     
+    func nilIfWhitespace() -> String? {
+        return isEmptyOrWhitespace ? nil : self
+    }
+    
     /// Removes all whitespace characters from the beginning and the end of the string.
     func trimming() -> String {
         return self.trimmingCharacters(in: CharacterSet.whitespaces)
