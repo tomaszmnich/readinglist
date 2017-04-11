@@ -207,18 +207,19 @@ class GoogleBooks {
         private static let googleBooksBaseUrl = URL(string: "https://books.google.com")!
         
         private static let searchResultFields = "items(id,volumeInfo(title,authors,industryIdentifiers,imageLinks/thumbnail))"
+        private static let apiKey = "AIzaSyAN64W_QrynoqZB3Sxdm1PudVOdjvU69Qo"
         
         var url: URL {
             switch self{
             case let .searchText(searchString):
                 let encodedQuery = searchString.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-                return URL(string: "/books/v1/volumes?q=\(encodedQuery)&maxResults=40&fields=\(Request.searchResultFields)", relativeTo: Request.apiBaseUrl)!
+                return URL(string: "/books/v1/volumes?q=\(encodedQuery)&maxResults=40&fields=\(Request.searchResultFields)&key=\(Request.apiKey)", relativeTo: Request.apiBaseUrl)!
                 
             case let .searchIsbn(isbn):
-                return URL(string: "/books/v1/volumes?q=isbn:\(isbn)&maxResults=1&fields=\(Request.searchResultFields)", relativeTo: Request.apiBaseUrl)!
+                return URL(string: "/books/v1/volumes?q=isbn:\(isbn)&maxResults=1&fields=\(Request.searchResultFields)&key=\(Request.apiKey)", relativeTo: Request.apiBaseUrl)!
                 
             case let .fetch(id):
-                return URL(string: "/books/v1/volumes/\(id)", relativeTo: Request.apiBaseUrl)!
+                return URL(string: "/books/v1/volumes/\(id)&key=\(Request.apiKey)", relativeTo: Request.apiBaseUrl)!
             
             case let .coverImage(googleBooksId, coverType):
                 return URL(string: "/books/content?id=\(googleBooksId)&printsec=frontcover&img=1&zoom=\(coverType.rawValue)", relativeTo: Request.googleBooksBaseUrl)!
