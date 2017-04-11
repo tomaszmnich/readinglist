@@ -107,7 +107,7 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
     
     func onModelSelected(_ model: SearchResultViewModel) {
         // Duplicate check
-        if let existingBook = appDelegate.booksStore.getIfExists(searchResult: model.searchResult) {
+        if let existingBook = appDelegate.booksStore.getIfExists(googleBooksId: model.searchResult.id, isbn: model.searchResult.isbn13) {
             
             let alert = duplicateBookAlertController(existingBook, modalControllerToDismiss: self) {
                 // Deselect the row after dismissing the alert

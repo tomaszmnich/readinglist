@@ -61,7 +61,7 @@ class Settings: UITableViewController, NavBarConfigurer {
         // The CONFIRM DELETE action:
         let confirmDelete = UIAlertController(title: "Final Warning", message: "This action is irreversible. Are you sure you want to continue?", preferredStyle: .alert)
         confirmDelete.addAction(UIAlertAction(title: "Delete", style: .destructive) { _ in
-            appDelegate.booksStore.deleteAllData()
+            appDelegate.booksStore.deleteAll()
             // Relayout the tables. Their empty data sets sometimes are in the wrong place after deleting everything.
             // TODO: look into making this work better
             appDelegate.splitViewController.tabbedViewController.readingTabView.layoutSubviews()
@@ -136,7 +136,7 @@ class Settings: UITableViewController, NavBarConfigurer {
     #if DEBUG
     func loadTestData() {
         
-        appDelegate.booksStore.deleteAllData()
+        appDelegate.booksStore.deleteAll()
         let csvPath = Bundle.main.url(forResource: "examplebooks", withExtension: "csv")
         
         SVProgressHUD.show(withStatus: "Loading Data...")

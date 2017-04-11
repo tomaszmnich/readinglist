@@ -44,6 +44,14 @@ class CoreSpotlightStack {
     }
     
     /**
+     Removes **all** items from the Spotlight index.
+    */
+    func deindexAllItems(completionHandler: ((Error?) -> Void)? = nil) {
+        guard indexingAvailable else { return }
+        CSSearchableIndex.default().deleteAllSearchableItems(completionHandler: completionHandler)
+    }
+    
+    /**
      Updates the items' entries in the Spotlight index.
     */
     func updateItems(_ items: [SpotlightItem]){

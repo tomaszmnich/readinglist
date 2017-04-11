@@ -55,15 +55,8 @@ class BooksStore {
      Retrieves the specified Book, if it exists.
      */
     func get(bookIdUrl: URL) -> Book? {
-        let bookObjectUrl = coreDataStack.managedObjectContext.persistentStoreCoordinator!.managedObjectID(forURIRepresentation: bookIdUrl)!
-        return coreDataStack.managedObjectContext.object(with: bookObjectUrl) as? Book
-    }
-    
-    /**
-     Returns a book with the specified GoogleBooks ID or ISBN, if one exists.
-    */
-    func getIfExists(searchResult: GoogleBooks.SearchResult) -> Book? {
-        return getIfExists(googleBooksId: searchResult.id, isbn: searchResult.isbn13)
+        let bookObjectId = coreDataStack.managedObjectContext.persistentStoreCoordinator!.managedObjectID(forURIRepresentation: bookIdUrl)!
+        return coreDataStack.managedObjectContext.object(with: bookObjectId) as? Book
     }
     
     /**
@@ -82,13 +75,6 @@ class BooksStore {
         fetchRequest.predicate = NSPredicate.Or([googleBooksPredicate, isbnPredicate])
         let books = try? coreDataStack.managedObjectContext.fetch(fetchRequest)
         return books?.first
-    }
-    
-    /**
-     Returns the number of books in the BooksStore
-    */
-    func bookCount() -> Int {
-        return (try? coreDataStack.managedObjectContext.count(for: bookFetchRequest())) ?? 0
     }
     
     /**
@@ -129,16 +115,6 @@ class BooksStore {
             print("Error determining max sort")
             return nil
         }
-    }
-    
-    /**
-     Deletes the given book from the managed object context.
-     Deindexes from Spotlight if necessary.
-    */
-    func delete(_ book: Book) {
-        coreSpotlightStack.deindexItems(withIdentifiers: [book.objectID.uriRepresentation().absoluteString])
-        coreDataStack.managedObjectContext.delete(book)
-        save()
     }
     
     /**
@@ -202,9 +178,20 @@ class BooksStore {
     }
     
     /**
-     Deletes **all** book objects from the persistent store.
+     Deletes the given book from the managed object context.
+     Deindexes from Spotlight if necessary.
+     */
+    func delete(_ book: Book) {
+        coreSpotlightStack.deindexItems(withIdentifiers: [book.objectID.uriRepresentation().absoluteString])
+        coreDataStack.managedObjectContext.delete(book)
+        save()
+    }
+    
+    /**
+     Deletes **all** book objects from the managed object context.
+     Deindexes all items from Spotlight if necessary.
     */
-    func deleteAllData() {
+    func deleteAll() {
         let deleteRequest = NSBatchDeleteRequest(fetchRequest: bookFetchRequest() as! NSFetchRequest<NSFetchRequestResult>)
         deleteRequest.resultType = .resultTypeObjectIDs
         
@@ -215,6 +202,9 @@ class BooksStore {
             // Notify the application that the objects in memory are stale and need to be refreshed
             let objectIDArray = result?.result as? [NSManagedObjectID]
             NSManagedObjectContext.mergeChanges(fromRemoteContextSave: [NSDeletedObjectsKey: objectIDArray as Any], into: [coreDataStack.managedObjectContext])
+            
+            // Remove all spotlight indexed items
+            coreSpotlightStack.deindexAllItems()
         }
         catch {
             print("Error deleting data: \(error)")
