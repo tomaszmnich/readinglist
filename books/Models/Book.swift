@@ -121,6 +121,9 @@ class BookMetadata {
     var isbn13: String?
     var coverImage: Data?
     
+    // ONLY used for import; not a usually populated field
+    var coverUrl: URL?
+    
     init(googleBooksId: String? = nil, title: String, authors: String) {
         self.googleBooksId = googleBooksId
         self.title = title
@@ -145,6 +148,7 @@ class BookMetadata {
         bookMetadata.isbn13 = Isbn13.tryParse(inputString: csvData["ISBN-13"])
         bookMetadata.pageCount = csvData["Page Count"] == nil ? nil : Int(csvData["Page Count"]!)
         bookMetadata.bookDescription = csvData["Description"]?.nilIfWhitespace()
+        bookMetadata.coverUrl = URL(optionalString: csvData["Cover URL"])
         
         let startedReading = Date(dateString: csvData["Started Reading"])
         let finishedReading = Date(dateString: csvData["Finished Reading"])

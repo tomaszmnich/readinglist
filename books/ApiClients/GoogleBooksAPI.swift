@@ -177,7 +177,7 @@ class GoogleBooks {
         return webRequest
     }
     
-    @discardableResult private static func requestData(from url: URL, callback: @escaping (Result<Data>) -> Void) -> URLSessionDataTask {
+    @discardableResult static func requestData(from url: URL, callback: @escaping (Result<Data>) -> Void) -> URLSessionDataTask {
         #if DEBUG
             print("Requesting \(url.absoluteString)")
         #endif

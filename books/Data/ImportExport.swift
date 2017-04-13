@@ -83,6 +83,9 @@ class BookImport {
         else if let isbn = bookMetadata.isbn13 {
             GoogleBooks.getCover(isbn: isbn, callback: getCoverCallback)
         }
+        else if let coverUrl = bookMetadata.coverUrl {
+            GoogleBooks.requestData(from: coverUrl, callback: getCoverCallback)
+        }
         else {
             callback()
         }
