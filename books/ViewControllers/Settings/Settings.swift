@@ -14,13 +14,13 @@ class Settings: UITableViewController, NavBarConfigurer {
     
     var navBarChangedDelegate: NavBarChangedDelegate!
     
-    @IBOutlet weak var addTestDataCell: UITableViewCell!
+    @IBOutlet weak var debugSettingsCell: UITableViewCell!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         #if !DEBUG
-            addTestDataCell.isHidden = true
+            debugSettingsCell.isHidden = true
         #endif
     }
     
@@ -46,11 +46,7 @@ class Settings: UITableViewController, NavBarConfigurer {
             exportData()
         case (1, 2):
             deleteAllData()
-        case (2, 0):
-            // "Use Test Data"
-            #if DEBUG
-                loadTestData()
-            #endif
+
         default:
             break
         }
@@ -132,28 +128,4 @@ class Settings: UITableViewController, NavBarConfigurer {
             }
         }
     }
-    
-    #if DEBUG
-    func loadTestData() {
-        
-        appDelegate.booksStore.deleteAll()
-        let csvPath = Bundle.main.url(forResource: "examplebooks", withExtension: "csv")
-        
-        SVProgressHUD.show(withStatus: "Loading Data...")
-        
-        BookImport.importFrom(csvFile: csvPath!, supplementBooks: true) { importedCount, duplicateCount, invalidCount in
-            var statusMessage = "\(importedCount) books imported."
-            
-            if duplicateCount != 0 {
-                statusMessage += " \(duplicateCount) rows ignored due pre-existing data."
-            }
-            
-            if invalidCount != 0 {
-                statusMessage += " \(invalidCount) rows ignored due to invalid data."
-            }
-            SVProgressHUD.dismiss()
-            SVProgressHUD.showInfo(withStatus: statusMessage)
-        }
-    }
-    #endif
 }

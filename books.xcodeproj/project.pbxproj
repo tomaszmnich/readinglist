@@ -23,6 +23,7 @@
 		493056431DB1561C0086FDAD /* TableUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493056421DB1561C0086FDAD /* TableUpdater.swift */; };
 		493421FB1DAD7D7500C09A22 /* PreviewingNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493421FA1DAD7D7500C09A22 /* PreviewingNavigationController.swift */; };
 		4936B5841D2C3A2C00600562 /* AddManually.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4936B5831D2C3A2C00600562 /* AddManually.storyboard */; };
+		4937A1481E9E1FB900A3B0D1 /* DebugSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4937A1471E9E1FB900A3B0D1 /* DebugSettings.swift */; };
 		4942348D1E70AFA100CEEB4C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 494234891E70AFA100CEEB4C /* Main.storyboard */; };
 		4942348E1E70AFA100CEEB4C /* SearchOnline.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4942348A1E70AFA100CEEB4C /* SearchOnline.storyboard */; };
 		4942348F1E70AFA100CEEB4C /* ScanBarcode.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4942348B1E70AFA100CEEB4C /* ScanBarcode.storyboard */; };
@@ -52,6 +53,7 @@
 		49BDCC631CD2A00F00F20AAE /* BookMetadataForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BDCC621CD2A00F00F20AAE /* BookMetadataForm.swift */; };
 		49BDCC6C1CD6120400F20AAE /* NavWithReadState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BDCC6B1CD6120400F20AAE /* NavWithReadState.swift */; };
 		49C5339F1DB281A10043E50E /* BookPredicateBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C5339E1DB281A10043E50E /* BookPredicateBuilder.swift */; };
+		49CEB80A1E9D8C06003FD859 /* DebugSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49CEB8091E9D8C06003FD859 /* DebugSettingsViewController.swift */; };
 		49D93AA51CAB16F800AE6611 /* CoreSpotlightStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49D93AA41CAB16F800AE6611 /* CoreSpotlightStack.swift */; };
 		49E95D0F1DD7D9EC00C215F8 /* GoogleBooksAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E95D0E1DD7D9EC00C215F8 /* GoogleBooksAPI.swift */; };
 		49F1D02B1E9C3F2700AD5BB3 /* examplebooks.csv in Resources */ = {isa = PBXBuildFile; fileRef = 49F1D02A1E9C3F2700AD5BB3 /* examplebooks.csv */; };
@@ -102,6 +104,7 @@
 		493056421DB1561C0086FDAD /* TableUpdater.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableUpdater.swift; sourceTree = "<group>"; };
 		493421FA1DAD7D7500C09A22 /* PreviewingNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreviewingNavigationController.swift; sourceTree = "<group>"; };
 		4936B5831D2C3A2C00600562 /* AddManually.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = AddManually.storyboard; sourceTree = "<group>"; };
+		4937A1471E9E1FB900A3B0D1 /* DebugSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DebugSettings.swift; sourceTree = "<group>"; };
 		494234891E70AFA100CEEB4C /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		4942348A1E70AFA100CEEB4C /* SearchOnline.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SearchOnline.storyboard; sourceTree = "<group>"; };
 		4942348B1E70AFA100CEEB4C /* ScanBarcode.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ScanBarcode.storyboard; sourceTree = "<group>"; };
@@ -135,6 +138,7 @@
 		49BDCC621CD2A00F00F20AAE /* BookMetadataForm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookMetadataForm.swift; sourceTree = "<group>"; };
 		49BDCC6B1CD6120400F20AAE /* NavWithReadState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavWithReadState.swift; sourceTree = "<group>"; };
 		49C5339E1DB281A10043E50E /* BookPredicateBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookPredicateBuilder.swift; sourceTree = "<group>"; };
+		49CEB8091E9D8C06003FD859 /* DebugSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DebugSettingsViewController.swift; sourceTree = "<group>"; };
 		49D93AA41CAB16F800AE6611 /* CoreSpotlightStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreSpotlightStack.swift; sourceTree = "<group>"; };
 		49E0C8931CA4945700703A9A /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
 		49E455381E922C5D0034C95C /* books_2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = books_2.xcdatamodel; sourceTree = "<group>"; };
@@ -246,6 +250,7 @@
 				495879641BF7E76200000131 /* CoreDataStack.swift */,
 				49D93AA41CAB16F800AE6611 /* CoreSpotlightStack.swift */,
 				49160F5E1E809DFE00168FD0 /* ImportExport.swift */,
+				4937A1471E9E1FB900A3B0D1 /* DebugSettings.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -270,6 +275,7 @@
 				494D96E31E759D8900299752 /* AttributionsViewController.swift */,
 				4943DB781DBD5104004CAF30 /* Settings.swift */,
 				49F6AC641E98F36B000B7D17 /* ImportDataViewController.swift */,
+				49CEB8091E9D8C06003FD859 /* DebugSettingsViewController.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -739,9 +745,11 @@
 				49D93AA51CAB16F800AE6611 /* CoreSpotlightStack.swift in Sources */,
 				4994706A1DB42067008CB06E /* ReadingTable.swift in Sources */,
 				49FE2ED51D6F675D00F04239 /* SearchOnline.swift in Sources */,
+				4937A1481E9E1FB900A3B0D1 /* DebugSettings.swift in Sources */,
 				494D96E21E71EDAE00299752 /* GeneralUIAction.swift in Sources */,
 				498B4D4D1CB1AB7A00C5F38B /* SplitViewController.swift in Sources */,
 				491F14621C02228C0052B355 /* ScanBarcode.swift in Sources */,
+				49CEB80A1E9D8C06003FD859 /* DebugSettingsViewController.swift in Sources */,
 				49BDCC6C1CD6120400F20AAE /* NavWithReadState.swift in Sources */,
 				493421FB1DAD7D7500C09A22 /* PreviewingNavigationController.swift in Sources */,
 			);

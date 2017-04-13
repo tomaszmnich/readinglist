@@ -51,20 +51,34 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     }
     
     private func setupAvSession() {
-        let camera = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo)
+        if DebugSettings.useFixedBarcodeScanImage {
+            useExampleBarcodeImage()
+        }
+        if let debugSimulation = DebugSettings.barcodeScanSimulation {
+            switch debugSimulation {
+            case .validIsbn:
+                respondToCapturedIsbn("9781781100264")
+                return
+            case .unfoundIsbn:
+                // Use a string which could be valid but isn't an ISBN
+                respondToCapturedIsbn("9781111111111")
+                return
+            case .existingIsbn:
+                respondToCapturedIsbn(DebugSettings.existingIsbn)
+                return
+            default:
+                break
+            }
+        }
         
-        guard let input = try? AVCaptureDeviceInput(device: camera) else {
-            #if DEBUG
-                // In debug mode, when we are running via fastlane snapshot, just use an image of a barcode
-                if UserDefaults.standard.bool(forKey: "FASTLANE_SNAPSHOT") {
-                    useExampleBarcodeImage()
-                    return
-                }
-            #endif
+    
+        let camera = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo)
+        guard let input = try? AVCaptureDeviceInput(device: camera), DebugSettings.barcodeScanSimulation != .noCameraPermissions else {
             presentCameraPermissionsAlert()
             return
         }
         
+        // Try to focus the camera if possible
         if camera?.isFocusPointOfInterestSupported == true {
             try? camera!.lockForConfiguration()
             camera!.focusPointOfInterest = cameraPreviewView.center
@@ -121,14 +135,17 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     
     func captureOutput(_ captureOutput: AVCaptureOutput!, didOutputMetadataObjects metadataObjects: [Any]!, from connection: AVCaptureConnection!) {
         
-        guard let avMetadata = metadataObjects.first as? AVMetadataMachineReadableCodeObject else { return }
-        guard let _ = Isbn13.tryParse(inputString: avMetadata.stringValue) else { return }
-        
+        guard let avMetadata = metadataObjects.first as? AVMetadataMachineReadableCodeObject,
+            let isbn = Isbn13.tryParse(inputString: avMetadata.stringValue) else { return }
+        respondToCapturedIsbn(isbn)
+    }
+    
+    func respondToCapturedIsbn(_ isbn: String) {
         // Since we have a result, stop the session and hide the preview
         session?.stopRunning()
         
         // Check that the book hasn't already been added
-        if let existingBook = appDelegate.booksStore.getIfExists(isbn: avMetadata.stringValue) {
+        if let existingBook = appDelegate.booksStore.getIfExists(isbn: isbn) {
             let alert = duplicateBookAlertController(existingBook, modalControllerToDismiss: self) {
                 self.session?.startRunning()
             }
@@ -136,20 +153,11 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
             self.present(alert, animated: true)
         }
         else {
-            searchForFoundIsbn(isbn: avMetadata.stringValue)
+            searchForFoundIsbn(isbn: isbn)
         }
     }
     
     func searchForFoundIsbn(isbn: String) {
-        // Before we bring up the spinner, let's check whether the ISBN already exists
-        if let existingBook = appDelegate.booksStore.getIfExists(isbn: isbn) {
-            let alert = duplicateBookAlertController(existingBook, modalControllerToDismiss: self) {
-                self.session?.startRunning()
-            }
-            
-            self.present(alert, animated: true)
-            return
-        }
 
         // We're going to be doing a search online, so bring up a spinner
         SVProgressHUD.show(withStatus: "Searching...")
