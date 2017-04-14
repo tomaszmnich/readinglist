@@ -27,7 +27,11 @@ class ReadingListApplication : XCUIApplication {
     
     func addTestData() {
         clickTab(.settings)
+        tables.cells.staticTexts["Debug Settings"].tap()
         tables.cells.staticTexts["Import Test Data"].tap()
+        print("Waiting 10 seconds, just to be safe")
+        sleep(10)
+        topNavBar.buttons["Settings"].tap()
     }
     
     func clickAddButton(addMethod: addMethod) {
@@ -53,8 +57,6 @@ class books_UITests: XCTestCase {
 
         // Add some test data
         app.addTestData()
-        print("Waiting 10 seconds")
-        sleep(10)
     }
     
     override func tearDown() {
