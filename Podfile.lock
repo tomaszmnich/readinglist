@@ -9,13 +9,13 @@ PODS:
   - HandySwift (2.2.0)
   - ImageRow (1.0.0):
     - Eureka (~> 2.0.0-beta.1)
-  - RxCocoa (3.2.0):
-    - RxSwift (~> 3.1)
-  - RxSwift (3.2.0)
+  - RxCocoa (3.4.0):
+    - RxSwift (~> 3.4)
+  - RxSwift (3.4.0)
   - RxSwiftUtilities (1.0.1):
     - RxCocoa (~> 3.0)
     - RxSwift (~> 3.0)
-  - SimulatorStatusMagic (1.9.3)
+  - SimulatorStatusMagic (1.9.4)
   - SVProgressHUD (2.1.2)
   - SwiftyJSON (3.1.4)
 
@@ -41,10 +41,10 @@ SPEC CHECKSUMS:
   Fabric: 5911403591946b8228ab1c51d98f1d7137e863c6
   HandySwift: 7bc03858d1368483f79ae6563f58619cf7ef5505
   ImageRow: 1e37db26f61a0c4ad3bc9a3a803c32d968782857
-  RxCocoa: ccdf43101a70407097a29082f648ba1676075b30
-  RxSwift: 46574f70d416b7923c237195939cc488a7fbf3a0
+  RxCocoa: d14ef6b6029e1ddc6e966508c09289090de68ff9
+  RxSwift: 3789a1af753002a14edecdb698a2424624296a9c
   RxSwiftUtilities: 57e77c17b885931c37aa038f114f14fd1f478ac2
-  SimulatorStatusMagic: 4703d78db62ff6419d889c8b2ed4ec38f9bba501
+  SimulatorStatusMagic: db93f00d164d854cd5ed7b5c75f48fba3b698c20
   SVProgressHUD: c404a55d78acbeb7ebb78b76d3faf986475a6994
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
 

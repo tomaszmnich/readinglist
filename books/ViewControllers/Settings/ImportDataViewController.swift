@@ -27,7 +27,7 @@ class ImportDataViewController : FormViewController, UIDocumentPickerDelegate, U
         })
         form.append(downloadImagesSection)
         
-        let selectDocumentSection = Section(footer: "Import books from a CSV file.")
+        let selectDocumentSection = Section(footer: "Import books from a CSV file. This is beta functionality!")
         selectDocumentSection.append(ButtonRow(selectDocumentKey) {
             $0.title = "Import Books"
             $0.onCellSelection(self.requestImport)
