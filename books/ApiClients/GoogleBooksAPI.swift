@@ -265,10 +265,15 @@ class GoogleBooks {
             result.hasSmallImage = fetchResult["volumeInfo","imageLinks","small"].string != nil
             result.hasThumbnailImage = fetchResult["volumeInfo","imageLinks","thumbnail"].string != nil
             
-            // This string may contain some HTML. We want to remove them, but first we might as well replace the "<br>"s with '\n'
+            // This string may contain some HTML. We want to remove them, but first we might as well replace the "<br>"s with '\n's
+            // and the "<p>"s with "\n\n".
             var description = fetchResult["volumeInfo","description"].string
-            description = description?.replacingOccurrences(of: "<br>", with: "\n")
+            description = description?.components(separatedBy: "<br>").map{$0.trimming()}.joined(separator: "\n")
+            description = description?.components(separatedBy: "<p>").map{$0.trimming()}.joined(separator: "\n\n")
+            description = description?.replacingOccurrences(of: "</p>", with: "")
             description = description?.replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression, range: nil)
+            description = description?.trimmingCharacters(in: .whitespacesAndNewlines)
+
             result.description = description
             
             return result

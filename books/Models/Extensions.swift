@@ -198,8 +198,8 @@ extension String {
         let charactersWhichRequireWrapping = CharacterSet(charactersIn: "\n,")
         let wrapInQuotes = self.rangeOfCharacter(from: charactersWhichRequireWrapping) != nil
         
-        // Replace " with "", new line with "\n" literal
-        let escapedString = self.replacingOccurrences(of: "\"", with: "\"\"").replacingOccurrences(of: "\n", with: "\\n")
+        // Replace " with ""
+        let escapedString = self.replacingOccurrences(of: "\"", with: "\"\"")
 
         if wrapInQuotes {
            return "\"\(escapedString)\""
