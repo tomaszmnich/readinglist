@@ -441,6 +441,7 @@
 				495C5D0A1BF1404D00E00C07 /* Resources */,
 				0D8E30982D54AB308B0C0608 /* [CP] Embed Pods Frameworks */,
 				F60DDB1727D6F85A9BA8603E /* [CP] Copy Pods Resources */,
+				4937A1491EA0323200A3B0D1 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -624,6 +625,19 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-books_UITests/Pods-books_UITests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		4937A1491EA0323200A3B0D1 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Fabric/run\" 79c3e18382aa560c2928a7c7b0371646f7828880 07b39f6a9f0f00382671716df2f61d6977e85c1119a676a593530ae35684fb3a";
 		};
 		5DBB0D8ED8F93BE2573E2B21 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -914,6 +928,7 @@
 				CODE_SIGN_ENTITLEMENTS = "books/Reading List.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				INFOPLIST_FILE = books/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

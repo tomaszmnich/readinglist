@@ -8,6 +8,8 @@
 
 import UIKit
 import CoreSpotlight
+import Fabric
+import Crashlytics
 
 #if DEBUG
     // Include SimulatorStatusMagic only in debug mode; it's only needed for automated screenshots
@@ -43,6 +45,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 SDStatusBarManager.sharedInstance().disableOverrides()
             }
         #endif
+        Fabric.with([Crashlytics.self])
         return true
     }
     

@@ -15,6 +15,8 @@ target 'books' do
   pod 'SVProgressHUD', '~> 2.1'
   pod 'SimulatorStatusMagic', :configurations => ['Debug']
   pod 'CSVImporter', '~> 1.7'
+  pod 'Fabric'
+  pod 'Crashlytics'
 
   target 'books_UITests' do
     inherit! :search_paths
