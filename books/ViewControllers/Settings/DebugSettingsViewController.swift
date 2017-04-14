@@ -36,7 +36,7 @@ class DebugSettingsViewController: FormViewController {
         
         let simulationOptions = SelectableSection<ListCheckRow<BarcodeScanSimulation>>("Barcode scan behaviour", selectionType: .singleSelection(enableDeselection: true))
         let currentValue = DebugSettings.barcodeScanSimulation
-        for option: BarcodeScanSimulation in [.noCameraPermissions, .validIsbn, .unfoundIsbn, .existingIsbn] {
+        for option: BarcodeScanSimulation in [.normal, .noCameraPermissions, .validIsbn, .unfoundIsbn, .existingIsbn] {
             simulationOptions.append(ListCheckRow<BarcodeScanSimulation>(){
                 $0.title = option.titleText
                 $0.selectableValue = option

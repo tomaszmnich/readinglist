@@ -9,13 +9,16 @@
 import Foundation
 
 enum BarcodeScanSimulation: Int {
-    case noCameraPermissions = 1
-    case validIsbn = 2
-    case unfoundIsbn = 3
-    case existingIsbn = 4
+    case normal = 1
+    case noCameraPermissions = 2
+    case validIsbn = 3
+    case unfoundIsbn = 4
+    case existingIsbn = 5
     
     var titleText: String {
         switch self {
+        case .normal:
+            return "Normal"
         case .noCameraPermissions:
             return "No Camera Permissions"
         case .validIsbn:

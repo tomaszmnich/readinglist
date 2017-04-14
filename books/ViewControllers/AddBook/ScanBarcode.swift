@@ -51,29 +51,34 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     }
     
     private func setupAvSession() {
+        #if DEBUG
         if DebugSettings.useFixedBarcodeScanImage {
             useExampleBarcodeImage()
         }
         if let debugSimulation = DebugSettings.barcodeScanSimulation {
             switch debugSimulation {
+            case .normal:
+                // In "normal" mode we want to ignore any actual errors, like not having a camera
+                return
             case .validIsbn:
                 respondToCapturedIsbn("9781781100264")
                 return
             case .unfoundIsbn:
-                // Use a string which could be valid but isn't an ISBN
+                // Use a string which isn't an ISBN
                 respondToCapturedIsbn("9781111111111")
                 return
             case .existingIsbn:
                 respondToCapturedIsbn(DebugSettings.existingIsbn)
                 return
-            default:
-                break
+            case .noCameraPermissions:
+                presentCameraPermissionsAlert()
+                return
             }
         }
-        
+        #endif
     
         let camera = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo)
-        guard let input = try? AVCaptureDeviceInput(device: camera), DebugSettings.barcodeScanSimulation != .noCameraPermissions else {
+        guard let input = try? AVCaptureDeviceInput(device: camera) else {
             presentCameraPermissionsAlert()
             return
         }
@@ -121,15 +126,8 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     private func setVideoOrientation() {
         guard let connection = self.previewLayer?.connection, connection.isVideoOrientationSupported else { return }
         
-        switch UIDevice.current.orientation {
-        case .landscapeRight:
-            connection.videoOrientation = AVCaptureVideoOrientation.landscapeLeft
-        case .landscapeLeft:
-            connection.videoOrientation = AVCaptureVideoOrientation.landscapeRight
-        case .portraitUpsideDown:
-            connection.videoOrientation = AVCaptureVideoOrientation.portraitUpsideDown
-        default:
-            connection.videoOrientation = AVCaptureVideoOrientation.portrait
+        if let videoOrientation = UIDevice.current.orientation.videoOrientation {
+            connection.videoOrientation = videoOrientation
         }
     }
     
@@ -259,4 +257,16 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     }
     
     #endif
+}
+
+extension UIDeviceOrientation {
+    var videoOrientation: AVCaptureVideoOrientation? {
+        switch self {
+        case .portrait: return .portrait
+        case .portraitUpsideDown: return .portraitUpsideDown
+        case .landscapeLeft: return .landscapeRight
+        case .landscapeRight: return .landscapeLeft
+        default: return nil
+        }
+    }
 }
