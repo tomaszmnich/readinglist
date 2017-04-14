@@ -11,7 +11,7 @@
 		49097BA81CFB102B001AF1F9 /* FetchedResultsFilterer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49097BA71CFB102B001AF1F9 /* FetchedResultsFilterer.swift */; };
 		49160F5B1E7FC59200168FD0 /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49160F5A1E7FC59200168FD0 /* SnapshotHelper.swift */; };
 		49160F5D1E7FC5D700168FD0 /* books_Snapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49160F5C1E7FC5D700168FD0 /* books_Snapshot.swift */; };
-		49160F5F1E809DFE00168FD0 /* ImportExport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49160F5E1E809DFE00168FD0 /* ImportExport.swift */; };
+		49160F5F1E809DFE00168FD0 /* BookImport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49160F5E1E809DFE00168FD0 /* BookImport.swift */; };
 		491612A51DCD20FA0086D7E5 /* books_UnitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491612A41DCD20FA0086D7E5 /* books_UnitTests.swift */; };
 		491C84281CF5027800894313 /* ReadStateForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491C84271CF5027800894313 /* ReadStateForm.swift */; };
 		491C842D1CF6268900894313 /* CreateReadState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491C842C1CF6268900894313 /* CreateReadState.swift */; };
@@ -90,7 +90,7 @@
 		49097BA71CFB102B001AF1F9 /* FetchedResultsFilterer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchedResultsFilterer.swift; sourceTree = "<group>"; };
 		49160F5A1E7FC59200168FD0 /* SnapshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SnapshotHelper.swift; sourceTree = "<group>"; };
 		49160F5C1E7FC5D700168FD0 /* books_Snapshot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = books_Snapshot.swift; sourceTree = "<group>"; };
-		49160F5E1E809DFE00168FD0 /* ImportExport.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImportExport.swift; sourceTree = "<group>"; };
+		49160F5E1E809DFE00168FD0 /* BookImport.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookImport.swift; sourceTree = "<group>"; };
 		491612A21DCD20FA0086D7E5 /* books_UnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = books_UnitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		491612A41DCD20FA0086D7E5 /* books_UnitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = books_UnitTests.swift; sourceTree = "<group>"; };
 		491612A61DCD20FA0086D7E5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -249,7 +249,7 @@
 				492500771C0B1B0000C149B5 /* BooksStore.swift */,
 				495879641BF7E76200000131 /* CoreDataStack.swift */,
 				49D93AA41CAB16F800AE6611 /* CoreSpotlightStack.swift */,
-				49160F5E1E809DFE00168FD0 /* ImportExport.swift */,
+				49160F5E1E809DFE00168FD0 /* BookImport.swift */,
 				4937A1471E9E1FB900A3B0D1 /* DebugSettings.swift */,
 			);
 			path = Data;
@@ -742,7 +742,7 @@
 				491C842F1CF6281B00894313 /* EditReadState.swift in Sources */,
 				495C5D101BF1404D00E00C07 /* AppDelegate.swift in Sources */,
 				491C84331CF630B600894313 /* CreateBook.swift in Sources */,
-				49160F5F1E809DFE00168FD0 /* ImportExport.swift in Sources */,
+				49160F5F1E809DFE00168FD0 /* BookImport.swift in Sources */,
 				49BDCC631CD2A00F00F20AAE /* BookMetadataForm.swift in Sources */,
 				495C5D431BF14BEB00E00C07 /* BookDetails.swift in Sources */,
 				491C842D1CF6268900894313 /* CreateReadState.swift in Sources */,
