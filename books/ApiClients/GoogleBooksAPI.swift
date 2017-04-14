@@ -219,7 +219,7 @@ class GoogleBooks {
                 return URL(string: "/books/v1/volumes?q=isbn:\(isbn)&maxResults=1&fields=\(Request.searchResultFields)&key=\(Request.apiKey)", relativeTo: Request.apiBaseUrl)!
                 
             case let .fetch(id):
-                return URL(string: "/books/v1/volumes/\(id)&key=\(Request.apiKey)", relativeTo: Request.apiBaseUrl)!
+                return URL(string: "/books/v1/volumes/\(id)?key=\(Request.apiKey)", relativeTo: Request.apiBaseUrl)!
             
             case let .coverImage(googleBooksId, coverType):
                 return URL(string: "/books/content?id=\(googleBooksId)&printsec=frontcover&img=1&zoom=\(coverType.rawValue)", relativeTo: Request.googleBooksBaseUrl)!
