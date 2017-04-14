@@ -1,12 +1,10 @@
 PODS:
+  - CHCSVParser (2.1.0)
   - Crashlytics (3.8.4):
     - Fabric (~> 1.6.3)
-  - CSVImporter (1.7.1):
-    - HandySwift (~> 2.0)
   - DZNEmptyDataSet (1.8.1)
   - Eureka (2.0.1)
   - Fabric (1.6.11)
-  - HandySwift (2.2.0)
   - ImageRow (1.0.0):
     - Eureka (~> 2.0.0-beta.1)
   - RxCocoa (3.4.0):
@@ -20,8 +18,8 @@ PODS:
   - SwiftyJSON (3.1.4)
 
 DEPENDENCIES:
+  - CHCSVParser (~> 2.1)
   - Crashlytics
-  - CSVImporter (~> 1.7)
   - DZNEmptyDataSet (~> 1.8)
   - Eureka (~> 2.0)
   - Fabric
@@ -34,12 +32,11 @@ DEPENDENCIES:
   - SwiftyJSON (~> 3.1)
 
 SPEC CHECKSUMS:
+  CHCSVParser: 3bcc7bdb72111a31222e95d57eacceefe4e537e8
   Crashlytics: 79e236942ca1e7fc641df1feb9a275360a78ab6a
-  CSVImporter: 9b7fb2a308977137d9a64e7898ec54168c38ce96
   DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
   Eureka: ae837bb1dfae0c07bc1bda7aeef87876eeb537c2
   Fabric: 5911403591946b8228ab1c51d98f1d7137e863c6
-  HandySwift: 7bc03858d1368483f79ae6563f58619cf7ef5505
   ImageRow: 1e37db26f61a0c4ad3bc9a3a803c32d968782857
   RxCocoa: d14ef6b6029e1ddc6e966508c09289090de68ff9
   RxSwift: 3789a1af753002a14edecdb698a2424624296a9c
@@ -48,6 +45,6 @@ SPEC CHECKSUMS:
   SVProgressHUD: c404a55d78acbeb7ebb78b76d3faf986475a6994
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
 
-PODFILE CHECKSUM: 9092e6be5add0c47482b305c70144e3bcd0a8f67
+PODFILE CHECKSUM: 51e1f67958de450d9368b5aad0b3c6873315ec9c
 
 COCOAPODS: 1.2.0

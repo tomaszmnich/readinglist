@@ -8,61 +8,168 @@
 
 import Foundation
 import SwiftyJSON
-import CSVImporter
+import CHCSVParser
 
-class BookImport {
+class CsvImporter: NSObject, CHCSVParserDelegate {
     
-    /// Callback sends imported count, duplicate count, and invalid count.
-    static func importFrom(csvFile: URL, supplementBooks: Bool, callback: @escaping (Int, Int, Int) -> Void) {
-        let importer = CSVImporter<(BookMetadata, BookReadingInformation)?>(path: csvFile.path, workQosClass: .userInitiated)
+    private var erroredLineIndexes = [Int]()
+    private var linesSuccessfullyReadCount = 0
+    
+    /// First argument is the line index, second argument is the cell values by header strings
+    private let lineParseSuccessHandler: ([String: String]) -> Void
+    private let lineParseErrorHandler: () -> ()
+    
+    private let completionHandler: () -> Void
+    
+    /// Argument is the headers in order they were read
+    private let headersReadHandler: ([String]) -> Void
+    
+    private var isFirstRow = true
+    private var currentRowIsErrored = false
+    private var currentRow = [String: String]()
+    private var headersByFieldIndex = [Int: String]()
+    private let parser: CHCSVParser!
+    
+    init(csvFileUrl: URL, headersReadHandler: @escaping ([String]) -> Void, lineParseSuccessHandler: @escaping ([String: String]) -> Void,
+         lineParseErrorHandler: @escaping () -> (), completionHandler: @escaping () -> ()) {
+        parser = CHCSVParser(contentsOfCSVURL: csvFileUrl)
+        parser.sanitizesFields = true
+        parser.recognizesBackslashesAsEscapes = true
+        parser.trimsWhitespace = true
         
-        let importResults = importer.importRecords(structure: { headers in
-            // TODO: Ideally we could throw an error and not import the document if there are bad rows...
-            if !headers.contains("Title") || !headers.contains("Author") {
-                print("Missing Title or Author column")
-            }
-        }, recordMapper: BookMetadata.csvImport)
+        self.headersReadHandler = headersReadHandler
+        self.lineParseSuccessHandler = lineParseSuccessHandler
+        self.lineParseErrorHandler = lineParseErrorHandler
+        self.completionHandler = completionHandler
+        super.init()
         
-        let validEntries = importResults.flatMap{ $0 }
-        let deduplicatedEntries = validEntries.filter {
-            appDelegate.booksStore.getIfExists(googleBooksId: $0.0.googleBooksId, isbn: $0.0.isbn13) == nil
+        parser.delegate = self
+    }
+    
+    func parse() {
+        parser.parse()
+    }
+    
+    func parser(_ parser: CHCSVParser!, didReadField field: String!, at fieldIndex: Int) {
+        if isFirstRow {
+            headersByFieldIndex[fieldIndex] = field
+        }
+        else {
+            guard let currentHeader = headersByFieldIndex[fieldIndex] else { currentRowIsErrored = true; return }
+            currentRow[currentHeader] = field
+        }
+    }
+    
+    func parser(_ parser: CHCSVParser!, didEndLine recordNumber: UInt) {
+        if isFirstRow {
+            headersReadHandler(headersByFieldIndex.map{$0.value})
+            isFirstRow = false
+            return
+        }
+        if currentRowIsErrored {
+            lineParseErrorHandler()
+        }
+        else {
+            lineParseSuccessHandler(currentRow)
+        }
+    }
+    
+    func parser(_ parser: CHCSVParser!, didBeginLine recordNumber: UInt) {
+        currentRow.removeAll(keepingCapacity: true)
+        currentRowIsErrored = false
+    }
+    
+    func parserDidEndDocument(_ parser: CHCSVParser!) {
+        completionHandler()
+    }
+}
+
+class BookImporter {
+    
+    private var importer: CsvImporter!
+    private let fileUrl: URL
+    private let callback: (Int, Int, Int) -> Void
+    private let missingHeadersCallback: () -> ()
+    
+    private var duplicateBookCount = 0
+    private var importedBookCount = 0
+    private var invalidCount = 0
+    
+    private var sortIndex = -1
+    private var supplementBooks: Bool
+    
+    // Keep track of the potentially numerous calls
+    private let dispatchGroup = DispatchGroup()
+    
+    init(csvFileUrl: URL, supplementBooks: Bool, missingHeadersCallback: @escaping () -> (), callback: @escaping (Int, Int, Int) -> Void) {
+        self.fileUrl = csvFileUrl
+        self.callback = callback
+        self.supplementBooks = supplementBooks
+        self.missingHeadersCallback = missingHeadersCallback
+    }
+    
+    func StartImport() {
+        importer = CsvImporter(csvFileUrl: self.fileUrl, headersReadHandler: onHeadersRead, lineParseSuccessHandler: onLineReadSuccess, lineParseErrorHandler: onLineReadError, completionHandler: onCompletion)
+        sortIndex = appDelegate.booksStore.maxSort() ?? -1
+        importer.parse()
+    }
+    
+    func onHeadersRead(headers: [String]) {
+        if !headers.contains("Title") || !headers.contains("Author") {
+            missingHeadersCallback()
+        }
+    }
+    
+    func onCompletion() {
+        dispatchGroup.notify(queue: .main) {
+            self.callback(self.importedBookCount, self.duplicateBookCount, self.invalidCount)
+        }
+    }
+    
+    func onLineReadSuccess(cellValues: [String: String]) {
+        let parsedData = BookMetadata.csvImport(csvData: cellValues)
+        
+        // Check for invalid data
+        guard let validParsedData = parsedData else {
+            invalidCount += 1
+            return
         }
         
-        // Grab the current maximum sort, so that we can add the new books after it
-        var sortIndex = appDelegate.booksStore.maxSort() ?? -1
+        // Check for duplicates
+        guard appDelegate.booksStore.getIfExists(googleBooksId: validParsedData.0.googleBooksId, isbn: validParsedData.0.isbn13) == nil else {
+            duplicateBookCount += 1
+            return
+        }
         
-        // Keep track of the potentially numerous calls
-        let dispatchGroup = DispatchGroup()
-        for entry in deduplicatedEntries {
-            dispatchGroup.enter()
-            
-            // Increment the sort index if this is a ToRead book.
-            let specifiedSort: Int?
-            if entry.1.readState == .toRead {
-                sortIndex += 1
-                specifiedSort = sortIndex
-            }
-            else {
-                specifiedSort = nil
-            }
-
-            if supplementBooks {
-                supplementBook(entry.0, readingInfo: entry.1) {
-                    DispatchQueue.main.async {
-                        appDelegate.booksStore.create(from: entry.0, readingInformation: entry.1, bookSort: specifiedSort)
-                        dispatchGroup.leave()
-                    }
+        // Increment the sort index if this is a ToRead book.
+        let specifiedSort: Int?
+        if validParsedData.1.readState == .toRead {
+            sortIndex += 1
+            specifiedSort = sortIndex
+        }
+        else {
+            specifiedSort = nil
+        }
+        
+        dispatchGroup.enter()
+        if supplementBooks {
+            BookImporter.supplementBook(validParsedData.0, readingInfo: validParsedData.1) {
+                DispatchQueue.main.async {
+                    appDelegate.booksStore.create(from: validParsedData.0, readingInformation: validParsedData.1, bookSort: specifiedSort)
+                    self.importedBookCount += 1
+                    self.dispatchGroup.leave()
                 }
             }
-            else {
-                appDelegate.booksStore.create(from: entry.0, readingInformation: entry.1, bookSort: specifiedSort)
-                dispatchGroup.leave()
-            }
         }
-        
-        dispatchGroup.notify(queue: .main) {
-            callback(deduplicatedEntries.count, validEntries.count - deduplicatedEntries.count, importResults.count - validEntries.count)
+        else {
+            appDelegate.booksStore.create(from: validParsedData.0, readingInformation: validParsedData.1, bookSort: specifiedSort)
+            importedBookCount += 1
+            dispatchGroup.leave()
         }
+    }
+    
+    func onLineReadError() {
+        invalidCount += 1
     }
     
     static func supplementBook(_ bookMetadata: BookMetadata, readingInfo: BookReadingInformation, callback: @escaping (Void) -> Void) {

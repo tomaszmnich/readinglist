@@ -56,7 +56,10 @@ class DebugSettingsViewController: FormViewController {
         
         SVProgressHUD.show(withStatus: "Loading Data...")
         
-        BookImport.importFrom(csvFile: csvPath!, supplementBooks: true) { importedCount, duplicateCount, invalidCount in
+        BookImporter(csvFileUrl: csvPath!, supplementBooks: true, missingHeadersCallback: {
+            print("Missing headers!")
+        }) { importedCount, duplicateCount, invalidCount in
+
             var statusMessage = "\(importedCount) books imported."
             
             if duplicateCount != 0 {
@@ -68,6 +71,6 @@ class DebugSettingsViewController: FormViewController {
             }
             SVProgressHUD.dismiss()
             SVProgressHUD.showInfo(withStatus: statusMessage)
-        }
+        }.StartImport()
     }
 }

@@ -10,7 +10,6 @@ import Foundation
 import UIKit
 import Eureka
 import SVProgressHUD
-import CSVImporter
 
 class ImportDataViewController : FormViewController, UIDocumentPickerDelegate, UIDocumentMenuDelegate {
     
@@ -57,17 +56,21 @@ class ImportDataViewController : FormViewController, UIDocumentPickerDelegate, U
         // We may want to download book cover images
         let shouldSupplementBooks = form.values()[downloadImagesKey] as! Bool
         
-        BookImport.importFrom(csvFile: url, supplementBooks: shouldSupplementBooks) { importedCount, duplicateCount, invalidCount in
+        BookImporter(csvFileUrl: url, supplementBooks: shouldSupplementBooks, missingHeadersCallback: {
+            
+        }, callback: {
+            importedCount, duplicateCount, invalidCount in
             var statusMessage = "\(importedCount) books imported."
             
             if duplicateCount != 0 {
                 statusMessage += " \(duplicateCount) rows ignored due pre-existing data."
             }
-
+            
             if invalidCount != 0 {
                 statusMessage += " \(invalidCount) rows ignored due to invalid data."
             }
             SVProgressHUD.showInfo(withStatus: statusMessage)
-        }
+        }).StartImport()
     }
+
 }
