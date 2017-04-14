@@ -45,7 +45,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 SDStatusBarManager.sharedInstance().disableOverrides()
             }
         #endif
-        Fabric.with([Crashlytics.self])
+        
+        #if !DEBUG
+            Fabric.with([Crashlytics.self])
+        #endif
         return true
     }
     
