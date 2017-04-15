@@ -63,10 +63,12 @@ class EditBook: BookMetadataForm {
     
     @IBAction func doneButtonWasPressed(_ sender: AnyObject) {
         // Check the title field is not nil
-        guard let titleField = titleField else { return }
+        guard let titleField = titleField, let authorList = authorList else { return }
         
         // Load the book metadata into an object from the form values
-        let newMetadata = BookMetadata(title: titleField, authors: authorList!)
+        let newMetadata = BookMetadata()
+        newMetadata.title = titleField
+        newMetadata.authors = authorList
         newMetadata.bookDescription = descriptionField
         newMetadata.coverImage = image == nil ? nil : UIImageJPEGRepresentation(image!, 0.7)
         

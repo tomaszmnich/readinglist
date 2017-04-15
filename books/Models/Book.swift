@@ -15,7 +15,7 @@ class Book: NSManagedObject {
     
     // Book Metadata
     @NSManaged fileprivate(set) var title: String
-    @NSManaged fileprivate(set) var authorList: String?
+    @NSManaged fileprivate(set) var authorList: String
     @NSManaged fileprivate(set) var isbn13: String?
     @NSManaged fileprivate(set) var googleBooksId: String?
     @NSManaged fileprivate(set) var pageCount: NSNumber?
@@ -56,8 +56,8 @@ class Book: NSManagedObject {
 extension Book {
 
     func populate(from metadata: BookMetadata) {
-        title = metadata.title
-        authorList = metadata.authors
+        title = metadata.title!
+        authorList = metadata.authors!
         isbn13 = metadata.isbn13
         googleBooksId = metadata.googleBooksId
         pageCount = metadata.pageCount as NSNumber?
@@ -77,7 +77,7 @@ extension Book {
     }
     
     func toSpotlightItem() -> SpotlightItem {
-        let spotlightTitle = "\(title)\(authorList == nil ? "" : " - \(authorList!)")"
+        let spotlightTitle = "\(title) - \(authorList)"
         
         return SpotlightItem(uniqueIdentifier: objectID.uriRepresentation().absoluteString, title: spotlightTitle, description: bookDescription, thumbnailImageData: coverImage)
     }
@@ -113,8 +113,8 @@ extension Book {
 /// Useful for maintaining in-creation books, or books being edited.
 class BookMetadata {
     let googleBooksId: String?
-    var title: String
-    var authors: String
+    var title: String?
+    var authors: String?
     var pageCount: Int?
     var publishedDate: Date?
     var bookDescription: String?
@@ -124,15 +124,17 @@ class BookMetadata {
     // ONLY used for import; not a usually populated field
     var coverUrl: URL?
     
-    init(googleBooksId: String? = nil, title: String, authors: String) {
+    init(googleBooksId: String? = nil) {
         self.googleBooksId = googleBooksId
-        self.title = title
-        self.authors = authors
+    }
+    
+    func isValid() -> Bool {
+        return title?.isEmptyOrWhitespace == false && authors?.isEmptyOrWhitespace == false
     }
     
     init(book: Book) {
         self.title = book.title
-        self.authors = book.authorList!
+        self.authors = book.authorList
         self.bookDescription = book.bookDescription
         self.pageCount = book.pageCount as? Int
         self.publishedDate = book.publishedDate
@@ -141,10 +143,11 @@ class BookMetadata {
         self.googleBooksId = book.googleBooksId
     }
     
-    static func csvImport(csvData: [String: String]) -> (BookMetadata, BookReadingInformation)? {
+    static func csvImport(csvData: [String: String]) -> (BookMetadata, BookReadingInformation) {
         
-        guard let title = csvData["Title"], let authors = csvData["Author"] else { return nil }
-        let bookMetadata = BookMetadata(googleBooksId: csvData["Google Books ID"]?.nilIfWhitespace(), title: title, authors: authors)
+        let bookMetadata = BookMetadata(googleBooksId: csvData["Google Books ID"]?.nilIfWhitespace())
+        bookMetadata.title = csvData["Title"]?.nilIfWhitespace()
+        bookMetadata.authors = csvData["Author"]?.nilIfWhitespace()
         bookMetadata.isbn13 = Isbn13.tryParse(inputString: csvData["ISBN-13"])
         bookMetadata.pageCount = csvData["Page Count"] == nil ? nil : Int(csvData["Page Count"]!)
         bookMetadata.bookDescription = csvData["Description"]?.nilIfWhitespace()

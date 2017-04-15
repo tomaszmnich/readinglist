@@ -36,6 +36,7 @@ class CsvImporter: NSObject, CHCSVParserDelegate {
         parser.sanitizesFields = true
         parser.recognizesBackslashesAsEscapes = true
         parser.trimsWhitespace = true
+        parser.recognizesComments = true
         
         self.headersReadHandler = headersReadHandler
         self.lineParseSuccessHandler = lineParseSuccessHandler
@@ -96,15 +97,17 @@ class BookImporter {
     private var invalidCount = 0
     
     private var sortIndex = -1
-    private var supplementBooks: Bool
+    private var supplementBookCover: Bool
+    private var supplementBookMetadata: Bool
     
     // Keep track of the potentially numerous calls
     private let dispatchGroup = DispatchGroup()
     
-    init(csvFileUrl: URL, supplementBooks: Bool, missingHeadersCallback: @escaping () -> (), callback: @escaping (Int, Int, Int) -> Void) {
+    init(csvFileUrl: URL, supplementBookCover: Bool, supplementBookMetadata: Bool, missingHeadersCallback: @escaping () -> (), callback: @escaping (Int, Int, Int) -> Void) {
         self.fileUrl = csvFileUrl
         self.callback = callback
-        self.supplementBooks = supplementBooks
+        self.supplementBookCover = supplementBookCover
+        self.supplementBookMetadata = supplementBookMetadata
         self.missingHeadersCallback = missingHeadersCallback
     }
     
@@ -130,20 +133,20 @@ class BookImporter {
         let parsedData = BookMetadata.csvImport(csvData: cellValues)
         
         // Check for invalid data
-        guard let validParsedData = parsedData else {
+        guard parsedData.0.isValid() || (parsedData.0.googleBooksId?.isEmptyOrWhitespace == false && supplementBookMetadata) else {
             invalidCount += 1
             return
         }
         
         // Check for duplicates
-        guard appDelegate.booksStore.getIfExists(googleBooksId: validParsedData.0.googleBooksId, isbn: validParsedData.0.isbn13) == nil else {
+        guard appDelegate.booksStore.getIfExists(googleBooksId: parsedData.0.googleBooksId, isbn: parsedData.0.isbn13) == nil else {
             duplicateBookCount += 1
             return
         }
         
         // Increment the sort index if this is a ToRead book.
         let specifiedSort: Int?
-        if validParsedData.1.readState == .toRead {
+        if parsedData.1.readState == .toRead {
             sortIndex += 1
             specifiedSort = sortIndex
         }
@@ -152,17 +155,30 @@ class BookImporter {
         }
         
         dispatchGroup.enter()
-        if supplementBooks {
-            BookImporter.supplementBook(validParsedData.0, readingInfo: validParsedData.1) {
+        
+        if !parsedData.0.isValid() && supplementBookMetadata {
+            GoogleBooks.fetch(googleBooksId: parsedData.0.googleBooksId!){ resultPage in
+                guard resultPage.result.isSuccess else { self.invalidCount += 1; self.dispatchGroup.leave(); return }
                 DispatchQueue.main.async {
-                    appDelegate.booksStore.create(from: validParsedData.0, readingInformation: validParsedData.1, bookSort: specifiedSort)
+                    BookImporter.supplementBook(resultPage.result.value!.toBookMetadata(), readingInfo: parsedData.1){
+                        appDelegate.booksStore.create(from: parsedData.0, readingInformation: parsedData.1, bookSort: specifiedSort)
+                        self.importedBookCount += 1
+                        self.dispatchGroup.leave()
+                    }
+                }
+            }
+        }
+        else if supplementBookCover {
+            BookImporter.supplementBook(parsedData.0, readingInfo: parsedData.1) {
+                DispatchQueue.main.async {
+                    appDelegate.booksStore.create(from: parsedData.0, readingInformation: parsedData.1, bookSort: specifiedSort)
                     self.importedBookCount += 1
                     self.dispatchGroup.leave()
                 }
             }
         }
         else {
-            appDelegate.booksStore.create(from: validParsedData.0, readingInformation: validParsedData.1, bookSort: specifiedSort)
+            appDelegate.booksStore.create(from: parsedData.0, readingInformation: parsedData.1, bookSort: specifiedSort)
             importedBookCount += 1
             dispatchGroup.leave()
         }
@@ -181,17 +197,17 @@ class BookImporter {
             callback()
         }
         
+        if let coverUrl = bookMetadata.coverUrl {
+            GoogleBooks.requestData(from: coverUrl, callback: getCoverCallback)
+        }
         // GoogleBooks ID takes priority over ISBN.
-        if let googleBookdId = bookMetadata.googleBooksId {
+        else if let googleBookdId = bookMetadata.googleBooksId {
             GoogleBooks.getCover(googleBooksId: googleBookdId, callback: getCoverCallback)
         }
             // but we'll try the ISBN is there was no Google Books ID
             // TODO: would be nice to supplement with GBID too
         else if let isbn = bookMetadata.isbn13 {
             GoogleBooks.getCover(isbn: isbn, callback: getCoverCallback)
-        }
-        else if let coverUrl = bookMetadata.coverUrl {
-            GoogleBooks.requestData(from: coverUrl, callback: getCoverCallback)
         }
         else {
             callback()

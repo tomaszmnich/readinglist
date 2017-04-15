@@ -315,7 +315,9 @@ class GoogleBooks {
         }
         
         func toBookMetadata() -> BookMetadata {
-            let metadata = BookMetadata(googleBooksId: id, title: title, authors: authors)
+            let metadata = BookMetadata(googleBooksId: id)
+            metadata.title = title
+            metadata.authors = authors
             metadata.bookDescription = description
             metadata.coverImage = coverImage
             metadata.pageCount = pageCount

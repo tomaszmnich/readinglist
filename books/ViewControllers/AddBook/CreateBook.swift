@@ -45,7 +45,9 @@ class CreateBook: BookMetadataForm {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let createReadState = segue.destination as? CreateReadState {
             
-            let finalBookMetadata = initialBookMetadata ?? BookMetadata(title: titleField!, authors: authorList!)
+            let finalBookMetadata = initialBookMetadata ?? BookMetadata()
+            finalBookMetadata.title = titleField!
+            finalBookMetadata.authors = authorList!
             finalBookMetadata.bookDescription = descriptionField
             finalBookMetadata.coverImage = image == nil ? nil : UIImageJPEGRepresentation(image!, 0.7)
             

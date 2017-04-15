@@ -56,7 +56,7 @@ class ImportDataViewController : FormViewController, UIDocumentPickerDelegate, U
         // We may want to download book cover images
         let shouldSupplementBooks = form.values()[downloadImagesKey] as! Bool
         
-        BookImporter(csvFileUrl: url, supplementBooks: shouldSupplementBooks, missingHeadersCallback: {
+        BookImporter(csvFileUrl: url, supplementBookCover: shouldSupplementBooks, supplementBookMetadata: false, missingHeadersCallback: {
             
         }, callback: {
             importedCount, duplicateCount, invalidCount in

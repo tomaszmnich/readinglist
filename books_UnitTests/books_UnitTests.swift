@@ -40,7 +40,9 @@ class books_UnitTests: XCTestCase {
     /// Gets a fully populated BookMetadata object. Increments the ISBN by 1 each time.
     private func getTestBookMetadata() -> BookMetadata {
         currentTestBook += 1
-        let testBookMetadata = BookMetadata(googleBooksId: "ABC123\(currentTestBook)", title: "Test Book Title \(currentTestBook)", authors: "Test Book Authors \(currentTestBook)")
+        let testBookMetadata = BookMetadata(googleBooksId: "ABC123\(currentTestBook)")
+        testBookMetadata.title = "Test Book Title \(currentTestBook)"
+        testBookMetadata.authors = "Test Book Authors \(currentTestBook)"
         testBookMetadata.bookDescription = "Test Book Description \(currentTestBook)"
         testBookMetadata.isbn13 = "1234567890\(String(format: "%03d", currentTestBook))"
         testBookMetadata.pageCount = 100 + currentTestBook

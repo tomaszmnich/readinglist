@@ -133,10 +133,10 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
-                            <tableViewSection headerTitle="Debug" id="K29-za-7go">
+                            <tableViewSection id="K29-za-7go">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" textLabel="deV-yO-fxn" style="IBUITableViewCellStyleDefault" id="nq9-f9-TaS">
-                                        <rect key="frame" x="0.0" y="391" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="361" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="nq9-f9-TaS" id="fId-nN-NnC">
                                             <rect key="frame" x="0.0" y="0.0" width="287" height="43.5"/>
