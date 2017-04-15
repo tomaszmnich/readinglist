@@ -50,6 +50,7 @@
 		499470681DB40D22008CB06E /* TabbedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 499470671DB40D22008CB06E /* TabbedViewController.swift */; };
 		4994706A1DB42067008CB06E /* ReadingTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 499470691DB42067008CB06E /* ReadingTable.swift */; };
 		4994706C1DB421A2008CB06E /* FinishedTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4994706B1DB421A2008CB06E /* FinishedTable.swift */; };
+		49BD08701EA2A85C00B21A01 /* Observables.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BD086F1EA2A85C00B21A01 /* Observables.swift */; };
 		49BDCC631CD2A00F00F20AAE /* BookMetadataForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BDCC621CD2A00F00F20AAE /* BookMetadataForm.swift */; };
 		49BDCC6C1CD6120400F20AAE /* NavWithReadState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BDCC6B1CD6120400F20AAE /* NavWithReadState.swift */; };
 		49C5339F1DB281A10043E50E /* BookPredicateBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C5339E1DB281A10043E50E /* BookPredicateBuilder.swift */; };
@@ -134,6 +135,7 @@
 		499470671DB40D22008CB06E /* TabbedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabbedViewController.swift; sourceTree = "<group>"; };
 		499470691DB42067008CB06E /* ReadingTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadingTable.swift; sourceTree = "<group>"; };
 		4994706B1DB421A2008CB06E /* FinishedTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FinishedTable.swift; sourceTree = "<group>"; };
+		49BD086F1EA2A85C00B21A01 /* Observables.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Observables.swift; sourceTree = "<group>"; };
 		49BDCC621CD2A00F00F20AAE /* BookMetadataForm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookMetadataForm.swift; sourceTree = "<group>"; };
 		49BDCC6B1CD6120400F20AAE /* NavWithReadState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavWithReadState.swift; sourceTree = "<group>"; };
 		49C5339E1DB281A10043E50E /* BookPredicateBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookPredicateBuilder.swift; sourceTree = "<group>"; };
@@ -284,6 +286,7 @@
 				495C5D401BF1423900E00C07 /* Book.swift */,
 				495FDC2D1CF8C676006DCF2E /* Extensions.swift */,
 				4973C7A21E905A04001CFABC /* Isbn13.swift */,
+				49BD086F1EA2A85C00B21A01 /* Observables.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -725,6 +728,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				49BD08701EA2A85C00B21A01 /* Observables.swift in Sources */,
 				4973C79F1E901A6A001CFABC /* CommonUIElements.swift in Sources */,
 				494D96E41E759D8900299752 /* AttributionsViewController.swift in Sources */,
 				4994706C1DB421A2008CB06E /* FinishedTable.swift in Sources */,

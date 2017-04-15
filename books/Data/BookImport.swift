@@ -132,7 +132,7 @@ class BookImporter {
     func onLineReadSuccess(cellValues: [String: String]) {
         let parsedData = BookMetadata.csvImport(csvData: cellValues)
         
-        // Check for invalid data
+        // Check for invalid data, OR that we are supplementing metadata
         guard parsedData.0.isValid() || (parsedData.0.googleBooksId?.isEmptyOrWhitespace == false && supplementBookMetadata) else {
             invalidCount += 1
             return
@@ -156,25 +156,26 @@ class BookImporter {
         
         dispatchGroup.enter()
         
+        // TODO: This could do with a big ol' refactor
         if !parsedData.0.isValid() && supplementBookMetadata {
             GoogleBooks.fetch(googleBooksId: parsedData.0.googleBooksId!){ resultPage in
                 guard resultPage.result.isSuccess else { self.invalidCount += 1; self.dispatchGroup.leave(); return }
-                DispatchQueue.main.async {
-                    BookImporter.supplementBook(resultPage.result.value!.toBookMetadata(), readingInfo: parsedData.1){
-                        appDelegate.booksStore.create(from: parsedData.0, readingInformation: parsedData.1, bookSort: specifiedSort)
-                        self.importedBookCount += 1
-                        self.dispatchGroup.leave()
-                    }
+                
+                let bookMetadata = resultPage.result.value!.toBookMetadata()
+                bookMetadata.coverUrl = parsedData.0.coverUrl
+                
+                BookImporter.supplementBook(bookMetadata) {
+                    appDelegate.booksStore.create(from: bookMetadata, readingInformation: parsedData.1, bookSort: specifiedSort)
+                    self.importedBookCount += 1
+                    self.dispatchGroup.leave()
                 }
             }
         }
         else if supplementBookCover {
-            BookImporter.supplementBook(parsedData.0, readingInfo: parsedData.1) {
-                DispatchQueue.main.async {
-                    appDelegate.booksStore.create(from: parsedData.0, readingInformation: parsedData.1, bookSort: specifiedSort)
-                    self.importedBookCount += 1
-                    self.dispatchGroup.leave()
-                }
+            BookImporter.supplementBook(parsedData.0) {
+                appDelegate.booksStore.create(from: parsedData.0, readingInformation: parsedData.1, bookSort: specifiedSort)
+                self.importedBookCount += 1
+                self.dispatchGroup.leave()
             }
         }
         else {
@@ -187,14 +188,17 @@ class BookImporter {
     func onLineReadError() {
         invalidCount += 1
     }
-    
-    static func supplementBook(_ bookMetadata: BookMetadata, readingInfo: BookReadingInformation, callback: @escaping (Void) -> Void) {
+
+    /// Callback is run on the main thread
+    static func supplementBook(_ bookMetadata: BookMetadata, callback: @escaping (Void) -> Void) {
         
         func getCoverCallback(coverResult: Result<Data>) {
             if coverResult.isSuccess {
                 bookMetadata.coverImage = coverResult.value!
             }
-            callback()
+            DispatchQueue.main.async {
+                callback()
+            }
         }
         
         if let coverUrl = bookMetadata.coverUrl {

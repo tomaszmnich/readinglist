@@ -41,10 +41,11 @@ class DebugSettings {
     
     static var useFixedBarcodeScanImage: Bool {
         get {
-            #if !DEBUG
+            #if DEBUG
+                return (UserDefaults.standard.value(forKey: useFixedBarcodeScanImageKey) as? Bool) ?? false
+            #else
                 return false
             #endif
-            return (UserDefaults.standard.value(forKey: useFixedBarcodeScanImageKey) as? Bool) ?? false
         }
         set {
             #if DEBUG
@@ -57,11 +58,12 @@ class DebugSettings {
     
     static var barcodeScanSimulation: BarcodeScanSimulation? {
         get {
-            #if !DEBUG
+            #if DEBUG
+                guard let rawValue = UserDefaults.standard.value(forKey: barcodeScanSimulationKey) as? Int else { return nil }
+                return BarcodeScanSimulation.init(rawValue: rawValue)!
+            #else
                 return nil
             #endif
-            guard let rawValue = UserDefaults.standard.value(forKey: barcodeScanSimulationKey) as? Int else { return nil }
-            return BarcodeScanSimulation.init(rawValue: rawValue)!
         }
         set {
             #if DEBUG

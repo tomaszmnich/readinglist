@@ -26,7 +26,13 @@ class ImportDataViewController : FormViewController, UIDocumentPickerDelegate, U
         })
         form.append(downloadImagesSection)
         
-        let selectDocumentSection = Section(footer: "Import books from a CSV file. This is beta functionality!")
+        let headerNames = ["Google Books ID", "ISBN-13", "Title", "Author", "Page Count", "Description", "Started Reading", "Finished Reading"]
+        func bulletPointedItem(_ item: String) -> String { return "  \u{2022} \(item)" }
+        
+        let selectDocumentSection = Section(footer: "Import books from a CSV file. Duplicates (by ISBN or Google Books ID) and invalid entries will be skipped.\n\n"
+                + "The CSV file should have the following headers:\n\n"
+                + headerNames.map{ bulletPointedItem($0) }.joined(separator: "\n"))
+    
         selectDocumentSection.append(ButtonRow(selectDocumentKey) {
             $0.title = "Import Books"
             $0.onCellSelection(self.requestImport)
