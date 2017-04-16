@@ -104,18 +104,13 @@ class GoogleBooks {
         }
     }
     
-    enum RequestError: Error {
-        case noJsonData
-        case noData
-    }
-    
     @discardableResult private static func requestJson(from url: URL, callback: @escaping (Result<JSON>) -> Void) -> URLSessionDataTask {
         #if DEBUG
             print("Requesting \(url.absoluteString)")
         #endif
         let webRequest = URLSession.shared.dataTask(with: url) { (data, _, error) in
             guard error == nil else { callback(Result.failure(error!)); return }
-            guard let json = JSON(optionalData: data) else { callback(Result.failure(RequestError.noJsonData)); return }
+            guard let json = JSON(optionalData: data) else { callback(Result.failure(GoogleError.noJsonData)); return }
             callback(Result<JSON>.success(json))
         }
         webRequest.resume()
@@ -128,7 +123,7 @@ class GoogleBooks {
         #endif
         let webRequest = URLSession.shared.dataTask(with: url) { (data, _, error) in
             guard error == nil else { callback(Result.failure(error!)); return }
-            guard let data = data else { callback(Result.failure(RequestError.noData)); return }
+            guard let data = data else { callback(Result.failure(GoogleError.noData)); return }
             callback(Result<Data>.success(data))
         }
         webRequest.resume()
@@ -225,6 +220,12 @@ class GoogleBooks {
         }
     }
     
+    enum GoogleError: Error {
+        case noResult
+        case noJsonData
+        case noData
+    }
+    
     class SearchResult {
         let id: String
         var title: String
@@ -295,9 +296,6 @@ class GoogleBooks {
     }
     
     class FetchResultPage {
-        enum FetchError: Error {
-            case noResult
-        }
         
         let request: Request
         let result: Result<FetchResult>
@@ -312,7 +310,7 @@ class GoogleBooks {
         }
         
         static func empty(fromRequest request: Request) -> FetchResultPage {
-            return FetchResultPage(Result.failure(FetchError.noResult), fromRequest: request)
+            return FetchResultPage(Result.failure(GoogleError.noResult), fromRequest: request)
         }
         
         static func error(_ error: Error, fromRequest request: Request) -> FetchResultPage {

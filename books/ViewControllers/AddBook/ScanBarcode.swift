@@ -166,7 +166,7 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
                 
                 guard resultPage.result.isSuccess else {
                     let error = resultPage.result.error!
-                    if (error as? GoogleBooks.FetchResultPage.FetchError) == .noResult {
+                    if (error as? GoogleBooks.GoogleError) == .noResult {
                         self.presentNoExactMatchAlert(forIsbn: isbn)
                     }
                     else {
