@@ -19,7 +19,9 @@ class Settings: UITableViewController, NavBarConfigurer {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        #if RELEASE
+        #if DEBUG
+            debugSettingsCell.isHidden = false
+        #else
             debugSettingsCell.isHidden = true
         #endif
     }
