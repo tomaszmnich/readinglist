@@ -84,7 +84,8 @@ class BookDetails: UIViewController {
         descriptionTextView.textContainer.lineFragmentPadding = 0
         descriptionTextView.textContainerInset = UIEdgeInsets.zero
         
-        appDelegate.booksStore.addSaveObserver(self, selector: #selector(bookChanged(_:)))
+        // Watch for changes in the managed object context
+        NotificationCenter.default.addObserver(self, selector: #selector(bookChanged(_:)), name: NSNotification.Name.NSManagedObjectContextDidSave, object: appDelegate.booksStore.managedObjectContext)
     }
     
     @objc private func bookChanged(_ notification: Notification) {

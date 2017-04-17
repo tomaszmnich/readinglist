@@ -24,12 +24,12 @@ class BookMetadataForm: FormViewController {
         let titleAuthorSection = Section()
         titleAuthorSection.append(TextRow(titleKey) {
             $0.placeholder = "Title"
-        }.onChange{_ in
+        }.onChange{[unowned self] _ in
             self.onChange()
         })
         titleAuthorSection.append(TextRow(authorListKey) {
             $0.placeholder = "Author"
-        }.onChange{ _ in
+        }.onChange{[unowned self] _ in
             self.onChange()
         })
         form.append(titleAuthorSection)
