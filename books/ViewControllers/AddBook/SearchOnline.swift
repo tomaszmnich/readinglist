@@ -48,14 +48,14 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
         
         // Activity drives the spinner
         indicator.drive(spinner.rx.isAnimating).addDisposableTo(disposeBag)
-        
+
         // Map the search bar text to a google books search, and bind the result to the table cells
         let searchResultsPage = searchBar.rx.text
             .orEmpty
             .throttle(1, scheduler: MainScheduler.instance)
             .distinctUntilChanged{$0.trimming() == $1.trimming()}
             .observeOn(ConcurrentDispatchQueueScheduler(qos: .userInitiated))
-            .flatMapLatest { searchText in
+            .flatMapLatest { [unowned self] searchText in
                 // Blank search terms produce empty array...
                 searchText.isEmptyOrWhitespace ? Observable.just(GoogleBooks.SearchResultsPage.empty(fromSearchText: searchText)) :
                     
@@ -63,11 +63,13 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
                     GoogleBooks.searchTextObservable(searchText)
                         .observeOn(MainScheduler.instance)
                         .trackActivity(self.indicator)
-        }
+            }
+            .shareReplay(1)
+ 
         
         // Map the sucess/failure state to the reason property on the empty data set
         searchResultsPage
-            .subscribe(onNext: { resultPage in
+            .subscribe(onNext: { [unowned self] resultPage in
                 if !resultPage.searchResults.isSuccess {
                     NSLog("Error searching online: \(resultPage.searchResults.error!.localizedDescription)")
                     self.emptyDataSet.reason = .error
@@ -80,7 +82,7 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
                 }
             })
             .addDisposableTo(disposeBag)
-        
+
         // Map the actual results to SearchResultViewModel items (or empty if failure)
         // and use them to drive the table cells
         searchResultsPage.map { ($0.searchResults.value ?? []).map(SearchResultViewModel.init) }
@@ -90,10 +92,14 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
             }
             .addDisposableTo(disposeBag)
         
+        
         // On cell selection, go to the next page
         tableView.rx.modelSelected(SearchResultViewModel.self)
-            .subscribe(onNext: onModelSelected)
+            .subscribe(onNext: { [unowned self] model in
+                self.onModelSelected(model)
+            })
             .addDisposableTo(disposeBag)
+ 
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -107,24 +113,28 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
     
     func onModelSelected(_ model: SearchResultViewModel) {
         // Duplicate check
-        if let existingBook = appDelegate.booksStore.getIfExists(googleBooksId: model.searchResult.id, isbn: model.searchResult.isbn13) {
+        if let existingBook = appDelegate.booksStore.getIfExists(googleBooksId: model.googleBooksId, isbn: model.isbn13) {
             
-            let alert = duplicateBookAlertController(existingBook, modalControllerToDismiss: self) {
+            let alert = duplicateBookAlertController(goToExistingBook: { [unowned self] in
+                self.dismiss(animated: true) {
+                    appDelegate.splitViewController.tabbedViewController.simulateBookSelection(existingBook)
+                }
+            }, cancel: { [unowned self] in
                 // Deselect the row after dismissing the alert
                 if let selectedRow = self.tableView.indexPathForSelectedRow {
                     self.tableView.deselectRow(at: selectedRow, animated: true)
                 }
-            }
-            self.present(alert, animated: true)
+            })
+            present(alert, animated: true)
         }
         else {
-            self.fetchAndSegue(searchResult: model.searchResult)
+            fetchAndSegue(googleBooksId: model.googleBooksId)
         }
     }
 
-    func fetchAndSegue(searchResult: GoogleBooks.SearchResult) {
+    func fetchAndSegue(googleBooksId: String) {
         SVProgressHUD.show(withStatus: "Loading...")
-        GoogleBooks.fetch(googleBooksId: searchResult.id) { resultPage in
+        GoogleBooks.fetch(googleBooksId: googleBooksId) { resultPage in
             DispatchQueue.main.async {
                 SVProgressHUD.dismiss()
                 if resultPage.result.isSuccess {
@@ -228,13 +238,15 @@ class SearchResultCell : UITableViewCell {
 /// The ViewModel corresponding to the SearchResultCell view
 class SearchResultViewModel {
     
-    let searchResult: GoogleBooks.SearchResult
+    let googleBooksId: String
+    let isbn13: String?
     let title: String
     let author: String
     let coverImage: Driver<UIImage?>
     
     init(searchResult: GoogleBooks.SearchResult) {
-        self.searchResult = searchResult
+        self.googleBooksId = searchResult.id
+        self.isbn13 = searchResult.isbn13
         self.title = searchResult.title
         self.author = searchResult.authors
 
