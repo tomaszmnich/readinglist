@@ -40,8 +40,8 @@ class BookDetails: UIViewController {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var authorsLabel: UILabel!
     @IBOutlet weak var descriptionTextView: UITextView!
-    @IBOutlet weak var finishedWhenLabel: UILabel!
-    @IBOutlet weak var startedWhenLabel: UILabel!
+    //@IBOutlet weak var finishedWhenLabel: UILabel!
+    //@IBOutlet weak var startedWhenLabel: UILabel!
     @IBOutlet weak var imageView: UIImageView!
     
     var viewModel: BookDetailsViewModel? {
@@ -57,8 +57,8 @@ class BookDetails: UIViewController {
             titleLabel.text = viewModel.title
             authorsLabel.text = viewModel.authors
             descriptionTextView.text = viewModel.description
-            startedWhenLabel.text = viewModel.startedWhen
-            finishedWhenLabel.text = viewModel.finishedWhen
+            //startedWhenLabel.text = viewModel.startedWhen
+            //finishedWhenLabel.text = viewModel.finishedWhen
             imageView.image = viewModel.cover
         }
     }
