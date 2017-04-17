@@ -24,8 +24,8 @@ DEPENDENCIES:
   - Eureka (~> 2.0)
   - Fabric
   - ImageRow (~> 1.0)
-  - RxCocoa (~> 3.0)
-  - RxSwift (~> 3.0)
+  - RxCocoa (~> 3.4)
+  - RxSwift (~> 3.4)
   - RxSwiftUtilities (~> 1.0)
   - SimulatorStatusMagic
   - SVProgressHUD (~> 2.1)
@@ -45,6 +45,6 @@ SPEC CHECKSUMS:
   SVProgressHUD: c404a55d78acbeb7ebb78b76d3faf986475a6994
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
 
-PODFILE CHECKSUM: 51e1f67958de450d9368b5aad0b3c6873315ec9c
+PODFILE CHECKSUM: 10013b8b85b76e8adab9b20c2ea052ce07932302
 
 COCOAPODS: 1.2.0
