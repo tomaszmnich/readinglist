@@ -25,7 +25,7 @@ class EditBook: BookMetadataForm {
             }.cellSetup{cell, row in
                 cell.tintColor = UIColor.red
             }
-            .onCellSelection{ _ in
+            .onCellSelection{[unowned self] _ in
                 self.presentDeleteAlert()
             })
         form.append(deleteSection)
@@ -43,7 +43,7 @@ class EditBook: BookMetadataForm {
         
         // Bring up the action sheet)
         confirmDeleteAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        confirmDeleteAlert.addAction(UIAlertAction(title: "Delete", style: .destructive) { _ in
+        confirmDeleteAlert.addAction(UIAlertAction(title: "Delete", style: .destructive) {[unowned self] _ in
             
             // Dismiss this modal view and then delete the book
             self.dismiss(animated: true) {

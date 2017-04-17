@@ -46,11 +46,11 @@ class ReadStateForm: FormViewController {
         })
         
         // Add the change and update detection, now that they are on the form
-        readStateRow.onChange{_ in self.onChange() }
-        startedReadingRow.onChange{_ in self.onChange() }
-        startedReadingRow.cellUpdate{_ in self.onChange() }
-        finishedReadingRow.onChange{_ in self.onChange() }
-        finishedReadingRow.cellUpdate{_ in self.onChange() }
+        readStateRow.onChange{[unowned self] _ in self.onChange() }
+        startedReadingRow.onChange{[unowned self] _ in self.onChange() }
+        startedReadingRow.cellUpdate{[unowned self] _ in self.onChange() }
+        finishedReadingRow.onChange{[unowned self] _ in self.onChange() }
+        finishedReadingRow.cellUpdate{[unowned self] _ in self.onChange() }
     }
     
     func appendRowToFormInSection(row: BaseRow, hiddenCondition: Condition?) {
@@ -80,16 +80,17 @@ class ReadStateForm: FormViewController {
     }
     
     var isValid: Bool {
+        let now = Date()
         // Check that the dates are ordered correctly and not in the future
         switch readState {
         case .toRead:
             return true
         case .reading:
-            return startedReading != nil && startedReading!.compareIgnoringTime(Date()) != .orderedDescending
+            return startedReading != nil && startedReading!.compareIgnoringTime(now) != .orderedDescending
         case .finished:
             return startedReading != nil && finishedReading != nil
-            && startedReading!.compareIgnoringTime(Date()) != .orderedDescending
-            && finishedReading!.compareIgnoringTime(Date()) != .orderedDescending
+            && startedReading!.compareIgnoringTime(now) != .orderedDescending
+            && finishedReading!.compareIgnoringTime(now) != .orderedDescending
             && startedReading!.compareIgnoringTime(finishedReading!) != .orderedDescending
         }
     }

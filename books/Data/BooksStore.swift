@@ -15,6 +15,11 @@ class BooksStore {
     private let bookEntityName = "Book"
     private let coreDataStack: CoreDataStack
     private let coreSpotlightStack: CoreSpotlightStack
+    var managedObjectContext: NSManagedObjectContext {
+        get {
+            return coreDataStack.managedObjectContext
+        }
+    }
     
     init(storeType: CoreDataStack.PersistentStoreType) {
         self.coreDataStack = CoreDataStack(momdFileName: "books", persistentStoreType: storeType)
@@ -168,13 +173,6 @@ class BooksStore {
         catch {
             print("Error saving context: \(error)")
         }
-    }
-    
-    /**
-     Adds the specified object as an observer of saves to the managed object context.
-    */
-    func addSaveObserver(_ observer: AnyObject, selector: Selector) {
-        NotificationCenter.default.addObserver(observer, selector: selector, name: NSNotification.Name.NSManagedObjectContextDidSave, object: coreDataStack.managedObjectContext)
     }
     
     /**
