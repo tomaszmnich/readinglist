@@ -35,12 +35,14 @@ class ImportDataViewController : FormViewController, UIDocumentPickerDelegate, U
     
         selectDocumentSection.append(ButtonRow(selectDocumentKey) {
             $0.title = "Import Books"
-            $0.onCellSelection(self.requestImport)
+            $0.onCellSelection{ [unowned self] cell,_ in
+                self.requestImport(cell: cell)
+            }
         })
         form.append(selectDocumentSection)
     }
     
-    func requestImport(cell: ButtonCellOf<String>, row: ButtonRow) {
+    func requestImport(cell: ButtonCellOf<String>) {
         let documentImport = UIDocumentMenuViewController(documentTypes: ["public.comma-separated-values-text"], in: .import)
         documentImport.delegate = self
         if let popPresenter = documentImport.popoverPresentationController {
