@@ -25,13 +25,25 @@ class ReadingListApplication : XCUIApplication {
         tabBars.buttons.element(boundBy: UInt(tab.rawValue)).tap()
     }
     
+    func waitUntilHittable(_ element: XCUIElement, failureMessage: String) {
+        let startTime = NSDate.timeIntervalSinceReferenceDate
+        
+        while !element.isHittable {
+            if NSDate.timeIntervalSinceReferenceDate - startTime > 30 {
+                XCTAssert(false, failureMessage)
+            }
+            CFRunLoopRunInMode(CFRunLoopMode.defaultMode, 0.1, false)
+        }
+    }
+    
     func addTestData() {
         clickTab(.settings)
         tables.cells.staticTexts["Debug Settings"].tap()
         tables.cells.staticTexts["Import Test Data"].tap()
-        print("Waiting 10 seconds, just to be safe")
-        sleep(10)
-        topNavBar.buttons["Settings"].tap()
+        
+        let backButton = topNavBar.buttons["Settings"]
+        waitUntilHittable(backButton, failureMessage: "Timeout waiting for test data to import")
+        backButton.tap()
     }
     
     func clickAddButton(addMethod: addMethod) {
