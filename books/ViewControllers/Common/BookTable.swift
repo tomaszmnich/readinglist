@@ -180,7 +180,7 @@ class BookTable: AutoUpdatingTableViewController {
 
     func addWasPressed() {
         func segueAction(title: String, identifier: String) -> UIAlertAction {
-            return UIAlertAction(title: title, style: .default){_ in
+            return UIAlertAction(title: title, style: .default){[unowned self] _ in
                 self.parent!.performSegue(withIdentifier: identifier, sender: self)
             }
         }

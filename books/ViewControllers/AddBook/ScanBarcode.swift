@@ -144,15 +144,23 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         
         // Check that the book hasn't already been added
         if let existingBook = appDelegate.booksStore.getIfExists(isbn: isbn) {
-            let alert = duplicateBookAlertController(existingBook, modalControllerToDismiss: self) {
-                self.session?.startRunning()
-            }
-            
-            self.present(alert, animated: true)
+            presentDuplicateAlert(existingBook)
         }
         else {
             searchForFoundIsbn(isbn: isbn)
         }
+    }
+    
+    func presentDuplicateAlert(_ book: Book) {
+        let alert = duplicateBookAlertController(goToExistingBook: { [unowned self] in
+            self.dismiss(animated: true) {
+                appDelegate.splitViewController.tabbedViewController.simulateBookSelection(book)
+            }
+        }, cancel: { [unowned self] in
+            self.session?.startRunning()
+        })
+        
+        self.present(alert, animated: true)
     }
     
     func searchForFoundIsbn(isbn: String) {
@@ -178,11 +186,7 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
                 let fetchResult = resultPage.result.value!
                 // We may now have a book which matches the Google Books ID (but didn't match the ISBN), so check again
                 if let existingBook = appDelegate.booksStore.getIfExists(googleBooksId: fetchResult.id) {
-                    let alert = duplicateBookAlertController(existingBook, modalControllerToDismiss: self) {
-                        self.session?.startRunning()
-                    }
-                    
-                    self.present(alert, animated: true)
+                    self.presentDuplicateAlert(existingBook)
                 }
                 else {
                     // If there is no duplicate, we can safely go to the next page

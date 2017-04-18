@@ -28,7 +28,7 @@ class DebugSettingsViewController: FormViewController {
         let importTestDataSection = Section(header: "Test data", footer: "Import a set of data for both testing and screenshots")
         importTestDataSection.append(ButtonRow() {
             $0.title = "Import Test Data"
-            $0.onCellSelection { _,_ in
+            $0.onCellSelection { [unowned self] _,_ in
                 self.loadTestData()
             }
         })
