@@ -24,14 +24,14 @@ class BookDetailsViewModel {
         authors = book.authorList
         
         var mutableDescription = ""
-        if book.pageCount != nil {
-            mutableDescription += String(describing: book.pageCount!) + " pages"
-        }
-        if book.pageCount != nil && book.publicationDate != nil {
-            mutableDescription += " * "
-        }
         if book.publicationDate != nil {
             mutableDescription += book.publicationDate!.toString(withDateStyle: .medium)
+        }
+        if book.pageCount != nil && book.publicationDate != nil {
+            mutableDescription += " • "
+        }
+        if book.pageCount != nil {
+            mutableDescription += String(describing: book.pageCount!) + " pages"
         }
         if !mutableDescription.isEmpty {
             mutableDescription += "\n\n"
