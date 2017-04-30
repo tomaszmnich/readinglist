@@ -27,11 +27,11 @@ class BookDetailsViewModel {
         if book.pageCount != nil {
             mutableDescription += String(describing: book.pageCount!) + " pages"
         }
-        if book.pageCount != nil && book.publishedDate != nil {
+        if book.pageCount != nil && book.publicationDate != nil {
             mutableDescription += " * "
         }
-        if book.publishedDate != nil {
-            mutableDescription += book.publishedDate!.toString(withDateStyle: .medium)
+        if book.publicationDate != nil {
+            mutableDescription += book.publicationDate!.toString(withDateStyle: .medium)
         }
         if !mutableDescription.isEmpty {
             mutableDescription += "\n\n"
