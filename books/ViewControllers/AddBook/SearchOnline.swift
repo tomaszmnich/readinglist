@@ -186,7 +186,7 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
             case .error:
                 reasonString = "⚠️ Error!"
             }
-            return NSAttributedString(string: reasonString, withFont: UIFont.systemFont(ofSize: 36, weight: UIFontWeightThin))
+            return NSAttributedString(reasonString, withFont: UIFont.systemFont(ofSize: 36, weight: UIFontWeightThin))
         }
         
         func description(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
@@ -199,7 +199,7 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
             case .error:
                 descriptionString = "Something went wrong! It might be your Internet connection..."
             }
-            return NSAttributedString(string: descriptionString, withFont: UIFont.preferredFont(forTextStyle: .body))
+            return NSAttributedString(descriptionString, withFont: UIFont.preferredFont(forTextStyle: .body))
         }
         
         func verticalOffset(forEmptyDataSet scrollView: UIScrollView!) -> CGFloat {

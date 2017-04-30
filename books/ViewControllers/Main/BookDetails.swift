@@ -13,19 +13,50 @@ import CoreSpotlight
 class BookDetailsViewModel {
     let book: Book
     let title: String
-    let authors: String?
+    let authors: String
     let description: String?
-    let startedWhen: String
-    let finishedWhen: String
+    let readingLog: NSAttributedString
     let cover: UIImage
     
     init(book: Book) {
         self.book = book
         title = book.title
         authors = book.authorList
-        description = book.bookDescription
-        startedWhen = book.startedReading?.toString(withDateFormat: "d MMMM yyyy") ?? " — "
-        finishedWhen = book.finishedReading?.toString(withDateFormat: "d MMMM yyyy") ?? " — "
+        
+        var mutableDescription = ""
+        if book.pageCount != nil {
+            mutableDescription += String(describing: book.pageCount!) + " pages"
+        }
+        if book.pageCount != nil && book.publishedDate != nil {
+            mutableDescription += " * "
+        }
+        if book.publishedDate != nil {
+            mutableDescription += book.publishedDate!.toString(withDateStyle: .medium)
+        }
+        if !mutableDescription.isEmpty {
+            mutableDescription += "\n\n"
+        }
+        if book.bookDescription != nil {
+            mutableDescription += book.bookDescription!
+        }
+        description = mutableDescription
+        
+        let headerFont = UIFont.preferredFont(forTextStyle: .body)
+        let subheaderFond = UIFont.preferredFont(forTextStyle: .caption1)
+        switch book.readState {
+        case .toRead:
+            readingLog = NSMutableAttributedString("To Read 📚", withFont: headerFont)
+            break
+        case .reading:
+            readingLog = NSMutableAttributedString("Currently Reading 📖\n", withFont: headerFont)
+                .chainAppend("Started \(book.startedReading!.toShortPrettyString())", withFont: subheaderFond)
+            break
+        case .finished:
+            readingLog = NSMutableAttributedString("Finished 🎉\n", withFont: headerFont)
+                .chainAppend("\(book.startedReading!.toShortPrettyString()) - \(book.finishedReading!.toShortPrettyString())", withFont: subheaderFond)
+            break
+        }
+        
         if let coverData = book.coverImage, let image = UIImage(data: coverData) {
             cover = image
         }
@@ -37,11 +68,11 @@ class BookDetailsViewModel {
 
 class BookDetails: UIViewController {
     
+    @IBOutlet weak var readingLogBackground: UIView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var authorsLabel: UILabel!
     @IBOutlet weak var descriptionTextView: UITextView!
-    //@IBOutlet weak var finishedWhenLabel: UILabel!
-    //@IBOutlet weak var startedWhenLabel: UILabel!
+    @IBOutlet weak var readingLogHeader: UILabel!
     @IBOutlet weak var imageView: UIImageView!
     
     var viewModel: BookDetailsViewModel? {
@@ -57,8 +88,7 @@ class BookDetails: UIViewController {
             titleLabel.text = viewModel.title
             authorsLabel.text = viewModel.authors
             descriptionTextView.text = viewModel.description
-            //startedWhenLabel.text = viewModel.startedWhen
-            //finishedWhenLabel.text = viewModel.finishedWhen
+            readingLogHeader.attributedText = viewModel.readingLog
             imageView.image = viewModel.cover
         }
     }
@@ -67,6 +97,7 @@ class BookDetails: UIViewController {
         super.viewDidLoad()
 
         view.backgroundColor = UIColor.white
+        readingLogBackground.layer.cornerRadius = 8
         
         // Initialise the view, so that by default a blank page is shown.
         // This is required for starting the app in split-screen mode, where this view is

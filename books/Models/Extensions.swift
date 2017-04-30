@@ -17,7 +17,7 @@ extension UIColor {
 }
 
 public extension NSAttributedString {
-    public convenience init(string: String, withFont font: UIFont) {
+    public convenience init(_ string: String, withFont font: UIFont) {
         self.init(string: string, attributes: [NSFontAttributeName: font])
     }
 }
@@ -44,9 +44,13 @@ extension NSMutableAttributedString {
         }
         return false
     }
+    
+    convenience init(_ string: String, withFont font: UIFont) {
+        self.init(attributedString: NSAttributedString(string, withFont: font))
+    }
 
-    func chainAppend(string: String, withFont font: UIFont) -> NSMutableAttributedString {
-        self.append(NSAttributedString(string: string, withFont: font))
+    func chainAppend(_ string: String, withFont font: UIFont) -> NSMutableAttributedString {
+        self.append(NSAttributedString(string, withFont: font))
         return self
     }
 }

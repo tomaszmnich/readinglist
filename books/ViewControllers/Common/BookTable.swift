@@ -234,10 +234,10 @@ extension BookTable : DZNEmptyDataSetSource {
             titleText = "📚 To Read"
         }
         else {
-            titleText = "✅ Finished"
+            titleText = "🎉 Finished"
         }
         
-        return NSAttributedString(string: titleText, withFont: UIFont.systemFont(ofSize: 42, weight: UIFontWeightThin))
+        return NSAttributedString(titleText, withFont: UIFont.systemFont(ofSize: 42, weight: UIFontWeightThin))
     }
     
     func verticalOffset(forEmptyDataSet scrollView: UIScrollView!) -> CGFloat {
@@ -257,25 +257,25 @@ extension BookTable : DZNEmptyDataSetSource {
         
         let descriptionText: NSMutableAttributedString
         if resultsFilterer.showingSearchResults {
-            descriptionText = NSMutableAttributedString(string: "Try changing your search, or add a new book by tapping the ", withFont: bodyFont)
-                .chainAppend(string: "+", withFont: boldFont)
-                .chainAppend(string: " button above.", withFont: bodyFont)
+            descriptionText = NSMutableAttributedString("Try changing your search, or add a new book by tapping the ", withFont: bodyFont)
+                .chainAppend("+", withFont: boldFont)
+                .chainAppend(" button above.", withFont: bodyFont)
         }
         else if readStates.contains(.reading) {
-            descriptionText = NSMutableAttributedString(string: "Books you add to your ", withFont: bodyFont)
-                .chainAppend(string: "To Read", withFont: boldFont)
-                .chainAppend(string: " list, or mark as currently ", withFont: bodyFont)
-                .chainAppend(string: "Reading", withFont: boldFont)
-                .chainAppend(string: ", will show up here.\n\nAdd a book by tapping the ", withFont: bodyFont)
-                .chainAppend(string: "+", withFont: boldFont)
-                .chainAppend(string: " button above.", withFont: bodyFont)
+            descriptionText = NSMutableAttributedString("Books you add to your ", withFont: bodyFont)
+                .chainAppend("To Read", withFont: boldFont)
+                .chainAppend(" list, or mark as currently ", withFont: bodyFont)
+                .chainAppend("Reading", withFont: boldFont)
+                .chainAppend(", will show up here.\n\nAdd a book by tapping the ", withFont: bodyFont)
+                .chainAppend("+", withFont: boldFont)
+                .chainAppend(" button above.", withFont: bodyFont)
         }
         else {
-            descriptionText = NSMutableAttributedString(string: "Books you mark as ", withFont: bodyFont)
-                .chainAppend(string: "Finished", withFont: boldFont)
-                .chainAppend(string: " will show up here.\n\nAdd a book by tapping the ", withFont: bodyFont)
-                .chainAppend(string: "+", withFont: boldFont)
-                .chainAppend(string: " button above.", withFont: bodyFont)
+            descriptionText = NSMutableAttributedString("Books you mark as ", withFont: bodyFont)
+                .chainAppend("Finished", withFont: boldFont)
+                .chainAppend(" will show up here.\n\nAdd a book by tapping the ", withFont: bodyFont)
+                .chainAppend("+", withFont: boldFont)
+                .chainAppend(" button above.", withFont: bodyFont)
         }
         
         return descriptionText
