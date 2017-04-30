@@ -14,6 +14,8 @@ class BookMetadataForm: FormViewController {
     
     private let titleKey = "title"
     private let authorListKey = "author"
+    private let pageCountKey = "pageCount"
+    private let publishedDateKey = "publishedDate"
     private let descriptionKey = "description"
     private let imageKey = "image"
     
@@ -23,30 +25,35 @@ class BookMetadataForm: FormViewController {
         // Title and Author
         let titleAuthorSection = Section()
         titleAuthorSection.append(TextRow(titleKey) {
-            $0.placeholder = "Title"
+            $0.title = "Title"
         }.onChange{[unowned self] _ in
             self.onChange()
         })
         titleAuthorSection.append(TextRow(authorListKey) {
-            $0.placeholder = "Author"
+            $0.title = "Author"
         }.onChange{[unowned self] _ in
             self.onChange()
         })
         form.append(titleAuthorSection)
         
-        // Page count and Publication date
-        let descriptionSection = Section()
-        descriptionSection.append(TextAreaRow(descriptionKey){
+        // Description section
+        let extraMetadataSection = Section()
+        extraMetadataSection.append(IntRow(pageCountKey) {
+            $0.title = "Page Count"
+        })
+        extraMetadataSection.append(DateRow(publishedDateKey) {
+            $0.title = "Publication Date"
+        })
+        extraMetadataSection.append(TextAreaRow(descriptionKey){
             $0.placeholder = "Description"
         }.cellSetup{
             $0.0.height = {return 200}
         })
-        
-        descriptionSection.append(ImageRow(imageKey){
+        extraMetadataSection.append(ImageRow(imageKey){
             $0.title = "Cover Image"
             $0.cell.height = {return 100}
         })
-        form.append(descriptionSection)
+        form.append(extraMetadataSection)
     }
     
     var titleField: String? {
@@ -57,6 +64,16 @@ class BookMetadataForm: FormViewController {
     var authorList: String? {
         get { return form.values()[authorListKey] as? String }
         set { form.setValues([authorListKey: newValue]) }
+    }
+    
+    var pageCount: Int? {
+        get { return form.values()[pageCountKey] as? Int }
+        set { form.setValues([pageCountKey: newValue]) }
+    }
+    
+    var publicationDate: Date? {
+        get { return form.values()[publishedDateKey] as? Date }
+        set { form.setValues([publishedDateKey: newValue]) }
     }
     
     var descriptionField: String? {

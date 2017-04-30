@@ -33,6 +33,8 @@ class EditBook: BookMetadataForm {
         // Initialise the form with the book values
         titleField = bookToEdit.title
         authorList = bookToEdit.authorList
+        pageCount = bookToEdit.pageCount == nil ? nil : Int(bookToEdit.pageCount!)
+        publicationDate = bookToEdit.publicationDate
         descriptionField = bookToEdit.bookDescription
         image = UIImage(optionalData: bookToEdit.coverImage)
     }
@@ -69,6 +71,8 @@ class EditBook: BookMetadataForm {
         let newMetadata = BookMetadata()
         newMetadata.title = titleField
         newMetadata.authors = authorList
+        newMetadata.pageCount = pageCount
+        newMetadata.publicationDate = publicationDate
         newMetadata.bookDescription = descriptionField
         newMetadata.coverImage = image == nil ? nil : UIImageJPEGRepresentation(image!, 0.7)
         

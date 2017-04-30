@@ -94,7 +94,7 @@ class GoogleBooks {
     
     static func getCover(isbn: String, callback: @escaping (Result<Data>) -> Void) {
         // If we are going by the ISBN, fetch the result first
-        // TODO: this could become redundant if we supplement ISBN -> GBID first.
+        // This could become redundant if we supplement ISBN -> GBID first.
         GoogleBooks.fetchIsbn(isbn) { fetchResult in
             guard fetchResult.result.isSuccess else { callback(Result.failure(fetchResult.result.error!)); return }
             
@@ -167,7 +167,6 @@ class GoogleBooks {
         }
     }
     
-    // TODO: Unit test
     class Parser {
         
         static func parseSearchResults(_ searchResults: JSON) -> [SearchResult] {
@@ -200,7 +199,8 @@ class GoogleBooks {
             
             let result = FetchResult(fromSearchResult: searchResult)
             result.pageCount = fetchResult["volumeInfo","pageCount"].int
-            result.publishedDate = fetchResult["volumeInfo","publishedDate"].string?.toDateViaFormat("yyyy-MM-dd")
+            // "Published Date" refers to *this* edition; there doesn't seem to be a way to get the first publication date :(
+            //result.publishedDate = fetchResult["volumeInfo","publishedDate"].string?.toDateViaFormat("yyyy-MM-dd")
 
             result.hasSmallImage = fetchResult["volumeInfo","imageLinks","small"].string != nil
             result.hasThumbnailImage = fetchResult["volumeInfo","imageLinks","thumbnail"].string != nil
@@ -267,7 +267,7 @@ class GoogleBooks {
             metadata.bookDescription = description
             metadata.coverImage = coverImage
             metadata.pageCount = pageCount
-            metadata.publishedDate = publishedDate
+            metadata.publicationDate = publishedDate
             metadata.isbn13 = isbn13
             return metadata
         }
