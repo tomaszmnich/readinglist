@@ -1,24 +1,24 @@
-Google Books ID,Started Reading,Finished Reading,Title,Author,Page Count,Description,Cover URL
+Google Books ID,Started Reading,Finished Reading,Title,Author,Page Count,Publication Date,Description,Cover URL
 #
 # READING
 #
-MlaEAgAAQBAJ, 2017-04-14,, The Moon Is A Harsh Mistress,,,,https://images.gr-assets.com/books/1418677284l/3242353.jpg
+MlaEAgAAQBAJ, 2017-04-14,, The Moon Is A Harsh Mistress,,,,,https://images.gr-assets.com/books/1418677284l/3242353.jpg
 #
 # TO READ
 #
-r119-dYq0mwC,,, A Wrinkle In Time,,,,
-w25sx0G6nRsC,,, Cat's Cradle,,,,
-vi2KCwAAQBAJ,,, Neuromancer,,,,
-t2vfDQAAQBAJ,,, It Can't Happen Here,,,,
-T_WlBgAAQBAJ,,, The Three Body Problem,,,,
+r119-dYq0mwC,,, A Wrinkle In Time,,,,,
+w25sx0G6nRsC,,, Cat's Cradle,,,,,
+vi2KCwAAQBAJ,,, Neuromancer,,,,,
+t2vfDQAAQBAJ,,, It Can't Happen Here,,,,,
+T_WlBgAAQBAJ,,, The Three Body Problem,,,,,
 #
 # FINISHED
 #
-m5vIVN7LjtgC, 2015-11-03, 2015-11-19, Down and Out in Paris and London,,,,
-RwqcCwAAQBAJ, 2016-07-14, 2016-07-31, Coming Up For Air,,,,
-y3CyRurE7P4C, 2016-12-27, 2017-01-17, Fahrenheit 451,,,,
-0oNp8FTIhlcC, 2017-01-17, 2017-02-11, Keep the Aspidistra Flying,,,,
-E2Pk5mjf9A0C, 2017-04-01, 2017-04-04, The Noise of Time,,,,
-cKWfCgAAQBAJ, 2017-02-11, 2017-02-14, Nineteen Eighty Four,,,,
-ISQcDAAAQBAJ, 2017-02-17, 2017-04-09, The Sellout,,,,
-,2016-10-01, 2016-10-14, Your First Swift App, Ash Furrow, ,"Want to write an iPhone app? Excited about experimenting with Swift? Both, but don't know where to start? Start here! I'll take you through everything from creating your first Xcode project to submitting to the App Store.", https://s3.amazonaws.com/titlepages.leanpub.com/yourfirstswiftapp/hero?1455119428
+m5vIVN7LjtgC, 2015-11-03, 2015-11-19, Down and Out in Paris and London,,,,,
+RwqcCwAAQBAJ, 2016-07-14, 2016-07-31, Coming Up For Air,,,,,
+y3CyRurE7P4C, 2016-12-27, 2017-01-17, Fahrenheit 451,,,,,
+0oNp8FTIhlcC, 2017-01-17, 2017-02-11, Keep the Aspidistra Flying,,,,,
+E2Pk5mjf9A0C, 2017-04-01, 2017-04-04, The Noise of Time,,,,,
+cKWfCgAAQBAJ, 2017-02-11, 2017-02-14, Nineteen Eighty Four,,,,,
+ISQcDAAAQBAJ, 2017-02-17, 2017-04-09, The Sellout,,,,,
+,2016-10-01, 2016-10-14, Your First Swift App, Ash Furrow, 209, 2016-02-10, "Want to write an iPhone app? Excited about experimenting with Swift? Both, but don't know where to start? Start here! I'll take you through everything from creating your first Xcode project to submitting to the App Store.", https://s3.amazonaws.com/titlepages.leanpub.com/yourfirstswiftapp/hero?1455119428

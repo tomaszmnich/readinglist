@@ -19,7 +19,7 @@ class Book: NSManagedObject {
     @NSManaged fileprivate(set) var isbn13: String?
     @NSManaged fileprivate(set) var googleBooksId: String?
     @NSManaged fileprivate(set) var pageCount: NSNumber?
-    @NSManaged fileprivate(set) var publishedDate: Date?
+    @NSManaged fileprivate(set) var publicationDate: Date?
     @NSManaged fileprivate(set) var bookDescription: String?
     @NSManaged fileprivate(set) var coverImage: Data?
     
@@ -61,7 +61,7 @@ extension Book {
         isbn13 = metadata.isbn13
         googleBooksId = metadata.googleBooksId
         pageCount = metadata.pageCount as NSNumber?
-        publishedDate = metadata.publishedDate
+        publicationDate = metadata.publicationDate
         bookDescription = metadata.bookDescription
         coverImage = metadata.coverImage
     }
@@ -102,6 +102,7 @@ extension Book {
         CsvColumn<Book>(header: "Title", cellValue: {$0.title}),
         CsvColumn<Book>(header: "Author", cellValue: {$0.authorList}),
         CsvColumn<Book>(header: "Page Count", cellValue: {$0.pageCount == nil ? nil : String(describing: $0.pageCount!)}),
+        CsvColumn<Book>(header: "Publication Date", cellValue: {$0.publicationDate == nil ? nil : $0.publicationDate!.toString(withDateFormat: "yyyy-MM-dd")}),
         CsvColumn<Book>(header: "Description", cellValue: {$0.bookDescription}),
         CsvColumn<Book>(header: "Started Reading", cellValue: {$0.startedReading?.toString(withDateFormat: "yyyy-MM-dd")}),
         CsvColumn<Book>(header: "Finished Reading", cellValue: {$0.finishedReading?.toString(withDateFormat: "yyyy-MM-dd")})
@@ -116,7 +117,7 @@ class BookMetadata {
     var title: String?
     var authors: String?
     var pageCount: Int?
-    var publishedDate: Date?
+    var publicationDate: Date?
     var bookDescription: String?
     var isbn13: String?
     var coverImage: Data?
@@ -137,7 +138,7 @@ class BookMetadata {
         self.authors = book.authorList
         self.bookDescription = book.bookDescription
         self.pageCount = book.pageCount as? Int
-        self.publishedDate = book.publishedDate
+        self.publicationDate = book.publicationDate
         self.coverImage = book.coverImage
         self.isbn13 = book.isbn13
         self.googleBooksId = book.googleBooksId
@@ -150,6 +151,7 @@ class BookMetadata {
         bookMetadata.authors = csvData["Author"]?.nilIfWhitespace()
         bookMetadata.isbn13 = Isbn13.tryParse(inputString: csvData["ISBN-13"])
         bookMetadata.pageCount = csvData["Page Count"] == nil ? nil : Int(csvData["Page Count"]!)
+        bookMetadata.publicationDate = csvData["Publication Date"] == nil ? nil : Date(dateString: csvData["Publication Date"]!)
         bookMetadata.bookDescription = csvData["Description"]?.nilIfWhitespace()
         bookMetadata.coverUrl = URL(optionalString: csvData["Cover URL"])
         
