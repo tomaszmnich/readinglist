@@ -17,6 +17,7 @@ class ReadStateForm: FormViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let now = Date()
 
         form +++ Section(header: "Current State", footer: "")
             <<< SegmentedRow<BookReadState>(readStateKey) {
@@ -38,8 +39,8 @@ class ReadStateForm: FormViewController {
                 $0.title = "Started Reading"
                 $0.maximumDate = Date.startOfToday()
                 // Set a value here so we can be sure that the started date is *never* null.
-                $0.value = Date.startOfToday()
-                $0.onChange {[unowned self] _ in
+                $0.value = now
+                $0.onChange {[unowned self] cell in
                     self.validate()
                 }
             }
@@ -51,7 +52,7 @@ class ReadStateForm: FormViewController {
                     return self.readState != .finished
                 }
                 // Set a value here so we can be sure that the finished date is *never* null.
-                $0.value = Date.startOfToday()
+                $0.value = now
                 $0.onChange{ [unowned self] _ in
                     self.validate()
                 }

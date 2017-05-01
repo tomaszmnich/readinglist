@@ -68,8 +68,8 @@ extension Book {
     
     func populate(from readingInformation: BookReadingInformation) {
         readState = readingInformation.readState
-        startedReading = readingInformation.startedReading?.startOfDay()
-        finishedReading = readingInformation.finishedReading?.startOfDay()
+        startedReading = readingInformation.startedReading
+        finishedReading = readingInformation.finishedReading
     }
     
     func toSpotlightItem() -> SpotlightItem {

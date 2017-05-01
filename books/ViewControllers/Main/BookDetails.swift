@@ -42,18 +42,20 @@ class BookDetailsViewModel {
         description = mutableDescription
         
         let headerFont = UIFont.preferredFont(forTextStyle: .body)
-        let subheaderFond = UIFont.preferredFont(forTextStyle: .caption1)
+        let subheaderFont = UIFont.preferredFont(forTextStyle: .caption1)
         switch book.readState {
         case .toRead:
             readingLog = NSMutableAttributedString("To Read 📚", withFont: headerFont)
             break
         case .reading:
             readingLog = NSMutableAttributedString("Currently Reading 📖\n", withFont: headerFont)
-                .chainAppend("Started \(book.startedReading!.toShortPrettyString())", withFont: subheaderFond)
+                .chainAppend("Started \(book.startedReading!.toShortPrettyString())", withFont: subheaderFont)
             break
         case .finished:
+            let sameDay = book.startedReading!.startOfDay() == book.finishedReading!.startOfDay()
             readingLog = NSMutableAttributedString("Finished 🎉\n", withFont: headerFont)
-                .chainAppend("\(book.startedReading!.toShortPrettyString()) - \(book.finishedReading!.toShortPrettyString())", withFont: subheaderFond)
+                .chainAppend("\(book.startedReading!.toShortPrettyString())", withFont: subheaderFont)
+                .chainAppend(sameDay ? "" : " - \(book.finishedReading!.toShortPrettyString())", withFont: subheaderFont)
             break
         }
         

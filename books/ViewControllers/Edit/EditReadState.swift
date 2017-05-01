@@ -23,8 +23,12 @@ class EditReadState: ReadStateForm {
         // Load the existing values on to the form; if dates are missing, use the current date
         // if the date entry field becomes visible
         readState = bookToEdit.readState
-        startedReading = bookToEdit.startedReading ?? Date.startOfToday()
-        finishedReading = bookToEdit.finishedReading ?? Date.startOfToday()
+        if let started = bookToEdit.startedReading {
+            startedReading = started
+        }
+        if let finished = bookToEdit.finishedReading {
+            finishedReading = finished
+        }
     }
     
     override func formValidated(isValid: Bool) {
