@@ -57,6 +57,16 @@ class ReadingListApplication : XCUIApplication {
         }
     }
     
+    func setBarcodeSimulation(_ mode: BarcodeScanSimulation) {
+        clickTab(.settings)
+        tables.cells.staticTexts["Debug Settings"].tap()
+        
+        tables.cells.staticTexts[mode.titleText].tap()
+        if navigationBars.count == 1 {
+            topNavBar.buttons["Settings"].tap()
+        }
+    }
+    
     func clickAddButton(addMethod: addMethod) {
         navigationBars.element(boundBy: 0).buttons["Add"].tap()
         sheets.buttons.element(boundBy: UInt(addMethod.rawValue)).tap()
@@ -144,5 +154,53 @@ class books_UITests: XCTestCase {
         sleep(2)
         app.collectionViews.collectionViews.buttons["Add To iCloud Drive"].tap()
         app.navigationBars["iCloud Drive"].buttons["Cancel"].tap()
+    }
+    
+    func testBarcodeScanner() {
+        let app = ReadingListApplication()
+        
+        func scanBarcode(mode: BarcodeScanSimulation) {
+            app.setBarcodeSimulation(mode)
+            app.clickTab(.toRead)
+        
+            app.navigationBars["To Read"].buttons["Add"].tap()
+            app.sheets.buttons["Scan Barcode"].tap()
+        }
+        
+        // Normal mode
+        scanBarcode(mode: .normal)
+        sleep(1)
+        app.topNavBar.buttons["Cancel"].tap()
+        
+        // No permissions
+        scanBarcode(mode: .noCameraPermissions)
+        sleep(1)
+        XCTAssertEqual(app.alerts.count, 1)
+        let permissionAlert = app.alerts.element(boundBy: 0)
+        XCTAssertEqual("Permission Required", permissionAlert.label)
+        permissionAlert.buttons["Cancel"].tap()
+        
+        // Valid ISBN
+        scanBarcode(mode: .validIsbn)
+        sleep(5)
+        app.topNavBar.buttons["Done"].tap()
+        
+        // Not found ISBN
+        scanBarcode(mode: .unfoundIsbn)
+        sleep(2)
+        XCTAssertEqual(app.alerts.count, 1)
+        let noMatchAlert = app.alerts.element(boundBy: 0)
+        XCTAssertEqual("No Exact Match", noMatchAlert.label)
+        noMatchAlert.buttons["No"].tap()
+        app.topNavBar.buttons["Cancel"].tap()
+        
+        // Existing ISBN
+        scanBarcode(mode: .existingIsbn)
+        sleep(1)
+        XCTAssertEqual(app.alerts.count, 1)
+        let duplicateAlert = app.alerts.element(boundBy: 0)
+        XCTAssertEqual("Book Already Added", duplicateAlert.label)
+        duplicateAlert.buttons["Cancel"].tap()
+        app.topNavBar.buttons["Cancel"].tap()
     }
 }
