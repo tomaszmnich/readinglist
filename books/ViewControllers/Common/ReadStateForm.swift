@@ -19,12 +19,15 @@ class ReadStateForm: FormViewController {
         super.viewDidLoad()
 
         // The three rows we need in this table
+        let readStateSection = Section(header: "Current State", footer: "")
         let readStateRow = SegmentedRow<BookReadState>(readStateKey) {
-            $0.title = "Read State"
             $0.options = [.toRead, .reading, .finished]
             // Set a value here so we can be sure that the read state option is *never* null.
             $0.value = .toRead
         }
+        readStateSection.append(readStateRow)
+        form.append(readStateSection)
+        
         let startedReadingRow = DateRow(dateStartedKey){
             $0.title = "Started Reading"
             // Set a value here so we can be sure that the started date is *never* null.
@@ -37,7 +40,6 @@ class ReadStateForm: FormViewController {
         }
         
         // Add the rows to the form
-        appendRowToFormInSection(row: readStateRow, hiddenCondition: nil)
         appendRowToFormInSection(row: startedReadingRow, hiddenCondition: Condition.function([readStateKey]) {_ in 
             return readStateRow.value == .toRead
         })
