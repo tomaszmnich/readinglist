@@ -22,7 +22,11 @@ class ReadingListApplication : XCUIApplication {
     }
     
     func clickTab(_ tab: tab) {
-        tabBars.buttons.element(boundBy: UInt(tab.rawValue)).tap()
+        getTab(tab).tap()
+    }
+    
+    func getTab(_ tab: tab) -> XCUIElement {
+        return tabBars.buttons.element(boundBy: UInt(tab.rawValue))
     }
     
     func waitUntilHittable(_ element: XCUIElement, failureMessage: String) {
@@ -39,11 +43,18 @@ class ReadingListApplication : XCUIApplication {
     func addTestData() {
         clickTab(.settings)
         tables.cells.staticTexts["Debug Settings"].tap()
+        
+        let isIpad = navigationBars.count == 2
         tables.cells.staticTexts["Import Test Data"].tap()
         
-        let backButton = topNavBar.buttons["Settings"]
-        waitUntilHittable(backButton, failureMessage: "Timeout waiting for test data to import")
-        backButton.tap()
+        if isIpad {
+            waitUntilHittable(getTab(.toRead), failureMessage: "Timeout waiting for test data to import")
+        }
+        else {
+            let backButton = topNavBar.buttons["Settings"]
+            waitUntilHittable(backButton, failureMessage: "Timeout waiting for test data to import")
+            backButton.tap()
+        }
     }
     
     func clickAddButton(addMethod: addMethod) {
@@ -112,7 +123,7 @@ class books_UITests: XCTestCase {
         let app = ReadingListApplication()
         
         app.clickTab(.toRead)
-        let bookCount = Int(app.tables.cells.count)
+        let bookCount = Int(app.tables.element(boundBy: 0).cells.count)
         
         app.tables.cells.element(boundBy: 0).tap()
         app.topNavBar.buttons["Edit"].tap()
