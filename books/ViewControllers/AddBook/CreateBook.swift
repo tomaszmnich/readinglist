@@ -31,12 +31,9 @@ class CreateBook: BookMetadataForm {
                 image = UIImage(data: data)
             }
         }
-        
-        // Trigger a validation update
-        onChange()
     }
     
-    override func onChange() {
+    override func formValidated(isValid: Bool) {
         nextButton.isEnabled = isValid
     }
     

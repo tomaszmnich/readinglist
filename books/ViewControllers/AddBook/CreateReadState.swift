@@ -22,8 +22,6 @@ class CreateReadState: ReadStateForm {
         
         // Set the read state on the form; add some default form values for the dates
         readState = (self.navigationController as! NavWithReadState).readState
-        startedReading = Date.startOfToday()
-        finishedReading = Date.startOfToday()
     }
     
     @IBAction func doneWasPressed(_ sender: UIBarButtonItem) {
@@ -38,7 +36,7 @@ class CreateReadState: ReadStateForm {
         self.navigationController?.dismiss(animated: true, completion: nil)
     }
     
-    override func onChange() {
+    override func formValidated(isValid: Bool) {
         doneButton.isEnabled = isValid
     }
 }

@@ -19,16 +19,15 @@ class EditBook: BookMetadataForm {
         super.viewDidLoad()
         
         // Add a Delete button
-        let deleteSection = Section()
-        deleteSection.append(ButtonRow("delete"){
-            $0.title = "Delete Book"
-            }.cellSetup{cell, row in
-                cell.tintColor = UIColor.red
-            }
-            .onCellSelection{[unowned self] _ in
-                self.presentDeleteAlert()
-            })
-        form.append(deleteSection)
+        form +++ Section()
+            <<< ButtonRow("delete"){
+                    $0.title = "Delete Book"
+                }.cellSetup{cell, row in
+                    cell.tintColor = UIColor.red
+                }
+                .onCellSelection{[unowned self] _ in
+                    self.presentDeleteAlert()
+                }
         
         // Initialise the form with the book values
         titleField = bookToEdit.title
@@ -55,7 +54,7 @@ class EditBook: BookMetadataForm {
         self.present(confirmDeleteAlert, animated: true, completion: nil)
     }
     
-    override func onChange() {
+    override func formValidated(isValid: Bool) {
         doneButton.isEnabled = isValid
     }
     

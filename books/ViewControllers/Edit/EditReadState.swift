@@ -27,7 +27,7 @@ class EditReadState: ReadStateForm {
         finishedReading = bookToEdit.finishedReading ?? Date.startOfToday()
     }
     
-    override func onChange() {
+    override func formValidated(isValid: Bool) {
         doneButton.isEnabled = isValid
     }
     

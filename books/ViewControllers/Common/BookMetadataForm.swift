@@ -23,37 +23,42 @@ class BookMetadataForm: FormViewController {
         super.viewDidLoad()
         
         // Title and Author
-        let titleAuthorSection = Section()
-        titleAuthorSection.append(TextRow(titleKey) {
-            $0.title = "Title"
-        }.onChange{[unowned self] _ in
-            self.onChange()
-        })
-        titleAuthorSection.append(TextRow(authorListKey) {
-            $0.title = "Author"
-        }.onChange{[unowned self] _ in
-            self.onChange()
-        })
-        form.append(titleAuthorSection)
+        form +++ Section()
+            <<< TextRow(titleKey) {
+                $0.title = "Title"
+                $0.add(rule: RuleRequired())
+                $0.validationOptions = .validatesOnChange
+            }.onRowValidationChanged{[unowned self] _ in
+                self.validationChanged()
+            }
+            <<< TextRow(authorListKey) {
+                $0.title = "Author"
+                $0.add(rule: RuleRequired())
+                $0.validationOptions = .validatesOnChange
+            }.onRowValidationChanged{[unowned self] _ in
+                self.validationChanged()
+            }
         
         // Description section
-        let extraMetadataSection = Section()
-        extraMetadataSection.append(IntRow(pageCountKey) {
-            $0.title = "Page Count"
-        })
-        extraMetadataSection.append(DateRow(publishedDateKey) {
-            $0.title = "Publication Date"
-        })
-        extraMetadataSection.append(TextAreaRow(descriptionKey){
-            $0.placeholder = "Description"
-        }.cellSetup{
-            $0.0.height = {return 200}
-        })
-        extraMetadataSection.append(ImageRow(imageKey){
-            $0.title = "Cover Image"
-            $0.cell.height = {return 100}
-        })
-        form.append(extraMetadataSection)
+        +++ Section()
+            <<< IntRow(pageCountKey) {
+                $0.title = "Page Count"
+            }
+            <<< DateRow(publishedDateKey) {
+                $0.title = "Publication Date"
+            }
+            <<< TextAreaRow(descriptionKey){
+                $0.placeholder = "Description"
+            }.cellSetup{
+                $0.0.height = {return 200}
+            }
+            <<< ImageRow(imageKey){
+                $0.title = "Cover Image"
+                $0.cell.height = {return 100}
+            }
+        
+        // Validate on load
+        form.validate()
     }
     
     var titleField: String? {
@@ -85,17 +90,17 @@ class BookMetadataForm: FormViewController {
         get { return form.values()[imageKey] as? UIImage }
         set { form.setValues([imageKey: newValue]) }
     }
+
+    private func validationChanged() {
+        formValidated(isValid: form.rows.flatMap{$0.validationErrors}.isEmpty)
+    }
     
-    func onChange() {
+    func formValidated(isValid: Bool) {
         // Should be overriden
     }
     
     func dismiss() {
         self.view.endEditing(true)
         self.navigationController?.dismiss(animated: true, completion: nil)
-    }
-    
-    var isValid: Bool {
-        return titleField?.isEmptyOrWhitespace == false && authorList?.isEmptyOrWhitespace == false
     }
 }
