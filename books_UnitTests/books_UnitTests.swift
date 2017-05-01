@@ -78,6 +78,16 @@ class books_UnitTests: XCTestCase {
         XCTAssertEqual((book1.sort as! Int) + 1, (book2.sort as! Int))
     }
     
+    func testSortOrderResets() {
+        let toReadState = BookReadingInformation.toRead()
+        let book = booksStore.create(from: getTestBookMetadata(), readingInformation: toReadState)
+        let originalSortOrder = book.sort
+        
+        booksStore.update(book: book, withMetadata: nil, withReadingInformation: BookReadingInformation.reading(started: Date()))
+        booksStore.update(book: book, withMetadata: nil, withReadingInformation: BookReadingInformation.toRead())
+        XCTAssertEqual(originalSortOrder, book.sort)
+    }
+    
     func testSortIndexRemovedWhenStarted() {
         let toReadState = BookReadingInformation.toRead()
         let book = booksStore.create(from: getTestBookMetadata(), readingInformation: toReadState)

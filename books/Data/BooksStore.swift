@@ -131,15 +131,7 @@ class BooksStore {
         book.createdWhen = Date()
         book.populate(from: metadata)
         book.populate(from: readingInformation)
-        if readingInformation.readState == .toRead{
-            if let specifiedBookSort = bookSort {
-                book.sort = NSNumber(value: specifiedBookSort)
-            }
-            else {
-                let maxSort = self.maxSort() ?? -1
-                book.sort = NSNumber(value: maxSort + 1)
-            }
-        }
+        updateSort(book: book, requestedSort: bookSort)
         
         save()
         updateSpotlightIndex(for: book)
@@ -156,9 +148,28 @@ class BooksStore {
         }
         if let readingInformation = readingInformation {
             book.populate(from: readingInformation)
+            updateSort(book: book)
         }
         save()
         updateSpotlightIndex(for: book)
+    }
+    
+    /**
+        Updates the supplied book's sort to an appropriate value, using the requested value if possible.
+    */
+    private func updateSort(book: Book, requestedSort: Int? = nil) {
+        if book.readState == .toRead{
+            if let specifiedBookSort = requestedSort {
+                book.sort = NSNumber(value: specifiedBookSort)
+            }
+            else {
+                let maxSort = self.maxSort() ?? -1
+                book.sort = NSNumber(value: maxSort + 1)
+            }
+        }
+        else {
+            book.sort = nil
+        }
     }
     
     /**
