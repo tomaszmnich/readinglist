@@ -46,7 +46,7 @@ class books_UnitTests: XCTestCase {
         testBookMetadata.bookDescription = "Test Book Description \(currentTestBook)"
         testBookMetadata.isbn13 = "1234567890\(String(format: "%03d", currentTestBook))"
         testBookMetadata.pageCount = 100 + currentTestBook
-        testBookMetadata.publishedDate = Date(timeIntervalSince1970: 1488926352)
+        testBookMetadata.publicationDate = Date(timeIntervalSince1970: 1488926352)
         return testBookMetadata
     }
     
@@ -64,7 +64,7 @@ class books_UnitTests: XCTestCase {
         XCTAssertEqual(testBookMetadata.bookDescription, book.bookDescription)
         XCTAssertEqual(testBookMetadata.isbn13, book.isbn13)
         XCTAssertEqual(testBookMetadata.pageCount, book.pageCount as? Int)
-        XCTAssertEqual(testBookMetadata.publishedDate, book.publishedDate)
+        XCTAssertEqual(testBookMetadata.publicationDate, book.publicationDate)
         XCTAssertEqual(readingInformation.readState, book.readState)
         XCTAssertEqual(readingInformation.startedReading, book.startedReading)
         XCTAssertEqual(readingInformation.finishedReading, book.finishedReading)
