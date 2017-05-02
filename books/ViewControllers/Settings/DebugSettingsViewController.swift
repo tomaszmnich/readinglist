@@ -56,7 +56,7 @@ class DebugSettingsViewController: FormViewController {
         
         SVProgressHUD.show(withStatus: "Loading Data...")
         
-        BookImporter(csvFileUrl: csvPath!, supplementBookCover: true, supplementBookMetadata: true, missingHeadersCallback: {
+        BookImporter(csvFileUrl: csvPath!, supplementBookCover: true, supplementBookMetadata: false, missingHeadersCallback: {
             print("Missing headers!")
         }) { importedCount, duplicateCount, invalidCount in
 

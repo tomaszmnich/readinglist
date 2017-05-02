@@ -1,24 +1,81 @@
-Google Books ID,Started Reading,Finished Reading,Title,Author,Page Count,Publication Date,Description,Cover URL
-#
-# READING
-#
-MlaEAgAAQBAJ, 2017-04-14,, The Moon Is A Harsh Mistress,,,,,https://images.gr-assets.com/books/1418677284l/3242353.jpg
-#
-# TO READ
-#
-r119-dYq0mwC,,, A Wrinkle In Time,,,,,
-w25sx0G6nRsC,,, Cat's Cradle,,,,,
-vi2KCwAAQBAJ,,, Neuromancer,,,,,
-t2vfDQAAQBAJ,,, It Can't Happen Here,,,,,
-T_WlBgAAQBAJ,,, The Three Body Problem,,,,,
-#
-# FINISHED
-#
-m5vIVN7LjtgC, 2015-11-03, 2015-11-19, Down and Out in Paris and London,,,,,
-RwqcCwAAQBAJ, 2016-07-14, 2016-07-31, Coming Up For Air,,,,,
-y3CyRurE7P4C, 2016-12-27, 2017-01-17, Fahrenheit 451,,,,,
-0oNp8FTIhlcC, 2017-01-17, 2017-02-11, Keep the Aspidistra Flying,,,,,
-E2Pk5mjf9A0C, 2017-04-01, 2017-04-04, The Noise of Time,,,,,
-cKWfCgAAQBAJ, 2017-02-11, 2017-02-14, Nineteen Eighty Four,,,,,
-ISQcDAAAQBAJ, 2017-02-17, 2017-04-09, The Sellout,,,,,
-,2016-10-01, 2016-10-14, Your First Swift App, Ash Furrow, 209, 2016-02-10, "Want to write an iPhone app? Excited about experimenting with Swift? Both, but don't know where to start? Start here! I'll take you through everything from creating your first Xcode project to submitting to the App Store.", https://s3.amazonaws.com/titlepages.leanpub.com/yourfirstswiftapp/hero?1455119428
+ISBN-13,Google Books ID,Cover URL,Title,Author,Page Count,Publication Date,Description,Started Reading,Finished Reading
+9781429915649,r119-dYq0mwC,,A Wrinkle in Time,Madeleine L'Engle,216,,"Madeleine L'Engle's ground-breaking science fiction and fantasy classic, soon to be a major motion picture.
+
+It was a dark and stormy night; Meg Murry, her small brother Charles Wallace, and her mother had come down to the kitchen for a midnight snack when they were upset by the arrival of a most disturbing stranger.
+
+""Wild nights are my glory,"" the unearthly stranger told them. ""I just got caught in a downdraft and blown off course. Let me sit down for a moment, and then I'll be on my way. Speaking of ways, by the way, there is such a thing as a tesseract.""
+
+A tesseract (in case the reader doesn't know) is a wrinkle in time. To tell more would rob the reader of the enjoyment of Miss L'Engle's unusual book. A Wrinkle in Time, winner of the Newbery Medal in 1963, is the story of the adventures in space and time of Meg, Charles Wallace, and Calvin O'Keefe (athlete, student, and one of the most popular boys in high school). They are in search of Meg's father, a scientist who disappeared while engaged in secret work for the government on the tesseract problem.
+
+A Wrinkle in Time is the winner of the 1963 Newbery Medal. It is the first book in The Time Quintet, which consists of A Wrinkle in Time, A Wind in the Door, A Swiftly Tilting Planet, Many Waters, and An Acceptable Time.
+
+A Wrinkle in Time is soon to be a movie from Disney, directed by Ava DuVernay, starring Storm Reid, Oprah Winfrey, Reese Witherspoon and Mindy Kaling.
+
+This title has Common Core connections.",,
+9780307567277,w25sx0G6nRsC,,Cat's Cradle,Kurt Vonnegut,304,,"Cat’s Cradle is Kurt Vonnegut’s satirical commentary on modern man and his madness. An apocalyptic tale of this planet’s ultimate fate, it features a midget as the protagonist, a complete, original theology created by a calypso singer, and a vision of the future that is at once blackly fatalistic and hilariously funny. A book that left an indelible mark on an entire generation of readers, Cat’s Cradle is one of the twentieth century’s most important works—and Vonnegut at his very best.
+
+
+
+From the Trade Paperback edition.",,
+9781551998756,RwqcCwAAQBAJ,,Coming Up for Air,George Orwell,214,,"A thoughtful exploration of growing up, growing old, and of whether you can, in fact, go home again, by one of the twentieth century’s greatest writers.
+
+George Bowling is forty-five year old insurance salesman with a wife and two kids. In an attempt to escape the monotonous banality of his life he takes some money that he won gambling and uses it to finance a trip to where he grew up, to see places and faces that he remembers from his youth. Unfortunately for George, reality isn’t as rosy as his memories.
+
+Penguin Random House Canada is proud to bring you classic works of literature in e-book form, with the highest quality production values. Find more today and rediscover books you never knew you loved.",2016-07-14,2016-07-31
+9780141906188,m5vIVN7LjtgC,,Down and Out in Paris and London,George Orwell,256,,"'You have talked so often of going to the dogs - and well, here are the dogs, and you have reached them.' George Orwell's vivid memoir of his time among the desperately poor and destitute in London and Paris is a moving tour of the underworld of society. Here he painstakingly documents a world of unrelenting drudgery and squalor - sleeping in bug-infested hostels and doss houses, working as a dishwasher in the vile 'Hôtel X', living alongside tramps, surviving on scraps and cigarette butts - in an unforgettable account of what being down and out is really like.
+
+Includes an introduction by Dervla Murphy, as well as definitive footnotes assigned to Orwell.",2015-11-03,2015-11-19
+9781451673319,y3CyRurE7P4C,,Fahrenheit 451,Ray Bradbury,159,,"Ray Bradbury’s internationally acclaimed novel Fahrenheit 451 is a masterwork of twentieth-century literature set in a bleak, dystopian future.
+
+Guy Montag is a fireman. In his world, where television rules and literature is on the brink of extinction, firemen start fires rather than put them out. His job is to destroy the most illegal of commodities, the printed book, along with the houses in which they are hidden.
+
+Montag never questions the destruction and ruin his actions produce, returning each day to his bland life and wife, Mildred, who spends all day with her television “family.” But then he meets an eccentric young neighbor, Clarisse, who introduces him to a past where people didn’t live in fear and to a present where one sees the world through the ideas in books instead of the mindless chatter of television.
+
+When Mildred attempts suicide and Clarisse suddenly disappears, Montag begins to question everything he has ever known. He starts hiding books in his home, and when his pilfering is discovered, the fireman has to run for his life.",2016-12-27,2017-01-17
+9780241310670,t2vfDQAAQBAJ,,It Can't Happen Here,Sinclair Lewis,400,,"It's 1935 and discontent is rife in America. From the political margins appears Buzz Windrip, charismatic presidential candidate and 'inspired guesser at what political doctrines the people would like'. Sweeping to power amid mass elation, he promises wealth for all and the dawn of a glorious new era. Small-town newspaper editor Doremus Jessop is worried, especially when the new regime becomes increasingly authoritarian. But what can one individual do to fight an all-powerful state? Sinclair Lewis's terrifying cautionary tale pits liberal complacency against popular fascism and shows: yes, it really can happen here.",,
+9780141183725,0oNp8FTIhlcC,,Keep the Aspidistra Flying,George Orwell,288,,"Gordon Comstock loathes dull, middle-class respectability and worship of money. He gives up a 'good job' in advertising to work part-time in a bookshop, giving him more time to write. But he slides instead into a self-induced poverty that destroys his creativity and his spirit. Only Rosemary, ever-faithful Rosemary, has the strength to challenge his commitment to his chosen way of life. Through the character of Gordon Comstock, Orwell reveals his own disaffection with the society he once himself renounced.",2017-01-17,2017-02-11
+9781473217393,vi2KCwAAQBAJ,,Neuromancer,William Gibson,352,,"The sky above the port was the colour of television, tuned to a dead channel.
+
+William Gibson revolutionised science fiction in his 1984 debut Neuromancer. The writer who gave us the matrix and coined the term 'cyberspace' produced a first novel that won the Hugo, Nebula and Philip K. Dick Awards, and lit the fuse on the Cyberpunk movement. 
+
+More than three decades later, Gibson's text is as stylish as ever, his noir narrative still glitters like chrome in the shadows and his depictions of the rise and abuse of corporate power look more prescient every day. Part thriller, part warning, Neuromancer is a timeless classic of modern SF and one of the 20th century's most potent and compelling visions of the future.",,
+9780141919959,E2Pk5mjf9A0C,,Nineteen Eighty-Four,George Orwell,400,,"Hidden away in the Record Department of the sprawling Ministry of Truth, Winston Smith skilfully rewrites the past to suit the needs of the Party. Yet he inwardly rebels against the totalitarian world he lives in, which demands absolute obedience and controls him through the all-seeing telescreens and the watchful eye of Big Brother, symbolic head of the Party. In his longing for truth and liberty, Smith begins a secret love affair with a fellow-worker Julia, but soon discovers the true price of freedom is betrayal.
+
+Contains an introduction by Thomas Pynchon, as well as an accompanying appendix and explanatory footnotes.",2017-04-01,2017-04-04
+9781444791044,MlaEAgAAQBAJ,https://images.gr-assets.com/books/1418677284l/3242353.jpg,The Moon is a Harsh Mistress,Robert A. Heinlein,288,,"In 2075, the Moon is no longer a penal colony. But it is still a prison...
+
+Life isn't easy for the political dissidents and convicts who live in the scattered colonies that make up lunar civilisation. Everything is regulated strictly, efficiently and cheaply by a central supercomputer, HOLMES IV.
+
+When humble technician Mannie O'Kelly-Davis discovers that HOLMES IV has quietly achieved consciousness (and developed a sense of humour), the choice is clear: either report the problem to the authorities... or become friends. 
+
+And perhaps overthrow the government while they're at it.
+
+The Moon is a Harsh Mistress has been called Robert A. Heinlein's crowning achievement. His best-known novels include Starship Troopers Mistress and Stranger in a Strange Land.",2017-04-14,
+9781473524828,cKWfCgAAQBAJ,,The Noise of Time,Julian Barnes,192,,"'BARNES'S MASTERPIECE' - OBSERVER
+
+In May 1937 a man in his early thirties waits by the lift of a Leningrad apartment block. He waits all through the night, expecting to be taken away to the Big House. Any celebrity he has known in the previous decade is no use to him now. And few who are taken to the Big House ever return.
+
+‘Stunning’ Sunday Times
+
+‘A profound meditation on power and the relationship of art and power... It is a masterpiece of sympathetic understanding... I don’t think Barnes has written a finer, more truthful or more profound book’ Scotsman
+ 
+‘A tour de force by a master novelist at the top of his game’ Daily Express",2017-02-11,2017-02-14
+9781786070166,ISQcDAAAQBAJ,,The Sellout,Paul Beatty,304,,"**WINNER OF THE MAN BOOKER PRIZE 2016**
+
+‘Outrageous, hilarious and profound.’ Simon Schama, Financial Times
+‘The longer you stare at Beatty’s pages, the smarter you’ll get.’ The Guardian
+‘The most badass first 100 pages of an American novel I’ve read.’ The New York Times
+
+A biting satire about a young man's isolated upbringing and the race trial that sends him to the Supreme Court, The Sellout showcases a comic genius at the top of his game.
+
+Born in Dickens on the southern outskirts of Los Angeles, the narrator of The Sellout spent his childhood as the subject in his father's racially charged psychological studies. He is told that his father’s work will lead to a memoir that will solve their financial woes. But when his father is killed in a drive-by shooting, he discovers there never was a memoir. All that’s left is a bill for a drive-through funeral.
+
+What’s more, Dickens has literally been wiped off the map to save California from further embarrassment. Fuelled by despair, the narrator sets out to right this wrong with the most outrageous action conceivable: reinstating slavery and segregating the local high school, which lands him in the Supreme Court.",2017-02-17,2017-04-09
+9781784971540,T_WlBgAAQBAJ,,The Three-Body Problem,Cixin Liu,400,,"THE HUGO AWARD WINNER. 
+
+1967: Ye Wenjie witnesses Red Guards beat her father to death during China's Cultural Revolution. This singular event will shape not only the rest of her life but also the future of mankind. 
+
+Four decades later, Beijing police ask nanotech engineer Wang Miao to infiltrate a secretive cabal of scientists after a spate of inexplicable suicides. Wang's investigation will lead him to a mysterious online game and immerse him in a virtual world ruled by the intractable and unpredicatable interaction of its three suns. 
+
+This is the Three-Body Problem and it is the key to everything: the key to the scientists' deaths, the key to a conspiracy that spans light-years and the key to the extinction-level threat humanity now faces.",,
+,,https://s3.amazonaws.com/titlepages.leanpub.com/yourfirstswiftapp/hero?1455119428,Your First Swift App,Ash Furrow,209,2016-02-10,"Want to write an iPhone app? Excited about experimenting with Swift? Both, but don't know where to start? Start here! I'll take you through everything from creating your first Xcode project to submitting to the App Store.",2016-10-01,2016-10-14
