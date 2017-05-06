@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="12141" systemVersion="16E195" minimumToolsVersion="Xcode 7.0" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
+    <entity name="Book" representedClassName="Book" syncable="YES">
+        <attribute name="authorList" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
+        <attribute name="bookDescription" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="coverImage" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES" syncable="YES"/>
+        <attribute name="createdWhen" attributeType="Date" defaultDateTimeInterval="504921600" usesScalarValueType="NO" indexed="YES" syncable="YES"/>
+        <attribute name="finishedReading" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="googleBooksId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="isbn13" optional="YES" attributeType="String" regularExpressionString="\d{13}" indexed="YES" syncable="YES"/>
+        <attribute name="notes" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="pageCount" optional="YES" attributeType="Integer 32" minValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="publicationDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="readState" attributeType="Integer 32" usesScalarValueType="NO" indexed="YES" syncable="YES"/>
+        <attribute name="sort" optional="YES" attributeType="Integer 32" usesScalarValueType="NO" indexed="YES" syncable="YES"/>
+        <attribute name="startedReading" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="title" attributeType="String" indexed="YES" syncable="YES"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="isbn13"/>
+            </uniquenessConstraint>
+            <uniquenessConstraint>
+                <constraint value="googleBooksId"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <elements>
+        <element name="Book" positionX="-63" positionY="-18" width="128" height="255"/>
+    </elements>
+</model>

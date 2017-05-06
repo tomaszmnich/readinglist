@@ -27,6 +27,7 @@ class Book: NSManagedObject {
     @NSManaged fileprivate(set) var readState: BookReadState
     @NSManaged fileprivate(set) var startedReading: Date?
     @NSManaged fileprivate(set) var finishedReading: Date?
+    @NSManaged fileprivate(set) var notes: String?
     
     // Other Metadata
     // TODO: Think about making this privately set, and managing its value internally
