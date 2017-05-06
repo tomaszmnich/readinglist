@@ -12,18 +12,36 @@ import UIKit
 
 class BookMetadataForm: FormViewController {
     
+    private let isbnKey = "isbn"
     private let titleKey = "title"
     private let authorListKey = "author"
     private let pageCountKey = "pageCount"
     private let publishedDateKey = "publishedDate"
     private let descriptionKey = "description"
     private let imageKey = "image"
+    private let deleteKey = "delete"
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Title and Author
+        
         form +++ Section()
+            <<< TextRow(isbnKey) {
+                $0.title = "ISBN"
+                $0.add(rule: RuleClosure<String> { rowValue in
+                    if rowValue != nil && !rowValue!.isEmpty && Isbn13.tryParse(inputString: rowValue!) == nil {
+                        // We allow blank ISBN fields, but not present, invalid text.
+                        return ValidationError(msg: "Invalid ISBN")
+                    }
+                    return nil
+                })
+                $0.validationOptions = .validatesOnChange
+            }.onRowValidationChanged{[unowned self] _ in
+                self.validationChanged()
+            }
+            
+        // Title and Author
+        +++ Section()
             <<< TextRow(titleKey) {
                 $0.title = "Title"
                 $0.add(rule: RuleRequired())
@@ -57,38 +75,48 @@ class BookMetadataForm: FormViewController {
                 $0.cell.height = {return 100}
             }
         
+        // Delete button
+        +++ Section()
+            <<< ButtonRow(deleteKey){
+                $0.title = "Delete"
+            }.cellSetup{ cell, row in
+                cell.tintColor = UIColor.red
+            }
+        
         // Validate on load
         form.validate()
     }
     
-    var titleField: String? {
-        get { return form.values()[titleKey] as? String }
-        set { form.setValues([titleKey: newValue]) }
+    var isbnField: TextRow {
+        get { return form.rowBy(tag: isbnKey) as! TextRow }
     }
     
-    var authorList: String? {
-        get { return form.values()[authorListKey] as? String }
-        set { form.setValues([authorListKey: newValue]) }
+    var titleField: TextRow {
+        get { return form.rowBy(tag: titleKey) as! TextRow }
     }
     
-    var pageCount: Int? {
-        get { return form.values()[pageCountKey] as? Int }
-        set { form.setValues([pageCountKey: newValue]) }
+    var authorList: TextRow {
+        get { return form.rowBy(tag: authorListKey) as! TextRow }
     }
     
-    var publicationDate: Date? {
-        get { return form.values()[publishedDateKey] as? Date }
-        set { form.setValues([publishedDateKey: newValue]) }
+    var pageCount: IntRow {
+        get { return form.rowBy(tag: pageCountKey) as! IntRow }
     }
     
-    var descriptionField: String? {
-        get { return form.values()[descriptionKey] as? String }
-        set { form.setValues([descriptionKey: newValue]) }
+    var publicationDate: DateRow {
+        get { return form.rowBy(tag: publishedDateKey) as! DateRow }
     }
     
-    var image: UIImage? {
-        get { return form.values()[imageKey] as? UIImage }
-        set { form.setValues([imageKey: newValue]) }
+    var descriptionField: TextAreaRow {
+        get { return form.rowBy(tag: descriptionKey) as! TextAreaRow }
+    }
+    
+    var image: ImageRow {
+        get { return form.rowBy(tag: imageKey) as! ImageRow }
+    }
+    
+    var deleteRow: ButtonRow {
+        get { return form.rowBy(tag: deleteKey) as! ButtonRow }
     }
 
     private func validationChanged() {
