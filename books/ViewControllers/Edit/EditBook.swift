@@ -18,24 +18,21 @@ class EditBook: BookMetadataForm {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Add a Delete button
-        form +++ Section()
-            <<< ButtonRow("delete"){
-                    $0.title = "Delete Book"
-                }.cellSetup{cell, row in
-                    cell.tintColor = UIColor.red
-                }
-                .onCellSelection{[unowned self] _ in
-                    self.presentDeleteAlert()
-                }
+        // Disable the ISBN field (disallow editing of the ISBN), and wire up the delete button
+        isbnField.disabled = true
+        isbnField.evaluateDisabled()
+        deleteRow.onCellSelection{ [unowned self] _ in
+            self.presentDeleteAlert()
+        }
         
         // Initialise the form with the book values
-        titleField = bookToEdit.title
-        authorList = bookToEdit.authorList
-        pageCount = bookToEdit.pageCount == nil ? nil : Int(bookToEdit.pageCount!)
-        publicationDate = bookToEdit.publicationDate
-        descriptionField = bookToEdit.bookDescription
-        image = UIImage(optionalData: bookToEdit.coverImage)
+        isbnField.value = bookToEdit.isbn13
+        titleField.value = bookToEdit.title
+        authorList.value = bookToEdit.authorList
+        pageCount.value = bookToEdit.pageCount == nil ? nil : Int(bookToEdit.pageCount!)
+        publicationDate.value = bookToEdit.publicationDate
+        descriptionField.value = bookToEdit.bookDescription
+        image.value = UIImage(optionalData: bookToEdit.coverImage)
     }
     
     func presentDeleteAlert(){
@@ -64,16 +61,16 @@ class EditBook: BookMetadataForm {
     
     @IBAction func doneButtonWasPressed(_ sender: AnyObject) {
         // Check the title field is not nil
-        guard let titleField = titleField, let authorList = authorList else { return }
+        guard let titleFieldValue = titleField.value, let authorListValue = authorList.value else { return }
         
         // Load the book metadata into an object from the form values
         let newMetadata = BookMetadata()
-        newMetadata.title = titleField
-        newMetadata.authors = authorList
-        newMetadata.pageCount = pageCount
-        newMetadata.publicationDate = publicationDate
-        newMetadata.bookDescription = descriptionField
-        newMetadata.coverImage = image == nil ? nil : UIImageJPEGRepresentation(image!, 0.7)
+        newMetadata.title = titleFieldValue
+        newMetadata.authors = authorListValue
+        newMetadata.pageCount = pageCount.value
+        newMetadata.publicationDate = publicationDate.value
+        newMetadata.bookDescription = descriptionField.value
+        newMetadata.coverImage = image.value == nil ? nil : UIImageJPEGRepresentation(image.value!, 0.7)
         
         // Update the book
         appDelegate.booksStore.update(book: bookToEdit, withMetadata: newMetadata)

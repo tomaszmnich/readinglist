@@ -17,18 +17,24 @@ class CreateBook: BookMetadataForm {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Hide the ISBN field's section and the delete button
+        isbnField.section!.hidden = true
+        isbnField.section!.evaluateHidden()
+        deleteRow.section!.hidden = true
+        deleteRow.section!.evaluateHidden()
+        
         if let initialBookMetadata = initialBookMetadata {
             // Change the title if we are prepopulating the fields
             navigationItem.title = "Add Book"
             
             // Set the field values
-            titleField = initialBookMetadata.title
-            authorList = initialBookMetadata.authors
-            descriptionField = initialBookMetadata.bookDescription
-            pageCount = initialBookMetadata.pageCount
-            publicationDate = initialBookMetadata.publicationDate
+            titleField.value = initialBookMetadata.title
+            authorList.value = initialBookMetadata.authors
+            descriptionField.value = initialBookMetadata.bookDescription
+            pageCount.value = initialBookMetadata.pageCount
+            publicationDate.value = initialBookMetadata.publicationDate
             if let data = initialBookMetadata.coverImage {
-                image = UIImage(data: data)
+                image.value = UIImage(data: data)
             }
         }
     }
@@ -45,12 +51,12 @@ class CreateBook: BookMetadataForm {
         if let createReadState = segue.destination as? CreateReadState {
             
             let finalBookMetadata = initialBookMetadata ?? BookMetadata()
-            finalBookMetadata.title = titleField!
-            finalBookMetadata.authors = authorList!
-            finalBookMetadata.pageCount = pageCount
-            finalBookMetadata.publicationDate = publicationDate
-            finalBookMetadata.bookDescription = descriptionField
-            finalBookMetadata.coverImage = image == nil ? nil : UIImageJPEGRepresentation(image!, 0.7)
+            finalBookMetadata.title = titleField.value!
+            finalBookMetadata.authors = authorList.value!
+            finalBookMetadata.pageCount = pageCount.value
+            finalBookMetadata.publicationDate = publicationDate.value
+            finalBookMetadata.bookDescription = descriptionField.value
+            finalBookMetadata.coverImage = image.value == nil ? nil : UIImageJPEGRepresentation(image.value!, 0.7)
             
             createReadState.bookMetadata = finalBookMetadata
         }

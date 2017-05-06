@@ -124,7 +124,7 @@ class books_UITests: XCTestCase {
         app.tables.cells.element(boundBy: 0).tap()
         app.topNavBar.buttons["Edit"].tap()
         
-        app.textFields.element(boundBy: 0).tap()
+        app.tables.staticTexts["Title"].tap()
         app.typeText("changed!")
         app.topNavBar.buttons["Done"].tap()
     }
@@ -138,7 +138,7 @@ class books_UITests: XCTestCase {
         app.tables.cells.element(boundBy: 0).tap()
         app.topNavBar.buttons["Edit"].tap()
         
-        app.tables.staticTexts["Delete Book"].tap()
+        app.tables.staticTexts["Delete"].tap()
         app.sheets.buttons["Delete"].tap()
         
         sleep(1)
