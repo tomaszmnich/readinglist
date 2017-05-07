@@ -233,7 +233,7 @@ class SearchBooksEmptyDataset: UIView {
             case .noSearch:
                 return "Type anything to start searching: a title, an author, an ISBN - or a mixture!"
             case .noResults:
-                return "We didn't find anything online which matched. Try changing your search string."
+                return "There were no Google Books search results. Try changing your search text."
             case .error:
                 return "Something went wrong! It might be your Internet connection..."
             }
