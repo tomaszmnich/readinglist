@@ -22,13 +22,15 @@ class EditReadState: ReadStateForm {
         
         // Load the existing values on to the form; if dates are missing, use the current date
         // if the date entry field becomes visible
-        readState = bookToEdit.readState
+        readState.value = bookToEdit.readState
         if let started = bookToEdit.startedReading {
-            startedReading = started
+            startedReading.value = started
         }
         if let finished = bookToEdit.finishedReading {
-            finishedReading = finished
+            finishedReading.value = finished
         }
+        
+        notes.value = bookToEdit.notes
     }
     
     override func formValidated(isValid: Bool) {
@@ -39,10 +41,10 @@ class EditReadState: ReadStateForm {
         self.view.endEditing(true)
         
         // Create an object representation of the form values
-        let newReadStateInfo = BookReadingInformation(readState: readState, startedWhen: startedReading, finishedWhen: finishedReading)
+        let newReadStateInfo = BookReadingInformation(readState: readState.value!, startedWhen: startedReading.value, finishedWhen: finishedReading.value)
         
         // Update the book
-        appDelegate.booksStore.update(book: bookToEdit, withReadingInformation: newReadStateInfo)
+        appDelegate.booksStore.update(book: bookToEdit, withReadingInformation: newReadStateInfo, readingNotes: notes.value)
         
         self.navigationController?.dismiss(animated: true, completion: nil)
     }

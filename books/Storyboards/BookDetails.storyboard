@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12118" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="svF-c1-e4g">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="svF-c1-e4g">
     <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12086"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -49,7 +49,7 @@
                                                 <rect key="frame" x="14" y="239" width="292" height="83.5"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rhe-Rl-p1n">
-                                                        <rect key="frame" x="74" y="8" width="145.5" height="37.5"/>
+                                                        <rect key="frame" x="16" y="8" width="260" height="37.5"/>
                                                         <attributedString key="attributedText">
                                                             <fragment content="Unknown State 12 Oct - 2 Nov 2015">
                                                                 <attributes>
@@ -74,6 +74,8 @@
                                                     <constraint firstItem="Rhe-Rl-p1n" firstAttribute="top" secondItem="Lv9-nn-Tne" secondAttribute="top" constant="8" id="JMa-h0-fTT"/>
                                                     <constraint firstItem="9jd-vS-BiD" firstAttribute="top" secondItem="Rhe-Rl-p1n" secondAttribute="bottom" constant="4" id="KqN-8N-vAr"/>
                                                     <constraint firstAttribute="bottom" secondItem="9jd-vS-BiD" secondAttribute="bottom" constant="4" id="QMx-Yj-lBn"/>
+                                                    <constraint firstAttribute="trailing" secondItem="Rhe-Rl-p1n" secondAttribute="trailing" constant="16" id="TDi-mD-XcI"/>
+                                                    <constraint firstItem="Rhe-Rl-p1n" firstAttribute="leading" secondItem="Lv9-nn-Tne" secondAttribute="leading" constant="16" id="bYt-DM-I3q"/>
                                                     <constraint firstItem="9jd-vS-BiD" firstAttribute="centerX" secondItem="Lv9-nn-Tne" secondAttribute="centerX" id="f40-U1-yks"/>
                                                     <constraint firstItem="Rhe-Rl-p1n" firstAttribute="centerX" secondItem="Lv9-nn-Tne" secondAttribute="centerX" id="tig-oS-IKn"/>
                                                 </constraints>

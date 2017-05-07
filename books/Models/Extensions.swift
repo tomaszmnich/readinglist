@@ -49,6 +49,10 @@ extension NSMutableAttributedString {
         self.init(attributedString: NSAttributedString(string, withFont: font))
     }
 
+    func append(_ string: String, withFont font: UIFont) {
+        self.append(NSAttributedString(string, withFont: font))
+    }
+    
     func chainAppend(_ string: String, withFont font: UIFont) -> NSMutableAttributedString {
         self.append(NSAttributedString(string, withFont: font))
         return self
@@ -179,7 +183,7 @@ extension String {
         return self.trimmingCharacters(in: CharacterSet.whitespaces)
     }
     
-    func toAttributedString(_ attributes: [String : AnyObject]?) -> NSAttributedString {
+    func toAttributedString(_ attributes: [String: Any]?) -> NSAttributedString {
         return NSAttributedString(string: self, attributes: attributes)
     }
     

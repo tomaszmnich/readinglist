@@ -11,9 +11,11 @@ import UIKit
 
 class ReadStateForm: FormViewController {
 
-    let readStateKey = "book-read-state"
-    let dateStartedKey = "date-started"
-    let dateFinishedKey = "date-finished"
+    private let readStateKey = "book-read-state"
+    private let dateStartedKey = "date-started"
+    private let dateFinishedKey = "date-finished"
+    private let notesKey = "notes"
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,12 +31,11 @@ class ReadStateForm: FormViewController {
                 }
             }
         
-            +++ Section(header: "Reading Log", footer: "") {
-                $0.hidden = Condition.function([readStateKey]) {[unowned self] _ in
-                    return self.readState == .toRead
-                }
+        +++ Section(header: "Reading Log", footer: "") {
+            $0.hidden = Condition.function([readStateKey]) {[unowned self] _ in
+                return self.readState.value! == .toRead
             }
-        
+        }
             <<< DateRow(dateStartedKey) {
                 $0.title = "Started Reading"
                 $0.maximumDate = Date.startOfToday()
@@ -49,7 +50,7 @@ class ReadStateForm: FormViewController {
                 $0.title = "Finished Reading"
                 $0.maximumDate = Date.startOfToday()
                 $0.hidden = Condition.function([readStateKey]) {[unowned self] _ in
-                    return self.readState != .finished
+                    return self.readState.value! != .finished
                 }
                 // Set a value here so we can be sure that the finished date is *never* null.
                 $0.value = now
@@ -57,12 +58,16 @@ class ReadStateForm: FormViewController {
                     self.validate()
                 }
             }
+        
+        +++ Section(header: "Notes", footer: "")
+            <<< TextAreaRow(notesKey)
+        
     }
     
     private func validate() {
-        if self.readState == .finished {
+        if self.readState.value == .finished {
             formValidated(isValid:
-                startedReading.compareIgnoringTime(finishedReading) != .orderedDescending)
+                startedReading.value!.compareIgnoringTime(finishedReading.value!) != .orderedDescending)
         }
         else {
             formValidated(isValid: true)
@@ -73,18 +78,19 @@ class ReadStateForm: FormViewController {
         // Should be overriden
     }
     
-    var readState: BookReadState {
-        get { return form.values()[readStateKey] as! BookReadState }
-        set { form.setValues([readStateKey: newValue]) }
+    var readState: SegmentedRow<BookReadState> {
+        get { return form.rowBy(tag: readStateKey) as! SegmentedRow<BookReadState> }
     }
     
-    var startedReading: Date {
-        get { return form.values(includeHidden: true)[dateStartedKey] as! Date }
-        set { form.setValues([dateStartedKey: newValue]) }
+    var startedReading: DateRow {
+        get { return form.rowBy(tag: dateStartedKey) as! DateRow }
     }
     
-    var finishedReading: Date {
-        get { return form.values(includeHidden: true)[dateFinishedKey] as! Date }
-        set { form.setValues([dateFinishedKey: newValue]) }
+    var finishedReading: DateRow {
+        get { return form.rowBy(tag: dateFinishedKey) as! DateRow }
+    }
+    
+    var notes: TextAreaRow {
+        get { return form.rowBy(tag: notesKey) as! TextAreaRow }
     }
 }

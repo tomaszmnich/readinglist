@@ -43,21 +43,29 @@ class BookDetailsViewModel {
         
         let headerFont = UIFont.preferredFont(forTextStyle: .body)
         let subheaderFont = UIFont.preferredFont(forTextStyle: .caption1)
+        var mutableReadingLog: NSMutableAttributedString
         switch book.readState {
         case .toRead:
-            readingLog = NSMutableAttributedString("To Read 📚", withFont: headerFont)
+            mutableReadingLog = NSMutableAttributedString("To Read 📚", withFont: headerFont)
             break
         case .reading:
-            readingLog = NSMutableAttributedString("Currently Reading 📖\n", withFont: headerFont)
+            mutableReadingLog = NSMutableAttributedString("Currently Reading 📖\n", withFont: headerFont)
                 .chainAppend("Started \(book.startedReading!.toShortPrettyString())", withFont: subheaderFont)
             break
         case .finished:
             let sameDay = book.startedReading!.startOfDay() == book.finishedReading!.startOfDay()
-            readingLog = NSMutableAttributedString("Finished 🎉\n", withFont: headerFont)
+            mutableReadingLog = NSMutableAttributedString("Finished 🎉\n", withFont: headerFont)
                 .chainAppend("\(book.startedReading!.toShortPrettyString())", withFont: subheaderFont)
                 .chainAppend(sameDay ? "" : " - \(book.finishedReading!.toShortPrettyString())", withFont: subheaderFont)
             break
         }
+        
+        if let notes = book.notes {
+            let leftAlignedStyle = NSMutableParagraphStyle()
+            leftAlignedStyle.alignment = NSTextAlignment.left
+            mutableReadingLog.append(NSAttributedString(string: "\n\n\(notes)", attributes: [NSParagraphStyleAttributeName: leftAlignedStyle, NSFontAttributeName: subheaderFont]))
+        }
+        readingLog = mutableReadingLog
         
         if let coverData = book.coverImage, let image = UIImage(data: coverData) {
             cover = image

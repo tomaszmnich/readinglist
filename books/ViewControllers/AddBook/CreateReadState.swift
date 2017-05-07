@@ -21,7 +21,7 @@ class CreateReadState: ReadStateForm {
         super.viewDidLoad()
         
         // Set the read state on the form; add some default form values for the dates
-        readState = (self.navigationController as! NavWithReadState).readState
+        readState.value = (self.navigationController as! NavWithReadState).readState
     }
     
     @IBAction func doneWasPressed(_ sender: UIBarButtonItem) {
@@ -29,10 +29,10 @@ class CreateReadState: ReadStateForm {
         
         // Update the book metadata object and create a book from it.
         // Ignore the dates which are not relevant.
-        let bookReadingInformation = BookReadingInformation(readState: readState, startedWhen: startedReading, finishedWhen: finishedReading)
-        appDelegate.booksStore.create(from: bookMetadata, readingInformation: bookReadingInformation)
+        let bookReadingInformation = BookReadingInformation(readState: readState.value!, startedWhen: startedReading.value, finishedWhen: finishedReading.value)
+        appDelegate.booksStore.create(from: bookMetadata, readingInformation: bookReadingInformation, readingNotes: notes.value)
         
-        appDelegate.splitViewController.tabbedViewController.setSelectedTab(to: readState == .finished ? .finished : .toRead)
+        appDelegate.splitViewController.tabbedViewController.setSelectedTab(to: readState.value! == .finished ? .finished : .toRead)
         self.navigationController?.dismiss(animated: true, completion: nil)
     }
     

@@ -126,11 +126,12 @@ class BooksStore {
      Creates a new Book object, populates with the provided metadata, saves the
      object context, and adds the book to the Spotlight index.
      */
-    @discardableResult func create(from metadata: BookMetadata, readingInformation: BookReadingInformation, bookSort: Int? = nil) -> Book {
+    @discardableResult func create(from metadata: BookMetadata, readingInformation: BookReadingInformation, bookSort: Int? = nil, readingNotes: String? = nil) -> Book {
         let book = coreDataStack.createNew(entity: bookEntityName) as! Book
         book.createdWhen = Date()
         book.populate(from: metadata)
         book.populate(from: readingInformation)
+        book.notes = readingNotes
         updateSort(book: book, requestedSort: bookSort)
         
         save()
@@ -142,33 +143,42 @@ class BooksStore {
         Updates the provided book with the provided metadata and reading information (whichever are provided).
         Saves and reindexes in spotlight.
     */
-    func update(book: Book, withMetadata metadata: BookMetadata? = nil, withReadingInformation readingInformation: BookReadingInformation? = nil) {
-        if let metadata = metadata {
-            book.populate(from: metadata)
-        }
-        if let readingInformation = readingInformation {
-            book.populate(from: readingInformation)
-            updateSort(book: book)
-        }
+    func update(book: Book, withMetadata metadata: BookMetadata) {
+        book.populate(from: metadata)
         save()
         updateSpotlightIndex(for: book)
     }
     
     /**
-        Updates the supplied book's sort to an appropriate value, using the requested value if possible.
+        Updates the provided book with the provided reading information. Leaves the 'notes' field unchanged.
+    */
+    func update(book: Book, withReadingInformation readingInformation: BookReadingInformation) {
+        update(book: book, withReadingInformation: readingInformation, readingNotes: book.notes)
+    }
+    
+    /**
+        Updates the provided book with the provided reading information and the provided notes field.
+     */
+    func update(book: Book, withReadingInformation readingInformation: BookReadingInformation, readingNotes: String?) {
+        book.populate(from: readingInformation)
+        book.notes = readingNotes
+        updateSort(book: book)
+        save()
+    }
+    
+    /**
+        Updates the supplied book's sort to an appropriate value, using the requested value if possible, the
+        current value - if there is one - or the maximum value otherwise.
     */
     private func updateSort(book: Book, requestedSort: Int? = nil) {
-        if book.readState == .toRead{
-            if let specifiedBookSort = requestedSort {
-                book.sort = NSNumber(value: specifiedBookSort)
-            }
-            else {
-                let maxSort = self.maxSort() ?? -1
-                book.sort = NSNumber(value: maxSort + 1)
-            }
+        guard book.readState == .toRead else { book.sort = nil; return }
+        
+        if let specifiedBookSort = requestedSort {
+            book.sort = NSNumber(value: specifiedBookSort)
         }
-        else {
-            book.sort = nil
+        else if book.sort == nil {
+            let maxSort = self.maxSort() ?? -1
+            book.sort = NSNumber(value: maxSort + 1)
         }
     }
     
