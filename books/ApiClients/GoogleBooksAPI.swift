@@ -23,9 +23,17 @@ class GoogleBooks {
     */
     static func searchText(_ text: String, callback: @escaping (SearchResultsPage) -> Void) -> URLSessionDataTask {
         return requestJson(from: Request.searchText(text).url) { result in
+            
+            // Check for HTTP error
             guard result.isSuccess else {
-                let errorPage = SearchResultsPage.error(result.error!, fromSearchText: text)
-                callback(errorPage)
+                callback(SearchResultsPage.error(result.error!, fromSearchText: text))
+                return
+            }
+            
+            // Check for errors reported by Google
+            let googleError = Parser.parseError(json: result.value!)
+            guard googleError == nil else {
+                callback(SearchResultsPage.error(googleError!, fromSearchText: text))
                 return
             }
             
@@ -43,9 +51,17 @@ class GoogleBooks {
         #endif
         let request = Request.searchIsbn(isbn)
         requestJson(from: request.url) { result in
+            
+            // Check for HTTP errors
             guard result.isSuccess else {
-                let errorPage = FetchResultPage.error(result.error!, fromRequest: request)
-                callback(errorPage)
+                callback(FetchResultPage.error(result.error!, fromRequest: request))
+                return
+            }
+            
+            // Check for errors reported by Google
+            let googleError = Parser.parseError(json: result.value!)
+            guard googleError == nil else {
+                callback(FetchResultPage.error(googleError!, fromRequest: request))
                 return
             }
             
@@ -64,8 +80,16 @@ class GoogleBooks {
         #endif
         let request = Request.fetch(googleBooksId)
         requestJson(from: request.url) { result in
+            // Check for HTTP errors
             guard result.isSuccess else {
                 callback(FetchResultPage.error(result.error!, fromRequest: request))
+                return
+            }
+            
+            // Check for errors reported by Google
+            let googleError = Parser.parseError(json: result.value!)
+            guard googleError == nil else {
+                callback(FetchResultPage.error(googleError!, fromRequest: request))
                 return
             }
             
@@ -110,7 +134,7 @@ class GoogleBooks {
         #endif
         let webRequest = URLSession.shared.dataTask(with: url) { (data, _, error) in
             guard error == nil else { callback(Result.failure(error!)); return }
-            guard let json = JSON(optionalData: data) else { callback(Result.failure(GoogleError.noJsonData)); return }
+            guard let json = JSON(optionalData: data) else { callback(Result.failure(GoogleErrorType.noJsonData)); return }
             callback(Result<JSON>.success(json))
         }
         webRequest.resume()
@@ -123,7 +147,7 @@ class GoogleBooks {
         #endif
         let webRequest = URLSession.shared.dataTask(with: url) { (data, _, error) in
             guard error == nil else { callback(Result.failure(error!)); return }
-            guard let data = data else { callback(Result.failure(GoogleError.noData)); return }
+            guard let data = data else { callback(Result.failure(GoogleErrorType.noData)); return }
             callback(Result<Data>.success(data))
         }
         webRequest.resume()
@@ -168,6 +192,13 @@ class GoogleBooks {
     }
     
     class Parser {
+        
+        static func parseError(json: JSON) -> GoogleError? {
+            if let code = json["error", "code"].int, let message = json["error", "message"].string {
+                return GoogleError(code: code, message: message)
+            }
+            return nil
+        }
         
         static func parseSearchResults(_ searchResults: JSON) -> [SearchResult] {
             return searchResults["items"].flatMap { itemJson in
@@ -220,10 +251,20 @@ class GoogleBooks {
         }
     }
     
-    enum GoogleError: Error {
+    enum GoogleErrorType: Error {
         case noResult
         case noJsonData
         case noData
+    }
+    
+    class GoogleError: Error {
+        let code: Int
+        let message: String
+        
+        init(code: Int, message: String) {
+            self.code = code
+            self.message = message
+        }
     }
     
     class SearchResult {
@@ -310,7 +351,7 @@ class GoogleBooks {
         }
         
         static func empty(fromRequest request: Request) -> FetchResultPage {
-            return FetchResultPage(Result.failure(GoogleError.noResult), fromRequest: request)
+            return FetchResultPage(Result.failure(GoogleErrorType.noResult), fromRequest: request)
         }
         
         static func error(_ error: Error, fromRequest request: Request) -> FetchResultPage {
