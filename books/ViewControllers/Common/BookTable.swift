@@ -207,7 +207,16 @@ class BookTable: AutoUpdatingTableViewController {
         }
         
         // Start with the delete action
-        var rowActions = [Book.deleteAction.toUITableViewRowAction(getActionableObject: getBookFromIndexPath)]
+        var rowActions = [UITableViewRowAction(style: .destructive, title: "Delete") { [unowned self] rowAction, indexPath in
+            
+            let bookToDelete = getBookFromIndexPath(rowAction: rowAction, indexPath: indexPath)
+            let confirmDeleteAlert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+            confirmDeleteAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            confirmDeleteAlert.addAction(UIAlertAction(title: "Delete", style: .destructive) { _ in
+                appDelegate.booksStore.delete(bookToDelete)
+            })
+            self.present(confirmDeleteAlert, animated: true, completion: nil)
+        }]
         
         // Add the other state change actions where appropriate
         if readState == .toRead {
