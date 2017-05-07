@@ -61,7 +61,9 @@ class ReadStateForm: FormViewController {
         
         +++ Section(header: "Notes", footer: "")
             <<< TextAreaRow(notesKey)
-        
+            .cellSetup{
+                $0.0.height = {return 150}
+            }
     }
     
     private func validate() {
