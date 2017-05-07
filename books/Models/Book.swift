@@ -102,7 +102,8 @@ extension Book {
         CsvColumn<Book>(header: "Publication Date", cellValue: {$0.publicationDate == nil ? nil : $0.publicationDate!.toString(withDateFormat: "yyyy-MM-dd")}),
         CsvColumn<Book>(header: "Description", cellValue: {$0.bookDescription}),
         CsvColumn<Book>(header: "Started Reading", cellValue: {$0.startedReading?.toString(withDateFormat: "yyyy-MM-dd")}),
-        CsvColumn<Book>(header: "Finished Reading", cellValue: {$0.finishedReading?.toString(withDateFormat: "yyyy-MM-dd")})
+        CsvColumn<Book>(header: "Finished Reading", cellValue: {$0.finishedReading?.toString(withDateFormat: "yyyy-MM-dd")}),
+        CsvColumn<Book>(header: "Notes", cellValue: {$0.notes})
     )
 }
 
@@ -141,7 +142,7 @@ class BookMetadata {
         self.googleBooksId = book.googleBooksId
     }
     
-    static func csvImport(csvData: [String: String]) -> (BookMetadata, BookReadingInformation) {
+    static func csvImport(csvData: [String: String]) -> (BookMetadata, BookReadingInformation, String?) {
         
         let bookMetadata = BookMetadata(googleBooksId: csvData["Google Books ID"]?.nilIfWhitespace())
         bookMetadata.title = csvData["Title"]?.nilIfWhitespace()
@@ -165,7 +166,9 @@ class BookMetadata {
         else {
             readingInformation = BookReadingInformation.toRead()
         }
-        return (bookMetadata, readingInformation)
+        
+        let notes = csvData["Notes"]?.isEmptyOrWhitespace == false ? csvData["Notes"] : nil
+        return (bookMetadata, readingInformation, notes)
     }
 }
 

@@ -165,7 +165,7 @@ class BookImporter {
                 bookMetadata.coverUrl = parsedData.0.coverUrl
                 
                 BookImporter.supplementBook(bookMetadata) {
-                    appDelegate.booksStore.create(from: bookMetadata, readingInformation: parsedData.1, bookSort: specifiedSort)
+                    appDelegate.booksStore.create(from: bookMetadata, readingInformation: parsedData.1, bookSort: specifiedSort, readingNotes: parsedData.2)
                     self.importedBookCount += 1
                     self.dispatchGroup.leave()
                 }
@@ -173,13 +173,13 @@ class BookImporter {
         }
         else if supplementBookCover {
             BookImporter.supplementBook(parsedData.0) {
-                appDelegate.booksStore.create(from: parsedData.0, readingInformation: parsedData.1, bookSort: specifiedSort)
+                appDelegate.booksStore.create(from: parsedData.0, readingInformation: parsedData.1, bookSort: specifiedSort, readingNotes: parsedData.2)
                 self.importedBookCount += 1
                 self.dispatchGroup.leave()
             }
         }
         else {
-            appDelegate.booksStore.create(from: parsedData.0, readingInformation: parsedData.1, bookSort: specifiedSort)
+            appDelegate.booksStore.create(from: parsedData.0, readingInformation: parsedData.1, bookSort: specifiedSort, readingNotes: parsedData.2)
             importedBookCount += 1
             dispatchGroup.leave()
         }
