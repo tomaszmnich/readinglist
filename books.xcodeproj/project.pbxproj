@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		49043DB71EBF1E0B00E74370 /* SearchBooksEmptyDataset.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49043DB61EBF1E0B00E74370 /* SearchBooksEmptyDataset.xib */; };
 		4905D85E1C135AB500F57B3C /* books.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4905D85C1C135AB500F57B3C /* books.xcdatamodeld */; };
 		49097BA81CFB102B001AF1F9 /* FetchedResultsFilterer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49097BA71CFB102B001AF1F9 /* FetchedResultsFilterer.swift */; };
 		49160F5B1E7FC59200168FD0 /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49160F5A1E7FC59200168FD0 /* SnapshotHelper.swift */; };
@@ -88,6 +89,7 @@
 		297D92A68CB2906FDBD31ED9 /* Pods_books_UnitTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_books_UnitTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3AC962F935D7BE333849CA18 /* Pods-books_UnitTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-books_UnitTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-books_UnitTests/Pods-books_UnitTests.debug.xcconfig"; sourceTree = "<group>"; };
 		49043DB51EBDEE9300E74370 /* books_4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = books_4.xcdatamodel; sourceTree = "<group>"; };
+		49043DB61EBF1E0B00E74370 /* SearchBooksEmptyDataset.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SearchBooksEmptyDataset.xib; sourceTree = "<group>"; };
 		4905D85D1C135AB500F57B3C /* books.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = books.xcdatamodel; sourceTree = "<group>"; };
 		49097BA71CFB102B001AF1F9 /* FetchedResultsFilterer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchedResultsFilterer.swift; sourceTree = "<group>"; };
 		49160F5A1E7FC59200168FD0 /* SnapshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SnapshotHelper.swift; sourceTree = "<group>"; };
@@ -268,6 +270,7 @@
 				4942348B1E70AFA100CEEB4C /* ScanBarcode.storyboard */,
 				4942348A1E70AFA100CEEB4C /* SearchOnline.storyboard */,
 				4943DB751DBB9D92004CAF30 /* Settings.storyboard */,
+				49043DB61EBF1E0B00E74370 /* SearchBooksEmptyDataset.xib */,
 			);
 			path = Storyboards;
 			sourceTree = "<group>";
@@ -554,6 +557,7 @@
 				49F3863C1E86D64A001F5D75 /* example_barcode.jpg in Resources */,
 				494D65D51EB906CB00764DC1 /* examplebooks.csv in Resources */,
 				4936B5841D2C3A2C00600562 /* AddManually.storyboard in Resources */,
+				49043DB71EBF1E0B00E74370 /* SearchBooksEmptyDataset.xib in Resources */,
 				4968A2B21CB3E0BF00CBF3F0 /* LaunchScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

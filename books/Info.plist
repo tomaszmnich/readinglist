@@ -56,9 +56,9 @@
 			<key>UIApplicationShortcutItemIconType</key>
 			<string>UIApplicationShortcutIconTypeSearch</string>
 			<key>UIApplicationShortcutItemTitle</key>
-			<string>Search Online</string>
+			<string>Search Books</string>
 			<key>UIApplicationShortcutItemType</key>
-			<string>$(PRODUCT_BUNDLE_IDENTIFIER).SearchOnline</string>
+			<string>$(PRODUCT_BUNDLE_IDENTIFIER).SearchBooks</string>
 		</dict>
 	</array>
 	<key>UILaunchStoryboardName</key>

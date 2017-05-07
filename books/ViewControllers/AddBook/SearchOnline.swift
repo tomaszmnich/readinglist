@@ -25,12 +25,12 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
     let disposeBag = DisposeBag()
     let indicator = ActivityIndicator()
     
-    let emptyDataSet = EmptyDataSet()
+    let emptyDatasetView = UINib(nibName: "SearchBooksEmptyDataset", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! SearchBooksEmptyDataset
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.emptyDataSetSource = emptyDataSet
+        tableView.emptyDataSetSource = self
         
         // The search bar delegate is used only to dismiss the keyboard when Done is pressed
         searchBar.returnKeyType = .done
@@ -48,16 +48,20 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
         
         // Activity drives the spinner
         indicator.drive(spinner.rx.isAnimating).addDisposableTo(disposeBag)
-
+        
+        func shouldPerformSearch(searchText: String) -> Bool {
+            return !searchText.isEmptyOrWhitespace && searchText.characters.count > 3
+        }
+        
         // Map the search bar text to a google books search, and bind the result to the table cells
         let searchResultsPage = searchBar.rx.text
             .orEmpty
-            .throttle(1, scheduler: MainScheduler.instance)
+            .throttle(2, scheduler: MainScheduler.instance)
             .distinctUntilChanged{$0.trimming() == $1.trimming()}
             .observeOn(ConcurrentDispatchQueueScheduler(qos: .userInitiated))
             .flatMapLatest { [unowned self] searchText in
                 // Blank search terms produce empty array...
-                searchText.isEmptyOrWhitespace ? Observable.just(GoogleBooks.SearchResultsPage.empty(fromSearchText: searchText)) :
+                !shouldPerformSearch(searchText: searchText) ? Observable.just(GoogleBooks.SearchResultsPage.empty(fromSearchText: searchText)) :
                     
                     // Otherwise, search on the Google API
                     GoogleBooks.searchTextObservable(searchText)
@@ -65,24 +69,36 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
                         .trackActivity(self.indicator)
             }
             .shareReplay(1)
- 
+        
         
         // Map the sucess/failure state to the reason property on the empty data set
         searchResultsPage
+            .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [unowned self] resultPage in
                 if !resultPage.searchResults.isSuccess {
                     NSLog("Error searching online: \(resultPage.searchResults.error!.localizedDescription)")
-                    self.emptyDataSet.reason = .error
+                    self.setEmptyDatasetReason(.error)
                 }
-                else if resultPage.searchText.isEmptyOrWhitespace {
-                    self.emptyDataSet.reason = .noSearch
+                else if !shouldPerformSearch(searchText: resultPage.searchText) {
+                    self.setEmptyDatasetReason(.noSearch)
                 }
                 else {
-                    self.emptyDataSet.reason = .noResults
+                    self.setEmptyDatasetReason(.noResults)
                 }
             })
             .addDisposableTo(disposeBag)
-
+        
+        // Set up the table footer; hide it until there are results
+        let poweredByGoogle = UIImageView(image: #imageLiteral(resourceName: "PoweredByGoogle"))
+        poweredByGoogle.contentMode = .scaleAspectFit
+        tableView.tableFooterView = poweredByGoogle
+        tableView.tableFooterView!.isHidden = true
+        
+        searchResultsPage.map{ ($0.searchResults.value?.count ?? 0) == 0 }
+            .asDriver(onErrorJustReturn: true)
+            .drive(tableView.tableFooterView!.rx.isHidden)
+            .addDisposableTo(disposeBag)
+        
         // Map the actual results to SearchResultViewModel items (or empty if failure)
         // and use them to drive the table cells
         searchResultsPage.map { ($0.searchResults.value ?? []).map(SearchResultViewModel.init) }
@@ -99,7 +115,7 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
                 self.onModelSelected(model)
             })
             .addDisposableTo(disposeBag)
- 
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -119,11 +135,11 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
                 self.dismiss(animated: true) {
                     appDelegate.splitViewController.tabbedViewController.simulateBookSelection(existingBook)
                 }
-            }, cancel: { [unowned self] in
-                // Deselect the row after dismissing the alert
-                if let selectedRow = self.tableView.indexPathForSelectedRow {
-                    self.tableView.deselectRow(at: selectedRow, animated: true)
-                }
+                }, cancel: { [unowned self] in
+                    // Deselect the row after dismissing the alert
+                    if let selectedRow = self.tableView.indexPathForSelectedRow {
+                        self.tableView.deselectRow(at: selectedRow, animated: true)
+                    }
             })
             present(alert, animated: true)
         }
@@ -131,7 +147,7 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
             fetchAndSegue(googleBooksId: model.googleBooksId)
         }
     }
-
+    
     func fetchAndSegue(googleBooksId: String) {
         SVProgressHUD.show(withStatus: "Loading...")
         GoogleBooks.fetch(googleBooksId: googleBooksId) { resultPage in
@@ -163,47 +179,64 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
         self.dismiss(animated: true, completion: nil)
     }
     
-    /** 
-     Empty Data Set for when no searches have yet been performed
-    */
-    class EmptyDataSet : NSObject, DZNEmptyDataSetSource {
-        
-        enum emptySetReason {
-            case noSearch
-            case noResults
-            case error
-        }
-        
-        var reason = emptySetReason.noSearch
-        
-        func title(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
-            let reasonString: String
+    
+    func setEmptyDatasetReason(_ reason: SearchBooksEmptyDataset.EmptySetReason) {
+        emptyDatasetView.setEmptyDatasetReason(reason)
+        tableView.reloadData()
+    }
+}
+
+extension SearchOnline: DZNEmptyDataSetSource {
+    func customView(forEmptyDataSet scrollView: UIScrollView!) -> UIView! {
+        return emptyDatasetView
+    }
+    
+    func verticalOffset(forEmptyDataSet scrollView: UIScrollView!) -> CGFloat {
+        return -scrollView.frame.size.height/4
+    }
+}
+
+class SearchBooksEmptyDataset: UIView {
+    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var descriptionLabel: UILabel!
+    
+    enum EmptySetReason {
+        case noSearch
+        case noResults
+        case error
+    }
+    
+    func setEmptyDatasetReason(_ reason: EmptySetReason) {
+        self.reason = reason
+        titleLabel.text = title
+        descriptionLabel.text = descriptionString
+    }
+    
+    private var reason = EmptySetReason.noSearch
+    
+    var title: String {
+        get {
             switch reason {
             case .noSearch:
-                reasonString = "🔍 Search Online"
+                return "🔍 Search Books"
             case .noResults:
-                reasonString = "😞 No Results"
+                return "😞 No Results"
             case .error:
-                reasonString = "⚠️ Error!"
+                return "⚠️ Error!"
             }
-            return NSAttributedString(reasonString, withFont: UIFont.systemFont(ofSize: 36, weight: UIFontWeightThin))
         }
-        
-        func description(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
-            let descriptionString: String
+    }
+    
+    var descriptionString: String {
+        get {
             switch reason {
             case .noSearch:
-                descriptionString = "Type anything to start searching: a title, an author, an ISBN - or a mixture!"
+                return "Type anything to start searching: a title, an author, an ISBN - or a mixture!"
             case .noResults:
-                descriptionString =  "We didn't find anything online which matched. Try changing your search string."
+                return "We didn't find anything online which matched. Try changing your search string."
             case .error:
-                descriptionString = "Something went wrong! It might be your Internet connection..."
+                return "Something went wrong! It might be your Internet connection..."
             }
-            return NSAttributedString(descriptionString, withFont: UIFont.preferredFont(forTextStyle: .body))
-        }
-        
-        func verticalOffset(forEmptyDataSet scrollView: UIScrollView!) -> CGFloat {
-            return -scrollView.frame.size.height/4
         }
     }
 }
@@ -249,7 +282,7 @@ class SearchResultViewModel {
         self.isbn13 = searchResult.isbn13
         self.title = searchResult.title
         self.author = searchResult.authors
-
+        
         // If we have a cover URL, we should use that to drive the cell image
         guard let coverURL = searchResult.thumbnailCoverUrl else { coverImage = Driver.just(#imageLiteral(resourceName: "CoverPlaceholder")); return }
         

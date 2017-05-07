@@ -66,7 +66,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if shortcutItem.type == "\(productBundleIdentifier).ScanBarcode" {
             splitViewController.tabbedViewController.performSegue(withIdentifier: "scanBarcode", sender: self)
         }
-        if shortcutItem.type == "\(productBundleIdentifier).SearchOnline" {
+        if shortcutItem.type == "\(productBundleIdentifier).SearchBooks" {
             splitViewController.tabbedViewController.performSegue(withIdentifier: "searchByText", sender: self)
         }
         completionHandler(true)
