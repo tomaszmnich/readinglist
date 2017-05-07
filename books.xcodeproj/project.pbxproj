@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		49043DB71EBF1E0B00E74370 /* SearchBooksEmptyDataset.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49043DB61EBF1E0B00E74370 /* SearchBooksEmptyDataset.xib */; };
+		49043DB91EBF31CA00E74370 /* OpenInSafariActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49043DB81EBF31CA00E74370 /* OpenInSafariActivity.swift */; };
 		4905D85E1C135AB500F57B3C /* books.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4905D85C1C135AB500F57B3C /* books.xcdatamodeld */; };
 		49097BA81CFB102B001AF1F9 /* FetchedResultsFilterer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49097BA71CFB102B001AF1F9 /* FetchedResultsFilterer.swift */; };
 		49160F5B1E7FC59200168FD0 /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49160F5A1E7FC59200168FD0 /* SnapshotHelper.swift */; };
@@ -90,6 +91,7 @@
 		3AC962F935D7BE333849CA18 /* Pods-books_UnitTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-books_UnitTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-books_UnitTests/Pods-books_UnitTests.debug.xcconfig"; sourceTree = "<group>"; };
 		49043DB51EBDEE9300E74370 /* books_4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = books_4.xcdatamodel; sourceTree = "<group>"; };
 		49043DB61EBF1E0B00E74370 /* SearchBooksEmptyDataset.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SearchBooksEmptyDataset.xib; sourceTree = "<group>"; };
+		49043DB81EBF31CA00E74370 /* OpenInSafariActivity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenInSafariActivity.swift; sourceTree = "<group>"; };
 		4905D85D1C135AB500F57B3C /* books.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = books.xcdatamodel; sourceTree = "<group>"; };
 		49097BA71CFB102B001AF1F9 /* FetchedResultsFilterer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchedResultsFilterer.swift; sourceTree = "<group>"; };
 		49160F5A1E7FC59200168FD0 /* SnapshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SnapshotHelper.swift; sourceTree = "<group>"; };
@@ -400,6 +402,7 @@
 				494D96E11E71EDAE00299752 /* GeneralUIAction.swift */,
 				493056421DB1561C0086FDAD /* TableUpdater.swift */,
 				4973C79E1E901A6A001CFABC /* CommonUIElements.swift */,
+				49043DB81EBF31CA00E74370 /* OpenInSafariActivity.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -747,6 +750,7 @@
 				495C5D3F1BF1412600E00C07 /* BookTable.swift in Sources */,
 				4943DB791DBD5104004CAF30 /* Settings.swift in Sources */,
 				491C842F1CF6281B00894313 /* EditReadState.swift in Sources */,
+				49043DB91EBF31CA00E74370 /* OpenInSafariActivity.swift in Sources */,
 				495C5D101BF1404D00E00C07 /* AppDelegate.swift in Sources */,
 				491C84331CF630B600894313 /* CreateBook.swift in Sources */,
 				49160F5F1E809DFE00168FD0 /* BookImport.swift in Sources */,

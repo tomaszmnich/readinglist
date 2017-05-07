@@ -5,6 +5,7 @@
     </device>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -129,11 +130,18 @@
                     </view>
                     <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
                     <navigationItem key="navigationItem" id="YRx-69-dRa">
-                        <barButtonItem key="rightBarButtonItem" systemItem="edit" id="ysf-NA-q2m">
-                            <connections>
-                                <segue destination="JWo-Zy-Tgk" kind="presentation" modalPresentationStyle="formSheet" id="xqc-St-ytC"/>
-                            </connections>
-                        </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem systemItem="edit" id="ysf-NA-q2m">
+                                <connections>
+                                    <segue destination="JWo-Zy-Tgk" kind="presentation" modalPresentationStyle="formSheet" id="xqc-St-ytC"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem systemItem="action" id="Idg-AT-4fK">
+                                <connections>
+                                    <action selector="shareButtonPressed:" destination="svF-c1-e4g" id="RUO-nt-shu"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
                     </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
@@ -142,6 +150,7 @@
                         <outlet property="imageView" destination="YTX-8q-xHR" id="zj3-Wi-8EJ"/>
                         <outlet property="readingLogBackground" destination="Lv9-nn-Tne" id="Zgq-Dn-WkX"/>
                         <outlet property="readingLogHeader" destination="Rhe-Rl-p1n" id="OBq-1R-Fvm"/>
+                        <outlet property="shareButton" destination="Idg-AT-4fK" id="vxR-7M-Bx2"/>
                         <outlet property="titleLabel" destination="Bmm-uv-eym" id="yqU-Pv-faG"/>
                     </connections>
                 </viewController>

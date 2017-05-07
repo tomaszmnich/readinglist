@@ -160,6 +160,7 @@ class GoogleBooks {
         case searchIsbn(String)
         case fetch(String)
         case coverImage(String, CoverType)
+        case webpage(String)
         
         enum CoverType : Int {
             case thumbnail = 1
@@ -187,6 +188,9 @@ class GoogleBooks {
             
             case let .coverImage(googleBooksId, coverType):
                 return URL(string: "/books/content?id=\(googleBooksId)&printsec=frontcover&img=1&zoom=\(coverType.rawValue)", relativeTo: Request.googleBooksBaseUrl)!
+                
+            case let .webpage(googleBooksId):
+                return URL(string: "/books?id=\(googleBooksId)", relativeTo: Request.googleBooksBaseUrl)!
             }
         }
     }

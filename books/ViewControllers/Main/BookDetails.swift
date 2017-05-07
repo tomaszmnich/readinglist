@@ -84,6 +84,7 @@ class BookDetails: UIViewController {
     @IBOutlet weak var descriptionTextView: UITextView!
     @IBOutlet weak var readingLogHeader: UILabel!
     @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var shareButton: UIBarButtonItem!
     
     var viewModel: BookDetailsViewModel? {
         didSet {
@@ -100,6 +101,10 @@ class BookDetails: UIViewController {
             descriptionTextView.text = viewModel.description
             readingLogHeader.attributedText = viewModel.readingLog
             imageView.image = viewModel.cover
+            
+            let enableShareButton = viewModel.book.googleBooksId != nil
+            shareButton.isEnabled = enableShareButton
+            shareButton.tintColor = enableShareButton ? nil : UIColor.clear
         }
     }
     
@@ -153,6 +158,24 @@ class BookDetails: UIViewController {
         else if let changeReadState = navController?.viewControllers.first as? EditReadState {
             changeReadState.bookToEdit = viewModel?.book
         }
+    }
+    
+    @IBAction func shareButtonPressed(_ sender: Any) {
+        guard let googleBooksId = viewModel?.book.googleBooksId else { return }
+        
+        let optionsAlert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        
+        optionsAlert.addAction(UIAlertAction(title: "Open on Google Books", style: .default) { _ in
+            UIApplication.shared.openURL(GoogleBooks.Request.webpage(googleBooksId).url)
+        })
+        optionsAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        
+        // For iPad, set the popover presentation controller's source
+        if let popPresenter = optionsAlert.popoverPresentationController {
+            popPresenter.barButtonItem = sender as? UIBarButtonItem
+        }
+        
+        self.present(optionsAlert, animated: true, completion: nil)
     }
 
     override var previewActionItems: [UIPreviewActionItem] {
