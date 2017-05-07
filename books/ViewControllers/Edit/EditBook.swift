@@ -26,6 +26,10 @@ class EditBook: BookMetadataForm {
         
         // Initialise the form with the book values
         isbnField.value = bookToEdit.isbn13
+        if bookToEdit.isbn13 == nil {
+            isbnField.section!.hidden = true
+            isbnField.section!.evaluateHidden()
+        }
         titleField.value = bookToEdit.title
         authorList.value = bookToEdit.authorList
         pageCount.value = bookToEdit.pageCount == nil ? nil : Int(bookToEdit.pageCount!)
