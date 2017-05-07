@@ -37,7 +37,7 @@ class ReadStateForm: FormViewController {
             }
         }
             <<< DateRow(dateStartedKey) {
-                $0.title = "Started Reading"
+                $0.title = "Started"
                 $0.maximumDate = Date.startOfToday()
                 // Set a value here so we can be sure that the started date is *never* null.
                 $0.value = now
@@ -47,7 +47,7 @@ class ReadStateForm: FormViewController {
             }
         
             <<< DateRow(dateFinishedKey) {
-                $0.title = "Finished Reading"
+                $0.title = "Finished"
                 $0.maximumDate = Date.startOfToday()
                 $0.hidden = Condition.function([readStateKey]) {[unowned self] _ in
                     return self.readState.value! != .finished
@@ -60,7 +60,9 @@ class ReadStateForm: FormViewController {
             }
         
         +++ Section(header: "Notes", footer: "")
-            <<< TextAreaRow(notesKey)
+            <<< TextAreaRow(notesKey){
+                $0.placeholder = "Add your personal notes here..."
+                }
             .cellSetup{
                 $0.0.height = {return 150}
             }
