@@ -53,9 +53,10 @@ class books_UnitTests: XCTestCase {
     func testBookMetadataPopulates() {
         let testBookMetadata = getTestBookMetadata()
         let readingInformation = BookReadingInformation.finished(started: yesterday, finished: today)
+        let readingNotes = "An interesting book..."
         
         // Create the book
-        let book = booksStore.create(from: testBookMetadata, readingInformation: readingInformation)
+        let book = booksStore.create(from: testBookMetadata, readingInformation: readingInformation, readingNotes: readingNotes)
         
         // Test that the metadata is all the same
         XCTAssertEqual(testBookMetadata.googleBooksId, book.googleBooksId)
@@ -68,6 +69,31 @@ class books_UnitTests: XCTestCase {
         XCTAssertEqual(readingInformation.readState, book.readState)
         XCTAssertEqual(readingInformation.startedReading, book.startedReading)
         XCTAssertEqual(readingInformation.finishedReading, book.finishedReading)
+        XCTAssertEqual(readingNotes, book.notes)
+    }
+    
+    func testReadingNotesClear() {
+        let testBookMetadata = getTestBookMetadata()
+        let readingInformation = BookReadingInformation.toRead()
+        let readingNotes = "An interesting book (2)..."
+        
+        // Create the book
+        let book = booksStore.create(from: testBookMetadata, readingInformation: readingInformation, readingNotes: readingNotes)
+        
+        // Try some updates which should not affect the notes field first; check that the notes are still there
+        booksStore.update(book: book, withMetadata: testBookMetadata)
+        XCTAssertEqual(readingNotes, book.notes)
+        
+        booksStore.update(book: book, withReadingInformation: readingInformation)
+        XCTAssertEqual(readingNotes, book.notes)
+        
+        // Now edit the notes field
+        let newNotes = "edited"
+        booksStore.update(book: book, withReadingInformation: readingInformation, readingNotes: newNotes)
+        XCTAssertEqual(newNotes, book.notes)
+        booksStore.update(book: book, withReadingInformation: readingInformation, readingNotes: nil)
+        XCTAssertNil(book.notes)
+        
     }
     
     func testThatSortOrderIncrements() {
@@ -83,8 +109,8 @@ class books_UnitTests: XCTestCase {
         let book = booksStore.create(from: getTestBookMetadata(), readingInformation: toReadState)
         let originalSortOrder = book.sort
         
-        booksStore.update(book: book, withMetadata: nil, withReadingInformation: BookReadingInformation.reading(started: Date()))
-        booksStore.update(book: book, withMetadata: nil, withReadingInformation: BookReadingInformation.toRead())
+        booksStore.update(book: book, withReadingInformation: BookReadingInformation.reading(started: Date()))
+        booksStore.update(book: book, withReadingInformation: BookReadingInformation.toRead())
         XCTAssertEqual(originalSortOrder, book.sort)
     }
     
