@@ -123,6 +123,7 @@ class books_UITests: XCTestCase {
         app.clickTab(.toRead)
         app.tables.cells.element(boundBy: 0).tap()
         app.topNavBar.buttons["Edit"].tap()
+        app.sheets.buttons.element(boundBy: 1).tap()
         
         app.tables.staticTexts["Title"].tap()
         app.typeText("changed!")
@@ -137,6 +138,7 @@ class books_UITests: XCTestCase {
         
         app.tables.cells.element(boundBy: 0).tap()
         app.topNavBar.buttons["Edit"].tap()
+        app.sheets.buttons.element(boundBy: 1).tap()
         
         app.tables.staticTexts["Delete"].tap()
         app.sheets.buttons["Delete"].tap()

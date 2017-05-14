@@ -220,10 +220,14 @@ class BookTable: AutoUpdatingTableViewController {
         
         // Add the other state change actions where appropriate
         if readState == .toRead {
-            rowActions.append(Book.transistionToReadingStateAction.toUITableViewRowAction(getActionableObject: getBookFromIndexPath))
+            let transitionToReading = Book.transistionToReadingStateAction.toUITableViewRowAction(getActionableObject: getBookFromIndexPath)
+            transitionToReading.backgroundColor = UIColor.buttonBlue
+            rowActions.append(transitionToReading)
         }
         else if readState == .reading {
-            rowActions.append(Book.transistionToFinishedStateAction.toUITableViewRowAction(getActionableObject: getBookFromIndexPath))
+            let transitionToFinished = Book.transistionToFinishedStateAction.toUITableViewRowAction(getActionableObject: getBookFromIndexPath)
+            transitionToFinished.backgroundColor = UIColor.flatGreen
+            rowActions.append(transitionToFinished)
         }
         
         return rowActions
@@ -246,7 +250,8 @@ extension BookTable : DZNEmptyDataSetSource {
             titleText = "🎉 Finished"
         }
         
-        return NSAttributedString(titleText, withFont: UIFont.systemFont(ofSize: 42, weight: UIFontWeightThin))
+        return NSAttributedString(string: titleText, attributes: [NSFontAttributeName: UIFont(name: "GillSans", size: 32)!,
+                                                           NSForegroundColorAttributeName: UIColor.gray])
     }
     
     func verticalOffset(forEmptyDataSet scrollView: UIScrollView!) -> CGFloat {
@@ -261,8 +266,8 @@ extension BookTable : DZNEmptyDataSetSource {
     }
     
     func description(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
-        let bodyFont = UIFont.preferredFont(forTextStyle: .body)
-        let boldFont = UIFont.boldSystemFont(ofSize: bodyFont.pointSize)
+        let bodyFont = UIFont(name: "GillSans", size: 18)!
+        let boldFont = UIFont(name: "GillSans-Semibold", size: 18)!
         
         let descriptionText: NSMutableAttributedString
         if resultsFilterer.showingSearchResults {

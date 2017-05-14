@@ -14,11 +14,24 @@ extension UIColor {
     convenience init(fromHex: UInt32){
         self.init(colorLiteralRed: Float(((fromHex & 0xFF0000) >> 16))/255.0, green: Float(((fromHex & 0x00FF00) >> 8))/255.0, blue: Float(((fromHex & 0x0000FF) >> 0))/255.0, alpha: 1.0)
     }
+    
+    static let flatGreen: UIColor = UIColor(fromHex: 0x2ecc71)
+    static let darkGray: UIColor = UIColor(fromHex: 0x4A4A4A)
+    static let buttonBlue = UIColor(red: 0, green: 0.478431, blue: 1, alpha: 1)
 }
 
 public extension NSAttributedString {
     public convenience init(_ string: String, withFont font: UIFont) {
         self.init(string: string, attributes: [NSFontAttributeName: font])
+    }
+}
+
+extension NSLayoutConstraint {
+    static let lowPriority: Float = 250
+    static let highPriority: Float = 999
+    
+    func highPriorityIff(_ condition: Bool) {
+        priority = condition ? NSLayoutConstraint.highPriority : NSLayoutConstraint.lowPriority
     }
 }
 
@@ -93,7 +106,7 @@ public extension Date {
         return self.startOfDay().compare(other.startOfDay())
     }
     
-    func toShortPrettyString() -> String {
+    func toShortPrettyString(fullMonth: Bool = false) -> String {
         let today = Date.startOfToday()
         let otherDate = startOfDay()
         
@@ -110,7 +123,7 @@ public extension Date {
         }
         else {
             // Use the format "12 Feb", or - if the date is not from this year - "12 Feb 2015"
-            return self.toString(withDateFormat: "d MMM\(thisYear == otherYear ? "" : " yyyy")")
+            return self.toString(withDateFormat: "d MMM\(fullMonth ? "M" : "")\(thisYear == otherYear ? "" : " yyyy")")
         }
     }
     

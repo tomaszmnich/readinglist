@@ -12,60 +12,38 @@ import CoreSpotlight
 
 class BookDetailsViewModel {
     let book: Book
-    let title: String
-    let authors: String
-    let description: String?
-    let readingLog: NSAttributedString
+    let readingLog: String
+    let information: String?
     let cover: UIImage
     
     init(book: Book) {
         self.book = book
-        title = book.title
-        authors = book.authorList
         
-        var mutableDescription = ""
+        var mutableInformation = ""
         if book.publicationDate != nil {
-            mutableDescription += book.publicationDate!.toString(withDateStyle: .medium)
+            mutableInformation = "Published \(book.publicationDate!.toString(withDateStyle: .medium))"
         }
         if book.pageCount != nil && book.publicationDate != nil {
-            mutableDescription += " • "
+            mutableInformation += "\n"
         }
         if book.pageCount != nil {
-            mutableDescription += String(describing: book.pageCount!) + " pages"
+            mutableInformation += "\(book.pageCount!) pages"
         }
-        if !mutableDescription.isEmpty {
-            mutableDescription += "\n\n"
-        }
-        if book.bookDescription != nil {
-            mutableDescription += book.bookDescription!
-        }
-        description = mutableDescription
+        information = mutableInformation.isEmpty ? nil : mutableInformation
         
-        let headerFont = UIFont.preferredFont(forTextStyle: .body)
-        let subheaderFont = UIFont.preferredFont(forTextStyle: .caption1)
-        var mutableReadingLog: NSMutableAttributedString
         switch book.readState {
         case .toRead:
-            mutableReadingLog = NSMutableAttributedString("To Read 📚", withFont: headerFont)
+            readingLog = "To Read 📚"
             break
         case .reading:
-            mutableReadingLog = NSMutableAttributedString("Currently Reading 📖\n", withFont: headerFont)
-                .chainAppend("Started \(book.startedReading!.toShortPrettyString())", withFont: subheaderFont)
+            readingLog = "Currently Reading 📖\nStarted \(book.startedReading!.toShortPrettyString(fullMonth: true))"
             break
         case .finished:
             let sameDay = book.startedReading!.startOfDay() == book.finishedReading!.startOfDay()
-            mutableReadingLog = NSMutableAttributedString("Finished 🎉\n", withFont: headerFont)
-                .chainAppend("\(book.startedReading!.toShortPrettyString())", withFont: subheaderFont)
-                .chainAppend(sameDay ? "" : " - \(book.finishedReading!.toShortPrettyString())", withFont: subheaderFont)
+            readingLog = "Finished 🎉\n\(book.startedReading!.toShortPrettyString(fullMonth: true))"
+                + (sameDay ? "" : " - \(book.finishedReading!.toShortPrettyString(fullMonth: true))")
             break
         }
-        
-        if let notes = book.notes {
-            let leftAlignedStyle = NSMutableParagraphStyle()
-            leftAlignedStyle.alignment = NSTextAlignment.left
-            mutableReadingLog.append(NSAttributedString(string: "\n\n\(notes)", attributes: [NSParagraphStyleAttributeName: leftAlignedStyle, NSFontAttributeName: subheaderFont]))
-        }
-        readingLog = mutableReadingLog
         
         if let coverData = book.coverImage, let image = UIImage(data: coverData) {
             cover = image
@@ -78,58 +56,100 @@ class BookDetailsViewModel {
 
 class BookDetails: UIViewController {
     
-    @IBOutlet weak var readingLogBackground: UIView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var authorsLabel: UILabel!
-    @IBOutlet weak var descriptionTextView: UITextView!
-    @IBOutlet weak var readingLogHeader: UILabel!
+    @IBOutlet weak var descriptionTextView: UILabel!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var shareButton: UIBarButtonItem!
+    @IBOutlet weak var changeReadState: BorderedButton!
+    @IBOutlet weak var informationLabel: UILabel!
+    @IBOutlet weak var readingLogLabel: UILabel!
+    @IBOutlet weak var informationHeaderContraint: NSLayoutConstraint!
+    @IBOutlet weak var readingLogNotes: UILabel!
+    @IBOutlet weak var readingLogHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var descriptionHeaderHeightConstraint: NSLayoutConstraint!
     
     var viewModel: BookDetailsViewModel? {
         didSet {
             guard let viewModel = viewModel else {
                 view.isHidden = true
-                navigationItem.rightBarButtonItem?.isEnabled = false
+                navigationItem.rightBarButtonItem?.toggleHidden(hidden: true)
+                shareButton.toggleHidden(hidden: true)
                 return
             }
             
             view.isHidden = false
-            navigationItem.rightBarButtonItem?.isEnabled = true
-            titleLabel.text = viewModel.title
-            authorsLabel.text = viewModel.authors
-            descriptionTextView.text = viewModel.description
-            readingLogHeader.attributedText = viewModel.readingLog
+            navigationItem.rightBarButtonItem?.toggleHidden(hidden: false)
+            shareButton.toggleHidden(hidden: false)
+            
+            titleLabel.text = viewModel.book.title
+            authorsLabel.text = viewModel.book.authorList
+            
+            informationHeaderContraint.highPriorityIff(viewModel.information == nil)
+            informationLabel.text = viewModel.information
+            readingLogLabel.text = viewModel.readingLog
+            
+            descriptionHeaderHeightConstraint.highPriorityIff(viewModel.book.bookDescription == nil)
+            descriptionTextView.text = viewModel.book.bookDescription
+            
+            readingLogHeightConstraint.highPriorityIff(viewModel.book.notes == nil)
+            readingLogNotes.text = viewModel.book.notes
+            
             imageView.image = viewModel.cover
             
-            let enableShareButton = viewModel.book.googleBooksId != nil
-            shareButton.isEnabled = enableShareButton
-            shareButton.tintColor = enableShareButton ? nil : UIColor.clear
+            shareButton.toggleHidden(hidden: viewModel.book.googleBooksId == nil)
+            changeReadState.isHidden = viewModel.book.readState == .finished
+            switch viewModel.book.readState {
+            case .toRead:
+                changeReadState.setColor(UIColor.buttonBlue)
+                changeReadState.setTitle("Start", for: .normal)
+            
+            case .reading:
+                changeReadState.setColor(UIColor.flatGreen)
+                changeReadState.setTitle("Finish", for: .normal)
+            case .finished:
+                changeReadState.isHidden = true
+            }
         }
+    }
+    
+    @IBAction func readStateButtonPressed(_ sender: BorderedButton) {
+        guard let viewModel = viewModel else { return }
+        let readState = viewModel.book.readState
+        guard readState == .toRead || readState == .reading else { return }
+        
+        let readingInfo: BookReadingInformation
+        if readState == .toRead {
+            readingInfo = BookReadingInformation.reading(started: Date())
+        }
+        else {
+            readingInfo = BookReadingInformation.finished(started: viewModel.book.startedReading!, finished: Date())
+        }
+        appDelegate.booksStore.update(book: viewModel.book, withReadingInformation: readingInfo)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         view.backgroundColor = UIColor.white
-        readingLogBackground.layer.cornerRadius = 8
         
         // Initialise the view, so that by default a blank page is shown.
         // This is required for starting the app in split-screen mode, where this view is
         // shown without any books being selected.
         view.isHidden = true
-        navigationItem.rightBarButtonItem?.isEnabled = false
+        navigationItem.rightBarButtonItem?.toggleHidden(hidden: true)
+        shareButton.toggleHidden(hidden: true)
         
         if let uiImage = imageView.image,
             let imageViewHeight = (imageView.constraints.filter{$0.firstAttribute == .height}).first?.constant,
             let widthConstraint = (imageView.constraints.filter{$0.firstAttribute == .width}).first {
             widthConstraint.constant = (imageViewHeight / uiImage.size.height) * uiImage.size.width
         }
-
+/*
         descriptionTextView.textContainer.lineBreakMode = .byTruncatingTail
         descriptionTextView.textContainer.lineFragmentPadding = 0
         descriptionTextView.textContainerInset = UIEdgeInsets.zero
-        
+*/
         // Watch for changes in the managed object context
         NotificationCenter.default.addObserver(self, selector: #selector(bookChanged(_:)), name: NSNotification.Name.NSManagedObjectContextDidSave, object: appDelegate.booksStore.managedObjectContext)
     }
@@ -150,6 +170,25 @@ class BookDetails: UIViewController {
         }
     }
     
+    @IBAction func editPressed(_ sender: UIBarButtonItem) {
+        let optionsAlert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        
+        optionsAlert.addAction(UIAlertAction(title: "Edit Reading Log", style: .default) { [unowned self] _ in
+            self.performSegue(withIdentifier: "editReadStateSegue", sender: self)
+        })
+        optionsAlert.addAction(UIAlertAction(title: "Edit Book Details", style: .default){ [unowned self] _ in
+            self.performSegue(withIdentifier: "editBookSegue", sender: self)
+        })
+        optionsAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        
+        // For iPad, set the popover presentation controller's source
+        if let popPresenter = optionsAlert.popoverPresentationController {
+            popPresenter.barButtonItem = sender
+        }
+        
+        self.present(optionsAlert, animated: true, completion: nil)
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let navController = segue.destination as? UINavigationController
         if let editBookController = navController?.viewControllers.first as? EditBook {
@@ -160,7 +199,7 @@ class BookDetails: UIViewController {
         }
     }
     
-    @IBAction func shareButtonPressed(_ sender: Any) {
+    @IBAction func shareButtonPressed(_ sender: UIBarButtonItem) {
         guard let googleBooksId = viewModel?.book.googleBooksId else { return }
         
         let optionsAlert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
@@ -172,7 +211,7 @@ class BookDetails: UIViewController {
         
         // For iPad, set the popover presentation controller's source
         if let popPresenter = optionsAlert.popoverPresentationController {
-            popPresenter.barButtonItem = sender as? UIBarButtonItem
+            popPresenter.barButtonItem = sender
         }
         
         self.present(optionsAlert, animated: true, completion: nil)
