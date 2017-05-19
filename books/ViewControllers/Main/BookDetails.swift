@@ -12,38 +12,62 @@ import CoreSpotlight
 
 class BookDetailsViewModel {
     let book: Book
-    let readingLog: String
+    let readState: String
+    let readDates: String
     let information: String?
     let cover: UIImage
     
     init(book: Book) {
         self.book = book
         
-        var mutableInformation = ""
-        if book.publicationDate != nil {
-            mutableInformation = "Published \(book.publicationDate!.toString(withDateStyle: .medium))"
-        }
-        if book.pageCount != nil && book.publicationDate != nil {
-            mutableInformation += "\n"
-        }
+        // Build extra metadata into a string
+        var infoPieces = [String]()
         if book.pageCount != nil {
-            mutableInformation += "\(book.pageCount!) pages"
+            infoPieces.append("\(book.pageCount!) pages")
         }
-        information = mutableInformation.isEmpty ? nil : mutableInformation
-        
+        if book.publicationDate != nil {
+            infoPieces.append("Published \(book.publicationDate!.toString(withDateStyle: .medium))")
+        }
+        information = infoPieces.isEmpty ? nil : infoPieces.joined(separator: " • ")
+
+        // Read state
         switch book.readState {
         case .toRead:
-            readingLog = "To Read 📚"
+            readState = "📚 To Read"
             break
         case .reading:
-            readingLog = "Currently Reading 📖\nStarted \(book.startedReading!.toShortPrettyString(fullMonth: true))"
+            readState = "📖 Currently Reading"
             break
         case .finished:
-            let sameDay = book.startedReading!.startOfDay() == book.finishedReading!.startOfDay()
-            readingLog = "Finished 🎉\n\(book.startedReading!.toShortPrettyString(fullMonth: true))"
-                + (sameDay ? "" : " - \(book.finishedReading!.toShortPrettyString(fullMonth: true))")
+            readState = "🎉 Finished"
             break
         }
+        
+        // Read dates
+        var readDatesPieces = [String]()
+        if book.readState == .toRead {
+            readDatesPieces.append("Added: \(book.createdWhen.toPrettyString(short: false))")
+        }
+        if let started = book.startedReading {
+            readDatesPieces.append("Started: \(started.toPrettyString(short: false))")
+        }
+        if let finished = book.finishedReading {
+            readDatesPieces.append("Finished: \(finished.toPrettyString(short: false))")
+        }
+        if book.readState != .toRead,
+            let dayCount = NSCalendar.current.dateComponents([.day], from: book.startedReading!.startOfDay(), to: (book.finishedReading ?? Date()).startOfDay()).day{
+            // Don't bother including the read time if currently reading and started today
+            if dayCount <= 0 && book.readState == .finished {
+                readDatesPieces.append("Read Time: within a day")
+            }
+            else if dayCount == 1 {
+                readDatesPieces.append("Read Time: 1 day")
+            }
+            else if dayCount > 1 {
+                readDatesPieces.append("Read Time: \(dayCount) days")
+            }
+        }
+        readDates = readDatesPieces.joined(separator: "\n")
         
         if let coverData = book.coverImage, let image = UIImage(data: coverData) {
             cover = image
@@ -58,26 +82,31 @@ class BookDetails: UIViewController {
     
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var authorsLabel: UILabel!
-    @IBOutlet weak var descriptionTextView: UILabel!
+    
     @IBOutlet weak var imageView: UIImageView!
-    @IBOutlet weak var shareButton: UIBarButtonItem!
+    @IBOutlet weak var readStateLabel: UILabel!
+    @IBOutlet weak var readDatesLabel: UILabel!
     @IBOutlet weak var changeReadState: BorderedButton!
-    @IBOutlet weak var informationLabel: UILabel!
-    @IBOutlet weak var readingLogLabel: UILabel!
-    @IBOutlet weak var informationHeaderContraint: NSLayoutConstraint!
-    @IBOutlet weak var readingLogNotes: UILabel!
-    @IBOutlet weak var readingLogHeightConstraint: NSLayoutConstraint!
+    
+    @IBOutlet weak var pageAndPubDateLabel: UILabel!
+    @IBOutlet weak var descriptionTextView: UILabel!
     @IBOutlet weak var descriptionHeaderHeightConstraint: NSLayoutConstraint!
+    
+    @IBOutlet weak var readingLogNotes: UILabel!
+    
+    @IBOutlet weak var shareButton: UIBarButtonItem!
     
     var viewModel: BookDetailsViewModel? {
         didSet {
             guard let viewModel = viewModel else {
+                // Hide the whole view and nav bar buttons
                 view.isHidden = true
                 navigationItem.rightBarButtonItem?.toggleHidden(hidden: true)
                 shareButton.toggleHidden(hidden: true)
                 return
             }
             
+            // Show the whole view and nav bar buttons
             view.isHidden = false
             navigationItem.rightBarButtonItem?.toggleHidden(hidden: false)
             shareButton.toggleHidden(hidden: false)
@@ -85,14 +114,14 @@ class BookDetails: UIViewController {
             titleLabel.text = viewModel.book.title
             authorsLabel.text = viewModel.book.authorList
             
-            informationHeaderContraint.highPriorityIff(viewModel.information == nil)
-            informationLabel.text = viewModel.information
-            readingLogLabel.text = viewModel.readingLog
+            readStateLabel.text = viewModel.readState
+            readDatesLabel.text = viewModel.readDates
             
-            descriptionHeaderHeightConstraint.highPriorityIff(viewModel.book.bookDescription == nil)
+            descriptionHeaderHeightConstraint.highPriorityIff(viewModel.book.bookDescription == nil || viewModel.information == nil)
+            pageAndPubDateLabel.text = viewModel.information
             descriptionTextView.text = viewModel.book.bookDescription
             
-            readingLogHeightConstraint.highPriorityIff(viewModel.book.notes == nil)
+            //readingLogHeightConstraint.highPriorityIff(viewModel.book.notes == nil)
             readingLogNotes.text = viewModel.book.notes
             
             imageView.image = viewModel.cover
@@ -145,11 +174,7 @@ class BookDetails: UIViewController {
             let widthConstraint = (imageView.constraints.filter{$0.firstAttribute == .width}).first {
             widthConstraint.constant = (imageViewHeight / uiImage.size.height) * uiImage.size.width
         }
-/*
-        descriptionTextView.textContainer.lineBreakMode = .byTruncatingTail
-        descriptionTextView.textContainer.lineFragmentPadding = 0
-        descriptionTextView.textContainerInset = UIEdgeInsets.zero
-*/
+
         // Watch for changes in the managed object context
         NotificationCenter.default.addObserver(self, selector: #selector(bookChanged(_:)), name: NSNotification.Name.NSManagedObjectContextDidSave, object: appDelegate.booksStore.managedObjectContext)
     }

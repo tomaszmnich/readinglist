@@ -106,7 +106,7 @@ public extension Date {
         return self.startOfDay().compare(other.startOfDay())
     }
     
-    func toShortPrettyString(fullMonth: Bool = false) -> String {
+    func toPrettyString(short: Bool = true) -> String {
         let today = Date.startOfToday()
         let otherDate = startOfDay()
         
@@ -119,11 +119,11 @@ public extension Date {
             return "Today"
         }
         if daysDifference > 0 && daysDifference <= 5 {
-            return self.toString(withDateFormat: "EEE")
+            return self.toString(withDateFormat: "EEE\(short ? "" : "E")")
         }
         else {
             // Use the format "12 Feb", or - if the date is not from this year - "12 Feb 2015"
-            return self.toString(withDateFormat: "d MMM\(fullMonth ? "M" : "")\(thisYear == otherYear ? "" : " yyyy")")
+            return self.toString(withDateFormat: "d MMM\(short ? "" : "M")\(thisYear == otherYear ? "" : " yyyy")")
         }
     }
     
