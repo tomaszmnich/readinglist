@@ -35,6 +35,13 @@ extension NSLayoutConstraint {
     }
 }
 
+extension UILabel {
+    func setTextOrHide(_ text: String?) {
+        self.text = text
+        self.isHidden = text == nil
+    }
+}
+
 extension UIApplication {
     func openUrlPlatformSpecific(url: URL, completionHandler: ((Bool) -> Void)? = nil) {
         if #available(iOS 10, *) {

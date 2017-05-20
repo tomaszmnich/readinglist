@@ -79,7 +79,7 @@ class BookDetailsViewModel {
 }
 
 class BookDetails: UIViewController {
-    
+    @IBOutlet weak var shareButton: UIBarButtonItem!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var authorsLabel: UILabel!
     
@@ -88,13 +88,13 @@ class BookDetails: UIViewController {
     @IBOutlet weak var readDatesLabel: UILabel!
     @IBOutlet weak var changeReadState: BorderedButton!
     
+    @IBOutlet weak var descriptionStack: UIStackView!
     @IBOutlet weak var pageAndPubDateLabel: UILabel!
     @IBOutlet weak var descriptionTextView: UILabel!
-    @IBOutlet weak var descriptionHeaderHeightConstraint: NSLayoutConstraint!
-    
+    @IBOutlet weak var middleSeparator: UIView!
+    @IBOutlet weak var readingLogStack: UIStackView!
     @IBOutlet weak var readingLogNotes: UILabel!
-    
-    @IBOutlet weak var shareButton: UIBarButtonItem!
+    @IBOutlet weak var bottomSeparator: UIView!
     
     var viewModel: BookDetailsViewModel? {
         didSet {
@@ -117,12 +117,15 @@ class BookDetails: UIViewController {
             readStateLabel.text = viewModel.readState
             readDatesLabel.text = viewModel.readDates
             
-            descriptionHeaderHeightConstraint.highPriorityIff(viewModel.book.bookDescription == nil || viewModel.information == nil)
+            let hideDescription = viewModel.information == nil && viewModel.book.bookDescription == nil
+            descriptionStack.isHidden = hideDescription
             pageAndPubDateLabel.text = viewModel.information
             descriptionTextView.text = viewModel.book.bookDescription
+            middleSeparator.isHidden = hideDescription
             
-            //readingLogHeightConstraint.highPriorityIff(viewModel.book.notes == nil)
+            readingLogStack.isHidden = viewModel.book.notes == nil
             readingLogNotes.text = viewModel.book.notes
+            bottomSeparator.isHidden = viewModel.book.notes == nil
             
             imageView.image = viewModel.cover
             
