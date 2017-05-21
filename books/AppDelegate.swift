@@ -11,11 +11,6 @@ import CoreSpotlight
 import Fabric
 import Crashlytics
 
-#if DEBUG
-    // Include SimulatorStatusMagic only in debug mode; it's only needed for automated screenshots
-    import SimulatorStatusMagic
-#endif
-
 let productBundleIdentifier = "com.andrewbennet.books"
 let appleAppId = "1217139955"
  
@@ -36,15 +31,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 
-        #if DEBUG
-            // In debug mode, when we are running via fastlane snapshot, override the simulator status bar
-            if UserDefaults.standard.bool(forKey: "FASTLANE_SNAPSHOT") {
-                SDStatusBarManager.sharedInstance().enableOverrides()
-            }
-            else {
-                SDStatusBarManager.sharedInstance().disableOverrides()
-            }
-        #else
+        #if !DEBUG
             Fabric.with([Crashlytics.self])
         #endif
         return true

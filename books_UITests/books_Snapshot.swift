@@ -18,28 +18,30 @@ class books_Snapshot: XCTestCase {
         setupSnapshot(app)
         app.launch()
         app.addTestData()
-        print("Waiting 10 seconds")
-        sleep(10)
         
         // There's a weird glitch with the search bar when books are first added. Restart the app the fix it.
         app.terminate()
         app.launch()
+        app.setBarcodeSimulation(.normal)
+        app.toggleBarcodeScanFixedImage()
+        app.togglePrettyStatusBar()
     }
     
     override func tearDown() {
+        let app = ReadingListApplication()
+        app.toggleBarcodeScanFixedImage()
         super.tearDown()
     }
     
     func testSnapshot() {
         let app = ReadingListApplication()
-        
         app.clickTab(.toRead)
         
         let isIpad = app.navigationBars.count == 2
         
         if isIpad {
             app.tables.cells.element(boundBy: 1).tap()
-        }
+        }        
         
         sleep(2)
         snapshot("0_ToReadList")

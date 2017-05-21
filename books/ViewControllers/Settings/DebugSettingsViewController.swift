@@ -1,38 +1,51 @@
 //
-//  BarcodeScanSimulationViewController.swift
+//  DebugSettingsViewController.swift
 //  books
 //
 //  Created by Andrew Bennet on 11/04/2017.
 //  Copyright © 2017 Andrew Bennet. All rights reserved.
 //
 
+#if DEBUG
+    
 import Foundation
 import Eureka
 import SVProgressHUD
+import SimulatorStatusMagic
 
 class DebugSettingsViewController: FormViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let showFixedImageSection = Section(header: "Screenshot helpers", footer: "Whether to show a fixed, preloaded image of a barcode when the barcode scan view is loaded. This can be useful for generating screenshots.")
-        showFixedImageSection.append(SwitchRow() {
-            $0.title = "Show Fixed Image"
-            $0.value = DebugSettings.useFixedBarcodeScanImage
-            $0.onChange {
-                DebugSettings.useFixedBarcodeScanImage = $0.value!
+        form +++ Section(header: "Screenshot helpers", footer: "Useful toggles for generating screenshots.")
+            <<< SwitchRow() {
+                $0.title = "Show Fixed Image"
+                $0.value = DebugSettings.useFixedBarcodeScanImage
+                $0.onChange {
+                    DebugSettings.useFixedBarcodeScanImage = $0.value!
+                }
             }
-        })
-        form.append(showFixedImageSection)
+            <<< SwitchRow() {
+                $0.title = "Pretty Status Bar"
+                $0.value = SDStatusBarManager.sharedInstance().usingOverrides
+                $0.onChange {
+                    if $0.value! {
+                        SDStatusBarManager.sharedInstance().enableOverrides()
+                    }
+                    else {
+                        SDStatusBarManager.sharedInstance().disableOverrides()
+                    }
+                }
+            }
         
-        let importTestDataSection = Section(header: "Test data", footer: "Import a set of data for both testing and screenshots")
-        importTestDataSection.append(ButtonRow() {
-            $0.title = "Import Test Data"
-            $0.onCellSelection { [unowned self] _,_ in
-                self.loadTestData()
+        form +++ Section(header: "Test data", footer: "Import a set of data for both testing and screenshots")
+            <<< ButtonRow() {
+                $0.title = "Import Test Data"
+                $0.onCellSelection { [unowned self] _,_ in
+                    self.loadTestData()
+                }
             }
-        })
-        form.append(importTestDataSection)
         
         let simulationOptions = SelectableSection<ListCheckRow<BarcodeScanSimulation>>("Barcode scan behaviour", selectionType: .singleSelection(enableDeselection: true))
         let currentValue = DebugSettings.barcodeScanSimulation
@@ -74,3 +87,5 @@ class DebugSettingsViewController: FormViewController {
         }.StartImport()
     }
 }
+
+#endif

@@ -1,7 +1,8 @@
 {
   "default": {
     "title": {
-      "color": "#444"
+      "color": "#444",
+	  "font": "./GillSans.ttc"
     },
     "background": "./background.jpg",
     "padding": 50

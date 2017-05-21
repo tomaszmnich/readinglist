@@ -60,6 +60,7 @@
 		49CEB80A1E9D8C06003FD859 /* DebugSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49CEB8091E9D8C06003FD859 /* DebugSettingsViewController.swift */; };
 		49D93AA51CAB16F800AE6611 /* CoreSpotlightStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49D93AA41CAB16F800AE6611 /* CoreSpotlightStack.swift */; };
 		49E95D0F1DD7D9EC00C215F8 /* GoogleBooksAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E95D0E1DD7D9EC00C215F8 /* GoogleBooksAPI.swift */; };
+		49F1EC801ED06F5B00C7060F /* ReadingListApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F1EC7F1ED06F5B00C7060F /* ReadingListApplication.swift */; };
 		49F3863C1E86D64A001F5D75 /* example_barcode.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 49F3863B1E86D64A001F5D75 /* example_barcode.jpg */; };
 		49F6AC651E98F36B000B7D17 /* ImportDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F6AC641E98F36B000B7D17 /* ImportDataViewController.swift */; };
 		49FE2ED51D6F675D00F04239 /* SearchOnline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49FE2ED41D6F675D00F04239 /* SearchOnline.swift */; };
@@ -151,6 +152,7 @@
 		49E455381E922C5D0034C95C /* books_2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = books_2.xcdatamodel; sourceTree = "<group>"; };
 		49E95D0E1DD7D9EC00C215F8 /* GoogleBooksAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleBooksAPI.swift; sourceTree = "<group>"; };
 		49EEF6861E943691003FF31E /* Reading List.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Reading List.entitlements"; sourceTree = "<group>"; };
+		49F1EC7F1ED06F5B00C7060F /* ReadingListApplication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadingListApplication.swift; sourceTree = "<group>"; };
 		49F3863B1E86D64A001F5D75 /* example_barcode.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = example_barcode.jpg; path = TestData/example_barcode.jpg; sourceTree = "<group>"; };
 		49F6AC641E98F36B000B7D17 /* ImportDataViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImportDataViewController.swift; sourceTree = "<group>"; };
 		49FE2ED41D6F675D00F04239 /* SearchOnline.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchOnline.swift; sourceTree = "<group>"; };
@@ -364,6 +366,7 @@
 				4962700D1DBF83840009CC3C /* Info.plist */,
 				4962700B1DBF83840009CC3C /* books_UITests.swift */,
 				49160F5C1E7FC5D700168FD0 /* books_Snapshot.swift */,
+				49F1EC7F1ED06F5B00C7060F /* ReadingListApplication.swift */,
 			);
 			path = books_UITests;
 			sourceTree = "<group>";
@@ -780,6 +783,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				49F1EC801ED06F5B00C7060F /* ReadingListApplication.swift in Sources */,
 				4962700C1DBF83840009CC3C /* books_UITests.swift in Sources */,
 				49160F5D1E7FC5D700168FD0 /* books_Snapshot.swift in Sources */,
 				494D65D31EB71BC400764DC1 /* DebugSettings.swift in Sources */,
