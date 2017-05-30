@@ -14,22 +14,10 @@ class BookDetailsViewModel {
     let book: Book
     let readState: String
     let readDates: String
-    let information: String?
     let cover: UIImage
     
     init(book: Book) {
         self.book = book
-        
-        // Build extra metadata into a string
-        var infoPieces = [String]()
-        if book.pageCount != nil {
-            infoPieces.append("\(book.pageCount!) pages")
-        }
-        if book.publicationDate != nil {
-            infoPieces.append("Published \(book.publicationDate!.toString(withDateStyle: .medium))")
-        }
-        infoPieces.append("Subjects: \(book.subjects.map{($0 as! Subject).name}.joined(separator: ", "))")
-        information = infoPieces.isEmpty ? nil : infoPieces.joined(separator: "\n")
 
         // Read state
         switch book.readState {
@@ -89,13 +77,19 @@ class BookDetails: UIViewController {
     @IBOutlet weak var readDatesLabel: UILabel!
     @IBOutlet weak var changeReadState: BorderedButton!
     
+    @IBOutlet weak var informationHeadingSeparator: UIView!
+    @IBOutlet weak var informationStack: UIStackView!
+    @IBOutlet weak var pagesLabel: UILabel!
+    @IBOutlet weak var publishedLabel: UILabel!
+    @IBOutlet weak var subjectsLabel: UILabel!
+    
+    @IBOutlet weak var descriptionHeadingSeparator: UIView!
     @IBOutlet weak var descriptionStack: UIStackView!
-    @IBOutlet weak var pageAndPubDateLabel: UILabel!
     @IBOutlet weak var descriptionTextView: UILabel!
-    @IBOutlet weak var middleSeparator: UIView!
+    
+    @IBOutlet weak var readingLogHeadingSeparator: UIView!
     @IBOutlet weak var readingLogStack: UIStackView!
     @IBOutlet weak var readingLogNotes: UILabel!
-    @IBOutlet weak var bottomSeparator: UIView!
     
     var viewModel: BookDetailsViewModel? {
         didSet {
@@ -118,15 +112,23 @@ class BookDetails: UIViewController {
             readStateLabel.text = viewModel.readState
             readDatesLabel.text = viewModel.readDates
             
-            let hideDescription = viewModel.information == nil && viewModel.book.bookDescription == nil
-            descriptionStack.isHidden = hideDescription
-            pageAndPubDateLabel.text = viewModel.information
-            descriptionTextView.text = viewModel.book.bookDescription
-            middleSeparator.isHidden = hideDescription
+            let hideInfoStack = viewModel.book.pageCount == nil && viewModel.book.publicationDate == nil && viewModel.book.subjects.count == 0
+            informationHeadingSeparator.isHidden = hideInfoStack
+            informationStack.isHidden = hideInfoStack
+            pagesLabel.isHidden = viewModel.book.pageCount == nil
+            pagesLabel.text = "Pages: \(viewModel.book.pageCount ?? 0)"
+            publishedLabel.isHidden = viewModel.book.publicationDate == nil
+            publishedLabel.text = "Published: \(viewModel.book.publicationDate?.toPrettyString() ?? "")"
+            subjectsLabel.isHidden = viewModel.book.subjects.count == 0
+            subjectsLabel.text = "Subjects: " + viewModel.book.subjects.array.map{($0 as! Subject).name}.joined(separator: "; ")
             
+            descriptionHeadingSeparator.isHidden = viewModel.book.bookDescription == nil
+            descriptionStack.isHidden = viewModel.book.bookDescription == nil
+            descriptionTextView.text = viewModel.book.bookDescription
+            
+            readingLogHeadingSeparator.isHidden = viewModel.book.notes == nil
             readingLogStack.isHidden = viewModel.book.notes == nil
             readingLogNotes.text = viewModel.book.notes
-            bottomSeparator.isHidden = viewModel.book.notes == nil
             
             imageView.image = viewModel.cover
             
