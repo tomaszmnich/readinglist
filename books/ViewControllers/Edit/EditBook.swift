@@ -68,7 +68,7 @@ class EditBook: BookMetadataForm {
         guard let titleFieldValue = titleField.value, let authorListValue = authorList.value else { return }
         
         // Load the book metadata into an object from the form values
-        let newMetadata = BookMetadata()
+        let newMetadata = BookMetadata(book: bookToEdit)
         newMetadata.title = titleFieldValue
         newMetadata.authors = authorListValue
         newMetadata.pageCount = pageCount.value
