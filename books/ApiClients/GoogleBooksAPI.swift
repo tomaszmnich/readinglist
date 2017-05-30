@@ -171,7 +171,7 @@ class GoogleBooks {
         private static let apiBaseUrl = URL(string: "https://www.googleapis.com")!
         private static let googleBooksBaseUrl = URL(string: "https://books.google.com")!
         
-        private static let searchResultFields = "items(id,volumeInfo(title,authors,industryIdentifiers,imageLinks/thumbnail))"
+        private static let searchResultFields = "items(id,volumeInfo(title,authors,industryIdentifiers,categories,imageLinks/thumbnail))"
         private static let apiKey = "AIzaSyAN64W_QrynoqZB3Sxdm1PudVOdjvU69Qo"
         
         var url: URL {
@@ -248,8 +248,14 @@ class GoogleBooks {
             description = description?.replacingOccurrences(of: "</p>", with: "")
             description = description?.replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression, range: nil)
             description = description?.trimmingCharacters(in: .whitespacesAndNewlines)
-
             result.description = description
+            
+            // Try to get the categories
+            if let subjects = fetchResult["volumeInfo", "categories"].array {
+                result.subjects = subjects.flatMap{
+                    $0.stringValue.components(separatedBy: "/").map{$0.trimming()}
+                }.filter{ $0 != "General" }.distinct()
+            }
             
             return result
         }
@@ -291,6 +297,7 @@ class GoogleBooks {
         var authors: String
         var isbn13: String?
         var description: String?
+        var subjects = [String]()
         var publishedDate: Date?
         var pageCount: Int?
         var hasThumbnailImage: Bool = false
@@ -310,6 +317,7 @@ class GoogleBooks {
             metadata.title = title
             metadata.authors = authors
             metadata.bookDescription = description
+            metadata.subjects = subjects
             metadata.coverImage = coverImage
             metadata.pageCount = pageCount
             metadata.publicationDate = publishedDate

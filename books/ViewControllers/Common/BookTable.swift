@@ -213,7 +213,7 @@ class BookTable: AutoUpdatingTableViewController {
             let confirmDeleteAlert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
             confirmDeleteAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
             confirmDeleteAlert.addAction(UIAlertAction(title: "Delete", style: .destructive) { _ in
-                appDelegate.booksStore.delete(bookToDelete)
+                appDelegate.booksStore.deleteBook(bookToDelete)
             })
             self.present(confirmDeleteAlert, animated: true, completion: nil)
         }]

@@ -7,8 +7,8 @@ target 'books' do
   # Pods for books
   pod 'DZNEmptyDataSet', '~> 1.8'
   pod 'SwiftyJSON', '~> 3.1'
-  pod 'Eureka', '~> 2.0'
-  pod 'ImageRow', '~> 1.0'
+  pod 'Eureka', '~> 3.0'
+  pod 'ImageRow', '~> 2.0'
   pod 'RxSwift', '~> 3.4'
   pod 'RxCocoa', '~> 3.4'
   pod 'RxSwiftUtilities', '~> 1.0'

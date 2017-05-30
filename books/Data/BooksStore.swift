@@ -13,6 +13,8 @@ import MobileCoreServices
 class BooksStore {
     
     private let bookEntityName = "Book"
+    private let subjectEntityName = "Subject"
+    
     private let coreDataStack: CoreDataStack
     private let coreSpotlightStack: CoreSpotlightStack
     var managedObjectContext: NSManagedObjectContext {
@@ -64,6 +66,24 @@ class BooksStore {
         return coreDataStack.managedObjectContext.object(with: bookObjectId) as? Book
     }
     
+    /*
+     Gets a Subject with the given name, if it exists. Otherwise, creates a new Subject with the name.
+    */
+    func getOrCreateSubject(withName name: String) -> Subject {
+        let fetchRequest = NSFetchRequest<Subject>(entityName: subjectEntityName)
+        fetchRequest.predicate = NSPredicate(stringFieldName: "name", equalTo: name)
+        fetchRequest.fetchLimit = 1
+
+        let existingSubject = (try? coreDataStack.managedObjectContext.fetch(fetchRequest))?.first
+        if let existingSubject = existingSubject {
+            return existingSubject
+        }
+        
+        let newSubject = coreDataStack.createNew(entity: subjectEntityName) as! Subject
+        newSubject.name = name
+        return newSubject
+    }
+    
     /**
      Returns the first found book with matching GoogleBooks ID or ISBN
     */
@@ -85,7 +105,7 @@ class BooksStore {
     /**
      Gets all of the books in the store
     */
-    func getAllAsync(callback: @escaping (([Book]) -> Void), onFail: @escaping ((Error) -> Void)) {
+    func getAllBooksAsync(callback: @escaping (([Book]) -> Void), onFail: @escaping ((Error) -> Void)) {
         do {
             try coreDataStack.managedObjectContext.execute(NSAsynchronousFetchRequest(fetchRequest: self.bookFetchRequest()) {
                 callback($0.finalResult ?? [])
@@ -94,6 +114,21 @@ class BooksStore {
         catch {
             print("Error fetching objects asyncronously")
             onFail(error)
+        }
+    }
+    
+    /**
+     Gets all subjects in the store
+    */
+    func getAllSubjects() -> [Subject] {
+        let fetchRequest = NSFetchRequest<Subject>(entityName: subjectEntityName)
+        
+        do {
+            return try coreDataStack.managedObjectContext.fetch(fetchRequest)
+        }
+        catch {
+            print("Error fetching all subjects")
+            return []
         }
     }
     
@@ -123,15 +158,34 @@ class BooksStore {
     }
     
     /**
+     Populates the provided book with all the metadata from the supplied instance
+    */
+    func populateBook(_ book: Book, withMetadata metadata: BookMetadata) {
+        book.title = metadata.title!
+        book.authorList = metadata.authors!
+        book.isbn13 = metadata.isbn13
+        book.googleBooksId = metadata.googleBooksId
+        book.pageCount = metadata.pageCount as NSNumber?
+        book.publicationDate = metadata.publicationDate
+        book.bookDescription = metadata.bookDescription
+        book.coverImage = metadata.coverImage
+
+        book.removeSubjects(book.subjects.set as NSSet)
+        let newSubjectSet = metadata.subjects.map{getOrCreateSubject(withName: $0)}
+        book.addSubjects(NSOrderedSet(array: newSubjectSet))
+    }
+    
+    /**
      Creates a new Book object, populates with the provided metadata, saves the
      object context, and adds the book to the Spotlight index.
      */
     @discardableResult func create(from metadata: BookMetadata, readingInformation: BookReadingInformation, bookSort: Int? = nil, readingNotes: String? = nil) -> Book {
         let book = coreDataStack.createNew(entity: bookEntityName) as! Book
         book.createdWhen = Date()
-        book.populate(from: metadata)
+        populateBook(book, withMetadata: metadata)
         book.populate(from: readingInformation)
         book.notes = readingNotes
+        
         updateSort(book: book, requestedSort: bookSort)
         
         save()
@@ -144,7 +198,8 @@ class BooksStore {
         Saves and reindexes in spotlight.
     */
     func update(book: Book, withMetadata metadata: BookMetadata) {
-        book.populate(from: metadata)
+        populateBook(book, withMetadata: metadata)
+        
         save()
         updateSpotlightIndex(for: book)
     }
@@ -200,10 +255,20 @@ class BooksStore {
      Deletes the given book from the managed object context.
      Deindexes from Spotlight if necessary.
      */
-    func delete(_ book: Book) {
+    func deleteBook(_ book: Book) {
         coreSpotlightStack.deindexItems(withIdentifiers: [book.objectID.uriRepresentation().absoluteString])
-        coreDataStack.managedObjectContext.delete(book)
+        deleteObject(book)
         save()
+    }
+    
+    /**
+     Deletes the object and logs if in debug mode
+    */
+    func deleteObject(_ object: NSManagedObject) {
+        #if DEBUG
+            print("Deleted object with ID \(object.objectID)")
+        #endif
+        managedObjectContext.delete(object)
     }
     
     /**

@@ -82,7 +82,7 @@ class Settings: UITableViewController, NavBarConfigurer {
         
         let exporter = CsvExporter(csvExport: Book.csvExport)
         
-        appDelegate.booksStore.getAllAsync(callback: {
+        appDelegate.booksStore.getAllBooksAsync(callback: {
             exporter.addData($0)
             self.renderAndServeCsvExport(exporter)
         }, onFail: {

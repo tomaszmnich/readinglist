@@ -28,7 +28,8 @@ class BookDetailsViewModel {
         if book.publicationDate != nil {
             infoPieces.append("Published \(book.publicationDate!.toString(withDateStyle: .medium))")
         }
-        information = infoPieces.isEmpty ? nil : infoPieces.joined(separator: " • ")
+        infoPieces.append("Subjects: \(book.subjects.map{($0 as! Subject).name}.joined(separator: ", "))")
+        information = infoPieces.isEmpty ? nil : infoPieces.joined(separator: "\n")
 
         // Read state
         switch book.readState {

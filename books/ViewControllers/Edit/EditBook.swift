@@ -9,13 +9,14 @@
 import UIKit
 
 class EditBook: BookMetadataForm {
-    
     var bookToEdit: Book!
     
     @IBOutlet weak var doneButton: UIBarButtonItem!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        subjects = bookToEdit.subjects.array.map{($0 as! Subject).name}
         
         // Disable the ISBN field (disallow editing of the ISBN), and wire up the delete button
         isbnField.disabled = true
@@ -48,7 +49,7 @@ class EditBook: BookMetadataForm {
             
             // Dismiss this modal view and then delete the book
             self.dismiss(animated: true) {
-                appDelegate.booksStore.delete(self.bookToEdit)
+                appDelegate.booksStore.deleteBook(self.bookToEdit)
             }
         })
         self.present(confirmDeleteAlert, animated: true, completion: nil)
@@ -71,6 +72,7 @@ class EditBook: BookMetadataForm {
         newMetadata.title = titleFieldValue
         newMetadata.authors = authorListValue
         newMetadata.pageCount = pageCount.value
+        newMetadata.subjects = subjects
         newMetadata.publicationDate = publicationDate.value
         newMetadata.bookDescription = descriptionField.value
         newMetadata.coverImage = image.value == nil ? nil : UIImageJPEGRepresentation(image.value!, 0.7)

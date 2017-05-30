@@ -10,29 +10,48 @@ import Foundation
 import CoreData
 
 @objc(Book)
-class Book: NSManagedObject {
-    // The fields on this managed object have private setters, to enforce that the properties are internally consistent.
-    
+public class Book: NSManagedObject {   
     // Book Metadata
-    @NSManaged fileprivate(set) var title: String
-    @NSManaged fileprivate(set) var authorList: String
-    @NSManaged fileprivate(set) var isbn13: String?
-    @NSManaged fileprivate(set) var googleBooksId: String?
-    @NSManaged fileprivate(set) var pageCount: NSNumber?
-    @NSManaged fileprivate(set) var publicationDate: Date?
-    @NSManaged fileprivate(set) var bookDescription: String?
-    @NSManaged fileprivate(set) var coverImage: Data?
+    @NSManaged var title: String
+    @NSManaged var authorList: String
+    @NSManaged var isbn13: String?
+    @NSManaged var googleBooksId: String?
+    @NSManaged var pageCount: NSNumber?
+    @NSManaged var publicationDate: Date?
+    @NSManaged var bookDescription: String?
+    @NSManaged var coverImage: Data?
     
     // Reading Information
-    @NSManaged fileprivate(set) var readState: BookReadState
-    @NSManaged fileprivate(set) var startedReading: Date?
-    @NSManaged fileprivate(set) var finishedReading: Date?
-    
+    @NSManaged var readState: BookReadState
+    @NSManaged var startedReading: Date?
+    @NSManaged var finishedReading: Date?
+
     // Other Metadata
-    // TODO: Think about making these privately set, and managing its value internally
     @NSManaged var notes: String?
     @NSManaged var sort: NSNumber?
     @NSManaged var createdWhen: Date
+    
+    // Subjects
+    @NSManaged public var subjects: NSOrderedSet
+
+    @objc(addSubjects:)
+    @NSManaged public func addSubjects(_ values: NSOrderedSet)
+    
+    @objc(removeSubjects:)
+    @NSManaged public func removeSubjects(_ values: NSSet)
+}
+
+@objc(Subject)
+public class Subject: NSManagedObject {
+    @NSManaged public var name: String
+    @NSManaged public var books: NSSet
+    
+    override public func willSave() {
+        super.willSave()
+        if !isDeleted && books.count == 0 {
+            managedObjectContext?.delete(self)
+        }
+    }
 }
 
 /// The availale reading progress states
@@ -56,17 +75,6 @@ class Book: NSManagedObject {
 
 extension Book {
 
-    func populate(from metadata: BookMetadata) {
-        title = metadata.title!
-        authorList = metadata.authors!
-        isbn13 = metadata.isbn13
-        googleBooksId = metadata.googleBooksId
-        pageCount = metadata.pageCount as NSNumber?
-        publicationDate = metadata.publicationDate
-        bookDescription = metadata.bookDescription
-        coverImage = metadata.coverImage
-    }
-    
     func populate(from readingInformation: BookReadingInformation) {
         readState = readingInformation.readState
         startedReading = readingInformation.startedReading
@@ -90,7 +98,7 @@ extension Book {
     }
     
     static let deleteAction = GeneralUIAction<Book>(style: .destructive, title: "Delete") { book in
-        appDelegate.booksStore.delete(book)
+        appDelegate.booksStore.deleteBook(book)
     }
     
     static let csvExport = CsvExport<Book>(columns:
@@ -119,6 +127,7 @@ class BookMetadata {
     var bookDescription: String?
     var isbn13: String?
     var coverImage: Data?
+    var subjects = [String]()
     
     // ONLY used for import; not a usually populated field
     var coverUrl: URL?
@@ -140,6 +149,7 @@ class BookMetadata {
         self.coverImage = book.coverImage
         self.isbn13 = book.isbn13
         self.googleBooksId = book.googleBooksId
+        self.subjects = book.subjects.map{($0 as! Subject).name}
     }
     
     static func csvImport(csvData: [String: String]) -> (BookMetadata, BookReadingInformation, String?) {

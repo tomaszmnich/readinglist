@@ -3,17 +3,17 @@ PODS:
   - Crashlytics (3.8.4):
     - Fabric (~> 1.6.3)
   - DZNEmptyDataSet (1.8.1)
-  - Eureka (2.0.1)
+  - Eureka (3.0.0)
   - Fabric (1.6.11)
-  - ImageRow (1.0.0):
-    - Eureka (~> 2.0.0-beta.1)
-  - RxCocoa (3.4.0):
+  - ImageRow (2.0.0):
+    - Eureka (= 3.0)
+  - RxCocoa (3.4.1):
     - RxSwift (~> 3.4)
-  - RxSwift (3.4.0)
+  - RxSwift (3.4.1)
   - RxSwiftUtilities (1.0.1):
     - RxCocoa (~> 3.0)
     - RxSwift (~> 3.0)
-  - SimulatorStatusMagic (1.9.4)
+  - SimulatorStatusMagic (1.9.5)
   - SVProgressHUD (2.1.2)
   - SwiftyJSON (3.1.4)
 
@@ -21,9 +21,9 @@ DEPENDENCIES:
   - CHCSVParser (~> 2.1)
   - Crashlytics
   - DZNEmptyDataSet (~> 1.8)
-  - Eureka (~> 2.0)
+  - Eureka (~> 3.0)
   - Fabric
-  - ImageRow (~> 1.0)
+  - ImageRow (~> 2.0)
   - RxCocoa (~> 3.4)
   - RxSwift (~> 3.4)
   - RxSwiftUtilities (~> 1.0)
@@ -35,16 +35,16 @@ SPEC CHECKSUMS:
   CHCSVParser: 3bcc7bdb72111a31222e95d57eacceefe4e537e8
   Crashlytics: 79e236942ca1e7fc641df1feb9a275360a78ab6a
   DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
-  Eureka: ae837bb1dfae0c07bc1bda7aeef87876eeb537c2
+  Eureka: f36fd440c3ebb7bfea0a4fbe6f16a05f1cb35906
   Fabric: 5911403591946b8228ab1c51d98f1d7137e863c6
-  ImageRow: 1e37db26f61a0c4ad3bc9a3a803c32d968782857
-  RxCocoa: d14ef6b6029e1ddc6e966508c09289090de68ff9
-  RxSwift: 3789a1af753002a14edecdb698a2424624296a9c
+  ImageRow: 9dfbfa38c1e62c25d638bc40e97a48c1809443c4
+  RxCocoa: a8a5f1d061d0043e28f56976829f31ce63e8eb09
+  RxSwift: 656f8fbeca5bc372121a72d9ebdd3cd3bc0ffade
   RxSwiftUtilities: 57e77c17b885931c37aa038f114f14fd1f478ac2
-  SimulatorStatusMagic: db93f00d164d854cd5ed7b5c75f48fba3b698c20
+  SimulatorStatusMagic: b3b4c5c49a07e8b1c452cc0327275e267a865fea
   SVProgressHUD: c404a55d78acbeb7ebb78b76d3faf986475a6994
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
 
-PODFILE CHECKSUM: 10013b8b85b76e8adab9b20c2ea052ce07932302
+PODFILE CHECKSUM: e70060024998de8d2c95b5018a2b24b1205c18ae
 
 COCOAPODS: 1.2.1

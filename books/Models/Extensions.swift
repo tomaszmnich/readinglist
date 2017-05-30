@@ -188,6 +188,18 @@ extension URLComponents {
     }
 }
 
+extension Array where Element: Equatable {
+    func distinct() -> [Element] {
+        var uniqueValues: [Element] = []
+        forEach { item in
+            if !uniqueValues.contains(item) {
+                uniqueValues += [item]
+            }
+        }
+        return uniqueValues
+    }
+}
+
 extension String {
     /// Return whether the string contains any characters which are not whitespace.
     var isEmptyOrWhitespace: Bool {

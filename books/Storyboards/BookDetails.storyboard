@@ -92,7 +92,7 @@
                                                             </label>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HLi-FL-4vx">
                                                                 <rect key="frame" x="0.0" y="40" width="386" height="80.666666666666686"/>
-                                                                <mutableString key="text">Gordon Comstock has 'declared war' on what he sees as an 'overarching dependence' on money by leaving a promising job as a copywriter for an advertising company called 'New Albion'—at which he shows great dexterity—and taking a low-paying job instead, ostensibly so he can write poetry. Coming from a respectable family background in which the inherited wealth has now become dissipated, Gordon resents having to work for a living. The 'war' (and the poetry), however, aren't going particularly well and, under the stress of his 'self-imposed exile' from affluence, Gordon has become absurd, petty and deeply neurotic.</mutableString>
+                                                                <string key="text">Gordon Comstock has 'declared war' on what he sees as an 'overarching dependence' on money by leaving a promising job as a copywriter for an advertising company called 'New Albion'—at which he shows great dexterity—and taking a low-paying job instead, ostensibly so he can write poetry. Coming from a respectable family background in which the inherited wealth has now become dissipated, Gordon resents having to work for a living. The 'war' (and the poetry), however, aren't going particularly well and, under the stress of his 'self-imposed exile' from affluence, Gordon has become absurd, petty and deeply neurotic.</string>
                                                                 <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="14"/>
                                                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                                 <nil key="highlightedColor"/>
@@ -321,11 +321,30 @@
                     </navigationItem>
                     <connections>
                         <outlet property="doneButton" destination="4HG-yh-hAC" id="p2g-br-MlO"/>
+                        <segue destination="WQe-HV-kqI" kind="show" identifier="editSubjectsSegue" id="oon-bn-FaC"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Lso-V8-voX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-2289" y="1336"/>
+        </scene>
+        <!--Book Subjects Form-->
+        <scene sceneID="2wP-G5-TFo">
+            <objects>
+                <viewController id="WQe-HV-kqI" customClass="BookSubjectsForm" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="6Gh-SP-NyI"/>
+                        <viewControllerLayoutGuide type="bottom" id="c41-1i-3Og"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="hQB-uz-Pkf">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="zoo-ZQ-eOf" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1500" y="1335"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="80d-7T-d57">

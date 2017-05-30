@@ -177,7 +177,8 @@ class books_UnitTests: XCTestCase {
     }
     
     func testHumanisedDateString() {
-        XCTAssertEqual("Today", today.toShortPrettyString())
+        XCTAssertEqual("Today", today.toPrettyString(short: true))
+        XCTAssertEqual("Today", today.toPrettyString(short: false))
     }
     
     func testIsbnParsing() {
@@ -211,6 +212,8 @@ class books_UnitTests: XCTestCase {
         XCTAssertNotNil(parseResult)
         XCTAssertEqual("The Sellout", parseResult!.title)
         XCTAssertEqual("Paul Beatty", parseResult!.authors)
+        XCTAssertEqual("Fiction", parseResult!.subjects[0])
+        XCTAssertEqual("Satire", parseResult!.subjects[1])
         XCTAssertEqual(304, parseResult!.pageCount)
         XCTAssertEqual("9781786070166", parseResult!.isbn13)
         XCTAssertNotNil(parseResult!.description)
@@ -234,5 +237,62 @@ class books_UnitTests: XCTestCase {
         
         let resultsWithCover = parseResult.filter{$0.thumbnailCoverUrl != nil}.count
         XCTAssertEqual(32, resultsWithCover)
+    }
+    
+    func testCreateExistingSubjects() {
+        let sub1 = booksStore.getOrCreateSubject(withName: "Subject 1")
+        let sub2 = booksStore.getOrCreateSubject(withName: "Subject 1")
+        XCTAssertEqual(sub1.objectID, sub2.objectID)
+        
+        XCTAssertEqual(1, booksStore.getAllSubjects().count)
+    }
+    
+    func testCreateNewSubjects() {
+        let sub1 = booksStore.getOrCreateSubject(withName: "Subject 1")
+        let sub2 = booksStore.getOrCreateSubject(withName: "Subject 2")
+        XCTAssertNotEqual(sub1.objectID, sub2.objectID)
+        
+        XCTAssertEqual(2, booksStore.getAllSubjects().count)
+    }
+    
+    func testAddSubjects() {
+        let newBook = booksStore.create(from: getTestBookMetadata(), readingInformation: BookReadingInformation.toRead())
+        let sub1 = booksStore.getOrCreateSubject(withName: "Subject 1")
+        let sub2 = booksStore.getOrCreateSubject(withName: "Subject 2")
+        newBook.addSubjects(NSOrderedSet(array: [sub1, sub2]))
+        booksStore.save()
+        
+        XCTAssertEqual(2, newBook.subjects.count)
+        XCTAssertEqual("Subject 1", (newBook.subjects[0] as! Subject).name)
+        XCTAssertEqual("Subject 2", (newBook.subjects[1] as! Subject).name)
+        
+        newBook.removeSubjects(NSSet(array: [sub1, sub2]))
+        newBook.addSubjects(NSOrderedSet(array: [sub2, sub1]))
+        booksStore.save()
+        XCTAssertEqual(2, newBook.subjects.count)
+        XCTAssertEqual("Subject 2", (newBook.subjects[0] as! Subject).name)
+        XCTAssertEqual("Subject 1", (newBook.subjects[1] as! Subject).name)
+    }
+    
+    func testSubjectAutomaticDeletion() {
+        let book1Metadata = getTestBookMetadata()
+        book1Metadata.subjects = ["Subject 1"]
+        let newBook1 = booksStore.create(from: book1Metadata, readingInformation: BookReadingInformation.toRead())
+        
+        let book2Metadata = getTestBookMetadata()
+        book2Metadata.subjects = ["Subject 1"]
+        let newBook2 = booksStore.create(from: book2Metadata, readingInformation: BookReadingInformation.toRead())
+        
+        booksStore.save()
+
+        XCTAssertEqual(1, booksStore.getAllSubjects().count)
+        
+        booksStore.deleteBook(newBook1)
+        booksStore.save()
+        XCTAssertEqual(1, booksStore.getAllSubjects().count)
+        
+        booksStore.deleteBook(newBook2)
+        booksStore.save()
+        XCTAssertEqual(0, booksStore.getAllSubjects().count)
     }
 }
