@@ -33,6 +33,10 @@ public class Book: NSManagedObject {
     
     // Subjects
     @NSManaged public var subjects: NSOrderedSet
+    
+    var subjectsArray: [Subject] {
+        get { return subjects.array.map{($0 as! Subject)} }
+    }
 
     @objc(addSubjects:)
     @NSManaged public func addSubjects(_ values: NSOrderedSet)
@@ -109,6 +113,7 @@ extension Book {
         CsvColumn<Book>(header: "Page Count", cellValue: {$0.pageCount == nil ? nil : String(describing: $0.pageCount!)}),
         CsvColumn<Book>(header: "Publication Date", cellValue: {$0.publicationDate == nil ? nil : $0.publicationDate!.toString(withDateFormat: "yyyy-MM-dd")}),
         CsvColumn<Book>(header: "Description", cellValue: {$0.bookDescription}),
+        CsvColumn<Book>(header: "Subjects", cellValue: {$0.subjectsArray.map{$0.name}.joined(separator: "; ")}),
         CsvColumn<Book>(header: "Started Reading", cellValue: {$0.startedReading?.toString(withDateFormat: "yyyy-MM-dd")}),
         CsvColumn<Book>(header: "Finished Reading", cellValue: {$0.finishedReading?.toString(withDateFormat: "yyyy-MM-dd")}),
         CsvColumn<Book>(header: "Notes", cellValue: {$0.notes})
@@ -161,6 +166,7 @@ class BookMetadata {
         bookMetadata.pageCount = csvData["Page Count"] == nil ? nil : Int(csvData["Page Count"]!)
         bookMetadata.publicationDate = csvData["Publication Date"] == nil ? nil : Date(dateString: csvData["Publication Date"]!)
         bookMetadata.bookDescription = csvData["Description"]?.nilIfWhitespace()
+        bookMetadata.subjects = csvData["Subjects"]?.components(separatedBy: ";").flatMap{$0.trimming().nilIfWhitespace()} ?? []
         bookMetadata.coverUrl = URL(optionalString: csvData["Cover URL"])
         
         let startedReading = Date(dateString: csvData["Started Reading"])

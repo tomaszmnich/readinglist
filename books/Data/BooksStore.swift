@@ -272,23 +272,17 @@ class BooksStore {
     }
     
     /**
-     Deletes **all** book objects from the managed object context.
+     Deletes **all** book objects from the managed object conte][xt.
      Deindexes all items from Spotlight if necessary.
     */
     func deleteAll() {
-        let deleteRequest = NSBatchDeleteRequest(fetchRequest: bookFetchRequest() as! NSFetchRequest<NSFetchRequestResult>)
-        deleteRequest.resultType = .resultTypeObjectIDs
-        
+
         do {
-            let result = try coreDataStack.managedObjectContext.execute(deleteRequest) as? NSBatchDeleteResult
+            let results = try coreDataStack.managedObjectContext.fetch(bookFetchRequest())
+            for result in results {
+                deleteBook(result)
+            }
             save()
-            
-            // Notify the application that the objects in memory are stale and need to be refreshed
-            let objectIDArray = result?.result as? [NSManagedObjectID]
-            NSManagedObjectContext.mergeChanges(fromRemoteContextSave: [NSDeletedObjectsKey: objectIDArray as Any], into: [coreDataStack.managedObjectContext])
-            
-            // Remove all spotlight indexed items
-            coreSpotlightStack.deindexAllItems()
         }
         catch {
             print("Error deleting data: \(error)")

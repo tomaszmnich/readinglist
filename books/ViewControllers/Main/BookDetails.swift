@@ -121,7 +121,7 @@ class BookDetails: UIViewController {
             publishedLabel.isHidden = viewModel.book.publicationDate == nil
             publishedLabel.text = "Published: \(viewModel.book.publicationDate?.toPrettyString() ?? "")"
             subjectsLabel.isHidden = viewModel.book.subjects.count == 0
-            subjectsLabel.text = "Subjects: " + viewModel.book.subjects.array.map{($0 as! Subject).name}.joined(separator: "; ")
+            subjectsLabel.text = "Subjects: " + viewModel.book.subjectsArray.map{$0.name}.joined(separator: "; ")
             
             descriptionHeadingSeparator.isHidden = viewModel.book.bookDescription == nil
             descriptionStack.isHidden = viewModel.book.bookDescription == nil
@@ -139,7 +139,6 @@ class BookDetails: UIViewController {
             case .toRead:
                 changeReadState.setColor(UIColor.buttonBlue)
                 changeReadState.setTitle("Start", for: .normal)
-            
             case .reading:
                 changeReadState.setColor(UIColor.flatGreen)
                 changeReadState.setTitle("Finish", for: .normal)
