@@ -9,6 +9,7 @@
 import UIKit
 import CoreData
 import CoreSpotlight
+import SVProgressHUD
 
 class BookDetailsViewModel {
     let book: Book
@@ -234,6 +235,19 @@ class BookDetails: UIViewController {
         
         optionsAlert.addAction(UIAlertAction(title: "Open on Google Books", style: .default) { _ in
             UIApplication.shared.openURL(GoogleBooks.Request.webpage(googleBooksId).url)
+        })
+        optionsAlert.addAction(UIAlertAction(title: "Update from Google Books", style: .default) { _ in
+            SVProgressHUD.show(withStatus: "Downloading...")
+            GoogleBooks.fetch(googleBooksId: googleBooksId) { [unowned self] fetchResultPage in
+                DispatchQueue.main.async {
+                    SVProgressHUD.dismiss()
+                    guard fetchResultPage.result.isSuccess else {
+                        SVProgressHUD.showError(withStatus: "Could not update book details")
+                        return
+                    }
+                    appDelegate.booksStore.update(book: self.viewModel!.book, withMetadata: fetchResultPage.result.value!.toBookMetadata())
+                }
+            }
         })
         optionsAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         
