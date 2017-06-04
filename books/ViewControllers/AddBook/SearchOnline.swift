@@ -33,7 +33,7 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
         tableView.emptyDataSetSource = self
         
         // The search bar delegate is used only to dismiss the keyboard when Done is pressed
-        searchBar.returnKeyType = .done
+        searchBar.returnKeyType = .search
         searchBar.delegate = self
         searchBar.text = initialSearchString
         
@@ -49,37 +49,42 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
         // Activity drives the spinner
         indicator.drive(spinner.rx.isAnimating).addDisposableTo(disposeBag)
         
-        func shouldPerformSearch(searchText: String) -> Bool {
-            return !searchText.isEmptyOrWhitespace && searchText.characters.count > 3
-        }
-        
-        // Map the search bar text to a google books search, and bind the result to the table cells
-        let searchResultsPage = searchBar.rx.text
-            .orEmpty
-            .throttle(2, scheduler: MainScheduler.instance)
-            .distinctUntilChanged{$0.trimming() == $1.trimming()}
+        // Map the click of the Search button (when there is non whitespace text)
+        // to a google books searchcells
+        let searchResults = searchBar.rx.searchButtonClicked
             .observeOn(ConcurrentDispatchQueueScheduler(qos: .userInitiated))
-            .flatMapLatest { [unowned self] searchText in
-                // Blank search terms produce empty array...
-                !shouldPerformSearch(searchText: searchText) ? Observable.just(GoogleBooks.SearchResultsPage.empty(fromSearchText: searchText)) :
-                    
-                    // Otherwise, search on the Google API
-                    GoogleBooks.searchTextObservable(searchText)
-                        .observeOn(MainScheduler.instance)
-                        .trackActivity(self.indicator)
+            .flatMapLatest { [unowned self] in
+                
+                self.searchBar.text?.isEmptyOrWhitespace == false ?
+                
+                // Search on the Google API
+                GoogleBooks.searchTextObservable(self.searchBar.text!)
+                    .observeOn(MainScheduler.instance)
+                    .trackActivity(self.indicator)
+                
+                : Observable.just(GoogleBooks.SearchResultsPage.empty())
             }
             .shareReplay(1)
         
+        // The Clear Result button should map to an empty set of results. Hook into the text observable
+        // and filter to only include the events where the text box is empty
+        let clearResults = searchBar.rx.text.orEmpty
+            .observeOn(ConcurrentDispatchQueueScheduler(qos: .userInitiated))
+            .filter { return $0.isEmpty }
+            .map { _ in GoogleBooks.SearchResultsPage.empty() }
+            .shareReplay(1)
+        
+        let aggregateResults = Observable.merge([searchResults, clearResults])
         
         // Map the sucess/failure state to the reason property on the empty data set
-        searchResultsPage
+        aggregateResults
             .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [unowned self] resultPage in
                 if !resultPage.searchResults.isSuccess {
                     NSLog("Error searching online: \(resultPage.searchResults.error!.localizedDescription)")
                     self.setEmptyDatasetReason(.error)
                 }
-                else if !shouldPerformSearch(searchText: resultPage.searchText) {
+                else if resultPage.searchText?.isEmptyOrWhitespace != false {
                     self.setEmptyDatasetReason(.noSearch)
                 }
                 else {
@@ -94,14 +99,14 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
         tableView.tableFooterView = poweredByGoogle
         tableView.tableFooterView!.isHidden = true
         
-        searchResultsPage.map{ ($0.searchResults.value?.count ?? 0) == 0 }
+        aggregateResults.map{ ($0.searchResults.value?.count ?? 0) == 0 }
             .asDriver(onErrorJustReturn: true)
             .drive(tableView.tableFooterView!.rx.isHidden)
             .addDisposableTo(disposeBag)
         
         // Map the actual results to SearchResultViewModel items (or empty if failure)
         // and use them to drive the table cells
-        searchResultsPage.map { ($0.searchResults.value ?? []).map(SearchResultViewModel.init) }
+        aggregateResults.map { ($0.searchResults.value ?? []).map(SearchResultViewModel.init) }
             .asDriver(onErrorJustReturn: [])
             .drive(tableView.rx.items(cellIdentifier: "SearchResultCell", cellType: SearchResultCell.self)) { _, viewModel, cell in
                 cell.viewModel = viewModel
@@ -231,7 +236,7 @@ class SearchBooksEmptyDataset: UIView {
         get {
             switch reason {
             case .noSearch:
-                return "Type anything to start searching: a title, an author, an ISBN - or a mixture!"
+                return "Search books by title, author, ISBN - or a mixture!"
             case .noResults:
                 return "There were no Google Books search results. Try changing your search text."
             case .error:
