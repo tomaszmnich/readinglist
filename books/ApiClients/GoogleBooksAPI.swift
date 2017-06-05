@@ -173,12 +173,10 @@ class GoogleBooks {
         
         private static let searchResultFields = "items(id,volumeInfo(title,authors,industryIdentifiers,imageLinks/thumbnail))"
         private static let apiKey = "AIzaSyAN64W_QrynoqZB3Sxdm1PudVOdjvU69Qo"
-        #if DEBUG
+        // The API Key is limited to 1000 requests per day. Removed the real-time search
+        // feature - hopefully searching without an API key is possible now.
         private static let useApiKey = false
-        #else
-        private static let useApiKey = true
-        #endif
-        
+
         var url: URL {
             switch self{
             case let .searchText(searchString):

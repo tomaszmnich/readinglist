@@ -85,6 +85,7 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
                     self.setEmptyDatasetReason(.error)
                 }
                 else if resultPage.searchText?.isEmptyOrWhitespace != false {
+                    self.tableView.setContentOffset(CGPoint.zero, animated: false)
                     self.setEmptyDatasetReason(.noSearch)
                 }
                 else {
