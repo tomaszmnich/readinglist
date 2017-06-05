@@ -173,18 +173,23 @@ class GoogleBooks {
         
         private static let searchResultFields = "items(id,volumeInfo(title,authors,industryIdentifiers,categories,imageLinks/thumbnail))"
         private static let apiKey = "AIzaSyAN64W_QrynoqZB3Sxdm1PudVOdjvU69Qo"
-        
+        // The API Key is limited to 1000 requests per day. Removed the real-time search
+        // feature - hopefully searching without an API key is possible now.
+        private static let useApiKey = false
+
         var url: URL {
             switch self{
             case let .searchText(searchString):
                 let encodedQuery = searchString.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-                return URL(string: "/books/v1/volumes?q=\(encodedQuery)&maxResults=40&fields=\(Request.searchResultFields)&key=\(Request.apiKey)", relativeTo: Request.apiBaseUrl)!
+                let relativeUrl = "/books/v1/volumes?q=\(encodedQuery)&maxResults=40&fields=\(Request.searchResultFields)\(Request.useApiKey ? "&key=\(Request.apiKey)" : "")"
+                return URL(string: relativeUrl, relativeTo: Request.apiBaseUrl)!
                 
             case let .searchIsbn(isbn):
-                return URL(string: "/books/v1/volumes?q=isbn:\(isbn)&maxResults=1&fields=\(Request.searchResultFields)&key=\(Request.apiKey)", relativeTo: Request.apiBaseUrl)!
+                let relativeUrl = "/books/v1/volumes?q=isbn:\(isbn)&maxResults=40&fields=\(Request.searchResultFields)\(Request.useApiKey ? "&key=\(Request.apiKey)" : "")"
+                return URL(string: relativeUrl, relativeTo: Request.apiBaseUrl)!
                 
             case let .fetch(id):
-                return URL(string: "/books/v1/volumes/\(id)?key=\(Request.apiKey)", relativeTo: Request.apiBaseUrl)!
+                return URL(string: "/books/v1/volumes/\(id)\(Request.useApiKey ? "?key=\(Request.apiKey)" : "")", relativeTo: Request.apiBaseUrl)!
             
             case let .coverImage(googleBooksId, coverType):
                 return URL(string: "/books/content?id=\(googleBooksId)&printsec=frontcover&img=1&zoom=\(coverType.rawValue)", relativeTo: Request.googleBooksBaseUrl)!
@@ -328,9 +333,9 @@ class GoogleBooks {
     
     class SearchResultsPage {
         let searchResults: Result<[SearchResult]>
-        let searchText: String
+        let searchText: String?
         
-        init(_ results: Result<[SearchResult]>, fromSearchText searchText: String) {
+        init(_ results: Result<[SearchResult]>, fromSearchText searchText: String?) {
             self.searchText = searchText
             self.searchResults = results
         }
@@ -339,8 +344,8 @@ class GoogleBooks {
             self.init(Result.success(results), fromSearchText: searchText)
         }
         
-        static func empty(fromSearchText searchText: String) -> SearchResultsPage {
-            return SearchResultsPage(Result.success([]), fromSearchText: searchText)
+        static func empty() -> SearchResultsPage {
+            return SearchResultsPage(Result.success([]), fromSearchText: nil)
         }
         
         static func error(_ error: Error, fromSearchText searchText: String) -> SearchResultsPage {

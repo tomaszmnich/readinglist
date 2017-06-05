@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="o9x-cb-ys2">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="o9x-cb-ys2">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -40,55 +40,55 @@
                         <subviews>
                             <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="Vde-59-8Z3">
                                 <rect key="frame" x="0.0" y="64" width="375" height="44"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="words" returnKeyType="done"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="words" returnKeyType="search"/>
                             </searchBar>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="81" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="1nj-su-2IL">
                                 <rect key="frame" x="0.0" y="108" width="375" height="559"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="0.0" reuseIdentifier="SearchResultCell" rowHeight="92" id="OA2-yq-v9U" customClass="SearchResultCell" customModule="Reading_List" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="0.0" reuseIdentifier="SearchResultCell" rowHeight="92" id="Ird-Fu-Ttz" customClass="SearchResultCell" customModule="Reading_List" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="18" width="375" height="92"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="OA2-yq-v9U" id="2aQ-go-24X">
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Ird-Fu-Ttz" id="g5T-kg-ooX">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="91.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bs5-Gi-0Ag">
-                                                    <rect key="frame" x="63" y="8" width="296" height="18"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qYu-gm-jJs">
+                                                    <rect key="frame" x="63" y="8" width="296" height="20"/>
                                                     <accessibility key="accessibilityConfiguration" identifier="title"/>
-                                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
-                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="pLh-fq-Whs">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="a7E-QL-seR">
                                                     <rect key="frame" x="4" y="4" width="51" height="83"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" secondItem="pLh-fq-Whs" secondAttribute="height" multiplier="1:1.6" id="C3e-In-4b5"/>
+                                                        <constraint firstAttribute="width" secondItem="a7E-QL-seR" secondAttribute="height" multiplier="1:1.6" id="xEy-xQ-XS8"/>
                                                     </constraints>
                                                 </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Authors" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FRa-pU-Zdo">
-                                                    <rect key="frame" x="63" y="26" width="296" height="16"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                                    <nil key="textColor"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Authors" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cJM-8E-mwt">
+                                                    <rect key="frame" x="63" y="28" width="296" height="17.5"/>
+                                                    <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="15"/>
+                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="bs5-Gi-0Ag" firstAttribute="top" secondItem="2aQ-go-24X" secondAttribute="topMargin" id="9mR-Ww-nOb"/>
-                                                <constraint firstAttribute="bottom" secondItem="pLh-fq-Whs" secondAttribute="bottom" constant="4" id="A8u-5l-OZi"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="FRa-pU-Zdo" secondAttribute="trailing" constant="8" id="SBJ-nx-rb9"/>
-                                                <constraint firstItem="pLh-fq-Whs" firstAttribute="leading" secondItem="2aQ-go-24X" secondAttribute="leading" constant="4" id="Vi4-xH-v3b"/>
-                                                <constraint firstItem="FRa-pU-Zdo" firstAttribute="top" secondItem="bs5-Gi-0Ag" secondAttribute="bottom" id="XCz-WM-lYb"/>
-                                                <constraint firstItem="bs5-Gi-0Ag" firstAttribute="leading" secondItem="pLh-fq-Whs" secondAttribute="trailing" constant="8" id="b9n-gT-ICH"/>
-                                                <constraint firstItem="pLh-fq-Whs" firstAttribute="top" secondItem="2aQ-go-24X" secondAttribute="top" constant="4" id="bjF-pU-7Wa"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="bs5-Gi-0Ag" secondAttribute="trailing" constant="8" id="dE8-0d-acG"/>
-                                                <constraint firstItem="FRa-pU-Zdo" firstAttribute="leading" secondItem="bs5-Gi-0Ag" secondAttribute="leading" id="jnA-d5-N8N"/>
+                                                <constraint firstItem="a7E-QL-seR" firstAttribute="leading" secondItem="g5T-kg-ooX" secondAttribute="leading" constant="4" id="1wc-PL-aao"/>
+                                                <constraint firstItem="qYu-gm-jJs" firstAttribute="top" secondItem="g5T-kg-ooX" secondAttribute="topMargin" id="JjV-jV-QzK"/>
+                                                <constraint firstAttribute="bottom" secondItem="a7E-QL-seR" secondAttribute="bottom" constant="4" id="KWS-0Z-TuL"/>
+                                                <constraint firstItem="qYu-gm-jJs" firstAttribute="leading" secondItem="a7E-QL-seR" secondAttribute="trailing" constant="8" id="PF4-5A-7h4"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="qYu-gm-jJs" secondAttribute="trailing" constant="8" id="YLH-Mu-Dus"/>
+                                                <constraint firstItem="a7E-QL-seR" firstAttribute="top" secondItem="g5T-kg-ooX" secondAttribute="top" constant="4" id="aVt-2l-SYO"/>
+                                                <constraint firstItem="cJM-8E-mwt" firstAttribute="leading" secondItem="qYu-gm-jJs" secondAttribute="leading" id="ewy-Ve-brk"/>
+                                                <constraint firstItem="cJM-8E-mwt" firstAttribute="trailing" secondItem="qYu-gm-jJs" secondAttribute="trailing" id="kUG-A8-cPC"/>
+                                                <constraint firstItem="cJM-8E-mwt" firstAttribute="top" secondItem="qYu-gm-jJs" secondAttribute="bottom" id="lXA-PJ-8id"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="authorOutlet" destination="FRa-pU-Zdo" id="ZAv-9B-dPM"/>
-                                            <outlet property="imageOutlet" destination="pLh-fq-Whs" id="Ati-EC-nV5"/>
-                                            <outlet property="titleOutlet" destination="bs5-Gi-0Ag" id="dG9-3a-AP7"/>
+                                            <outlet property="authorOutlet" destination="cJM-8E-mwt" id="1d1-jy-sh3"/>
+                                            <outlet property="imageOutlet" destination="a7E-QL-seR" id="UUF-pP-0kQ"/>
+                                            <outlet property="titleOutlet" destination="qYu-gm-jJs" id="kXM-rd-uPg"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
