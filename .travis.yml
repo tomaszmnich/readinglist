@@ -5,4 +5,4 @@ before_install:
 xcode_workspace: books.xcworkspace
 xcode_scheme: books
 script:
-  - xcodebuild test -workspace books.xcworkspace -scheme books -destination 'platform=iOS Simulator,name=iPhone 7,OS=10.3' CODE_SIGNING_REQUIRED=NO
+  - xcodebuild test -workspace books.xcworkspace -scheme books -destination 'platform=iOS Simulator,name=iPhone 7,OS=10.3.1' CODE_SIGNING_REQUIRED=NO
