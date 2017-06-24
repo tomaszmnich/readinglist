@@ -87,37 +87,50 @@ class books_UITests: XCTestCase {
         app.navigationBars["iCloud Drive"].buttons["Cancel"].tap()
     }
     
-    func testBarcodeScanner() {
+    private func scanBarcode(app: ReadingListApplication, mode: BarcodeScanSimulation) {
+        app.setBarcodeSimulation(mode)
+        app.clickTab(.toRead)
+        
+        app.navigationBars["To Read"].buttons["Add"].tap()
+        app.sheets.buttons["Scan Barcode"].tap()
+    }
+    
+    func testBarcodeScannerNormal() {
         let app = ReadingListApplication()
         
-        func scanBarcode(mode: BarcodeScanSimulation) {
-            app.setBarcodeSimulation(mode)
-            app.clickTab(.toRead)
-        
-            app.navigationBars["To Read"].buttons["Add"].tap()
-            app.sheets.buttons["Scan Barcode"].tap()
-        }
-        
         // Normal mode
-        scanBarcode(mode: .normal)
+        scanBarcode(app: app, mode: .normal)
         sleep(1)
         app.topNavBar.buttons["Cancel"].tap()
+    }
+    
+    func testBarcodeScannerNoPermissions() {
+        let app = ReadingListApplication()
         
         // No permissions
-        scanBarcode(mode: .noCameraPermissions)
+        scanBarcode(app: app, mode: .noCameraPermissions)
         sleep(1)
         XCTAssertEqual(app.alerts.count, 1)
         let permissionAlert = app.alerts.element(boundBy: 0)
         XCTAssertEqual("Permission Required", permissionAlert.label)
         permissionAlert.buttons["Cancel"].tap()
+    }
+    
+    func testBarcodeScannerValidIsbn() {
+        let app = ReadingListApplication()
         
         // Valid ISBN
-        scanBarcode(mode: .validIsbn)
+        scanBarcode(app: app, mode: .validIsbn)
         sleep(5)
         app.topNavBar.buttons["Done"].tap()
         
+    }
+    
+    func testBarcodeScannerNotFoundIsbn() {
+        let app = ReadingListApplication()
+        
         // Not found ISBN
-        scanBarcode(mode: .unfoundIsbn)
+        scanBarcode(app: app, mode: .unfoundIsbn)
         sleep(2)
         XCTAssertEqual(app.alerts.count, 1)
         let noMatchAlert = app.alerts.element(boundBy: 0)
@@ -125,8 +138,13 @@ class books_UITests: XCTestCase {
         noMatchAlert.buttons["No"].tap()
         app.topNavBar.buttons["Cancel"].tap()
         
+    }
+    
+    func testBarcodeScannerExistingIsbn() {
+        let app = ReadingListApplication()
+        
         // Existing ISBN
-        scanBarcode(mode: .existingIsbn)
+        scanBarcode(app: app, mode: .existingIsbn)
         sleep(1)
         XCTAssertEqual(app.alerts.count, 1)
         let duplicateAlert = app.alerts.element(boundBy: 0)
