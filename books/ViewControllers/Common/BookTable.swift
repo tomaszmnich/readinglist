@@ -211,11 +211,18 @@ class BookTable: AutoUpdatingTableViewController {
             
             let bookToDelete = getBookFromIndexPath(rowAction: rowAction, indexPath: indexPath)
             let confirmDeleteAlert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-            confirmDeleteAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-            confirmDeleteAlert.addAction(UIAlertAction(title: "Delete", style: .destructive) { _ in
+            // TODO: Can't work out how to setup the popover presentation controller for iPad.
+            // Don't bother with the confirm delete alert for iPad
+            if confirmDeleteAlert.popoverPresentationController != nil {
                 appDelegate.booksStore.deleteBook(bookToDelete)
-            })
-            self.present(confirmDeleteAlert, animated: true, completion: nil)
+            }
+            else {
+                confirmDeleteAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+                confirmDeleteAlert.addAction(UIAlertAction(title: "Delete", style: .destructive) { _ in
+                    appDelegate.booksStore.deleteBook(bookToDelete)
+                })
+                self.present(confirmDeleteAlert, animated: true, completion: nil)
+            }
         }]
         
         // Add the other state change actions where appropriate
