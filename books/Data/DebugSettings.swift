@@ -71,4 +71,38 @@ class DebugSettings {
             #endif
         }
     }
+    
+    private static let showSortNumberKey = "showSortNumber"
+    
+    static var showSortNumber: Bool {
+        get {
+            #if DEBUG
+                return UserDefaults.standard.value(forKey: showSortNumberKey) as? Bool ?? false
+            #else
+                return false
+            #endif
+        }
+        set {
+            #if DEBUG
+                UserDefaults.standard.setValue(newValue, forKey: showSortNumberKey)
+            #endif
+        }
+    }
+    
+    private static let showCellReloadControlKey = "showCellReloadControl"
+    
+    static var showCellReloadControl: Bool {
+        get {
+            #if DEBUG
+                return UserDefaults.standard.value(forKey: showCellReloadControlKey) as? Bool ?? false
+            #else
+                return false
+            #endif
+        }
+        set {
+            #if DEBUG
+                UserDefaults.standard.setValue(newValue, forKey: showCellReloadControlKey)
+            #endif
+        }
+    }
 }

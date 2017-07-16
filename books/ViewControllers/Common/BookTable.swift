@@ -38,6 +38,12 @@ class BookTableViewCell: UITableViewCell, ConfigurableCell {
         else {
             readTimeLabel.text = nil
         }
+        
+        #if DEBUG
+            if DebugSettings.showSortNumber {
+                titleLabel.text =  "(" + (book.sort?.stringValue ?? "none") + ") " + book.title
+            }
+        #endif
     }
 }
 
@@ -236,6 +242,16 @@ class BookTable: AutoUpdatingTableViewController {
             transitionToFinished.backgroundColor = UIColor.flatGreen
             rowActions.append(transitionToFinished)
         }
+        
+        #if DEBUG
+            if DebugSettings.showCellReloadControl {
+                let reloadCell = UITableViewRowAction(style: .default, title: "Reload") {[unowned self] _, indexPath in
+                    self.tableView.reloadRows(at: [indexPath], with: .none)
+                }
+                reloadCell.backgroundColor = UIColor.gray
+                rowActions.append(reloadCell)
+            }
+        #endif
         
         return rowActions
     }

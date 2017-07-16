@@ -241,13 +241,16 @@ class BooksStore {
      Saves the managedObjectContext and suppresses any errors.
      Is automatically called by the Update and Create functions.
     */
-    func save() {
+    @discardableResult
+    func save() -> Bool {
         // TODO: Find a way to make this method private, if possible
         do {
             try coreDataStack.managedObjectContext.save()
+            return true
         }
         catch {
             print("Error saving context: \(error)")
+            return false
         }
     }
     

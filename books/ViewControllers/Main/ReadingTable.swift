@@ -55,25 +55,46 @@ class ReadingTable: BookTable, NavBarConfigurer {
         guard sourceIndexPath.row != destinationIndexPath.row else { return }
         
         // Calculate the ordering of the two rows involved
-        let itemMovedDown = sourceIndexPath.row < destinationIndexPath.row
-        let firstRow = itemMovedDown ? sourceIndexPath.row : destinationIndexPath.row
-        let lastRow = itemMovedDown ? destinationIndexPath.row : sourceIndexPath.row
+        let itemWasMovedDown = sourceIndexPath.row < destinationIndexPath.row
+        let topRow = itemWasMovedDown ? sourceIndexPath.row : destinationIndexPath.row
+        let bottomRow = itemWasMovedDown ? destinationIndexPath.row : sourceIndexPath.row
         
         // Move the objects to reflect the rows
         var objectsInSection = resultsController.sections![toReadSectionIndex].objects!
         let movedObj = objectsInSection.remove(at: sourceIndexPath.row)
         objectsInSection.insert(movedObj, at: destinationIndexPath.row)
         
-        // Update the model to reflect the objects's positions
-        for rowNumber in firstRow...lastRow {
+        // Update the model sort indexes. The lowest sort number should be the sort of the book immediately
+        // above the range, plus 1, or - if the range starts at the top - 0.
+        var sortIndex: Int
+        if topRow == 0 {
+            sortIndex = 0
+        }
+        else {
+            sortIndex = (objectsInSection[topRow - 1] as! Book).sort!.intValue + 1
+        }
+        for rowNumber in topRow...bottomRow {
             let book = objectsInSection[rowNumber] as! Book
-            book.sort = rowNumber as NSNumber?
+            book.sort = NSNumber(integerLiteral: sortIndex)
+            sortIndex += 1
         }
         
         // Turn off updates while we save the object context
         tableUpdater.withoutUpdates {
-            appDelegate.booksStore.save()
-            try? resultsController.performFetch()
+            if appDelegate.booksStore.save() {
+                do {
+                    try resultsController.performFetch()
+                }
+                catch {
+                    // If the fetch failed and the cells are not in the position which the result controller thinks
+                    // they are, refresh the table. This will put the cells back where they "should" be.
+                    tableView.reloadData()
+                }
+            }
+            else {
+                // If the save failed, revert the cells
+                tableView.reloadData()
+            }
         }
     }
     

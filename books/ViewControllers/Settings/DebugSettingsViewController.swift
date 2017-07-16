@@ -59,7 +59,23 @@ class DebugSettingsViewController: FormViewController {
                 }
             })
         }
-        form.append(simulationOptions)
+        form +++ simulationOptions
+        
+        form +++ Section("Debug Controls")
+            <<< SwitchRow() {
+                $0.title = "Show sort number"
+                $0.value = DebugSettings.showSortNumber
+                $0.onChange {
+                    DebugSettings.showSortNumber = $0.value ?? false
+                }
+            }
+            <<< SwitchRow() {
+                $0.title = "Show cell reload control"
+                $0.value = DebugSettings.showCellReloadControl
+                $0.onChange {
+                    DebugSettings.showCellReloadControl = $0.value ?? false
+                }
+        }
     }
     
     func loadTestData() {
