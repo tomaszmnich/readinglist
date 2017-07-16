@@ -1,7 +1,7 @@
 ---
 layout: default
 ---
-<h1 style="line-height: 95px; margin-bottom: 30px;">
+<h1>
   <img src="https://raw.githubusercontent.com/AndrewBennet/readinglist/master/media/AppIcon.png"
   alt="App icon" style="width: 100px; float: left; padding-right: 10px;" />
   Reading List
