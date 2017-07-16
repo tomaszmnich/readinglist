@@ -68,7 +68,7 @@ class ReadingListApplication : XCUIApplication {
         }
     }
     
-    func toggleBarcodeScanFixedImage() {
+    func togglePrettyStatusBar() {
         clickTab(.settings)
         tables.cells.staticTexts["Debug Settings"].tap()
         
@@ -78,7 +78,7 @@ class ReadingListApplication : XCUIApplication {
         }
     }
     
-    func togglePrettyStatusBar() {
+    func toggleBarcodeScanFixedImage() {
         clickTab(.settings)
         tables.cells.staticTexts["Debug Settings"].tap()
         

@@ -30,6 +30,7 @@ class books_Snapshot: XCTestCase {
     override func tearDown() {
         let app = ReadingListApplication()
         app.toggleBarcodeScanFixedImage()
+        app.togglePrettyStatusBar()
         super.tearDown()
     }
     
