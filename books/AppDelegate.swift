@@ -12,8 +12,7 @@ import Fabric
 import Crashlytics
 
 let productBundleIdentifier = "com.andrewbennet.books"
-let appleAppId = "1217139955"
- 
+
 var appDelegate: AppDelegate {
     return UIApplication.shared.delegate as! AppDelegate
 }
