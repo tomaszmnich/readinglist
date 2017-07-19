@@ -9,6 +9,8 @@
 import UIKit
 import AVFoundation
 import SVProgressHUD
+import Fabric
+import Crashlytics
 
 class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     
@@ -141,6 +143,9 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     func respondToCapturedIsbn(_ isbn: String) {
         // Since we have a result, stop the session and hide the preview
         session?.stopRunning()
+        
+        // Event logging
+        Answers.logCustomEvent(withName: "Scan Barcode", customAttributes: [:])
         
         // Check that the book hasn't already been added
         if let existingBook = appDelegate.booksStore.getIfExists(isbn: isbn) {

@@ -10,6 +10,8 @@ import Foundation
 import UIKit
 import Eureka
 import SVProgressHUD
+import Fabric
+import Crashlytics
 
 class ImportDataViewController : FormViewController, UIDocumentPickerDelegate, UIDocumentMenuDelegate {
     
@@ -60,6 +62,7 @@ class ImportDataViewController : FormViewController, UIDocumentPickerDelegate, U
     
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentAt url: URL) {
         SVProgressHUD.show(withStatus: "Importing")
+        Answers.logCustomEvent(withName: "CSV Import", customAttributes: [:])
         
         // We may want to download book cover images
         let shouldSupplementBooks = form.values()[downloadImagesKey] as! Bool

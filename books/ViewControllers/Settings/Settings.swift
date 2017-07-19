@@ -9,6 +9,8 @@
 import UIKit
 import Foundation
 import SVProgressHUD
+import Crashlytics
+import Fabric
 
 class Settings: UITableViewController, NavBarConfigurer {
     
@@ -78,6 +80,7 @@ class Settings: UITableViewController, NavBarConfigurer {
     }
     
     func exportData() {
+        Answers.logCustomEvent(withName: "CSV Export", customAttributes: [:])
         SVProgressHUD.show(withStatus: "Generating...")
         
         let exporter = CsvExporter(csvExport: Book.csvExport)

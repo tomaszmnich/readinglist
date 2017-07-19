@@ -13,6 +13,8 @@ import RxCocoa
 import RxSwiftUtilities
 import SVProgressHUD
 import DZNEmptyDataSet
+import Fabric
+import Crashlytics
 
 class SearchOnline: UIViewController, UISearchBarDelegate {
     
@@ -134,6 +136,8 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
     }
     
     func onModelSelected(_ model: SearchResultViewModel) {
+        Answers.logCustomEvent(withName: "Search Online", customAttributes: [:])
+        
         // Duplicate check
         if let existingBook = appDelegate.booksStore.getIfExists(googleBooksId: model.googleBooksId, isbn: model.isbn13) {
             

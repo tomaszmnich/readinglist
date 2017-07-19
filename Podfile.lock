@@ -1,15 +1,15 @@
 PODS:
   - CHCSVParser (2.1.0)
-  - Crashlytics (3.8.4):
+  - Crashlytics (3.8.5):
     - Fabric (~> 1.6.3)
   - DZNEmptyDataSet (1.8.1)
   - Eureka (3.0.0)
-  - Fabric (1.6.11)
+  - Fabric (1.6.12)
   - ImageRow (2.0.0):
     - Eureka (= 3.0)
-  - RxCocoa (3.4.1):
-    - RxSwift (~> 3.4)
-  - RxSwift (3.4.1)
+  - RxCocoa (3.6.0):
+    - RxSwift (~> 3.6)
+  - RxSwift (3.6.0)
   - RxSwiftUtilities (1.0.1):
     - RxCocoa (~> 3.0)
     - RxSwift (~> 3.0)
@@ -33,13 +33,13 @@ DEPENDENCIES:
 
 SPEC CHECKSUMS:
   CHCSVParser: 3bcc7bdb72111a31222e95d57eacceefe4e537e8
-  Crashlytics: 79e236942ca1e7fc641df1feb9a275360a78ab6a
+  Crashlytics: dfbae35ef22ca189240d230ad501feea4ee85d2d
   DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
   Eureka: f36fd440c3ebb7bfea0a4fbe6f16a05f1cb35906
-  Fabric: 5911403591946b8228ab1c51d98f1d7137e863c6
+  Fabric: f050464eac45a2ce5a8e6e6a07e977c0df32fe28
   ImageRow: 9dfbfa38c1e62c25d638bc40e97a48c1809443c4
-  RxCocoa: a8a5f1d061d0043e28f56976829f31ce63e8eb09
-  RxSwift: 656f8fbeca5bc372121a72d9ebdd3cd3bc0ffade
+  RxCocoa: cb865569239ebf1b1434056e5c8859d99dff103a
+  RxSwift: a0925c7fb11fbe60055285f6f2062241aa37a175
   RxSwiftUtilities: 57e77c17b885931c37aa038f114f14fd1f478ac2
   SimulatorStatusMagic: b3b4c5c49a07e8b1c452cc0327275e267a865fea
   SVProgressHUD: c404a55d78acbeb7ebb78b76d3faf986475a6994
