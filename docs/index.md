@@ -29,4 +29,4 @@ Reading List is free and [open source](https://github.com/AndrewBennet/readingli
 
 ## Author
 
-Andrew Bennet ([GitHub](https://github.com/AndrewBennet)).
+Andrew Bennet ([GitHub](https://github.com/AndrewBennet), [Twitter](https://twitter.com/AndrewBennet)).
