@@ -11,8 +11,9 @@ import Foundation
 import SVProgressHUD
 import Crashlytics
 import Fabric
+import MessageUI
 
-class Settings: UITableViewController, NavBarConfigurer {
+class Settings: UITableViewController, NavBarConfigurer, MFMailComposeViewControllerDelegate {
     
     var navBarChangedDelegate: NavBarChangedDelegate!
     
@@ -45,11 +46,17 @@ class Settings: UITableViewController, NavBarConfigurer {
         case (0, 1):
             // "Rate"
             UIApplication.shared.openUrlPlatformSpecific(url: URL(string: "itms-apps://appsto.re/gb/ZtbJib.i?action=write-review")!)
+        case (0, 2):
+            // "Feedback"
+            sendFeedbackEmail()
             
         case (1, 0):
             exportData()
         case (1, 2):
             deleteAllData()
+            
+        case (2, 0):
+            UIApplication.shared.openUrlPlatformSpecific(url: URL(string: "https://github.com/AndrewBennet/readinglist")!)
 
         default:
             break
@@ -132,5 +139,41 @@ class Settings: UITableViewController, NavBarConfigurer {
                 self.present(activityViewController, animated: true, completion: nil)
             }
         }
+    }
+    
+    func sendFeedbackEmail() {
+        let toEmail = "readinglist@andrewbennet.com"
+        if MFMailComposeViewController.canSendMail() {
+
+            let appDisplayVersion: String
+            if let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"],
+                let buildVersion = Bundle.main.infoDictionary?["CFBundleVersion"] {
+                appDisplayVersion = "v\(appVersion) (\(buildVersion))"
+            }
+            else {
+                appDisplayVersion = "Unknown"
+            }
+            
+            let mailComposer = MFMailComposeViewController()
+            mailComposer.mailComposeDelegate = self
+            mailComposer.setToRecipients([toEmail])
+            mailComposer.setSubject("Reading List \(appDisplayVersion) Feedback")
+            let messageBody = "\n\n\n" +
+                "Reading List\n" +
+                "App Version: \(appDisplayVersion)\n" +
+                "iOS Version: \(UIDevice.current.systemVersion)\n" +
+                "Device: \(UIDevice.current.model)"
+            mailComposer.setMessageBody(messageBody, isHTML: false)
+            self.present(mailComposer, animated: true)
+        }
+        else {
+            let alert = UIAlertController(title: "Can't send email", message: "Couldn't find any email accounts. If you *really* want to give feedback, email \(toEmail). Thanks!", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default))
+            self.present(alert, animated: true)
+        }
+    }
+    
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        self.dismiss(animated: true)
     }
 }
