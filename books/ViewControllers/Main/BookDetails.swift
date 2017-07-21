@@ -10,6 +10,7 @@ import UIKit
 import CoreData
 import CoreSpotlight
 import SVProgressHUD
+import StoreKit
 
 class BookDetailsViewModel {
     let book: Book
@@ -161,6 +162,10 @@ class BookDetails: UIViewController {
             readingInfo = BookReadingInformation.finished(started: viewModel.book.startedReading!, finished: Date())
         }
         appDelegate.booksStore.update(book: viewModel.book, withReadingInformation: readingInfo)
+        
+        if #available(iOS 10.3, *) {
+            SKStoreReviewController.requestReview()
+        }
     }
     
     override func viewDidLoad() {

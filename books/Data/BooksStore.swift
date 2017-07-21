@@ -288,4 +288,13 @@ class BooksStore {
             print("Error deleting data: \(error)")
         }
     }
+    
+    /**
+     Returns a count of the number of books which exist
+    */
+    func bookCount() -> Int {
+        let fetchRequest = bookFetchRequest()
+        let bookCount = try? managedObjectContext.count(for: fetchRequest)
+        return bookCount ?? -1
+    }
 }

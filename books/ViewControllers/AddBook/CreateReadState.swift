@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import StoreKit
 
 class CreateReadState: ReadStateForm {
 
@@ -33,7 +34,12 @@ class CreateReadState: ReadStateForm {
         appDelegate.booksStore.create(from: bookMetadata, readingInformation: bookReadingInformation, readingNotes: notes.value)
         
         appDelegate.splitViewController.tabbedViewController.setSelectedTab(to: readState.value! == .finished ? .finished : .toRead)
-        self.navigationController?.dismiss(animated: true, completion: nil)
+        self.navigationController?.dismiss(animated: true) {
+            // Arbitrary number of books which the user has to have before we pester them
+            if #available(iOS 10.3, *), appDelegate.booksStore.bookCount() >= 4 {
+                SKStoreReviewController.requestReview()
+            }
+        }
     }
     
     override func formValidated(isValid: Bool) {
