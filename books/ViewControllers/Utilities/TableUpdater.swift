@@ -96,13 +96,17 @@ where ResultType : NSFetchRequestResult, CellType : UITableViewCell, CellType: C
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange object: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         switch type {
+            // some weird stuff happens in iOS 9 :/
+            // Be extra careful
         case .update:
-            if indexPath != newIndexPath {
-                tableView.deleteRows(at: [indexPath!], with: .automatic)
-                tableView.insertRows(at: [newIndexPath!], with: .automatic)
+            if let indexPath = indexPath,
+                let newIndexPath = newIndexPath,
+                indexPath != newIndexPath {
+                    tableView.deleteRows(at: [indexPath], with: .automatic)
+                    tableView.insertRows(at: [newIndexPath], with: .automatic)
             }
-            else if !createdSectionIndexes.contains(indexPath!.section) {
-                tableView.reloadRows(at: [indexPath!], with: .automatic)
+            else if let indexPath = indexPath, !createdSectionIndexes.contains(indexPath.section) {
+                tableView.reloadRows(at: [indexPath], with: .automatic)
             }
         case .insert:
             tableView.insertRows(at: [newIndexPath!], with: .automatic)

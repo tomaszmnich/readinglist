@@ -169,10 +169,7 @@ class BooksStore {
         book.publicationDate = metadata.publicationDate
         book.bookDescription = metadata.bookDescription
         book.coverImage = metadata.coverImage
-
-        book.removeSubjects(book.subjects.set as NSSet)
-        let newSubjectSet = metadata.subjects.map{getOrCreateSubject(withName: $0)}
-        book.addSubjects(NSOrderedSet(array: newSubjectSet))
+        book.subjects = NSOrderedSet(array: metadata.subjects.map{getOrCreateSubject(withName: $0)})
     }
     
     /**

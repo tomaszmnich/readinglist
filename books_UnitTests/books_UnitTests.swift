@@ -259,22 +259,21 @@ class books_UnitTests: XCTestCase {
         let newBook = booksStore.create(from: getTestBookMetadata(), readingInformation: BookReadingInformation.toRead())
         let sub1 = booksStore.getOrCreateSubject(withName: "Subject 1")
         let sub2 = booksStore.getOrCreateSubject(withName: "Subject 2")
-        newBook.addSubjects(NSOrderedSet(array: [sub1, sub2]))
+        newBook.subjects = NSOrderedSet(array: [sub1, sub2])
         booksStore.save()
         
         XCTAssertEqual(2, newBook.subjects.count)
         XCTAssertEqual("Subject 1", (newBook.subjects[0] as! Subject).name)
         XCTAssertEqual("Subject 2", (newBook.subjects[1] as! Subject).name)
         
-        newBook.removeSubjects(NSSet(array: [sub1, sub2]))
-        newBook.addSubjects(NSOrderedSet(array: [sub2, sub1]))
+        newBook.subjects = NSOrderedSet(array: [sub2, sub1])
         booksStore.save()
         XCTAssertEqual(2, newBook.subjects.count)
         XCTAssertEqual("Subject 2", (newBook.subjects[0] as! Subject).name)
         XCTAssertEqual("Subject 1", (newBook.subjects[1] as! Subject).name)
     }
     
-    func testSubjectAutomaticDeletion() {
+    func testSubjectAutomaticDeletionUponBookDeletion() {
         let book1Metadata = getTestBookMetadata()
         book1Metadata.subjects = ["Subject 1"]
         let newBook1 = booksStore.create(from: book1Metadata, readingInformation: BookReadingInformation.toRead())
@@ -294,5 +293,19 @@ class books_UnitTests: XCTestCase {
         booksStore.deleteBook(newBook2)
         booksStore.save()
         XCTAssertEqual(0, booksStore.getAllSubjects().count)
+    }
+    
+    func testSubjectAutomaticDeletionUponSubjectRemoval() {
+        let book1Metadata = getTestBookMetadata()
+        book1Metadata.subjects = ["Subject 1"]
+        let newBook1 = booksStore.create(from: book1Metadata, readingInformation: BookReadingInformation.toRead())
+        
+        booksStore.save()
+        
+        XCTAssertEqual(1, booksStore.getAllSubjects().count)
+        book1Metadata.subjects = ["Subject 2"]
+        booksStore.update(book: newBook1, withMetadata: book1Metadata)
+        booksStore.save()
+        XCTAssertEqual(1, booksStore.getAllSubjects().count)
     }
 }

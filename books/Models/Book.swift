@@ -38,11 +38,17 @@ public class Book: NSManagedObject {
         get { return subjects.array.map{($0 as! Subject)} }
     }
 
+/*
+    These functions might be useful but don't work on iOS 9
+    See https://stackoverflow.com/q/7385439/5513562
+
     @objc(addSubjects:)
     @NSManaged public func addSubjects(_ values: NSOrderedSet)
     
     @objc(removeSubjects:)
     @NSManaged public func removeSubjects(_ values: NSSet)
+*/
+
 }
 
 @objc(Subject)
