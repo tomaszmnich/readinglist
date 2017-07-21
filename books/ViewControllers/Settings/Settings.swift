@@ -44,7 +44,7 @@ class Settings: UITableViewController, NavBarConfigurer {
             UIApplication.shared.openUrlPlatformSpecific(url: URL(string: "https://andrewbennet.github.io/readinglist")!)
         case (0, 1):
             // "Rate"
-            UIApplication.shared.openUrlPlatformSpecific(url: URL(string: "itms-apps://appsto.re/gb/ZtbJib.i")!)
+            UIApplication.shared.openUrlPlatformSpecific(url: URL(string: "itms-apps://appsto.re/gb/ZtbJib.i?action=write-review")!)
             
         case (1, 0):
             exportData()
