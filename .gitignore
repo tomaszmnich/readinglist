@@ -3,3 +3,5 @@ xcuserdata
 .DS_Store
 Pods/
 screenshots.html
+.sass-cache/
+_site
