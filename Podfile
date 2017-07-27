@@ -16,7 +16,7 @@ target 'books' do
   pod 'SimulatorStatusMagic', :configurations => ['Debug']
   pod 'Fabric'
   pod 'Crashlytics'
-  pod 'CHCSVParser', '~> 2.1'
+  pod 'CHCSVParser', :git => 'https://github.com/davedelong/CHCSVParser.git'
 
   target 'books_UITests' do
     inherit! :search_paths
