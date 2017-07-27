@@ -42,7 +42,7 @@ class Settings: UITableViewController, NavBarConfigurer, MFMailComposeViewContro
         switch (indexPath.section, indexPath.row) {
         case (0, 0):
             // "About"
-            UIApplication.shared.openUrlPlatformSpecific(url: URL(string: "https://andrewbennet.github.io/readinglist")!)
+            UIApplication.shared.openUrlPlatformSpecific(url: URL(string: "https://www.readinglistapp.xyz")!)
         case (0, 1):
             // "Rate"
             UIApplication.shared.openUrlPlatformSpecific(url: URL(string: "itms-apps://appsto.re/gb/ZtbJib.i?action=write-review")!)
