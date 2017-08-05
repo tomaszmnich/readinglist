@@ -1,5 +1,5 @@
 //
-//  ImportDataViewController.swift
+//  ImportViewController.swift
 //  books
 //
 //  Created by Andrew Bennet on 08/04/2017.
@@ -13,35 +13,22 @@ import SVProgressHUD
 import Fabric
 import Crashlytics
 
-class ImportDataViewController : FormViewController, UIDocumentPickerDelegate, UIDocumentMenuDelegate {
+class ImportViewController : FormViewController, UIDocumentPickerDelegate, UIDocumentMenuDelegate {
     
-    private let downloadImagesKey = "downloadImages"
-    private let selectDocumentKey = "selectDocument"
+    static let headerNames = ["Google Books ID", "ISBN-13", "Title", "Author", "Page Count", "Publication Date", "Description", "Subjects", "Started Reading", "Finished Reading", "Notes"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let downloadImagesSection = Section(footer: "If enabled, book covers will be downloaded where the import document has either an ISBN-13 or a Google Books ID.")
-        downloadImagesSection.append(SwitchRow(downloadImagesKey) {
-            $0.title = "Download Images"
-            $0.value = true
-        })
-        form.append(downloadImagesSection)
-        
-        let headerNames = ["Google Books ID", "ISBN-13", "Title", "Author", "Page Count", "Publication Date", "Description", "Subjects", "Started Reading", "Finished Reading", "Notes"]
-        func bulletPointedItem(_ item: String) -> String { return "  \u{2022} \(item)" }
-        
-        let selectDocumentSection = Section(footer: "Import books from a CSV file. Duplicates (by ISBN or Google Books ID) and invalid entries will be skipped.\n\n"
-                + "The CSV file should have the following headers:\n\n"
-                + headerNames.map{ bulletPointedItem($0) }.joined(separator: "\n"))
-    
-        selectDocumentSection.append(ButtonRow(selectDocumentKey) {
-            $0.title = "Import Books"
-            $0.onCellSelection{ [unowned self] cell,_ in
-                self.requestImport(cell: cell)
+        form +++ Section(footer: "Tap the button to import books from a CSV file. The CSV file should have the following headers:\n\n"
+                + ImportViewController.headerNames.map{ "  \u{2022} \($0)" }.joined(separator: "\n")
+                + "\n\nTitle and Author cells are mandatory. Subjects should be separated by semicolons.\n\nBook covers will be downloaded where the import document has either an ISBN-13 or a Google Books ID. Duplicates and invalid entries will be skipped.\n\nAn example input document can be obtained by saving the result of an Export.")
+            <<< ButtonRow() {
+                $0.title = "Select File"
+                $0.onCellSelection{ [unowned self] cell,_ in
+                    self.requestImport(cell: cell)
+                }
             }
-        })
-        form.append(selectDocumentSection)
     }
     
     func requestImport(cell: ButtonCellOf<String>) {
@@ -62,12 +49,9 @@ class ImportDataViewController : FormViewController, UIDocumentPickerDelegate, U
     
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentAt url: URL) {
         SVProgressHUD.show(withStatus: "Importing")
-        Answers.logCustomEvent(withName: "CSV Import", customAttributes: [:])
+        UserEngagement.logEvent(.csvImport)
         
-        // We may want to download book cover images
-        let shouldSupplementBooks = form.values()[downloadImagesKey] as! Bool
-        
-        BookImporter(csvFileUrl: url, supplementBookCover: shouldSupplementBooks, supplementBookMetadata: false, missingHeadersCallback: {
+        BookImporter(csvFileUrl: url, supplementBookCover: true, supplementBookMetadata: false, missingHeadersCallback: {
             
         }, callback: {
             importedCount, duplicateCount, invalidCount in

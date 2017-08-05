@@ -80,7 +80,8 @@ class books_UITests: XCTestCase {
         let app = ReadingListApplication()
         
         app.clickTab(.settings)
-        app.tables.staticTexts["Export Data"].tap()
+        app.tables.staticTexts["Export"].tap()
+        app.tables.staticTexts["Export"].tap()
         
         sleep(2)
         app.collectionViews.collectionViews.buttons["Add To iCloud Drive"].tap()

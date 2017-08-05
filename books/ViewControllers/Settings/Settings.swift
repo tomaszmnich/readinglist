@@ -29,12 +29,22 @@ class Settings: UITableViewController, NavBarConfigurer, MFMailComposeViewContro
         #endif
     }
     
+    override func tableView(_ tableView: UITableView, willDisplayFooterView view: UIView, forSection section: Int) {
+        let footer = view as! UITableViewHeaderFooterView
+        footer.textLabel?.textAlignment = .center
+        if section == 2 {
+            footer.textLabel?.text = "Reading List \(appDelegate.appVersionDisplay())\nDeveloped by Andrew Bennet"
+        }
+    }
+    
     func configureNavBar(_ navBar: UINavigationItem) {
         // Configure the navigation item
         navBar.title = "Settings"
         navBar.rightBarButtonItem = nil
         navBar.leftBarButtonItem = nil
     }
+    
+    let appStoreAddress = "appsto.re/gb/ZtbJib.i"
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
@@ -44,14 +54,15 @@ class Settings: UITableViewController, NavBarConfigurer, MFMailComposeViewContro
             // "About"
             UIApplication.shared.openUrlPlatformSpecific(url: URL(string: "https://www.readinglistapp.xyz")!)
         case (0, 1):
-            // "Rate"
-            UIApplication.shared.openUrlPlatformSpecific(url: URL(string: "itms-apps://appsto.re/gb/ZtbJib.i?action=write-review")!)
+            // "Share"
+            present(UIActivityViewController(activityItems: [URL(string: "https://\(appStoreAddress)")!], applicationActivities: nil), animated: true)
         case (0, 2):
+            // "Rate"
+            UIApplication.shared.openUrlPlatformSpecific(url: URL(string: "itms-apps://\(appStoreAddress)?action=write-review")!)
+        case (0, 3):
             // "Feedback"
             sendFeedbackEmail()
-            
-        case (1, 0):
-            exportData()
+        
         case (1, 2):
             deleteAllData()
             
@@ -86,81 +97,19 @@ class Settings: UITableViewController, NavBarConfigurer, MFMailComposeViewContro
         self.present(areYouSure, animated: true)
     }
     
-    func exportData() {
-        Answers.logCustomEvent(withName: "CSV Export", customAttributes: [:])
-        SVProgressHUD.show(withStatus: "Generating...")
-        
-        let exporter = CsvExporter(csvExport: Book.csvExport)
-        
-        appDelegate.booksStore.getAllBooksAsync(callback: {
-            exporter.addData($0)
-            self.renderAndServeCsvExport(exporter)
-        }, onFail: {
-            NSLog($0.localizedDescription)
-            SVProgressHUD.dismiss()
-            SVProgressHUD.showError(withStatus: "Error collecting data.")
-        })
-    }
-    
-    func renderAndServeCsvExport(_ exporter: CsvExporter<Book>) {
-        DispatchQueue.global(qos: .userInitiated).async {
-            
-            // Write the document to a temporary file
-            let exportFileName = "Reading List Export - \(Date().toString(withDateFormat: "yyyy-MM-dd hh-mm")).csv"
-            let temporaryFilePath = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(exportFileName)
-            do {
-                try exporter.write(to: temporaryFilePath)
-            }
-            catch {
-                NSLog(error.localizedDescription)
-                DispatchQueue.main.async {
-                    SVProgressHUD.dismiss()
-                    SVProgressHUD.showError(withStatus: "Error exporting data.")
-                }
-                return
-            }
-            
-            // Present a dialog with the resulting file (presenting it on the main thread, of course)
-            let activityViewController = UIActivityViewController(activityItems: [temporaryFilePath], applicationActivities: [])
-            activityViewController.excludedActivityTypes = [
-                UIActivityType.assignToContact, UIActivityType.saveToCameraRoll, UIActivityType.postToFlickr, UIActivityType.postToVimeo,
-                UIActivityType.postToTencentWeibo, UIActivityType.postToTwitter, UIActivityType.postToFacebook, UIActivityType.openInIBooks
-            ]
-            
-            if let popPresenter = activityViewController.popoverPresentationController {
-                let cellRect = self.tableView.rectForRow(at: IndexPath(item: 0, section: 1))
-                popPresenter.sourceRect = cellRect
-                popPresenter.sourceView = self.tableView
-                popPresenter.permittedArrowDirections = .any
-            }
-            
-            DispatchQueue.main.async {
-                SVProgressHUD.dismiss()
-                self.present(activityViewController, animated: true, completion: nil)
-            }
-        }
-    }
-    
     func sendFeedbackEmail() {
         let toEmail = "readinglist@andrewbennet.com"
         if MFMailComposeViewController.canSendMail() {
-
-            let appDisplayVersion: String
-            if let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"],
-                let buildVersion = Bundle.main.infoDictionary?["CFBundleVersion"] {
-                appDisplayVersion = "v\(appVersion) (\(buildVersion))"
-            }
-            else {
-                appDisplayVersion = "Unknown"
-            }
+            
+            let appVersion = appDelegate.appVersionDisplay()
             
             let mailComposer = MFMailComposeViewController()
             mailComposer.mailComposeDelegate = self
             mailComposer.setToRecipients([toEmail])
-            mailComposer.setSubject("Reading List \(appDisplayVersion) Feedback")
+            mailComposer.setSubject("Reading List \(appVersion) Feedback")
             let messageBody = "\n\n\n" +
                 "Reading List\n" +
-                "App Version: \(appDisplayVersion)\n" +
+                "App Version: \(appVersion)\n" +
                 "iOS Version: \(UIDevice.current.systemVersion)\n" +
                 "Device: \(UIDevice.current.model)"
             mailComposer.setMessageBody(messageBody, isHTML: false)

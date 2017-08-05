@@ -62,5 +62,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         completionHandler(true)
     }
+    
+    func appVersionDisplay() -> String {
+        if let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"],
+            let buildVersion = Bundle.main.infoDictionary?["CFBundleVersion"] {
+            return "v\(appVersion) (\(buildVersion))"
+        }
+        else {
+            return "Unknown"
+        }
+    }
 }
 
