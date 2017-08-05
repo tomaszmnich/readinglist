@@ -16,8 +16,6 @@ class AttributionsViewController : UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        textView.setContentOffset(CGPoint(x: 0, y: 0), animated: false)
-        
         let mutableText = NSMutableAttributedString(attributedString: textView.attributedText)
         mutableText.hyperlinkText("Icons8", to: URL(string: "https://icons8.com")!)
         mutableText.hyperlinkText("Eureka", to: URL(string: "https://github.com/xmartlabs/Eureka")!)
