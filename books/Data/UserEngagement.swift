@@ -8,7 +8,6 @@
 
 import Foundation
 import StoreKit
-import Fabric
 import Crashlytics
 
 class UserEngagement {

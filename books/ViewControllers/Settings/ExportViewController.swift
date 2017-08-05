@@ -9,7 +9,6 @@
 import Foundation
 import UIKit
 import Eureka
-import Fabric
 import Crashlytics
 import SVProgressHUD
 

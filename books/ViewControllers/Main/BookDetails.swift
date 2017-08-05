@@ -10,7 +10,6 @@ import UIKit
 import CoreData
 import CoreSpotlight
 import SVProgressHUD
-import StoreKit
 
 class BookDetailsViewModel {
     let book: Book

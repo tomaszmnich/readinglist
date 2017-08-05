@@ -10,7 +10,6 @@ import Foundation
 import UIKit
 import Eureka
 import SVProgressHUD
-import Fabric
 import Crashlytics
 
 class ImportViewController : FormViewController, UIDocumentPickerDelegate, UIDocumentMenuDelegate {

@@ -7,8 +7,6 @@
 //
 
 import UIKit
-import Fabric
-import Crashlytics
 
 class CreateBook: BookMetadataForm {
     

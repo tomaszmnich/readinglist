@@ -12,7 +12,6 @@ import RxSwift
 import RxCocoa
 import SVProgressHUD
 import DZNEmptyDataSet
-import Fabric
 import Crashlytics
 
 class SearchOnline: UIViewController, UISearchBarDelegate {

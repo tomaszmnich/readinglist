@@ -7,10 +7,8 @@
 //
 
 import UIKit
-import Foundation
 import SVProgressHUD
 import Crashlytics
-import Fabric
 import MessageUI
 
 class Settings: UITableViewController, NavBarConfigurer, MFMailComposeViewControllerDelegate {

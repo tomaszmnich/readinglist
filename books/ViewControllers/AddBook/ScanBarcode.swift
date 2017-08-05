@@ -9,8 +9,6 @@
 import UIKit
 import AVFoundation
 import SVProgressHUD
-import Fabric
-import Crashlytics
 
 class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     
