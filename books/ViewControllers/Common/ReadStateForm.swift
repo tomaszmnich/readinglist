@@ -64,7 +64,7 @@ class ReadStateForm: FormViewController {
                 $0.placeholder = "Add your personal notes here..."
                 }
             .cellSetup{
-                $0.0.height = {return 150}
+                $0.0.height = {return 250}
             }
     }
     

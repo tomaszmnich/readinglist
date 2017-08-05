@@ -125,7 +125,7 @@ public extension Date {
         if daysDifference == 0 {
             return "Today"
         }
-        if daysDifference > 0 && daysDifference <= 5 {
+        if daysDifference > 0 && daysDifference <= 3 {
             return self.toString(withDateFormat: "EEE\(short ? "" : "E")")
         }
         else {
