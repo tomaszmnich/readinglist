@@ -52,7 +52,7 @@ class CreateBook: BookMetadataForm {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         super.prepare(for: segue, sender: sender)
         if let createReadState = segue.destination as? CreateReadState {
-            Answers.logCustomEvent(withName: "Add Manual Book", customAttributes: [:])
+            UserEngagement.logEvent(.addManualBook)
             
             let finalBookMetadata = initialBookMetadata ?? BookMetadata()
             finalBookMetadata.title = titleField.value!

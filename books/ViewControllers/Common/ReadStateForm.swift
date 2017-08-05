@@ -14,8 +14,8 @@ class ReadStateForm: FormViewController {
     private let readStateKey = "book-read-state"
     private let dateStartedKey = "date-started"
     private let dateFinishedKey = "date-finished"
+    private let currentPageKey = "current-page"
     private let notesKey = "notes"
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,7 +30,6 @@ class ReadStateForm: FormViewController {
                     self.validate()
                 }
             }
-        
         +++ Section(header: "Reading Log", footer: "") {
             $0.hidden = Condition.function([readStateKey]) {[unowned self] _ in
                 return self.readState.value! == .toRead
@@ -58,6 +57,16 @@ class ReadStateForm: FormViewController {
                     self.validate()
                 }
             }
+            
+            <<< IntRow(currentPageKey) {
+                $0.title = "Current Page"
+                $0.hidden = Condition.function([readStateKey]) { [unowned self] _ in
+                    return self.readState.value! != .reading
+                }
+                $0.onChange{ [unowned self] _ in
+                    self.validate()
+                }
+            }
         
         +++ Section(header: "Notes", footer: "")
             <<< TextAreaRow(notesKey){
@@ -70,18 +79,17 @@ class ReadStateForm: FormViewController {
     
     private func validate() {
         if self.readState.value == .finished {
-            formValidated(isValid:
-                startedReading.value!.compareIgnoringTime(finishedReading.value!) != .orderedDescending)
+            formValidated(isValid: startedReading.value!.compareIgnoringTime(finishedReading.value!) != .orderedDescending)
         }
-        else {
-            formValidated(isValid: true)
+        else if self.readState.value == .reading {
+            formValidated(isValid: currentPage.value == nil || currentPage.value! > 0)
         }
     }
     
     func formValidated(isValid: Bool) {
         // Should be overriden
     }
-    
+
     var readState: SegmentedRow<BookReadState> {
         get { return form.rowBy(tag: readStateKey) as! SegmentedRow<BookReadState> }
     }
@@ -92,6 +100,10 @@ class ReadStateForm: FormViewController {
     
     var finishedReading: DateRow {
         get { return form.rowBy(tag: dateFinishedKey) as! DateRow }
+    }
+
+    var currentPage: IntRow {
+        get { return form.rowBy(tag: currentPageKey) as! IntRow }
     }
     
     var notes: TextAreaRow {

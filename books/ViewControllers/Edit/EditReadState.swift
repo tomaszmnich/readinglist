@@ -17,7 +17,7 @@ class EditReadState: ReadStateForm {
 
     override func viewDidLoad(){
         super.viewDidLoad()
-        
+
         navigationItem.title = bookToEdit.title
         
         // Load the existing values on to the form; if dates are missing, use the current date
@@ -30,6 +30,7 @@ class EditReadState: ReadStateForm {
             finishedReading.value = finished
         }
         
+        currentPage.value = bookToEdit.currentPage == nil ? nil : Int(bookToEdit.currentPage!)
         notes.value = bookToEdit.notes
     }
     
@@ -41,7 +42,7 @@ class EditReadState: ReadStateForm {
         self.view.endEditing(true)
         
         // Create an object representation of the form values
-        let newReadStateInfo = BookReadingInformation(readState: readState.value!, startedWhen: startedReading.value, finishedWhen: finishedReading.value)
+        let newReadStateInfo = BookReadingInformation(readState: readState.value!, startedWhen: startedReading.value, finishedWhen: finishedReading.value, currentPage: currentPage.value)
         
         // Update the book
         appDelegate.booksStore.update(book: bookToEdit, withReadingInformation: newReadStateInfo, readingNotes: notes.value)

@@ -58,6 +58,9 @@ class BookDetailsViewModel {
                 readDatesPieces.append("Read Time: \(dayCount) days")
             }
         }
+        if let currentPage = book.currentPage {
+            readDatesPieces.append("Current Page: \(currentPage)")
+        }
         readDates = readDatesPieces.joined(separator: "\n")
         
         if let coverData = book.coverImage, let image = UIImage(data: coverData) {
@@ -156,7 +159,7 @@ class BookDetails: UIViewController {
         
         let readingInfo: BookReadingInformation
         if readState == .toRead {
-            readingInfo = BookReadingInformation.reading(started: Date())
+            readingInfo = BookReadingInformation.reading(started: Date(), currentPage: nil)
         }
         else {
             readingInfo = BookReadingInformation.finished(started: viewModel.book.startedReading!, finished: Date())

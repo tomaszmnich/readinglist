@@ -28,6 +28,7 @@ public class Book: NSManagedObject {
 
     // Other Metadata
     @NSManaged var notes: String?
+    @NSManaged var currentPage: NSNumber?
     @NSManaged var sort: NSNumber?
     @NSManaged var createdWhen: Date
     
@@ -89,6 +90,7 @@ extension Book {
         readState = readingInformation.readState
         startedReading = readingInformation.startedReading
         finishedReading = readingInformation.finishedReading
+        currentPage = readingInformation.currentPage == nil ? nil : NSNumber(integerLiteral: readingInformation.currentPage!)
     }
     
     func toSpotlightItem() -> SpotlightItem {
@@ -98,12 +100,12 @@ extension Book {
     }
     
     static let transistionToReadingStateAction = GeneralUIAction<Book>(style: .normal, title: "Start") { book in
-        let reading = BookReadingInformation(readState: .reading, startedWhen: Date(), finishedWhen: nil)
+        let reading = BookReadingInformation(readState: .reading, startedWhen: Date(), finishedWhen: nil, currentPage: nil)
         updateReadStateAndLog(book: book, readingInformation: reading)
     }
     
     static let transistionToFinishedStateAction = GeneralUIAction<Book>(style: .normal, title: "Finish") { book in
-        let finished = BookReadingInformation(readState: .finished, startedWhen: book.startedReading!, finishedWhen: Date())
+        let finished = BookReadingInformation(readState: .finished, startedWhen: book.startedReading!, finishedWhen: Date(), currentPage: nil)
         updateReadStateAndLog(book: book, readingInformation: finished)
     }
     
@@ -129,6 +131,7 @@ extension Book {
         CsvColumn<Book>(header: "Subjects", cellValue: {$0.subjectsArray.map{$0.name}.joined(separator: "; ")}),
         CsvColumn<Book>(header: "Started Reading", cellValue: {$0.startedReading?.toString(withDateFormat: "yyyy-MM-dd")}),
         CsvColumn<Book>(header: "Finished Reading", cellValue: {$0.finishedReading?.toString(withDateFormat: "yyyy-MM-dd")}),
+        CsvColumn<Book>(header: "Current Page", cellValue: {$0.currentPage == nil ? nil : String(describing: $0.currentPage!)}),
         CsvColumn<Book>(header: "Notes", cellValue: {$0.notes})
     )
 }
@@ -184,13 +187,14 @@ class BookMetadata {
         
         let startedReading = Date(dateString: csvData["Started Reading"])
         let finishedReading = Date(dateString: csvData["Finished Reading"])
+        let currentPage = csvData["Current Page"] == nil ? nil : Int(string: csvData["Current Page"]!)
 
         let readingInformation: BookReadingInformation
         if startedReading != nil && finishedReading != nil {
             readingInformation = BookReadingInformation.finished(started: startedReading!, finished: finishedReading!)
         }
         else if startedReading != nil && finishedReading == nil {
-            readingInformation = BookReadingInformation.reading(started: startedReading!)
+            readingInformation = BookReadingInformation.reading(started: startedReading!, currentPage: currentPage)
         }
         else {
             readingInformation = BookReadingInformation.toRead()
@@ -209,34 +213,38 @@ class BookReadingInformation {
     let readState: BookReadState
     let startedReading: Date?
     let finishedReading: Date?
+    let currentPage: Int?
     
     /// Will only populate the start date if started; will only populate the finished date if finished.
     /// Otherwise, dates are set to nil.
-    init(readState: BookReadState, startedWhen: Date?, finishedWhen: Date?) {
+    init(readState: BookReadState, startedWhen: Date?, finishedWhen: Date?, currentPage: Int?) {
         self.readState = readState
         switch readState {
         case .toRead:
             self.startedReading = nil
             self.finishedReading = nil
+            self.currentPage = nil
         case .reading:
             self.startedReading = startedWhen!
             self.finishedReading = nil
+            self.currentPage = currentPage
         case .finished:
             self.startedReading = startedWhen!
             self.finishedReading = finishedWhen!
+            self.currentPage = nil
         }
     }
     
     static func toRead() -> BookReadingInformation {
-        return BookReadingInformation(readState: .toRead, startedWhen: nil, finishedWhen: nil)
+        return BookReadingInformation(readState: .toRead, startedWhen: nil, finishedWhen: nil, currentPage: nil)
     }
     
-    static func reading(started: Date) -> BookReadingInformation {
-        return BookReadingInformation(readState: .reading, startedWhen: started, finishedWhen: nil)
+    static func reading(started: Date, currentPage: Int?) -> BookReadingInformation {
+        return BookReadingInformation(readState: .reading, startedWhen: started, finishedWhen: nil, currentPage: currentPage)
     }
     
     static func finished(started: Date, finished: Date) -> BookReadingInformation {
-        return BookReadingInformation(readState: .finished, startedWhen: started, finishedWhen: finished)
+        return BookReadingInformation(readState: .finished, startedWhen: started, finishedWhen: finished, currentPage: nil)
     }
 }
 
