@@ -150,9 +150,9 @@ class BookMetadataForm: FormViewController {
         // Should be overriden
     }
     
-    func dismiss() {
+    func dismiss(completion: (() -> Void)? = nil) {
         self.view.endEditing(true)
-        self.navigationController?.dismiss(animated: true, completion: nil)
+        self.navigationController?.dismiss(animated: true, completion: completion)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

@@ -46,7 +46,10 @@ class EditReadState: ReadStateForm {
         // Update the book
         appDelegate.booksStore.update(book: bookToEdit, withReadingInformation: newReadStateInfo, readingNotes: notes.value)
         
-        self.navigationController?.dismiss(animated: true, completion: nil)
+        self.navigationController?.dismiss(animated: true){
+            UserEngagement.logEvent(.editReadState)
+            UserEngagement.onReviewTrigger()
+        }
     }
     
     @IBAction func cancelWasPressed(_ sender: UIBarButtonItem) {

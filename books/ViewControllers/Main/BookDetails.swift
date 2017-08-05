@@ -163,9 +163,8 @@ class BookDetails: UIViewController {
         }
         appDelegate.booksStore.update(book: viewModel.book, withReadingInformation: readingInfo)
         
-        if #available(iOS 10.3, *) {
-            SKStoreReviewController.requestReview()
-        }
+        UserEngagement.logEvent(.transitionReadState)
+        UserEngagement.onReviewTrigger()
     }
     
     override func viewDidLoad() {

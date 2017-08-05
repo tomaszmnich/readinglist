@@ -50,6 +50,7 @@ class EditBook: BookMetadataForm {
             // Dismiss this modal view and then delete the book
             self.dismiss(animated: true) {
                 appDelegate.booksStore.deleteBook(self.bookToEdit)
+                UserEngagement.logEvent(.deleteBook)
             }
         })
         self.present(confirmDeleteAlert, animated: true, completion: nil)
@@ -79,6 +80,9 @@ class EditBook: BookMetadataForm {
         
         // Update the book
         appDelegate.booksStore.update(book: bookToEdit, withMetadata: newMetadata)
-        dismiss()
+        dismiss {
+            UserEngagement.logEvent(.editBook)
+            UserEngagement.onReviewTrigger()
+        }
     }
 }

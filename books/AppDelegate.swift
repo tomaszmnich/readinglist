@@ -33,7 +33,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         #if !DEBUG
             Fabric.with([Crashlytics.self])
         #endif
+
         return true
+    }
+    
+    func applicationDidBecomeActive(_ application: UIApplication) {
+        UserEngagement.onAppOpen()
     }
     
     func application(_ application: UIApplication, willContinueUserActivityWithType userActivityType: String) -> Bool {

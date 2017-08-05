@@ -145,7 +145,7 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         session?.stopRunning()
         
         // Event logging
-        Answers.logCustomEvent(withName: "Scan Barcode", customAttributes: [:])
+        UserEngagement.logEvent(.scanBarcode)
         
         // Check that the book hasn't already been added
         if let existingBook = appDelegate.booksStore.getIfExists(isbn: isbn) {

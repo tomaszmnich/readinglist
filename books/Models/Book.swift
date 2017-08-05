@@ -99,16 +99,23 @@ extension Book {
     
     static let transistionToReadingStateAction = GeneralUIAction<Book>(style: .normal, title: "Start") { book in
         let reading = BookReadingInformation(readState: .reading, startedWhen: Date(), finishedWhen: nil)
-        appDelegate.booksStore.update(book: book, withReadingInformation: reading)
+        updateReadStateAndLog(book: book, readingInformation: reading)
     }
     
     static let transistionToFinishedStateAction = GeneralUIAction<Book>(style: .normal, title: "Finish") { book in
         let finished = BookReadingInformation(readState: .finished, startedWhen: book.startedReading!, finishedWhen: Date())
-        appDelegate.booksStore.update(book: book, withReadingInformation: finished)
+        updateReadStateAndLog(book: book, readingInformation: finished)
+    }
+    
+    private static func updateReadStateAndLog(book: Book, readingInformation: BookReadingInformation) {
+        appDelegate.booksStore.update(book: book, withReadingInformation: readingInformation)
+        UserEngagement.logEvent(.transitionReadState)
+        UserEngagement.onReviewTrigger()
     }
     
     static let deleteAction = GeneralUIAction<Book>(style: .destructive, title: "Delete") { book in
         appDelegate.booksStore.deleteBook(book)
+        UserEngagement.logEvent(.deleteBook)
     }
     
     static let csvExport = CsvExport<Book>(columns:

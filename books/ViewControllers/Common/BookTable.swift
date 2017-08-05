@@ -221,13 +221,16 @@ class BookTable: AutoUpdatingTableViewController {
             // Don't bother with the confirm delete alert for iPad
             if confirmDeleteAlert.popoverPresentationController != nil {
                 appDelegate.booksStore.deleteBook(bookToDelete)
+                UserEngagement.logEvent(.deleteBook)
             }
             else {
                 confirmDeleteAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
                 confirmDeleteAlert.addAction(UIAlertAction(title: "Delete", style: .destructive) { _ in
                     appDelegate.booksStore.deleteBook(bookToDelete)
                 })
-                self.present(confirmDeleteAlert, animated: true, completion: nil)
+                self.present(confirmDeleteAlert, animated: true) {
+                    UserEngagement.logEvent(.deleteBook)
+                }
             }
         }]
         
