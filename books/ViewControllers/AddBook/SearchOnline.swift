@@ -51,10 +51,18 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
         // Activity drives the spinner
         indicator.drive(spinner.rx.isAnimating).addDisposableTo(disposeBag)
         
+        let autoSearch = Observable<Void>.create { [unowned self] observer in
+            // If we arrived with a search string, we want to fire off the search
+            if self.initialSearchString != nil {
+                observer.onNext()
+            }
+            return Disposables.create()
+        }
+        
         // Map the click of the Search button (when there is non whitespace text)
         // to a google books searchcells
-        let searchResults = searchBar.rx.searchButtonClicked
-            .observeOn(ConcurrentDispatchQueueScheduler(qos: .userInitiated))
+        let searchButtonClicked = searchBar.rx.searchButtonClicked.observeOn(ConcurrentDispatchQueueScheduler(qos: .userInitiated))
+        let searchResults = Observable.merge([autoSearch, searchButtonClicked])
             .flatMapLatest { [unowned self] in
                 
                 self.searchBar.text?.isEmptyOrWhitespace == false ?
@@ -83,7 +91,7 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
             .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [unowned self] resultPage in
                 if !resultPage.searchResults.isSuccess {
-                    NSLog("Error searching online: \(resultPage.searchResults.error!.localizedDescription)")
+                    Crashlytics.sharedInstance().recordError(resultPage.searchResults.error!)
                     self.setEmptyDatasetReason(.error)
                 }
                 else if resultPage.searchText?.isEmptyOrWhitespace != false {
@@ -123,7 +131,6 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
                 self.onModelSelected(model)
             })
             .addDisposableTo(disposeBag)
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
