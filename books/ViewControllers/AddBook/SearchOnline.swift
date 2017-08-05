@@ -10,7 +10,6 @@ import Foundation
 import UIKit
 import RxSwift
 import RxCocoa
-import RxSwiftUtilities
 import SVProgressHUD
 import DZNEmptyDataSet
 import Fabric
@@ -20,12 +19,10 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
     
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var spinner: UIActivityIndicatorView!
     
     var initialSearchString: String?
     
     let disposeBag = DisposeBag()
-    let indicator = ActivityIndicator()
     
     let emptyDatasetView = UINib(nibName: "SearchBooksEmptyDataset", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! SearchBooksEmptyDataset
     
@@ -48,9 +45,6 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
         // Remove cell separators between blank cells
         tableView.tableFooterView = UIView()
         
-        // Activity drives the spinner
-        indicator.drive(spinner.rx.isAnimating).addDisposableTo(disposeBag)
-        
         let autoSearch = Observable<Void>.create { [unowned self] observer in
             // If we arrived with a search string, we want to fire off the search
             if self.initialSearchString != nil {
@@ -63,16 +57,16 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
         // to a google books searchcells
         let searchButtonClicked = searchBar.rx.searchButtonClicked.observeOn(ConcurrentDispatchQueueScheduler(qos: .userInitiated))
         let searchResults = Observable.merge([autoSearch, searchButtonClicked])
-            .flatMapLatest { [unowned self] in
+            .flatMapLatest { [unowned self] Void -> Observable<GoogleBooks.SearchResultsPage> in
+                SVProgressHUD.show(withStatus: "Searching...")
+
+                if self.searchBar.text?.isEmptyOrWhitespace == false {
                 
-                self.searchBar.text?.isEmptyOrWhitespace == false ?
-                
-                // Search on the Google API
-                GoogleBooks.searchTextObservable(self.searchBar.text!)
-                    .observeOn(MainScheduler.instance)
-                    .trackActivity(self.indicator)
-                
-                : Observable.just(GoogleBooks.SearchResultsPage.empty())
+                    // Search on the Google API
+                    return GoogleBooks.searchTextObservable(self.searchBar.text!)
+                        .observeOn(MainScheduler.instance)
+                }
+                return Observable.just(GoogleBooks.SearchResultsPage.empty())
             }
             .shareReplay(1)
         
@@ -90,6 +84,7 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
         aggregateResults
             .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [unowned self] resultPage in
+                SVProgressHUD.dismiss()
                 if !resultPage.searchResults.isSuccess {
                     Crashlytics.sharedInstance().recordError(resultPage.searchResults.error!)
                     self.setEmptyDatasetReason(.error)

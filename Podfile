@@ -11,7 +11,6 @@ target 'books' do
   pod 'ImageRow', '~> 2.0'
   pod 'RxSwift', '~> 3.4'
   pod 'RxCocoa', '~> 3.4'
-  pod 'RxSwiftUtilities', '~> 1.0'
   pod 'SVProgressHUD', '~> 2.1'
   pod 'SimulatorStatusMagic', :configurations => ['Debug']
   pod 'Fabric'
