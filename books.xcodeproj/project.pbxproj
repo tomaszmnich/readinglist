@@ -943,7 +943,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				INFOPLIST_FILE = books/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\" \"-D\" \"DEBUG\"";
 				PRODUCT_BUNDLE_IDENTIFIER = com.andrewbennet.books;
@@ -962,7 +962,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer: Andrew Bennet (NSVAF8RDK6)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = books/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.andrewbennet.books;
 				PRODUCT_NAME = "Reading List";
