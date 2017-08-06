@@ -94,8 +94,10 @@ class BookTable: AutoUpdatingTableViewController {
         // Set the DZN data set source
         tableView.emptyDataSetSource = self
         
-        // The left button should be an edit button
+        // The left button should be an edit button. Hide it by default in case there
+        // are no books. This will be updated by the numberOfSections func
         navigationItem.leftBarButtonItem = editButtonItem
+        navigationItem.leftBarButtonItem!.toggleHidden(hidden: true)
 
         super.viewDidLoad()
     }
@@ -118,6 +120,7 @@ class BookTable: AutoUpdatingTableViewController {
             if currentlyAnyBooks != anyBooksExist {
                 anyBooksExist = currentlyAnyBooks
                 searchController.searchBar.isHidden = !anyBooksExist
+                navigationItem.leftBarButtonItem!.toggleHidden(hidden: !currentlyAnyBooks)
                 // If we hide the search bar, we should make sure the keyboard is gone too.
                 // This can happen in slightly tenious circumstances - if a user deletes or removes
                 // the last book on the screen whilst in a search mode, then dismisses the search, 

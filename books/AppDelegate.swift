@@ -60,15 +60,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
+        
+        func performSegueFromToReadPage(segueName: String) {
+            tabBarController.selectTab(.toRead)
+            let navController = tabBarController.selectedSplitViewController!.masterNavigationController
+            navController.popToRootViewController(animated: false)
+            navController.viewControllers[0].performSegue(withIdentifier: segueName, sender: self)
+            completionHandler(true)
+        }
+
         if shortcutItem.type == "\(productBundleIdentifier).ScanBarcode" {
-            tabBarController.selectTab(.toRead)
-            tabBarController.performSegue(withIdentifier: "scanBarcode", sender: self)
+            performSegueFromToReadPage(segueName: "scanBarcode")
         }
-        if shortcutItem.type == "\(productBundleIdentifier).SearchBooks" {
-            tabBarController.selectTab(.toRead)
-            tabBarController.performSegue(withIdentifier: "searchByText", sender: self)
+        else if shortcutItem.type == "\(productBundleIdentifier).SearchBooks" {
+            performSegueFromToReadPage(segueName: "searchByText")
         }
-        completionHandler(true)
     }
     
     func appVersionDisplay() -> String {
