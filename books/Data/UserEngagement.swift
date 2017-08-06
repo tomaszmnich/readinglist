@@ -66,3 +66,17 @@ class PersistedCounter {
         return UserDefaults.standard.integer(forKey: withKey)
     }
 }
+
+public extension UIDevice {
+    
+    // From https://stackoverflow.com/a/26962452/5513562
+    var modelIdentifier: String {
+        var systemInfo = utsname()
+        uname(&systemInfo)
+        let machineMirror = Mirror(reflecting: systemInfo.machine)
+        return machineMirror.children.reduce("") { identifier, element in
+            guard let value = element.value as? Int8, value != 0 else { return identifier }
+            return identifier + String(UnicodeScalar(UInt8(value)))
+        }
+    }
+}
