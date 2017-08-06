@@ -51,15 +51,18 @@ class BookTable: AutoUpdatingTableViewController {
     var resultsController: NSFetchedResultsController<Book>!
     var resultsFilterer: FetchedResultsFilterer<Book, BookPredicateBuilder>!
     var readStates: [BookReadState]!
-    var navBarChangedDelegate: NavBarChangedDelegate!
     var searchController: UISearchController!
-    var addButton: UIBarButtonItem!
+    
+    var parentSplitViewController: SplitViewController {
+        get { return splitViewController as! SplitViewController }
+    }
     
     /// Whether there are any books in this screen. Does not consider the impact of searching - there
     /// may be no results on screen due to a search, but this property might still be true.
     var anyBooksExist = true
     
     override func viewDidLoad() {
+        
         let readStatePredicate = NSPredicate.Or(readStates.map{BookPredicate.readState(equalTo: $0)})
         
         // Set up the results controller
@@ -82,14 +85,6 @@ class BookTable: AutoUpdatingTableViewController {
         searchController.hidesNavigationBarDuringPresentation = false
         tableView.tableHeaderView = searchController.searchBar
         
-        // Initialise the add button
-        addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addWasPressed))
-        
-        // contentOffset will not change before the main run loop ends without queueing it, for splitable devices (iPhone Plus & iPad)
-        DispatchQueue.main.async {
-            self.tableView.contentOffset.y = self.searchController.searchBar.frame.size.height
-        }
-        
         // We will manage the clearing of selections ourselves.
         clearsSelectionOnViewWillAppear = false
         
@@ -98,19 +93,22 @@ class BookTable: AutoUpdatingTableViewController {
         
         // Set the DZN data set source
         tableView.emptyDataSetSource = self
+        
+        // The left button should be an edit button
+        navigationItem.leftBarButtonItem = editButtonItem
 
         super.viewDidLoad()
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        // Deselect selected rows, so they don't stay highlighted
-        if let selectedIndexPath = self.tableView.indexPathForSelectedRow {
+        // Deselect selected rows, so they don't stay highlighted, but only when in non-split mode
+        if let selectedIndexPath = self.tableView.indexPathForSelectedRow, !parentSplitViewController.detailIsPresented {
             self.tableView.deselectRow(at: selectedIndexPath, animated: animated)
         }
         
         super.viewDidAppear(animated)
     }
-    
+
     override func numberOfSections(in tableView: UITableView) -> Int {
         let numberOfSections = super.numberOfSections(in: tableView)
         
@@ -129,7 +127,6 @@ class BookTable: AutoUpdatingTableViewController {
                         self.searchController.searchBar.resignFirstResponder()
                     }
                 }
-                navBarChangedDelegate?.navBarChanged()
             }
         }
 
@@ -154,8 +151,8 @@ class BookTable: AutoUpdatingTableViewController {
         self.tableView.selectRow(at: indexPathOfSelectedBook, animated: false, scrollPosition: .none)
         
         // If there is a detail view presented, pop back to the tabbed page.
-        if appDelegate.splitViewController.detailIsPresented {
-            appDelegate.splitViewController.bookDetailsViewController?.viewModel = BookDetailsViewModel(book: book)
+        if parentSplitViewController.detailIsPresented {
+            (parentSplitViewController.displayedDetailViewController as? BookDetails)?.viewModel = BookDetailsViewModel(book: book)
         }
         else{
             // Segue to the details view, with the cell corresponding to the book as the sender
@@ -176,6 +173,14 @@ class BookTable: AutoUpdatingTableViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let navWithReadState = segue.destination as? NavWithReadState {
+            navWithReadState.readState = readStates.first!
+            
+            // If this is going to the SearchOnline page, and our sender was Text, prepopulate with that text
+            if let searchOnline = navWithReadState.topViewController as? SearchOnline, let searchText = sender as? String {
+                searchOnline.initialSearchString = searchText
+            }
+        }
         if let detailsViewController = (segue.destination as? UINavigationController)?.topViewController as? BookDetails,
             let cell = sender as? UITableViewCell,
             let selectedIndex = self.tableView.indexPath(for: cell) {
@@ -184,10 +189,11 @@ class BookTable: AutoUpdatingTableViewController {
         }
     }
 
-    func addWasPressed() {
+    @IBAction func addWasPressed(_ sender: UIBarButtonItem) {
+    
         func segueAction(title: String, identifier: String) -> UIAlertAction {
             return UIAlertAction(title: title, style: .default){[unowned self] _ in
-                self.parent!.performSegue(withIdentifier: identifier, sender: self)
+                self.performSegue(withIdentifier: identifier, sender: self)
             }
         }
         
@@ -199,7 +205,7 @@ class BookTable: AutoUpdatingTableViewController {
         
         // For iPad, set the popover presentation controller's source
         if let popPresenter = optionsAlert.popoverPresentationController {
-            popPresenter.barButtonItem = addButton
+            popPresenter.barButtonItem = sender
         }
         
         self.present(optionsAlert, animated: true, completion: nil)
@@ -276,13 +282,10 @@ extension BookTable : DZNEmptyDataSetSource {
             titleText = "🎉 Finished"
         }
         
-        return NSAttributedString(string: titleText, attributes: [NSFontAttributeName: UIFont(name: "GillSans", size: 32)!,
-                                                           NSForegroundColorAttributeName: UIColor.gray])
+        return NSAttributedString(string: titleText, attributes: [NSFontAttributeName: UIFont(name: "GillSans", size: 32)!, NSForegroundColorAttributeName: UIColor.gray])
     }
     
     func verticalOffset(forEmptyDataSet scrollView: UIScrollView!) -> CGFloat {
-        // The No Results screen should be a bit higher up than the other screens,
-        // since the keyboard will often be up in this mode.
         if resultsFilterer.showingSearchResults {
             return -scrollView.frame.height / 4 + self.tableView.tableHeaderView!.frame.size.height / 2.0
         }

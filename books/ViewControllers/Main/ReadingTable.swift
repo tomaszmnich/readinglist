@@ -9,17 +9,12 @@
 import UIKit
 import DZNEmptyDataSet
 
-class ReadingTable: BookTable, NavBarConfigurer {
+class ReadingTable: BookTable {
 
     override func viewDidLoad() {
         readStates = [.toRead, .reading]
+        navigationItem.title = "To Read"
         super.viewDidLoad()
-    }
-    
-    func configureNavBar(_ navBar: UINavigationItem) {
-        navBar.rightBarButtonItem = addButton
-        navBar.leftBarButtonItem = anyBooksExist ? editButtonItem : nil
-        navBar.title = "To Read"
     }
     
     var toReadSectionIndex: Int? {
@@ -33,8 +28,7 @@ class ReadingTable: BookTable, NavBarConfigurer {
 
     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         // We can reorder the "ToRead" books if there are more than one
-            return indexPath.section == toReadSectionIndex &&
-                self.tableView(tableView, numberOfRowsInSection: toReadSectionIndex!) > 1
+        return indexPath.section == toReadSectionIndex && self.tableView(tableView, numberOfRowsInSection: toReadSectionIndex!) > 1
     }
     
     

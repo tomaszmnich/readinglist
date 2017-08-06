@@ -11,9 +11,7 @@ import SVProgressHUD
 import Crashlytics
 import MessageUI
 
-class Settings: UITableViewController, NavBarConfigurer, MFMailComposeViewControllerDelegate {
-    
-    var navBarChangedDelegate: NavBarChangedDelegate!
+class Settings: UITableViewController, MFMailComposeViewControllerDelegate {
     
     @IBOutlet weak var debugSettingsCell: UITableViewCell!
     
@@ -34,14 +32,7 @@ class Settings: UITableViewController, NavBarConfigurer, MFMailComposeViewContro
             footer.textLabel?.text = "Reading List \(appDelegate.appVersionDisplay())\nDeveloped by Andrew Bennet"
         }
     }
-    
-    func configureNavBar(_ navBar: UINavigationItem) {
-        // Configure the navigation item
-        navBar.title = "Settings"
-        navBar.rightBarButtonItem = nil
-        navBar.leftBarButtonItem = nil
-    }
-    
+
     let appStoreAddress = "appsto.re/gb/ZtbJib.i"
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -78,10 +69,9 @@ class Settings: UITableViewController, NavBarConfigurer, MFMailComposeViewContro
         let confirmDelete = UIAlertController(title: "Final Warning", message: "This action is irreversible. Are you sure you want to continue?", preferredStyle: .alert)
         confirmDelete.addAction(UIAlertAction(title: "Delete", style: .destructive) { _ in
             appDelegate.booksStore.deleteAll()
-            // Relayout the tables. Their empty data sets sometimes are in the wrong place after deleting everything.
-            // TODO: look into making this work better
-            appDelegate.splitViewController.tabbedViewController.readingTabView.layoutSubviews()
-            appDelegate.splitViewController.tabbedViewController.finishedTabView.layoutSubviews()
+            // TODO: The empty data sets sometimes are in the wrong place after deleting everything.
+            //appDelegate.splitViewController.tabbedViewController.readingTabView.layoutSubviews()
+            //appDelegate.splitViewController.tabbedViewController.finishedTabView.layoutSubviews()
         })
         confirmDelete.addAction(UIAlertAction(title: "Cancel", style: .cancel))
         

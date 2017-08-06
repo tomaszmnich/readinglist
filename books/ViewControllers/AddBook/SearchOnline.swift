@@ -144,7 +144,7 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
             
             let alert = duplicateBookAlertController(goToExistingBook: { [unowned self] in
                 self.dismiss(animated: true) {
-                    appDelegate.splitViewController.tabbedViewController.simulateBookSelection(existingBook)
+                    appDelegate.tabBarController.simulateBookSelection(existingBook)
                 }
                 }, cancel: { [unowned self] in
                     // Deselect the row after dismissing the alert

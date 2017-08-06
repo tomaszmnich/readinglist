@@ -157,7 +157,7 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     func presentDuplicateAlert(_ book: Book) {
         let alert = duplicateBookAlertController(goToExistingBook: { [unowned self] in
             self.dismiss(animated: true) {
-                appDelegate.splitViewController.tabbedViewController.simulateBookSelection(book)
+                appDelegate.tabBarController.simulateBookSelection(book)
             }
         }, cancel: { [unowned self] in
             self.session?.startRunning()
@@ -206,8 +206,8 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
             self.session?.startRunning()
         }))
         alert.addAction(UIAlertAction(title: "Yes", style: UIAlertActionStyle.default, handler: { _ in
-            self.dismiss(animated: true){
-                appDelegate.splitViewController.tabbedViewController.performSegue(withIdentifier: "searchByText", sender: isbn)
+            self.dismiss(animated: true){ [unowned self] in
+                self.presentingViewController?.performSegue(withIdentifier: "searchByText", sender: isbn)
             }
         }))
         self.present(alert, animated: true, completion: nil)

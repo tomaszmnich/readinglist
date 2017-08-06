@@ -72,6 +72,10 @@ class BookDetailsViewModel {
 }
 
 class BookDetails: UIViewController {
+    var parentSplitViewController: SplitViewController? {
+        get { return appDelegate.tabBarController.selectedViewController as? SplitViewController }
+    }
+    
     @IBOutlet weak var shareButton: UIBarButtonItem!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var authorsLabel: UILabel!
@@ -203,7 +207,7 @@ class BookDetails: UIViewController {
             self.viewModel = nil
 
             // Pop back to the book table if necessary
-            appDelegate.splitViewController.masterNavigationController.popToRootViewController(animated: false)
+            parentSplitViewController?.masterNavigationController.popToRootViewController(animated: false)
         }
     }
     
