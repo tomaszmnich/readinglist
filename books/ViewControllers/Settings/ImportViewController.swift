@@ -34,8 +34,8 @@ class ImportViewController : FormViewController, UIDocumentPickerDelegate, UIDoc
         let documentImport = UIDocumentMenuViewController(documentTypes: ["public.comma-separated-values-text"], in: .import)
         documentImport.delegate = self
         if let popPresenter = documentImport.popoverPresentationController {
-            popPresenter.sourceRect = cell.contentView.bounds
-            popPresenter.sourceView = cell.contentView
+            popPresenter.sourceRect = cell.frame
+            popPresenter.sourceView = self.tableView
             popPresenter.permittedArrowDirections = .up
         }
         self.present(documentImport, animated: true)
