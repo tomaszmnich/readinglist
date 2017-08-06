@@ -71,8 +71,8 @@ class ExportViewController: FormViewController {
             ]
             
             if let popPresenter = activityViewController.popoverPresentationController {
-                let cellRect = self.tableView.rectForRow(at: IndexPath(item: 0, section: 1))
-                popPresenter.sourceRect = cellRect
+                let cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 0))!
+                popPresenter.sourceRect = cell.frame
                 popPresenter.sourceView = self.tableView
                 popPresenter.permittedArrowDirections = .any
             }

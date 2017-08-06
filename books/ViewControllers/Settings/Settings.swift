@@ -86,25 +86,25 @@ class Settings: UITableViewController, MFMailComposeViewControllerDelegate {
     }
     
     func sendFeedbackEmail() {
-        let toEmail = "readinglist@andrewbennet.com"
+        let toEmail = "feedback@readinglistapp.xyz"
         if MFMailComposeViewController.canSendMail() {
             
             let appVersion = appDelegate.appVersionDisplay()
             
             let mailComposer = MFMailComposeViewController()
             mailComposer.mailComposeDelegate = self
-            mailComposer.setToRecipients([toEmail])
-            mailComposer.setSubject("Reading List \(appVersion) Feedback")
+            mailComposer.setToRecipients(["App Developer <\(toEmail)>"])
+            mailComposer.setSubject("Reading List Feedback")
             let messageBody = "\n\n\n" +
                 "Reading List\n" +
                 "App Version: \(appVersion)\n" +
                 "iOS Version: \(UIDevice.current.systemVersion)\n" +
-                "Device: \(UIDevice.current.model)"
+                "Device: \(UIDevice.current.modelIdentifier)"
             mailComposer.setMessageBody(messageBody, isHTML: false)
             self.present(mailComposer, animated: true)
         }
         else {
-            let alert = UIAlertController(title: "Can't send email", message: "Couldn't find any email accounts. If you *really* want to give feedback, email \(toEmail). Thanks!", preferredStyle: .alert)
+            let alert = UIAlertController(title: "Can't send email", message: "Couldn't find any email accounts. If you want to give feedback, email \(toEmail)", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default))
             self.present(alert, animated: true)
         }
