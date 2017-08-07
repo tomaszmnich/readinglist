@@ -28,6 +28,7 @@ class AttributionsViewController : UIViewController {
         
         textView.attributedText = mutableText
         
-        textView.setContentOffset(CGPoint(x: 0, y: -navigationController!.navigationBar.frame.height), animated: false)
+        // Scroll the textview to the top
+        textView.contentOffset = CGPoint(x: 0, y: textView.contentOffset.x - textView.contentSize.height)
     }
 }
