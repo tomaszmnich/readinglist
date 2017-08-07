@@ -57,10 +57,6 @@ class BookTable: AutoUpdatingTableViewController {
         get { return splitViewController as! SplitViewController }
     }
     
-    /// Whether there are any books in this screen. Does not consider the impact of searching - there
-    /// may be no results on screen due to a search, but this property might still be true.
-    var anyBooksExist = true
-    
     override func viewDidLoad() {
         
         let readStatePredicate = NSPredicate.Or(readStates.map{BookPredicate.readState(equalTo: $0)})
@@ -93,11 +89,10 @@ class BookTable: AutoUpdatingTableViewController {
         
         // Set the DZN data set source
         tableView.emptyDataSetSource = self
+        tableView.emptyDataSetDelegate = self
         
-        // The left button should be an edit button. Hide it by default in case there
-        // are no books. This will be updated by the numberOfSections func
+        // The left button should be an edit button
         navigationItem.leftBarButtonItem = editButtonItem
-        navigationItem.leftBarButtonItem!.toggleHidden(hidden: true)
 
         super.viewDidLoad()
     }
@@ -109,31 +104,6 @@ class BookTable: AutoUpdatingTableViewController {
         }
         
         super.viewDidAppear(animated)
-    }
-
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        let numberOfSections = super.numberOfSections(in: tableView)
-        
-        // Remember whether we have any books
-        if !resultsFilterer.showingSearchResults {
-            let currentlyAnyBooks = numberOfSections != 0
-            if currentlyAnyBooks != anyBooksExist {
-                anyBooksExist = currentlyAnyBooks
-                searchController.searchBar.isHidden = !anyBooksExist
-                navigationItem.leftBarButtonItem!.toggleHidden(hidden: !currentlyAnyBooks)
-                // If we hide the search bar, we should make sure the keyboard is gone too.
-                // This can happen in slightly tenious circumstances - if a user deletes or removes
-                // the last book on the screen whilst in a search mode, then dismisses the search, 
-                // brings it back, and then dismisses it again.
-                if searchController.searchBar.isHidden {
-                    DispatchQueue.main.async {
-                        self.searchController.searchBar.resignFirstResponder()
-                    }
-                }
-            }
-        }
-
-        return numberOfSections
     }
 
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -272,7 +242,6 @@ class BookTable: AutoUpdatingTableViewController {
 /// DZNEmptyDataSetSource functions
 extension BookTable : DZNEmptyDataSetSource {
     
-
     func title(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
         let titleText: String!
         if resultsFilterer.showingSearchResults {
@@ -325,5 +294,22 @@ extension BookTable : DZNEmptyDataSetSource {
         }
         
         return descriptionText
+    }
+}
+
+extension BookTable: DZNEmptyDataSetDelegate {
+    // We want to hide the Edit button when there are no items on the screen; show it when there are
+    // items on the screen.
+    // We want to hide the Search Bar when there are no items, but not due to a search filtering everything out.
+    func emptyDataSetDidAppear(_ scrollView: UIScrollView!) {
+        if !resultsFilterer.showingSearchResults {
+            self.searchController.searchBar.isHidden = true
+        }
+        navigationItem.leftBarButtonItem!.toggleHidden(hidden: true)
+    }
+    
+    func emptyDataSetDidDisappear(_ scrollView: UIScrollView!) {
+        self.searchController.searchBar.isHidden = false
+        navigationItem.leftBarButtonItem!.toggleHidden(hidden: false)
     }
 }
