@@ -19,7 +19,7 @@ class ExportViewController: FormViewController {
         
         form +++ Section(footer: "Tap the button to export all books to a CSV file. CSV files can be opened by most spreadsheet software. "
             + "\n\nThe CSV file will have the following headers:\n\n"
-            + ImportViewController.headerNames.map{ "  \u{2022} \($0)" }.joined(separator: "\n"))
+            + Book.csvColumnHeaders.map{ "  \u{2022} \($0)" }.joined(separator: "\n"))
         
             <<< ButtonRow() {
                 $0.title = "Export"

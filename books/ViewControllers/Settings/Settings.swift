@@ -93,7 +93,7 @@ class Settings: UITableViewController, MFMailComposeViewControllerDelegate {
             
             let mailComposer = MFMailComposeViewController()
             mailComposer.mailComposeDelegate = self
-            mailComposer.setToRecipients(["App Developer <\(toEmail)>"])
+            mailComposer.setToRecipients(["Reading List Developer <\(toEmail)>"])
             mailComposer.setSubject("Reading List Feedback")
             let messageBody = "\n\n\n" +
                 "Reading List\n" +

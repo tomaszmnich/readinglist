@@ -134,6 +134,8 @@ extension Book {
         CsvColumn<Book>(header: "Current Page", cellValue: {$0.currentPage == nil ? nil : String(describing: $0.currentPage!)}),
         CsvColumn<Book>(header: "Notes", cellValue: {$0.notes})
     )
+    
+    static let csvColumnHeaders = ["Google Books ID", "ISBN-13", "Title", "Author", "Page Count", "Publication Date", "Description", "Subjects", "Started Reading", "Finished Reading", "Current Page", "Notes"]
 }
 
 
