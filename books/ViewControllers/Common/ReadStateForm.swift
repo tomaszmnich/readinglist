@@ -82,7 +82,7 @@ class ReadStateForm: FormViewController {
             formValidated(isValid: startedReading.value!.compareIgnoringTime(finishedReading.value!) != .orderedDescending)
         }
         else if self.readState.value == .reading {
-            formValidated(isValid: currentPage.value == nil || currentPage.value! > 0)
+            formValidated(isValid: currentPage.value == nil || (currentPage.value! >= 0 && currentPage.value! <= 999999999))
         }
     }
     
