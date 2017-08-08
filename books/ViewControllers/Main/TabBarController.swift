@@ -37,4 +37,16 @@ class TabBarController: UITabBarController {
             let selectedBook = appDelegate.booksStore.get(bookIdUrl: identifierUrl) else { return }
         simulateBookSelection(selectedBook)
     }
+    
+    override func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
+        if let selectedSplitViewController = selectedSplitViewController, item.tag == selectedIndex {
+            
+            if selectedSplitViewController.masterNavigationController.viewControllers.count > 1 {
+               selectedSplitViewController.masterNavigationController.popToRootViewController(animated: true)
+            }
+            else if let topTable = selectedSplitViewController.masterNavigationController.viewControllers.first as? UITableViewController {
+                topTable.tableView.setContentOffset(CGPoint(x: 0, y: 0 - topTable.tableView.contentInset.top), animated: true)
+            }
+        }
+    }
 }
