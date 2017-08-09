@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="C9v-sl-9fR">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="C9v-sl-9fR">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -15,7 +15,7 @@
         <!--Tab Bar Controller-->
         <scene sceneID="M4F-hO-4et">
             <objects>
-                <tabBarController hidesBottomBarWhenPushed="YES" id="C9v-sl-9fR" customClass="TabBarController" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
+                <tabBarController id="C9v-sl-9fR" customClass="TabBarController" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBar key="tabBar" contentMode="scaleToFill" id="fux-T1-IA9">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -397,7 +397,7 @@
         <image name="to-do-filled" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="ORf-W5-Eln"/>
-        <segue reference="Na9-6W-gDW"/>
+        <segue reference="Nby-6z-xHm"/>
+        <segue reference="kjk-Kz-aZ6"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -53,6 +53,7 @@
 		499470681DB40D22008CB06E /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 499470671DB40D22008CB06E /* TabBarController.swift */; };
 		4994706A1DB42067008CB06E /* ReadingTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 499470691DB42067008CB06E /* ReadingTable.swift */; };
 		4994706C1DB421A2008CB06E /* FinishedTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4994706B1DB421A2008CB06E /* FinishedTable.swift */; };
+		49B2CEF81F39A4D300C6B45D /* SortOrderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B2CEF71F39A4D300C6B45D /* SortOrderViewController.swift */; };
 		49BD08701EA2A85C00B21A01 /* Observables.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BD086F1EA2A85C00B21A01 /* Observables.swift */; };
 		49BDCC631CD2A00F00F20AAE /* BookMetadataForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BDCC621CD2A00F00F20AAE /* BookMetadataForm.swift */; };
 		49BDCC6C1CD6120400F20AAE /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BDCC6B1CD6120400F20AAE /* Utilities.swift */; };
@@ -142,6 +143,7 @@
 		499470671DB40D22008CB06E /* TabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		499470691DB42067008CB06E /* ReadingTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadingTable.swift; sourceTree = "<group>"; };
 		4994706B1DB421A2008CB06E /* FinishedTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FinishedTable.swift; sourceTree = "<group>"; };
+		49B2CEF71F39A4D300C6B45D /* SortOrderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SortOrderViewController.swift; sourceTree = "<group>"; };
 		49BD086F1EA2A85C00B21A01 /* Observables.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Observables.swift; sourceTree = "<group>"; };
 		49BDCC621CD2A00F00F20AAE /* BookMetadataForm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookMetadataForm.swift; sourceTree = "<group>"; };
 		49BDCC6B1CD6120400F20AAE /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
@@ -285,6 +287,7 @@
 				49F6AC641E98F36B000B7D17 /* ImportViewController.swift */,
 				49CEB8091E9D8C06003FD859 /* DebugSettingsViewController.swift */,
 				492710521F35BF3100286352 /* ExportViewController.swift */,
+				49B2CEF71F39A4D300C6B45D /* SortOrderViewController.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -750,6 +753,7 @@
 				49812BB41CA95F0600A49EBA /* BookPredicate.swift in Sources */,
 				495C5D3F1BF1412600E00C07 /* BookTable.swift in Sources */,
 				4943DB791DBD5104004CAF30 /* Settings.swift in Sources */,
+				49B2CEF81F39A4D300C6B45D /* SortOrderViewController.swift in Sources */,
 				491C842F1CF6281B00894313 /* EditReadState.swift in Sources */,
 				495C5D101BF1404D00E00C07 /* AppDelegate.swift in Sources */,
 				492710531F35BF3100286352 /* ExportViewController.swift in Sources */,

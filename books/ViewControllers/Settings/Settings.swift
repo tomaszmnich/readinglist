@@ -14,6 +14,7 @@ import MessageUI
 class Settings: UITableViewController, MFMailComposeViewControllerDelegate {
     
     @IBOutlet weak var debugSettingsCell: UITableViewCell!
+    @IBOutlet weak var sortOrderCell: UITableViewCell!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,10 +26,15 @@ class Settings: UITableViewController, MFMailComposeViewControllerDelegate {
         #endif
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        sortOrderCell.detailTextLabel!.text = TableSortOrderInfo.Options[UserSettings.tableSortOrder]!.displayName
+        super.viewWillAppear(animated)
+    }
+    
     override func tableView(_ tableView: UITableView, willDisplayFooterView view: UIView, forSection section: Int) {
         let footer = view as! UITableViewHeaderFooterView
         footer.textLabel?.textAlignment = .center
-        if section == 2 {
+        if section == 3 {
             footer.textLabel?.text = "Reading List \(appDelegate.appVersionDisplay())\nDeveloped by Andrew Bennet"
         }
     }
@@ -52,10 +58,10 @@ class Settings: UITableViewController, MFMailComposeViewControllerDelegate {
             // "Feedback"
             sendFeedbackEmail()
         
-        case (1, 2):
+        case (2, 2):
             deleteAllData()
             
-        case (2, 0):
+        case (3, 0):
             UIApplication.shared.openUrlPlatformSpecific(url: URL(string: "https://github.com/AndrewBennet/readinglist")!)
 
         default:

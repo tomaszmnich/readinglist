@@ -27,8 +27,10 @@ class AttributionsViewController : UIViewController {
         mutableText.hyperlinkText("CHCSVParser", to: URL(string: "https://github.com/davedelong/CHCSVParser")!)
         
         textView.attributedText = mutableText
-        
-        // Scroll the textview to the top
-        textView.contentOffset = CGPoint(x: 0, y: textView.contentOffset.x - textView.contentSize.height)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        self.textView.contentOffset = CGPoint.zero
+        super.viewWillAppear(animated)
     }
 }

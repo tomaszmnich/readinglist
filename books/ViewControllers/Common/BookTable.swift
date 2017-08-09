@@ -58,33 +58,19 @@ class BookTable: AutoUpdatingTableViewController {
     }
     
     override func viewDidLoad() {
-        
-        let readStatePredicate = NSPredicate.Or(readStates.map{BookPredicate.readState(equalTo: $0)})
-        
-        // Set up the results controller
-        resultsController = appDelegate.booksStore.fetchedResultsController(readStatePredicate, initialSortDescriptors: BooksStore.standardSortOrder)
     
-        // Assign the table updator, which will deal with changes to the data
-        tableUpdater = TableUpdater<Book, BookTableViewCell>(table: tableView, controller: resultsController)
-        
         /// The UISearchController to which this UITableViewController will be connected.
-        searchController = UISearchController(searchResultsController: nil)
-        let predicateBuilder = BookPredicateBuilder(readStatePredicate: readStatePredicate)
-        resultsFilterer = FetchedResultsFilterer(uiSearchController: searchController, tableView: self.tableView, fetchedResultsController: resultsController, predicateBuilder: predicateBuilder)
+        configureSearchController()
         
-        // Search Controller UI decisions
-        searchController.dimsBackgroundDuringPresentation = false
-        searchController.searchBar.returnKeyType = .done
-        searchController.searchBar.placeholder = "Your Library"
-        searchController.searchBar.searchBarStyle = .minimal
-        searchController.searchBar.backgroundColor = tableView.backgroundColor!
-        searchController.hidesNavigationBarDuringPresentation = false
-        tableView.tableHeaderView = searchController.searchBar
+        // Handle the data fetch, sort and filtering
+        buildResultsController()
         
         // We will manage the clearing of selections ourselves.
         clearsSelectionOnViewWillAppear = false
         
         // Setting the table footer removes the cell separators.
+        tableView.tableHeaderView = searchController.searchBar
+        tableView.setContentOffset(CGPoint(x: 0, y: searchController.searchBar.frame.height), animated: false)
         tableView.tableFooterView = UIView()
         
         // Set the DZN data set source
@@ -94,7 +80,34 @@ class BookTable: AutoUpdatingTableViewController {
         // The left button should be an edit button
         navigationItem.leftBarButtonItem = editButtonItem
 
+        // Watch for changes in book sort order
+        NotificationCenter.default.addObserver(self, selector: #selector(bookSortChanged), name: NSNotification.Name.onBookSortOrderChanged, object: nil)
+        
         super.viewDidLoad()
+    }
+    
+    @objc func bookSortChanged() {
+        buildResultsController()
+        tableView.reloadData()
+    }
+    
+    func buildResultsController() {
+        let readStatePredicate = NSPredicate.Or(readStates.map{BookPredicate.readState(equalTo: $0)})
+        resultsController = appDelegate.booksStore.fetchedResultsController(readStatePredicate, initialSortDescriptors: UserSettings.selectedSortOrder)
+        tableUpdater = TableUpdater<Book, BookTableViewCell>(table: tableView, controller: resultsController)
+        
+        let predicateBuilder = BookPredicateBuilder(readStatePredicate: readStatePredicate)
+        resultsFilterer = FetchedResultsFilterer(uiSearchController: searchController, tableView: self.tableView, fetchedResultsController: resultsController, predicateBuilder: predicateBuilder)
+    }
+    
+    func configureSearchController() {
+        searchController = UISearchController(searchResultsController: nil)
+        searchController.dimsBackgroundDuringPresentation = false
+        searchController.searchBar.returnKeyType = .done
+        searchController.searchBar.placeholder = "Your Library"
+        searchController.searchBar.searchBarStyle = .minimal
+        searchController.searchBar.backgroundColor = tableView.backgroundColor!
+        searchController.hidesNavigationBarDuringPresentation = false
     }
     
     override func viewDidAppear(_ animated: Bool) {

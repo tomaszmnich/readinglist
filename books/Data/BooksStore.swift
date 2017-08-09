@@ -51,14 +51,6 @@ class BooksStore {
     }
     
     /**
-     Ordered by read state, sort order, started reading date and then finished reading date
-    */
-    static let standardSortOrder = [BookPredicate.readStateSort,
-                                    BookPredicate.sortIndexSort,
-                                    BookPredicate.finishedReadingDescendingSort,
-                                    BookPredicate.startedReadingDescendingSort]
-    
-    /**
      Retrieves the specified Book, if it exists.
      */
     func get(bookIdUrl: URL) -> Book? {
