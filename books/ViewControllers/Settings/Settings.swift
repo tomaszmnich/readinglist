@@ -50,7 +50,7 @@ class Settings: UITableViewController, MFMailComposeViewControllerDelegate {
             UIApplication.shared.openUrlPlatformSpecific(url: URL(string: "https://www.readinglistapp.xyz")!)
         case (0, 1):
             // "Share"
-            present(UIActivityViewController(activityItems: [URL(string: "https://\(appStoreAddress)")!], applicationActivities: nil), animated: true)
+            share()
         case (0, 2):
             // "Rate"
             UIApplication.shared.openUrlPlatformSpecific(url: URL(string: "itms-apps://\(appStoreAddress)?action=write-review")!)
@@ -67,6 +67,17 @@ class Settings: UITableViewController, MFMailComposeViewControllerDelegate {
         default:
             break
         }
+    }
+    
+    func share() {
+        let activityViewController = UIActivityViewController(activityItems: [URL(string: "https://\(appStoreAddress)")!], applicationActivities: nil)
+        if let popPresenter = activityViewController.popoverPresentationController {
+            let cell = self.tableView.cellForRow(at: IndexPath(row: 1, section: 0))!
+            popPresenter.sourceRect = cell.frame
+            popPresenter.sourceView = self.tableView
+            popPresenter.permittedArrowDirections = .any
+        }
+        present(activityViewController, animated: true)
     }
     
     func deleteAllData() {
