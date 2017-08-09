@@ -25,8 +25,8 @@ class BookPredicate {
         return NSPredicate(intFieldName: readStateFieldName, equalTo: Int(readState.rawValue))
     }
     
-    static func titleAndAuthor(searchString: String) -> NSPredicate {
-        return NSPredicate.searchWithinFields(searchString, fieldNames: titleFieldName, authorFieldName)
+    static func search(searchString: String) -> NSPredicate {
+        return NSPredicate.wordsWithinFields(searchString, fieldNames: titleFieldName, authorFieldName, "ANY subjects.name")
     }
     
     static func isbnEqual(to isbn: String) -> NSPredicate {
@@ -36,7 +36,7 @@ class BookPredicate {
     static func googleBooksIdEqual(to googleBooksId: String) -> NSPredicate {
         return NSPredicate(stringFieldName: googleBooksIdFieldName, equalTo: googleBooksId)
     }
-    
+
     static let titleSort = NSSortDescriptor(key: titleFieldName, ascending: true)
     static let startedReadingSort = NSSortDescriptor(key: startedReadingFieldName, ascending: true)
     static let startedReadingDescendingSort = NSSortDescriptor(key: startedReadingFieldName, ascending: false)

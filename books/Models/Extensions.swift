@@ -285,7 +285,7 @@ extension NSPredicate {
         return NSCompoundPredicate(andPredicateWithSubpredicates: andPredicates)
     }
     
-    static func searchWithinFields(_ searchString: String, fieldNames: String...) -> NSPredicate {
+    static func wordsWithinFields(_ searchString: String, fieldNames: String...) -> NSPredicate {
         // Split on whitespace and remove empty elements
         let searchStringComponents = searchString.components(separatedBy: CharacterSet.alphanumerics.inverted).filter{
             !$0.isEmpty
