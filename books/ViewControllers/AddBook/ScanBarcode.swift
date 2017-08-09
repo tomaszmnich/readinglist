@@ -57,6 +57,8 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         }
         if let debugSimulation = DebugSettings.barcodeScanSimulation {
             switch debugSimulation {
+            case .none:
+                break
             case .normal:
                 // In "normal" mode we want to ignore any actual errors, like not having a camera
                 return

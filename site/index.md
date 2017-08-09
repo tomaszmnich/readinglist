@@ -2,31 +2,37 @@
 layout: default
 ---
 <h1>
-  <img src="https://raw.githubusercontent.com/AndrewBennet/readinglist/master/media/AppIcon.png"
-  alt="App icon" style="width: 100px; float: left; padding-right: 10px;" />
+  <img src="{{ site.url }}/assets/AppIcon.png"
+  alt="Reading List app icon" style="width: 100px; float: left; padding-right: 10px;" />
   Reading List
 </h1>
 
-Reading List is an app for iPhone, iPad and iPod Touch, to track personal reading lists.
+Reading List is a free iOS app for iPhone, iPad and iPod Touch, to track and catalog the books you read.
 
-<img src="https://raw.githubusercontent.com/AndrewBennet/readinglist/master/media/iPhone7-ToReadList_framed.png"
-  alt="iPhone Screenshot" style="width: 280px;" />
+<img src="{{ site.url }}/assets/iPhone7-ToReadList_framed.png"
+  alt="Reading List iPhone Screenshot" style="width: 280px;" />
 
-## Features
+Easily keep a list of books you’ve read, books you’re reading, and books you want to read. Track your reading progress by recording the start and finish dates of the books in your list.
 
-* Add books quickly by scanning a barcode or searching online, using Google Books data
-* Easily mark a book as started or finished by swiping
-* Order the books in your To Read list to plan what to read next
-* Record notes against each book
-* Export and import your books to and from CSV file
-* No ads, no purchases and no online account required!
+## Add New Books
+* Scan the barcode of a book to quickly add it to your list
+* Search online to find and add books
+* Alternatively, add a book manually by typing in its details
 
-## Open Source
+## Track Your Reading
+* Quickly log the dates you start and finish each book with a tap or swipe
+* Order the books in your To Read section, to help plan your next book
+* Record your current page number of the books you're reading
+* Add notes to each book to keep track of your thoughts, quotes, etc.
 
-Reading List is free and [open source](https://github.com/AndrewBennet/readinglist), released under the [MIT Licence](https://github.com/AndrewBennet/readinglist/blob/master/LICENSE).
+## Free & Open
+* Export and import all your data
+* No online account or signup needed
+* All data is private and stored only on-device
+* Fully [open source](https://github.com/AndrewBennet/readinglist), released under the [MIT Licence](https://github.com/AndrewBennet/readinglist/blob/master/LICENSE)
+
+
+<br />
+By Andrew Bennet ([GitHub](https://github.com/AndrewBennet), [Twitter](https://twitter.com/AndrewBennet))
 
 <a href="https://itunes.apple.com/us/app/reading-list-a-book-tracking-log/id1217139955?mt=8" style="display:inline-block;overflow:hidden;background:url(//linkmaker.itunes.apple.com/assets/shared/badges/en-us/appstore-lrg.svg) no-repeat;width:135px;height:40px;background-size:contain;"></a>
-
-## Author
-
-Andrew Bennet ([GitHub](https://github.com/AndrewBennet), [Twitter](https://twitter.com/AndrewBennet)).

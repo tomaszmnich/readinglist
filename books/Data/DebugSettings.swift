@@ -9,6 +9,7 @@
 import Foundation
 
 enum BarcodeScanSimulation: Int {
+    case none = 0
     case normal = 1
     case noCameraPermissions = 2
     case validIsbn = 3
@@ -17,6 +18,8 @@ enum BarcodeScanSimulation: Int {
     
     var titleText: String {
         switch self {
+        case .none:
+            return "None"
         case .normal:
             return "Normal"
         case .noCameraPermissions:
@@ -59,7 +62,7 @@ class DebugSettings {
     static var barcodeScanSimulation: BarcodeScanSimulation? {
         get {
             #if DEBUG
-                guard let rawValue = UserDefaults.standard.value(forKey: barcodeScanSimulationKey) as? Int else { return nil }
+                guard let rawValue = UserDefaults.standard.value(forKey: barcodeScanSimulationKey) as? Int else { return .none }
                 return BarcodeScanSimulation.init(rawValue: rawValue)!
             #else
                 return nil
