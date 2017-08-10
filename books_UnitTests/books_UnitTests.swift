@@ -125,7 +125,8 @@ class books_UnitTests: XCTestCase {
     }
     
     func testToReadBookOrdering() {
-        let fetchedResultsController = booksStore.fetchedResultsController(BookPredicate.readState(equalTo: .toRead), initialSortDescriptors: BooksStore.standardSortOrder)
+        UserSettings.tableSortOrder = .byDate
+        let fetchedResultsController = booksStore.fetchedResultsController(BookPredicate.readState(equalTo: .toRead), initialSortDescriptors: UserSettings.selectedSortOrder)
         
         let first = booksStore.create(from: getTestBookMetadata(), readingInformation: BookReadingInformation.toRead())
         let second = booksStore.create(from: getTestBookMetadata(), readingInformation: BookReadingInformation.toRead())
@@ -136,7 +137,8 @@ class books_UnitTests: XCTestCase {
     }
     
     func testReadingBookOrdering() {
-        let fetchedResultsController = booksStore.fetchedResultsController(BookPredicate.readState(equalTo: .reading), initialSortDescriptors: BooksStore.standardSortOrder)
+        UserSettings.tableSortOrder = .byDate
+        let fetchedResultsController = booksStore.fetchedResultsController(BookPredicate.readState(equalTo: .reading), initialSortDescriptors: UserSettings.selectedSortOrder)
         
         let past = booksStore.create(from: getTestBookMetadata(), readingInformation: BookReadingInformation.reading(started: yesterday, currentPage: 132))
         let future = booksStore.create(from: getTestBookMetadata(), readingInformation: BookReadingInformation.reading(started: tomorrow, currentPage: nil))
@@ -149,7 +151,8 @@ class books_UnitTests: XCTestCase {
     }
     
     func testFinishedBookOrdering() {
-        let fetchedResultsController = booksStore.fetchedResultsController(BookPredicate.readState(equalTo: .finished), initialSortDescriptors: BooksStore.standardSortOrder)
+        UserSettings.tableSortOrder = .byDate
+        let fetchedResultsController = booksStore.fetchedResultsController(BookPredicate.readState(equalTo: .finished), initialSortDescriptors: UserSettings.selectedSortOrder)
         
         let past1 = booksStore.create(from: getTestBookMetadata(), readingInformation: BookReadingInformation.finished(started: tomorrow, finished: yesterday))
         let past2 = booksStore.create(from: getTestBookMetadata(), readingInformation: BookReadingInformation.finished(started: yesterday, finished: yesterday))

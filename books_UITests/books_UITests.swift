@@ -51,7 +51,7 @@ class books_UITests: XCTestCase {
         
         app.clickTab(.toRead)
         app.tables.cells.element(boundBy: 0).tap()
-        app.topNavBar.buttons["Edit"].tap()
+        app.navigationBars.matching(identifier: "Reading_List.BookDetails").buttons["Edit"].tap()
         app.sheets.buttons.element(boundBy: 1).tap()
         
         app.tables.staticTexts["Title"].tap()
@@ -66,7 +66,7 @@ class books_UITests: XCTestCase {
         let bookCount = Int(app.tables.element(boundBy: 0).cells.count)
         
         app.tables.cells.element(boundBy: 0).tap()
-        app.topNavBar.buttons["Edit"].tap()
+        app.navigationBars.matching(identifier: "Reading_List.BookDetails").buttons["Edit"].tap()
         app.sheets.buttons.element(boundBy: 1).tap()
         
         app.tables.staticTexts["Delete"].tap()
@@ -83,9 +83,11 @@ class books_UITests: XCTestCase {
         app.tables.staticTexts["Export"].tap()
         app.tables.element(boundBy: app.tables.count - 1).staticTexts["Export"].tap()
         
-        sleep(2)
-        app.collectionViews.collectionViews.buttons["Add To iCloud Drive"].tap()
-        app.navigationBars["iCloud Drive"].buttons["Cancel"].tap()
+        if #available(iOS 10, *){
+            sleep(2)
+            app.collectionViews.collectionViews.buttons["Add To iCloud Drive"].tap()
+            app.navigationBars["iCloud Drive"].buttons["Cancel"].tap()
+        }
     }
     
     private func scanBarcode(app: ReadingListApplication, mode: BarcodeScanSimulation) {
