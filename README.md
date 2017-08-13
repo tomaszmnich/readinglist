@@ -1,4 +1,5 @@
 # Reading List
+[![Build Status](https://travis-ci.org/AndrewBennet/readinglist.svg?branch=master)](https://travis-ci.org/AndrewBennet/readinglist)
 [![codebeat badge](https://codebeat.co/badges/3f7723a7-8967-436e-b5e9-549e0261603c)](https://codebeat.co/projects/github-com-andrewbennet-readinglist)
 
 [Reading List](https://www.readinglistapp.xyz) is a free, open source iOS app for iPhone, iPad and iPod Touch, written in Swift. Reading List allows users to track and catalog the books they read.
@@ -20,7 +21,9 @@
 * Export and import all your data
 * No online account or signup needed
 * All data is private and stored only on-device
+* No ads!
 * Fully [open source](https://github.com/AndrewBennet/readinglist), released under the [MIT Licence](https://github.com/AndrewBennet/readinglist/blob/master/LICENSE)
 
-<br />
-<a href="https://itunes.apple.com/us/app/reading-list-a-book-tracking-log/id1217139955?mt=8" style="display:inline-block;overflow:hidden;background:url(//linkmaker.itunes.apple.com/assets/shared/badges/en-us/appstore-lrg.svg) no-repeat;width:135px;height:40px;background-size:contain;"></a>
+<a href="https://itunes.apple.com/gb/app/reading-list-a-book-tracking-log/id1217139955?mt=8">
+  <img src="https://linkmaker.itunes.apple.com/assets/shared/badges/en-us/appstore-lrg.svg" style="height: 60px;"/>
+</a>
