@@ -33,6 +33,6 @@ Easily keep a list of books you’ve read, books you’re reading, and books you
 
 
 <br />
-By Andrew Bennet ([GitHub](https://github.com/AndrewBennet), [Twitter](https://twitter.com/AndrewBennet))
+By [Andrew Bennet](https://www.andrewbennet.com) ([GitHub](https://github.com/AndrewBennet), [Twitter](https://twitter.com/AndrewBennet))
 
 <a href="https://itunes.apple.com/us/app/reading-list-a-book-tracking-log/id1217139955?mt=8" style="display:inline-block;overflow:hidden;background:url(//linkmaker.itunes.apple.com/assets/shared/badges/en-us/appstore-lrg.svg) no-repeat;width:135px;height:40px;background-size:contain;"></a>
