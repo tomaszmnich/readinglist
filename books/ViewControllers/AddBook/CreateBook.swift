@@ -58,6 +58,7 @@ class CreateBook: BookMetadataForm {
             finalBookMetadata.pageCount = pageCount.value
             finalBookMetadata.publicationDate = publicationDate.value
             finalBookMetadata.bookDescription = descriptionField.value
+            finalBookMetadata.subjects = subjects
             finalBookMetadata.coverImage = image.value == nil ? nil : UIImageJPEGRepresentation(image.value!, 0.7)
             
             createReadState.bookMetadata = finalBookMetadata
