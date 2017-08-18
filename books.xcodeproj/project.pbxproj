@@ -54,6 +54,7 @@
 		4994706A1DB42067008CB06E /* ReadingTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 499470691DB42067008CB06E /* ReadingTable.swift */; };
 		4994706C1DB421A2008CB06E /* FinishedTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4994706B1DB421A2008CB06E /* FinishedTable.swift */; };
 		49B2CEF81F39A4D300C6B45D /* SortOrderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B2CEF71F39A4D300C6B45D /* SortOrderViewController.swift */; };
+		49B8D8DB1F44CCB000D4C4EF /* BooksMapping_6_7.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 49B8D8DA1F44CCB000D4C4EF /* BooksMapping_6_7.xcmappingmodel */; };
 		49BD08701EA2A85C00B21A01 /* Observables.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BD086F1EA2A85C00B21A01 /* Observables.swift */; };
 		49BDCC631CD2A00F00F20AAE /* BookMetadataForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BDCC621CD2A00F00F20AAE /* BookMetadataForm.swift */; };
 		49BDCC6C1CD6120400F20AAE /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BDCC6B1CD6120400F20AAE /* Utilities.swift */; };
@@ -144,6 +145,8 @@
 		499470691DB42067008CB06E /* ReadingTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadingTable.swift; sourceTree = "<group>"; };
 		4994706B1DB421A2008CB06E /* FinishedTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FinishedTable.swift; sourceTree = "<group>"; };
 		49B2CEF71F39A4D300C6B45D /* SortOrderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SortOrderViewController.swift; sourceTree = "<group>"; };
+		49B8D8D91F44C96E00D4C4EF /* books_7.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = books_7.xcdatamodel; sourceTree = "<group>"; };
+		49B8D8DA1F44CCB000D4C4EF /* BooksMapping_6_7.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = BooksMapping_6_7.xcmappingmodel; sourceTree = "<group>"; };
 		49BD086F1EA2A85C00B21A01 /* Observables.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Observables.swift; sourceTree = "<group>"; };
 		49BDCC621CD2A00F00F20AAE /* BookMetadataForm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookMetadataForm.swift; sourceTree = "<group>"; };
 		49BDCC6B1CD6120400F20AAE /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
@@ -335,6 +338,7 @@
 				495C5D441BF14C4B00E00C07 /* ViewControllers */,
 				49F386341E869F78001F5D75 /* TestData */,
 				495C5D0F1BF1404D00E00C07 /* AppDelegate.swift */,
+				49B8D8DA1F44CCB000D4C4EF /* BooksMapping_6_7.xcmappingmodel */,
 				498CD1E41F2A8369007E98B5 /* books.xcdatamodeld */,
 				49EEF6861E943691003FF31E /* Reading List.entitlements */,
 				495C5D161BF1404D00E00C07 /* Assets.xcassets */,
@@ -758,6 +762,7 @@
 				495C5D101BF1404D00E00C07 /* AppDelegate.swift in Sources */,
 				492710531F35BF3100286352 /* ExportViewController.swift in Sources */,
 				491C84331CF630B600894313 /* CreateBook.swift in Sources */,
+				49B8D8DB1F44CCB000D4C4EF /* BooksMapping_6_7.xcmappingmodel in Sources */,
 				49160F5F1E809DFE00168FD0 /* BookImport.swift in Sources */,
 				49BDCC631CD2A00F00F20AAE /* BookMetadataForm.swift in Sources */,
 				495C5D431BF14BEB00E00C07 /* BookDetails.swift in Sources */,
@@ -1058,10 +1063,11 @@
 		498CD1E41F2A8369007E98B5 /* books.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				49B8D8D91F44C96E00D4C4EF /* books_7.xcdatamodel */,
 				492710541F360E9D00286352 /* books_6.xcdatamodel */,
 				498CD1E51F2A8369007E98B5 /* books_5.xcdatamodel */,
 			);
-			currentVersion = 492710541F360E9D00286352 /* books_6.xcdatamodel */;
+			currentVersion = 49B8D8D91F44C96E00D4C4EF /* books_7.xcdatamodel */;
 			path = books.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

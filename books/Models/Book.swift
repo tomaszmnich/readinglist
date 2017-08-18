@@ -9,11 +9,56 @@
 import Foundation
 import CoreData
 
+class BookMapping_6_7: NSEntityMigrationPolicy {
+    override func createDestinationInstances(forSource sInstance: NSManagedObject, in mapping: NSEntityMapping, manager: NSMigrationManager) throws {
+        let newBook = NSEntityDescription.insertNewObject(forEntityName: "Book", into: manager.destinationContext)
+        
+        func copyValue(forKey key: String) {
+            newBook.setValue(sInstance.value(forKey: key), forKey: key)
+        }
+        
+        copyValue(forKey: "title")
+        copyValue(forKey: "isbn13")
+        copyValue(forKey: "googleBooksId")
+        copyValue(forKey: "pageCount")
+        copyValue(forKey: "publicationDate")
+        copyValue(forKey: "bookDescription")
+        copyValue(forKey: "coverImage")
+        copyValue(forKey: "readState")
+        copyValue(forKey: "startedReading")
+        copyValue(forKey: "finishedReading")
+        copyValue(forKey: "notes")
+        copyValue(forKey: "currentPage")
+        copyValue(forKey: "sort")
+        copyValue(forKey: "createdWhen")
+        copyValue(forKey: "subjects")
+        var authors = [NSManagedObject]()
+        for author in ((sInstance.value(forKey: "authorList") as! String).components(separatedBy: ",").map {$0.trimming()}) {
+            let newAuthor = NSEntityDescription.insertNewObject(forEntityName: "Author", into: manager.destinationContext)
+            if let range = author.range(of: " ", options: .backwards) {
+                newAuthor.setValue(author.substring(from: range.upperBound), forKey: "lastName")
+                newAuthor.setValue(author.substring(to: range.upperBound), forKey: "firstNames")
+            }
+            else {
+                newAuthor.setValue(author, forKey: "lastName")
+            }
+            authors.append(newAuthor)
+        }
+        newBook.setValue(NSOrderedSet(array: authors), forKey: "authors")
+    }
+}
+
+@objc(Author)
+public class Author: NSManagedObject {
+    @NSManaged var lastName: String
+    @NSManaged var firstNames: String?
+}
+
 @objc(Book)
 public class Book: NSManagedObject {   
     // Book Metadata
     @NSManaged var title: String
-    @NSManaged var authorList: String
+    var authorList: String!
     @NSManaged var isbn13: String?
     @NSManaged var googleBooksId: String?
     @NSManaged var pageCount: NSNumber?
@@ -32,11 +77,16 @@ public class Book: NSManagedObject {
     @NSManaged var sort: NSNumber?
     @NSManaged var createdWhen: Date
     
-    // Subjects
-    @NSManaged public var subjects: NSOrderedSet
+    // Relationships
+    @NSManaged var subjects: NSOrderedSet
+    @NSManaged var authors: NSOrderedSet
     
     var subjectsArray: [Subject] {
         get { return subjects.array.map{($0 as! Subject)} }
+    }
+    
+    var authorsArray: [Author] {
+        get { return authors.array.map{($0 as! Author)} }
     }
 
 /*
