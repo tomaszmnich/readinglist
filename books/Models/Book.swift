@@ -31,21 +31,30 @@ class BookMapping_6_7: NSEntityMigrationPolicy {
         copyValue(forKey: "currentPage")
         copyValue(forKey: "sort")
         copyValue(forKey: "createdWhen")
-        sInstance.setValue(manager.destinationInstances(forEntityMappingName: "SubjectToSubject",
-                                                        sourceInstances: (sInstance.value(forKey: "subjects") as! [NSManagedObject])),
-                           forKey: "subjects")
+        let sourceSubjects = (sInstance.value(forKey: "subjects") as! NSOrderedSet).map{$0 as! NSManagedObject}
+        let destinationSubjects = manager.destinationInstances(forEntityMappingName: "SubjectToSubject",
+                                      sourceInstances: sourceSubjects)
+        newBook.setValue(NSOrderedSet(array: destinationSubjects), forKey: "subjects")
 
         var authors = [NSManagedObject]()
-        for author in ((sInstance.value(forKey: "authorList") as! String).components(separatedBy: ",").map {$0.trimming()}) {
-            let newAuthor = NSEntityDescription.insertNewObject(forEntityName: "Author", into: manager.destinationContext)
-            if let range = author.range(of: " ", options: .backwards) {
-                newAuthor.setValue(author.substring(from: range.upperBound).trimming(), forKey: "lastName")
-                newAuthor.setValue(author.substring(to: range.upperBound).trimming(), forKey: "firstNames")
+        for authorString in ((sInstance.value(forKey: "authorList") as! String).components(separatedBy: ",").flatMap{$0.trimming().nilIfWhitespace()}) {
+            var authorDetails: (lastName: String, firstNames: String?)?
+            if let range = authorString.range(of: " ", options: .backwards),
+                let lastName = authorString.substring(from: range.upperBound).trimming().nilIfWhitespace() {
+                authorDetails = (lastName: lastName,
+                                 firstNames: authorString.substring(to: range.upperBound).trimming().nilIfWhitespace())
             }
             else {
-                newAuthor.setValue(author, forKey: "lastName")
+                authorDetails = (lastName: authorString, firstNames: nil)
             }
-            authors.append(newAuthor)
+            
+            if let authorDetails = authorDetails {
+                let newAuthor = NSEntityDescription.insertNewObject(forEntityName: "Author", into: manager.destinationContext)
+                newAuthor.setValue(authorDetails.lastName, forKey: "lastName")
+                newAuthor.setValue(authorDetails.firstNames, forKey: "firstNames")
+                authors.append(newAuthor)
+            }
+            
         }
         newBook.setValue(NSOrderedSet(array: authors), forKey: "authors")
     }

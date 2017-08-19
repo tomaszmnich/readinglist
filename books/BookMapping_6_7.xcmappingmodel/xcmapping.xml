@@ -110,7 +110,7 @@ cBIAAYagrxECfwAHAAgAFwAzADQANQBBAEIAQwBEAF8AYABhAGcAaAB0AIoAiwCMAI0AjgCPAJAAkQCS
         <attribute name="migrationpolicyclassname" type="string">Reading_List.BookMapping_6_7</attribute>
         <attribute name="sourcename" type="string">Book</attribute>
         <attribute name="mappingtypename" type="string">Undefined</attribute>
-        <attribute name="mappingnumber" type="int16">3</attribute>
+        <attribute name="mappingnumber" type="int16">2</attribute>
         <attribute name="destinationname" type="string">Book</attribute>
         <attribute name="autogenerateexpression" type="bool">1</attribute>
         <relationship name="mappingmodel" type="1/1" destination="XDDEVMAPPINGMODEL" idrefs="z110"></relationship>
@@ -136,7 +136,7 @@ cBIAAYagrxECfwAHAAgAFwAzADQANQBBAEIAQwBEAF8AYABhAGcAaAB0AIoAiwCMAI0AjgCPAJAAkQCS
     <object type="XDDEVENTITYMAPPING" id="z120">
         <attribute name="sourcename" type="string">Subject</attribute>
         <attribute name="mappingtypename" type="string">Undefined</attribute>
-        <attribute name="mappingnumber" type="int16">2</attribute>
+        <attribute name="mappingnumber" type="int16">1</attribute>
         <attribute name="destinationname" type="string">Subject</attribute>
         <attribute name="autogenerateexpression" type="bool">1</attribute>
         <relationship name="mappingmodel" type="1/1" destination="XDDEVMAPPINGMODEL" idrefs="z110"></relationship>
