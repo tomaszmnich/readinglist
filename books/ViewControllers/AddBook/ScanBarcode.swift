@@ -208,8 +208,8 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
             self.session?.startRunning()
         }))
         alert.addAction(UIAlertAction(title: "Yes", style: UIAlertActionStyle.default, handler: { _ in
-            self.dismiss(animated: true){ [unowned self] in
-                self.presentingViewController?.performSegue(withIdentifier: "searchByText", sender: isbn)
+            self.dismiss(animated: true) {
+                appDelegate.tabBarController.selectedSplitViewController!.masterNavigationController.viewControllers[0].performSegue(withIdentifier: "searchByText", sender: isbn)
             }
         }))
         self.present(alert, animated: true, completion: nil)

@@ -21,6 +21,12 @@ class TabBarController: UITabBarController {
         selectedIndex = tab.rawValue
     }
     
+    var selectedTab: TabOption {
+        get {
+            return TabOption(rawValue: selectedIndex)!
+        }
+    }
+    
     var selectedSplitViewController: SplitViewController? {
         get { return selectedViewController as? SplitViewController }
     }
