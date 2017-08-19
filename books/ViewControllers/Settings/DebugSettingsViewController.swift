@@ -47,19 +47,33 @@ class DebugSettingsViewController: FormViewController {
                 }
             }
         
-        let simulationOptions = SelectableSection<ListCheckRow<BarcodeScanSimulation>>("Barcode scan behaviour", selectionType: .singleSelection(enableDeselection: false))
-        let currentValue = DebugSettings.barcodeScanSimulation
-        for option: BarcodeScanSimulation in [.none, .normal, .noCameraPermissions, .validIsbn, .unfoundIsbn, .existingIsbn] {
-            simulationOptions.append(ListCheckRow<BarcodeScanSimulation>(){
-                $0.title = option.titleText
-                $0.selectableValue = option
-                $0.value = (option == currentValue ? option : nil)
-                $0.onChange{
-                    DebugSettings.barcodeScanSimulation = $0.value
+        form +++ SelectableSection<ListCheckRow<BarcodeScanSimulation>>("Barcode scan behaviour", selectionType: .singleSelection(enableDeselection: false)) {
+            let currentValue = DebugSettings.barcodeScanSimulation
+            for option: BarcodeScanSimulation in [.none, .normal, .noCameraPermissions, .validIsbn, .unfoundIsbn, .existingIsbn] {
+                $0 <<< ListCheckRow<BarcodeScanSimulation>(){
+                    $0.title = option.titleText
+                    $0.selectableValue = option
+                    $0.value = (option == currentValue ? option : nil)
+                    $0.onChange{
+                        DebugSettings.barcodeScanSimulation = $0.value ?? .none
+                    }
                 }
-            })
+            }
         }
-        form +++ simulationOptions
+        
+        form +++ SelectableSection<ListCheckRow<QuickAction>>("Quick Action Simulation", selectionType: .singleSelection(enableDeselection: false)) {
+            let currentQuickActionValue = DebugSettings.quickActionSimulation
+            for quickActionOption: QuickAction in [.none, .barcodeScan, .searchOnline] {
+                $0 <<< ListCheckRow<QuickAction>(){
+                    $0.title = quickActionOption.titleText
+                    $0.selectableValue = quickActionOption
+                    $0.value = (quickActionOption == currentQuickActionValue ? quickActionOption : nil)
+                    $0.onChange{
+                        DebugSettings.quickActionSimulation = $0.value ?? .none
+                    }
+                }
+            }
+        }
         
         form +++ Section("Debug Controls")
             <<< SwitchRow() {

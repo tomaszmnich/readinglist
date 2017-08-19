@@ -55,8 +55,7 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         if DebugSettings.useFixedBarcodeScanImage {
             useExampleBarcodeImage()
         }
-        if let debugSimulation = DebugSettings.barcodeScanSimulation {
-            switch debugSimulation {
+        switch DebugSettings.barcodeScanSimulation {
             case .none:
                 break
             case .normal:
@@ -76,7 +75,6 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
                 presentCameraPermissionsAlert()
                 return
             }
-        }
         #endif
     
         let camera = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo)
