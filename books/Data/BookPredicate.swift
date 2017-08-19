@@ -11,7 +11,6 @@ import Foundation
 class BookPredicate {
     
     private static let titleFieldName = "title"
-    private static let authorFieldName = "authorList"
     
     private static let sortFieldName = "sort"
     private static let startedReadingFieldName = "startedReading"
@@ -26,7 +25,7 @@ class BookPredicate {
     }
     
     static func search(searchString: String) -> NSPredicate {
-        return NSPredicate.wordsWithinFields(searchString, fieldNames: titleFieldName, authorFieldName, "ANY subjects.name")
+        return NSPredicate.wordsWithinFields(searchString, fieldNames: titleFieldName, "ANY authors.firstNames", "ANY authors.lastName", "ANY subjects.name")
     }
     
     static func isbnEqual(to isbn: String) -> NSPredicate {
@@ -38,6 +37,7 @@ class BookPredicate {
     }
 
     static let titleSort = NSSortDescriptor(key: titleFieldName, ascending: true)
+    static let authorSort = NSSortDescriptor(key: "authors[LAST].lastName", ascending: true)
     static let startedReadingSort = NSSortDescriptor(key: startedReadingFieldName, ascending: true)
     static let startedReadingDescendingSort = NSSortDescriptor(key: startedReadingFieldName, ascending: false)
     static let finishedReadingSort = NSSortDescriptor(key: finishedReadingFieldName, ascending: true)

@@ -110,7 +110,7 @@ public class Book: NSManagedObject {
     
     var authorList: String {
         get {
-            return authorsArray.map{$0.firstNames == nil ? "" : ($0.firstNames! + " ") + $0.lastName}.joined(separator: ", ")
+            return authorsArray.map{($0.firstNames == nil ? "" : ($0.firstNames! + " ")) + $0.lastName}.joined(separator: ", ")
         }
     }
 
