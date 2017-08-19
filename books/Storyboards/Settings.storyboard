@@ -415,7 +415,7 @@
         <scene sceneID="fMM-ER-0nz">
             <objects>
                 <viewController id="juL-4Y-K5g" customClass="AttributionsViewController" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
-                    <textView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" usesAttributedText="YES" id="6iZ-6w-JVb">
+                    <textView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" usesAttributedText="YES" id="6iZ-6w-JVb">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
