@@ -13,6 +13,7 @@ import MobileCoreServices
 class BooksStore {
     
     private let bookEntityName = "Book"
+    private let authorEntityName = "Author"
     private let subjectEntityName = "Subject"
     
     private let coreDataStack: CoreDataStack
@@ -154,13 +155,32 @@ class BooksStore {
     */
     func populateBook(_ book: Book, withMetadata metadata: BookMetadata) {
         book.title = metadata.title!
-        book.authorList = metadata.authors!
         book.isbn13 = metadata.isbn13
         book.googleBooksId = metadata.googleBooksId
         book.pageCount = metadata.pageCount as NSNumber?
         book.publicationDate = metadata.publicationDate
         book.bookDescription = metadata.bookDescription
         book.coverImage = metadata.coverImage
+        
+        // Update the authors in order. Add any extras, remove any surplus
+        var authors = book.authorsArray
+        for (index, authorMetadata) in metadata.authors.enumerated() {
+            if index < authors.count {
+                authors[index].firstNames = authorMetadata.firstNames
+                authors[index].lastName = authorMetadata.lastName
+            }
+            else {
+                authors.append(createAuthor(lastName: authorMetadata.lastName, firstNames: authorMetadata.firstNames))
+            }
+        }
+        if authors.count > metadata.authors.count {
+            for oldAuthorIndex in metadata.authors.count...(authors.count - 1) {
+                let oldAuthor = authors.remove(at: oldAuthorIndex)
+                managedObjectContext.delete(oldAuthor)
+            }
+        }
+        
+        book.authors = NSOrderedSet(array: authors)
         book.subjects = NSOrderedSet(array: metadata.subjects.map{getOrCreateSubject(withName: $0)})
     }
     
@@ -171,6 +191,7 @@ class BooksStore {
     @discardableResult func create(from metadata: BookMetadata, readingInformation: BookReadingInformation, bookSort: Int? = nil, readingNotes: String? = nil) -> Book {
         let book = coreDataStack.createNew(entity: bookEntityName) as! Book
         book.createdWhen = Date()
+        
         populateBook(book, withMetadata: metadata)
         book.populate(from: readingInformation)
         book.notes = readingNotes
@@ -180,6 +201,13 @@ class BooksStore {
         save()
         updateSpotlightIndex(for: book)
         return book
+    }
+    
+    func createAuthor(lastName: String, firstNames: String?) -> Author {
+        let author = coreDataStack.createNew(entity: authorEntityName) as! Author
+        author.lastName = lastName
+        author.firstNames = firstNames
+        return author
     }
     
     /**

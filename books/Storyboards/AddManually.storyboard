@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="xds-k5-GLF">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="xds-k5-GLF">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -55,6 +56,7 @@
                     <connections>
                         <outlet property="nextButton" destination="QTN-8Z-LoW" id="Nbz-zA-L0t"/>
                         <segue destination="af7-26-DUE" kind="show" identifier="editSubjectsSegue" id="tSb-fJ-oqB"/>
+                        <segue destination="Dco-SR-ZEQ" kind="show" identifier="editAuthorSegue" id="pYX-hP-aEb"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gmG-Zu-fQn" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -88,6 +90,24 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5yp-ht-5Ct" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="38" y="994"/>
+        </scene>
+        <!--Book Author Form-->
+        <scene sceneID="mIM-9y-C2N">
+            <objects>
+                <viewController id="Dco-SR-ZEQ" customClass="BookAuthorForm" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Nl5-4J-jhJ"/>
+                        <viewControllerLayoutGuide type="bottom" id="37I-u2-668"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="JdY-Dl-3bv">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="0YV-P3-sLT" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1182" y="1759"/>
         </scene>
         <!--Book Subjects Form-->
         <scene sceneID="sqH-Rf-PtL">

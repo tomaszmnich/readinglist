@@ -18,8 +18,7 @@ class CreateBook: BookMetadataForm {
         super.viewDidLoad()
         
         // Hide the ISBN field's section and the delete button
-        isbnField.section!.hidden = true
-        isbnField.section!.evaluateHidden()
+        isbnField.section!.remove(at: isbnField.indexPath!.row)
         deleteRow.section!.hidden = true
         deleteRow.section!.evaluateHidden()
         
@@ -29,7 +28,7 @@ class CreateBook: BookMetadataForm {
             
             // Set the field values
             titleField.value = initialBookMetadata.title
-            authorList.value = initialBookMetadata.authors
+            authors = initialBookMetadata.authors
             descriptionField.value = initialBookMetadata.bookDescription
             pageCount.value = initialBookMetadata.pageCount
             publicationDate.value = initialBookMetadata.publicationDate
@@ -53,13 +52,7 @@ class CreateBook: BookMetadataForm {
             UserEngagement.logEvent(.addManualBook)
             
             let finalBookMetadata = initialBookMetadata ?? BookMetadata()
-            finalBookMetadata.title = titleField.value!
-            finalBookMetadata.authors = authorList.value!
-            finalBookMetadata.pageCount = pageCount.value
-            finalBookMetadata.publicationDate = publicationDate.value
-            finalBookMetadata.bookDescription = descriptionField.value
-            finalBookMetadata.coverImage = image.value == nil ? nil : UIImageJPEGRepresentation(image.value!, 0.7)
-            
+            populateMetadata(finalBookMetadata)
             createReadState.bookMetadata = finalBookMetadata
         }
     }

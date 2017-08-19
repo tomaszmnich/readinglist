@@ -14,9 +14,10 @@ class EditBook: BookMetadataForm {
     @IBOutlet weak var doneButton: UIBarButtonItem!
     
     override func viewDidLoad() {
-        super.viewDidLoad()
-        
+        authors = bookToEdit.authorsArray.map{($0.firstNames, $0.lastName)}
         subjects = bookToEdit.subjects.array.map{($0 as! Subject).name}
+        
+        super.viewDidLoad()
         
         // Disable the ISBN field (disallow editing of the ISBN), and wire up the delete button
         isbnField.disabled = true
@@ -32,7 +33,6 @@ class EditBook: BookMetadataForm {
             isbnField.section!.evaluateHidden()
         }
         titleField.value = bookToEdit.title
-        authorList.value = bookToEdit.authorList
         pageCount.value = bookToEdit.pageCount == nil ? nil : Int(bookToEdit.pageCount!)
         publicationDate.value = bookToEdit.publicationDate
         descriptionField.value = bookToEdit.bookDescription
@@ -66,17 +66,11 @@ class EditBook: BookMetadataForm {
     
     @IBAction func doneButtonWasPressed(_ sender: AnyObject) {
         // Check the title field is not nil
-        guard let titleFieldValue = titleField.value, let authorListValue = authorList.value else { return }
+        guard titleField.value != nil && authors.count >= 1 else { return }
         
         // Load the book metadata into an object from the form values
         let newMetadata = BookMetadata(book: bookToEdit)
-        newMetadata.title = titleFieldValue
-        newMetadata.authors = authorListValue
-        newMetadata.pageCount = pageCount.value
-        newMetadata.subjects = subjects
-        newMetadata.publicationDate = publicationDate.value
-        newMetadata.bookDescription = descriptionField.value
-        newMetadata.coverImage = image.value == nil ? nil : UIImageJPEGRepresentation(image.value!, 0.7)
+        populateMetadata(newMetadata)
         
         // Update the book
         appDelegate.booksStore.update(book: bookToEdit, withMetadata: newMetadata)

@@ -220,9 +220,8 @@ class GoogleBooks {
             guard let id = item["id"].string,
                 let title = item["volumeInfo", "title"].string,
                 let authors = item["volumeInfo", "authors"].array else { return nil }
-                
-            let singleAuthorListString = authors.map{$0.rawString()!}.joined(separator: ", ")
-            let result = SearchResult(id: id, title: title, authors: singleAuthorListString)
+            
+            let result = SearchResult(id: id, title: title, authors: authors.map{$0.rawString()!})
             
             result.thumbnailCoverUrl = URL(optionalString: item["volumeInfo","imageLinks","thumbnail"].string)?.toHttps()
             result.isbn13 = item["volumeInfo","industryIdentifiers"].array?.first(where: { json in
@@ -285,11 +284,11 @@ class GoogleBooks {
     class SearchResult {
         let id: String
         var title: String
-        var authors: String
+        var authors: [String]
         var isbn13: String?
         var thumbnailCoverUrl: URL?
         
-        init(id: String, title: String, authors: String) {
+        init(id: String, title: String, authors: [String]) {
             self.id = id
             self.title = title
             self.authors = authors
@@ -299,7 +298,7 @@ class GoogleBooks {
     class FetchResult {
         let id: String
         var title: String
-        var authors: String
+        var authors = [String]()
         var isbn13: String?
         var description: String?
         var subjects = [String]()
@@ -320,7 +319,14 @@ class GoogleBooks {
         func toBookMetadata() -> BookMetadata {
             let metadata = BookMetadata(googleBooksId: id)
             metadata.title = title
-            metadata.authors = authors
+            metadata.authors = authors.map{
+                if let range = $0.range(of: " ", options: .backwards) {
+                    return (firstNames: $0.substring(to: range.upperBound).trimming(), lastName: $0.substring(from: range.upperBound).trimming())
+                }
+                else {
+                    return (firstNames: nil, lastName: $0)
+                }
+            }
             metadata.bookDescription = description
             metadata.subjects = subjects
             metadata.coverImage = coverImage

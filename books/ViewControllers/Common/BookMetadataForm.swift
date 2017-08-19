@@ -14,25 +14,96 @@ class BookMetadataForm: FormViewController {
     
     private let isbnKey = "isbn"
     private let titleKey = "title"
-    private let authorListKey = "author"
+    private let authorsSectionKey = "authors"
     private let pageCountKey = "pageCount"
     private let subjectsKey = "subjects"
     private let publishedDateKey = "publishedDate"
     private let descriptionKey = "description"
     private let imageKey = "image"
     private let deleteKey = "delete"
+    private let editAuthorSegueName = "editAuthorSegue"
     
-    var subjects = [String]() {
-        didSet {
-            guard isViewLoaded else { return }
-            subjectsButton.updateCell()
+    var authors = [(firstNames: String?, lastName: String)]()
+    
+    func configureAuthorCellsFromArray() {
+        let maxIndex = max(authorsSection.count, authors.count) - 1
+        for index in 0...maxIndex {
+            let authorRow: AuthorButtonRow? = index < authorsSection.count ? authorsSection[index] as? AuthorButtonRow : nil
+            let authorValue: (firstNames: String?, lastName: String)? = index < authors.count ? authors[index] : nil
+        
+            // If both row and array item present, update the row from the array item
+            if let authorRow = authorRow, let authorValue = authorValue {
+                authorRow.authorFirstNames = authorValue.firstNames
+                authorRow.authorLastName = authorValue.lastName
+            }
+            else if authorRow != nil {
+                var section = form.sectionBy(tag: authorsSectionKey)!
+                section.remove(at: index)
+            }
         }
     }
+    
+    func configureAuthorArrayFromCells() {
+        authors.removeAll()
+        for (_, row) in authorsSection.enumerated() {
+            guard let authorRow = row as? AuthorButtonRow else { continue }
+            guard let lastName = authorRow.authorLastName?.trimming().nilIfWhitespace() else { continue }
+            let firstName = authorRow.authorFirstNames?.trimming().nilIfWhitespace()
+            authors.append((firstName, lastName))
+        }
+    }
+    
+    var subjects = [String]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Title
         form +++ Section()
+            <<< TextRow(titleKey) {
+                $0.title = "Title"
+                $0.add(rule: RuleRequired())
+                $0.validationOptions = .validatesOnChange
+            }.onRowValidationChanged{[unowned self] _ in
+                self.validationChanged()
+            }
+        
+        // Authors
+        +++ AuthorMultivaluedSection(multivaluedOptions: [.Insert, .Delete], header: "Authors", footer: "") {
+            let authorSection = $0 as! AuthorMultivaluedSection
+            authorSection.tag = authorsSectionKey
+            $0.addButtonProvider = { _ in
+                return ButtonRow(){
+                    $0.title = "Add Author"
+                }.cellUpdate { cell, row in
+                    cell.textLabel?.textAlignment = .left
+                }
+            }
+            $0.multivaluedRowToInsertAt = { _ in
+                return AuthorButtonRow(){
+                    $0.cellStyle = .value1
+                }.cellUpdate{ cell, _ in
+                    cell.textLabel?.textColor = UIColor.black
+                    cell.textLabel?.textAlignment = .left
+                }
+            }
+            for authorValue in authors {
+                $0 <<< AuthorButtonRow() {
+                    $0.cellStyle = .value1
+                    $0.authorLastName = authorValue.lastName
+                    $0.authorFirstNames = authorValue.firstNames
+                }.onCellSelection{ [unowned self] _, row in
+                    self.performSegue(withIdentifier: self.editAuthorSegueName, sender: row)
+                }
+                .cellUpdate{ cell, _ in
+                    cell.textLabel?.textColor = UIColor.black
+                    cell.textLabel?.textAlignment = .left
+                }
+            }
+        }
+        
+        // Details section
+        +++ Section(header: "Additional Information", footer: "")
             <<< TextRow(isbnKey) {
                 $0.title = "ISBN"
                 $0.add(rule: RuleClosure<String> { rowValue in
@@ -43,29 +114,9 @@ class BookMetadataForm: FormViewController {
                     return nil
                 })
                 $0.validationOptions = .validatesOnChange
-            }.onRowValidationChanged{[unowned self] _ in
-                self.validationChanged()
+                }.onRowValidationChanged{[unowned self] _ in
+                    self.validationChanged()
             }
-            
-        // Title and Author
-        +++ Section()
-            <<< TextRow(titleKey) {
-                $0.title = "Title"
-                $0.add(rule: RuleRequired())
-                $0.validationOptions = .validatesOnChange
-            }.onRowValidationChanged{[unowned self] _ in
-                self.validationChanged()
-            }
-            <<< TextRow(authorListKey) {
-                $0.title = "Author"
-                $0.add(rule: RuleRequired())
-                $0.validationOptions = .validatesOnChange
-            }.onRowValidationChanged{[unowned self] _ in
-                self.validationChanged()
-            }
-        
-        // Details section
-        +++ Section(header: "Additional Information", footer: "")
             <<< IntRow(pageCountKey) {
                 $0.title = "Page Count"
             }
@@ -104,6 +155,19 @@ class BookMetadataForm: FormViewController {
         
         // Validate on load
         form.validate()
+        
+        // Add callbacks after form loaded
+        authorsSection.onRowsAdded = { [unowned self] rows, _ in
+            guard rows.count == 1 else { return }
+            if let row = rows.first! as? AuthorButtonRow {
+                self.performSegue(withIdentifier: self.editAuthorSegueName, sender: row)
+            }
+            self.validationChanged()
+        }
+        authorsSection.onRowsRemoved = { [unowned self] _, _ in
+            self.configureAuthorArrayFromCells()
+            self.validationChanged()
+        }
     }
     
     var isbnField: TextRow {
@@ -114,8 +178,8 @@ class BookMetadataForm: FormViewController {
         get { return form.rowBy(tag: titleKey) as! TextRow }
     }
     
-    var authorList: TextRow {
-        get { return form.rowBy(tag: authorListKey) as! TextRow }
+    var authorsSection: AuthorMultivaluedSection {
+        get { return form.sectionBy(tag: authorsSectionKey) as! AuthorMultivaluedSection }
     }
     
     var pageCount: IntRow {
@@ -143,7 +207,9 @@ class BookMetadataForm: FormViewController {
     }
 
     private func validationChanged() {
-        formValidated(isValid: form.rows.flatMap{$0.validationErrors}.isEmpty)
+        // A bit of custom validation because Sections cannot have validators:
+        let anyAuthors = authorsSection.count > 1
+        formValidated(isValid: anyAuthors && form.rows.flatMap{$0.validationErrors}.isEmpty)
     }
     
     func formValidated(isValid: Bool) {
@@ -155,14 +221,114 @@ class BookMetadataForm: FormViewController {
         self.navigationController?.dismiss(animated: true, completion: completion)
     }
     
+    func populateMetadata(_ metadata: BookMetadata) {
+        metadata.title = titleField.value
+        metadata.authors = authors
+        metadata.pageCount = pageCount.value
+        metadata.subjects = subjects
+        metadata.publicationDate = publicationDate.value
+        metadata.bookDescription = descriptionField.value
+        metadata.coverImage = image.value == nil ? nil : UIImageJPEGRepresentation(image.value!, 0.7)
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         super.prepare(for: segue, sender: sender)
         if let subjectsVc = segue.destination as? BookSubjectsForm {
             subjectsVc.subjects = subjects
         }
+        if let authorsVs = segue.destination as? BookAuthorForm {
+            let authorRow = sender as! AuthorButtonRow
+            authorsVs.authorButton = authorRow
+            authorsVs.firstNames = authorRow.authorFirstNames
+            authorsVs.lastName = authorRow.authorLastName
+        }
+        else {
+            configureAuthorArrayFromCells()
+        }
     }
 }
 
+class BookAuthorForm: FormViewController {
+    var authorButton: AuthorButtonRow!
+    var firstNames: String?
+    var lastName: String?
+    
+    var bookMetadataForm: BookMetadataForm {
+        get { return navigationController!.viewControllers.first! as! BookMetadataForm }
+    }
+    
+    private let firstNameTag = "firstName"
+    private let lastNameTag = "lastName"
+    
+    override func viewDidLoad() {
+        
+        super.viewDidLoad()
+        
+        form +++ Section(header: "Author Name", footer: "")
+            <<< TextRow(firstNameTag) {
+                $0.placeholder = "First Name(s)"
+                $0.value = firstNames
+            }
+            <<< TextRow(lastNameTag) {
+                $0.placeholder = "Last Name"
+                $0.value = lastName
+            }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        // Update the name properties, and set them on the source button
+        firstNames = (form.rowBy(tag: firstNameTag) as! TextRow).value?.trimming()
+        lastName = (form.rowBy(tag: lastNameTag) as! TextRow).value?.trimming()
+        authorButton.authorFirstNames = firstNames
+        authorButton.authorLastName = lastName
+        
+        bookMetadataForm.configureAuthorArrayFromCells()
+        bookMetadataForm.configureAuthorCellsFromArray()
+
+        super.viewWillDisappear(animated)
+    }
+}
+
+class AuthorMultivaluedSection: MultivaluedSection {
+    public var onRowsAdded: (([BaseRow], IndexSet) -> Void)?
+    public var onRowsRemoved: (([BaseRow], IndexSet) -> Void)?
+    
+    override func rowsHaveBeenAdded(_ rows: [BaseRow], at: IndexSet) {
+        onRowsAdded?(rows, at)
+    }
+    
+    override func rowsHaveBeenRemoved(_ rows: [BaseRow], at: IndexSet) {
+        onRowsRemoved?(rows, at)
+    }
+}
+
+final class AuthorButtonRow: _ButtonRowOf<String>, RowType {
+    required init(tag: String?) {
+        super.init(tag: tag)
+    }
+    
+    var authorLastName: String? {
+        didSet {
+            authorLastName = authorLastName?.trimming().nilIfWhitespace()
+            configure()
+        }
+    }
+    
+    var authorFirstNames: String? {
+        didSet {
+            authorFirstNames = authorFirstNames?.trimming().nilIfWhitespace()
+            configure()
+        }
+    }
+    
+    private func configure() {
+        var authorPieces = [String]()
+        if let firstName = authorFirstNames { authorPieces.append(firstName) }
+        if let lastName = authorLastName { authorPieces.append(lastName) }
+        title = authorPieces.joined(separator: " ")
+        reload()
+    }
+}
 
 class BookSubjectsForm: FormViewController {
     var subjects = [String]()
@@ -198,6 +364,7 @@ class BookSubjectsForm: FormViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         bookMetadataForm.subjects = form.rows.flatMap{($0 as? TextRow)?.value?.trimming().nilIfWhitespace()}.distinct()
+        bookMetadataForm.subjectsButton.updateCell()
         super.viewWillDisappear(animated)
     }
 }

@@ -31,13 +31,16 @@ class BookMapping_6_7: NSEntityMigrationPolicy {
         copyValue(forKey: "currentPage")
         copyValue(forKey: "sort")
         copyValue(forKey: "createdWhen")
-        copyValue(forKey: "subjects")
+        sInstance.setValue(manager.destinationInstances(forEntityMappingName: "SubjectToSubject",
+                                                        sourceInstances: (sInstance.value(forKey: "subjects") as! [NSManagedObject])),
+                           forKey: "subjects")
+
         var authors = [NSManagedObject]()
         for author in ((sInstance.value(forKey: "authorList") as! String).components(separatedBy: ",").map {$0.trimming()}) {
             let newAuthor = NSEntityDescription.insertNewObject(forEntityName: "Author", into: manager.destinationContext)
             if let range = author.range(of: " ", options: .backwards) {
-                newAuthor.setValue(author.substring(from: range.upperBound), forKey: "lastName")
-                newAuthor.setValue(author.substring(to: range.upperBound), forKey: "firstNames")
+                newAuthor.setValue(author.substring(from: range.upperBound).trimming(), forKey: "lastName")
+                newAuthor.setValue(author.substring(to: range.upperBound).trimming(), forKey: "firstNames")
             }
             else {
                 newAuthor.setValue(author, forKey: "lastName")
@@ -52,13 +55,20 @@ class BookMapping_6_7: NSEntityMigrationPolicy {
 public class Author: NSManagedObject {
     @NSManaged var lastName: String
     @NSManaged var firstNames: String?
+    @NSManaged var book: Book!
+
+    override public func willSave() {
+        super.willSave()
+        if !isDeleted && book == nil {
+            managedObjectContext?.delete(self)
+        }
+    }
 }
 
 @objc(Book)
 public class Book: NSManagedObject {   
     // Book Metadata
     @NSManaged var title: String
-    var authorList: String!
     @NSManaged var isbn13: String?
     @NSManaged var googleBooksId: String?
     @NSManaged var pageCount: NSNumber?
@@ -87,6 +97,12 @@ public class Book: NSManagedObject {
     
     var authorsArray: [Author] {
         get { return authors.array.map{($0 as! Author)} }
+    }
+    
+    var authorList: String {
+        get {
+            return authorsArray.map{$0.firstNames == nil ? "" : ($0.firstNames! + " ") + $0.lastName}.joined(separator: ", ")
+        }
     }
 
 /*
@@ -194,7 +210,12 @@ extension Book {
 class BookMetadata {
     let googleBooksId: String?
     var title: String?
-    var authors: String?
+    var authors = [(firstNames: String?, lastName: String)]()
+    var authorList: String {
+        get {
+            return authors.map{($0.0 == nil ? "" : ($0.0! + " ")) + $0.1}.joined(separator: " ")
+        }
+    }
     var pageCount: Int?
     var publicationDate: Date?
     var bookDescription: String?
@@ -210,12 +231,15 @@ class BookMetadata {
     }
     
     func isValid() -> Bool {
-        return title?.isEmptyOrWhitespace == false && authors?.isEmptyOrWhitespace == false
+        return title?.isEmptyOrWhitespace == false && authors.count >= 1
     }
     
     init(book: Book) {
         self.title = book.title
-        self.authors = book.authorList
+        self.authors = book.authors.map{
+            let author = $0 as! Author
+            return (author.firstNames, author.lastName)
+        }
         self.bookDescription = book.bookDescription
         self.pageCount = book.pageCount as? Int
         self.publicationDate = book.publicationDate
@@ -229,7 +253,7 @@ class BookMetadata {
         
         let bookMetadata = BookMetadata(googleBooksId: csvData["Google Books ID"]?.nilIfWhitespace())
         bookMetadata.title = csvData["Title"]?.nilIfWhitespace()
-        bookMetadata.authors = csvData["Author"]?.nilIfWhitespace()
+        //bookMetadata.authors = csvData["Author"]?.nilIfWhitespace()
         bookMetadata.isbn13 = Isbn13.tryParse(inputString: csvData["ISBN-13"])
         bookMetadata.pageCount = csvData["Page Count"] == nil ? nil : Int(csvData["Page Count"]!)
         bookMetadata.publicationDate = csvData["Publication Date"] == nil ? nil : Date(dateString: csvData["Publication Date"]!)

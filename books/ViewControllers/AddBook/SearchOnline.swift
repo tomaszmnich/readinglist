@@ -292,7 +292,7 @@ class SearchResultViewModel {
         self.googleBooksId = searchResult.id
         self.isbn13 = searchResult.isbn13
         self.title = searchResult.title
-        self.author = searchResult.authors
+        self.author = searchResult.authors.joined(separator: ", ")
         
         // If we have a cover URL, we should use that to drive the cell image
         guard let coverURL = searchResult.thumbnailCoverUrl else { coverImage = Driver.just(#imageLiteral(resourceName: "CoverPlaceholder")); return }

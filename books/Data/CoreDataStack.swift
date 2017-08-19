@@ -52,8 +52,7 @@ class CoreDataStack {
                 return NSInMemoryStoreType
             }
         }()
-        let persistentStoreOptions = [NSMigratePersistentStoresAutomaticallyOption: true,
-                                      NSInferMappingModelAutomaticallyOption: true]
+        let persistentStoreOptions = [NSMigratePersistentStoresAutomaticallyOption: true]
         do {
             try persistentStoreCoordinator.addPersistentStore(ofType: storeDescriptor, configurationName: nil, at: storeUrl, options: persistentStoreOptions)
         }
