@@ -34,6 +34,23 @@ enum BarcodeScanSimulation: Int {
     }
 }
 
+enum QuickAction: Int {
+    case none = 0
+    case barcodeScan = 1
+    case searchOnline = 2
+    
+    var titleText: String {
+        switch self {
+        case .none:
+            return "None"
+        case .barcodeScan:
+            return "Barcode Scan"
+        case .searchOnline:
+            return "Search Online"
+        }
+    }
+}
+
 class DebugSettings {
     private static let useFixedBarcodeScanImageKey = "useFixedBarcodeScanImage"
     
@@ -59,18 +76,18 @@ class DebugSettings {
     
     private static let barcodeScanSimulationKey = "barcodeScanSimulation"
     
-    static var barcodeScanSimulation: BarcodeScanSimulation? {
+    static var barcodeScanSimulation: BarcodeScanSimulation {
         get {
             #if DEBUG
                 guard let rawValue = UserDefaults.standard.value(forKey: barcodeScanSimulationKey) as? Int else { return .none }
                 return BarcodeScanSimulation.init(rawValue: rawValue)!
             #else
-                return nil
+                return .none
             #endif
         }
         set {
             #if DEBUG
-                UserDefaults.standard.setValue(newValue?.rawValue, forKey: barcodeScanSimulationKey)
+                UserDefaults.standard.setValue(newValue.rawValue, forKey: barcodeScanSimulationKey)
             #endif
         }
     }
@@ -105,6 +122,24 @@ class DebugSettings {
         set {
             #if DEBUG
                 UserDefaults.standard.setValue(newValue, forKey: showCellReloadControlKey)
+            #endif
+        }
+    }
+    
+    private static let quickActionSimulationKey = "quickActionSimulation"
+    
+    static var quickActionSimulation: QuickAction {
+        get {
+            #if DEBUG
+                guard let simulation = UserDefaults.standard.value(forKey: quickActionSimulationKey) as? Int else { return .none }
+                return QuickAction(rawValue: simulation)!
+            #else
+                return .none
+            #endif
+        }
+        set {
+            #if DEBUG
+                UserDefaults.standard.setValue(newValue.rawValue, forKey: quickActionSimulationKey)
             #endif
         }
     }

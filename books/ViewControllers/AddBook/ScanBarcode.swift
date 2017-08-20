@@ -55,8 +55,7 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         if DebugSettings.useFixedBarcodeScanImage {
             useExampleBarcodeImage()
         }
-        if let debugSimulation = DebugSettings.barcodeScanSimulation {
-            switch debugSimulation {
+        switch DebugSettings.barcodeScanSimulation {
             case .none:
                 break
             case .normal:
@@ -76,7 +75,6 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
                 presentCameraPermissionsAlert()
                 return
             }
-        }
         #endif
     
         let camera = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo)
@@ -208,8 +206,8 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
             self.session?.startRunning()
         }))
         alert.addAction(UIAlertAction(title: "Yes", style: UIAlertActionStyle.default, handler: { _ in
-            self.dismiss(animated: true){ [unowned self] in
-                self.presentingViewController?.performSegue(withIdentifier: "searchByText", sender: isbn)
+            self.dismiss(animated: true) {
+                appDelegate.tabBarController.selectedSplitViewController!.masterNavigationController.viewControllers[0].performSegue(withIdentifier: "searchByText", sender: isbn)
             }
         }))
         self.present(alert, animated: true, completion: nil)

@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreSpotlight
+import Eureka
 
 class TabBarController: UITabBarController {
     
@@ -19,6 +20,12 @@ class TabBarController: UITabBarController {
     
     func selectTab(_ tab: TabOption) {
         selectedIndex = tab.rawValue
+    }
+    
+    var selectedTab: TabOption {
+        get {
+            return TabOption(rawValue: selectedIndex)!
+        }
     }
     
     var selectedSplitViewController: SplitViewController? {
@@ -44,8 +51,9 @@ class TabBarController: UITabBarController {
             if selectedSplitViewController.masterNavigationController.viewControllers.count > 1 {
                selectedSplitViewController.masterNavigationController.popToRootViewController(animated: true)
             }
-            else if let topTable = selectedSplitViewController.masterNavigationController.viewControllers.first as? UITableViewController {
-                topTable.tableView.setContentOffset(CGPoint(x: 0, y: 0 - topTable.tableView.contentInset.top), animated: true)
+            else if let topVc = selectedSplitViewController.masterNavigationController.viewControllers.first,
+                let topTable = (topVc as? UITableViewController)?.tableView ?? (topVc as? FormViewController)?.tableView {
+                topTable.setContentOffset(CGPoint(x: 0, y: 0 - topTable.contentInset.top), animated: true)
             }
         }
     }

@@ -123,11 +123,7 @@ class BookMetadataForm: FormViewController {
             <<< DateRow(publishedDateKey) {
                 $0.title = "Publication Date"
             }
-            <<< ButtonRow(subjectsKey){
-                $0.title = "Subjects"
-                $0.presentationMode = .segueName(segueName: "editSubjectsSegue", onDismiss: nil)
-                $0.cellStyle = .value1
-            }.cellUpdate { [unowned self] cell, _ in
+            <<< NavigationRow(title: "Subjects", segueName: "editSubjectsSegue", initialiser: {$0.cellStyle = .value1}){ [unowned self] cell, _ in
                 cell.detailTextLabel?.text = self.subjects.joined(separator: ", ")
             }
         

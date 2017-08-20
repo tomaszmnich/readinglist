@@ -29,6 +29,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return window!.rootViewController as! TabBarController
     }
     
+    private static let barcodeScanActionName = "\(productBundleIdentifier).ScanBarcode"
+    private static let searchOnlineActionName = "\(productBundleIdentifier).SearchBooks"
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 
         #if !DEBUG
@@ -44,6 +47,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func applicationDidBecomeActive(_ application: UIApplication) {
+        #if DEBUG
+            switch DebugSettings.quickActionSimulation {
+            case .barcodeScan:
+                performQuickAction(shortcutType: AppDelegate.barcodeScanActionName)
+            case .searchOnline:
+                performQuickAction(shortcutType: AppDelegate.searchOnlineActionName)
+            default:
+                break
+            }
+        #endif
         UserEngagement.onAppOpen()
     }
     
@@ -60,19 +73,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
-        
+        performQuickAction(shortcutType: shortcutItem.type)
+        completionHandler(true)
+    }
+    
+    func performQuickAction(shortcutType: String) {
         func performSegueFromToReadPage(segueName: String) {
             tabBarController.selectTab(.toRead)
             let navController = tabBarController.selectedSplitViewController!.masterNavigationController
             navController.popToRootViewController(animated: false)
             navController.viewControllers[0].performSegue(withIdentifier: segueName, sender: self)
-            completionHandler(true)
         }
-
-        if shortcutItem.type == "\(productBundleIdentifier).ScanBarcode" {
+        
+        if shortcutType == AppDelegate.barcodeScanActionName {
             performSegueFromToReadPage(segueName: "scanBarcode")
         }
-        else if shortcutItem.type == "\(productBundleIdentifier).SearchBooks" {
+        else if shortcutType == AppDelegate.searchOnlineActionName {
             performSegueFromToReadPage(segueName: "searchByText")
         }
     }
