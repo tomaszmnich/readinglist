@@ -15,12 +15,10 @@ class SortOrderViewController: FormViewController {
         super.viewDidLoad()
         
         func tableSortRow(_ tableSort: TableSortOrder) -> ListCheckRow<TableSortOrder> {
-            
-            let info = TableSortOrderInfo.Options[tableSort]!
             return ListCheckRow<TableSortOrder>() {
-                $0.title = info.displayName
-                $0.selectableValue = info.sortOrder
-                $0.value = UserSettings.tableSortOrder == info.sortOrder ? info.sortOrder : nil
+                $0.title = tableSort.displayName
+                $0.selectableValue = tableSort
+                $0.value = UserSettings.tableSortOrder == tableSort ? tableSort : nil
             }
         }
         
@@ -43,19 +41,15 @@ enum TableSortOrder: Int {
     // 0 is the default preference value.
     case byDate = 0
     case byTitle = 1
-}
-
-struct TableSortOrderInfo {
-    let sortOrder: TableSortOrder
-    let displayName: String
     
-    private init(sortOrder: TableSortOrder, displayName: String) {
-        self.sortOrder = sortOrder
-        self.displayName = displayName
+    var displayName: String {
+        switch self {
+        case .byDate:
+            return "By Date"
+        case .byTitle:
+            return "By Title"
+        }
     }
-    
-    static let Options: [TableSortOrder: TableSortOrderInfo] = [.byDate: TableSortOrderInfo(sortOrder: .byDate, displayName: "By Date"),
-                          .byTitle: TableSortOrderInfo(sortOrder: .byTitle, displayName: "By Title")]
 }
 
 class UserSettings {

@@ -10,62 +10,97 @@ import UIKit
 import SVProgressHUD
 import Crashlytics
 import MessageUI
+import Eureka
 
-class Settings: UITableViewController, MFMailComposeViewControllerDelegate {
+class Settings: FormViewController, MFMailComposeViewControllerDelegate {
     
-    @IBOutlet weak var debugSettingsCell: UITableViewCell!
-    @IBOutlet weak var sortOrderCell: UITableViewCell!
+    let appStoreAddress = "appsto.re/gb/ZtbJib.i"
+    private let bookSortOrderKey = "sortOrder"
     
     override func viewDidLoad() {
         super.viewDidLoad()
+    
+        func NavigationRow(title: String, segueName: String) -> ButtonRow {
+            return ButtonRow() {
+                $0.title = title
+                $0.presentationMode = .segueName(segueName: segueName, onDismiss: nil)
+            }.cellUpdate{ cell, _ in
+                cell.textLabel?.textAlignment = .left
+                cell.textLabel?.textColor = .black
+                cell.accessoryType = .disclosureIndicator
+            }
+        }
+        
+        func ActionButton(title: String, action: @escaping (Void) -> Void) -> ButtonRow {
+            return ButtonRow() {
+                $0.title = title
+            }.cellUpdate{ cell, _ in
+                cell.textLabel?.textAlignment = .left
+            }.onCellSelection{_,_ in
+                action()
+            }
+        }
+        
+        form +++ Section(header: "General", footer: "If you find Reading List useful, please consider giving it a rating. If you have any suggestions, feedback is welcome 👍")
+            <<< ActionButton(title: "📚 About") {
+                UIApplication.shared.openUrlPlatformSpecific(url: URL(string: "https://www.readinglistapp.xyz")!)
+            }
+            <<< ActionButton(title: "👋 Share") { [unowned self] in
+                self.share()
+            }
+            <<< ActionButton(title: "❤️ Rate") {
+                UIApplication.shared.openUrlPlatformSpecific(url: URL(string: "itms-apps://\(self.appStoreAddress)?action=write-review")!)
+            }
+            <<< ActionButton(title: "💡 Feedback"){ [unowned self] in
+                self.sendFeedbackEmail()
+            }
+        
+        +++ Section(header: "Options", footer: "")
+            <<< ButtonRow() {
+                $0.tag = bookSortOrderKey
+                $0.title = "Book Sort Order"
+                $0.cellStyle = .value1
+                $0.presentationMode = .segueName(segueName: "sortOrder", onDismiss: nil)
+            }.cellUpdate{ cell, _ in
+                cell.detailTextLabel?.text = UserSettings.tableSortOrder.displayName
+                cell.textLabel!.textColor = .black
+                cell.textLabel!.textAlignment = .left
+                cell.accessoryType = .disclosureIndicator
+            }
+        
+        +++ Section(header: "Data", footer: "")
+            <<< NavigationRow(title: "Import", segueName: "import")
+            <<< NavigationRow(title: "Export", segueName: "export")
+            <<< ButtonRow() {
+                $0.title = "Delete All"
+            }.cellUpdate{ cell, _ in
+                cell.textLabel?.textAlignment = .left
+                cell.textLabel?.textColor = .red
+            }.onCellSelection{[unowned self] _,_ in
+                self.deleteAllData()
+            }
+        
+        +++ Section(header: "Open Source", footer: "Reading List \(appDelegate.appVersionDisplay())\nDeveloped by Andrew Bennet")
+            <<< ActionButton(title: "View Source Code") {
+                UIApplication.shared.openUrlPlatformSpecific(url: URL(string: "https://github.com/AndrewBennet/readinglist")!)
+            }
+            <<< NavigationRow(title: "Attributions", segueName: "attributions")
         
         #if DEBUG
-            debugSettingsCell.isHidden = false
-        #else
-            debugSettingsCell.isHidden = true
+            form.allSections.last! <<< NavigationRow(title: "Debug Settings", segueName: "debugSettings")
         #endif
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        sortOrderCell.detailTextLabel!.text = TableSortOrderInfo.Options[UserSettings.tableSortOrder]!.displayName
         super.viewWillAppear(animated)
+        form.rowBy(tag: bookSortOrderKey)!.updateCell()
     }
     
-    override func tableView(_ tableView: UITableView, willDisplayFooterView view: UIView, forSection section: Int) {
-        let footer = view as! UITableViewHeaderFooterView
-        footer.textLabel?.textAlignment = .center
-        if section == 3 {
-            footer.textLabel?.text = "Reading List \(appDelegate.appVersionDisplay())\nDeveloped by Andrew Bennet"
-        }
-    }
-
-    let appStoreAddress = "appsto.re/gb/ZtbJib.i"
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        
-        switch (indexPath.section, indexPath.row) {
-        case (0, 0):
-            // "About"
-            UIApplication.shared.openUrlPlatformSpecific(url: URL(string: "https://www.readinglistapp.xyz")!)
-        case (0, 1):
-            // "Share"
-            share()
-        case (0, 2):
-            // "Rate"
-            UIApplication.shared.openUrlPlatformSpecific(url: URL(string: "itms-apps://\(appStoreAddress)?action=write-review")!)
-        case (0, 3):
-            // "Feedback"
-            sendFeedbackEmail()
-        
-        case (2, 2):
-            deleteAllData()
-            
-        case (3, 0):
-            UIApplication.shared.openUrlPlatformSpecific(url: URL(string: "https://github.com/AndrewBennet/readinglist")!)
-
-        default:
-            break
+    func tableView(_ tableView: UITableView, willDisplayFooterView view: UIView, forSection section: Int) {
+        // Center the footers
+        if let footer = view as? UITableViewHeaderFooterView {
+            footer.textLabel?.textAlignment = .center
         }
     }
     
@@ -86,9 +121,6 @@ class Settings: UITableViewController, MFMailComposeViewControllerDelegate {
         let confirmDelete = UIAlertController(title: "Final Warning", message: "This action is irreversible. Are you sure you want to continue?", preferredStyle: .alert)
         confirmDelete.addAction(UIAlertAction(title: "Delete", style: .destructive) { _ in
             appDelegate.booksStore.deleteAll()
-            // TODO: The empty data sets sometimes are in the wrong place after deleting everything.
-            //appDelegate.splitViewController.tabbedViewController.readingTabView.layoutSubviews()
-            //appDelegate.splitViewController.tabbedViewController.finishedTabView.layoutSubviews()
         })
         confirmDelete.addAction(UIAlertAction(title: "Cancel", style: .cancel))
         
