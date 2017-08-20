@@ -181,6 +181,7 @@ class BooksStore {
         }
         
         book.authors = NSOrderedSet(array: authors)
+        book.firstAuthorLastName = authors.first?.lastName
         book.subjects = NSOrderedSet(array: metadata.subjects.map{getOrCreateSubject(withName: $0)})
     }
     

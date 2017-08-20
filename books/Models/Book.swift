@@ -9,62 +9,19 @@
 import Foundation
 import CoreData
 
-class BookMapping_6_7: NSEntityMigrationPolicy {
-    override func createDestinationInstances(forSource sInstance: NSManagedObject, in mapping: NSEntityMapping, manager: NSMigrationManager) throws {
-        let newBook = NSEntityDescription.insertNewObject(forEntityName: "Book", into: manager.destinationContext)
-        
-        func copyValue(forKey key: String) {
-            newBook.setValue(sInstance.value(forKey: key), forKey: key)
-        }
-        
-        copyValue(forKey: "title")
-        copyValue(forKey: "isbn13")
-        copyValue(forKey: "googleBooksId")
-        copyValue(forKey: "pageCount")
-        copyValue(forKey: "publicationDate")
-        copyValue(forKey: "bookDescription")
-        copyValue(forKey: "coverImage")
-        copyValue(forKey: "readState")
-        copyValue(forKey: "startedReading")
-        copyValue(forKey: "finishedReading")
-        copyValue(forKey: "notes")
-        copyValue(forKey: "currentPage")
-        copyValue(forKey: "sort")
-        copyValue(forKey: "createdWhen")
-        let sourceSubjects = (sInstance.value(forKey: "subjects") as! NSOrderedSet).map{$0 as! NSManagedObject}
-        let destinationSubjects = manager.destinationInstances(forEntityMappingName: "SubjectToSubject",
-                                      sourceInstances: sourceSubjects)
-        newBook.setValue(NSOrderedSet(array: destinationSubjects), forKey: "subjects")
-
-        var authors = [NSManagedObject]()
-        for authorString in ((sInstance.value(forKey: "authorList") as! String).components(separatedBy: ",").flatMap{$0.trimming().nilIfWhitespace()}) {
-            var authorDetails: (lastName: String, firstNames: String?)?
-            if let range = authorString.range(of: " ", options: .backwards),
-                let lastName = authorString.substring(from: range.upperBound).trimming().nilIfWhitespace() {
-                authorDetails = (lastName: lastName,
-                                 firstNames: authorString.substring(to: range.upperBound).trimming().nilIfWhitespace())
-            }
-            else {
-                authorDetails = (lastName: authorString, firstNames: nil)
-            }
-            
-            if let authorDetails = authorDetails {
-                let newAuthor = NSEntityDescription.insertNewObject(forEntityName: "Author", into: manager.destinationContext)
-                newAuthor.setValue(authorDetails.lastName, forKey: "lastName")
-                newAuthor.setValue(authorDetails.firstNames, forKey: "firstNames")
-                authors.append(newAuthor)
-            }
-            
-        }
-        newBook.setValue(NSOrderedSet(array: authors), forKey: "authors")
-    }
-}
-
 @objc(Author)
 public class Author: NSManagedObject {
     @NSManaged var lastName: String
     @NSManaged var firstNames: String?
     @NSManaged var book: Book!
+    
+    var displayFirstLast: String {
+        get { return (firstNames == nil ? "" : "\(firstNames!) ") + lastName }
+    }
+    
+    var displayLastCommaFirst: String {
+        get { return lastName + (firstNames == nil ? "" : ", \(firstNames!)") }
+    }
 
     override public func willSave() {
         super.willSave()
@@ -84,6 +41,7 @@ public class Book: NSManagedObject {
     @NSManaged var publicationDate: Date?
     @NSManaged var bookDescription: String?
     @NSManaged var coverImage: Data?
+    @NSManaged var firstAuthorLastName: String?
     
     // Reading Information
     @NSManaged var readState: BookReadState
@@ -108,9 +66,9 @@ public class Book: NSManagedObject {
         get { return authors.array.map{($0 as! Author)} }
     }
     
-    var authorList: String {
+    var authorsFirstLast: String {
         get {
-            return authorsArray.map{($0.firstNames == nil ? "" : ($0.firstNames! + " ")) + $0.lastName}.joined(separator: ", ")
+            return authorsArray.map{$0.displayFirstLast}.joined(separator: ", ")
         }
     }
 
@@ -169,7 +127,7 @@ extension Book {
     }
     
     func toSpotlightItem() -> SpotlightItem {
-        let spotlightTitle = "\(title) - \(authorList)"
+        let spotlightTitle = "\(title) - \(authorsFirstLast)"
         
         return SpotlightItem(uniqueIdentifier: objectID.uriRepresentation().absoluteString, title: spotlightTitle, description: bookDescription, thumbnailImageData: coverImage)
     }
@@ -199,7 +157,7 @@ extension Book {
         CsvColumn<Book>(header: "ISBN-13", cellValue: {$0.isbn13}),
         CsvColumn<Book>(header: "Google Books ID", cellValue: {$0.googleBooksId}),
         CsvColumn<Book>(header: "Title", cellValue: {$0.title}),
-        CsvColumn<Book>(header: "Author", cellValue: {$0.authorList}),
+        CsvColumn<Book>(header: "Authors", cellValue: {$0.authorsArray.map{$0.displayLastCommaFirst}.joined(separator: "; ")}),
         CsvColumn<Book>(header: "Page Count", cellValue: {$0.pageCount == nil ? nil : String(describing: $0.pageCount!)}),
         CsvColumn<Book>(header: "Publication Date", cellValue: {$0.publicationDate == nil ? nil : $0.publicationDate!.toString(withDateFormat: "yyyy-MM-dd")}),
         CsvColumn<Book>(header: "Description", cellValue: {$0.bookDescription}),
@@ -210,7 +168,11 @@ extension Book {
         CsvColumn<Book>(header: "Notes", cellValue: {$0.notes})
     )
     
-    static let csvColumnHeaders = ["Google Books ID", "ISBN-13", "Title", "Author", "Page Count", "Publication Date", "Description", "Subjects", "Started Reading", "Finished Reading", "Current Page", "Notes"]
+    static var csvColumnHeaders: [String] {
+        get {
+            return csvExport.columns.map{$0.header}
+        }
+    }
 }
 
 
@@ -262,7 +224,22 @@ class BookMetadata {
         
         let bookMetadata = BookMetadata(googleBooksId: csvData["Google Books ID"]?.nilIfWhitespace())
         bookMetadata.title = csvData["Title"]?.nilIfWhitespace()
-        //bookMetadata.authors = csvData["Author"]?.nilIfWhitespace()
+        if let authorText = csvData["Authors"]?.nilIfWhitespace() {
+            bookMetadata.authors = authorText.components(separatedBy: ";")
+                .flatMap{$0.trimming().nilIfWhitespace()}
+                .map{
+                    if let firstCommaPos = $0.range(of: ","),
+                        let lastName = $0.substring(to: firstCommaPos.lowerBound).trimming().nilIfWhitespace()  {
+                        return ($0.substring(from: firstCommaPos.upperBound).trimming().nilIfWhitespace(), lastName)
+                    }
+                    else {
+                        return (nil, $0)
+                    }
+                }
+        }
+        else {
+            bookMetadata.authors = []
+        }
         bookMetadata.isbn13 = Isbn13.tryParse(inputString: csvData["ISBN-13"])
         bookMetadata.pageCount = csvData["Page Count"] == nil ? nil : Int(csvData["Page Count"]!)
         bookMetadata.publicationDate = csvData["Publication Date"] == nil ? nil : Date(dateString: csvData["Publication Date"]!)

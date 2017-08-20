@@ -13,6 +13,7 @@ class BookPredicate {
     private static let titleFieldName = "title"
     
     private static let sortFieldName = "sort"
+    private static let firstAuthorLastNameFieldName = "firstAuthorLastName"
     private static let startedReadingFieldName = "startedReading"
     private static let finishedReadingFieldName = "finishedReading"
     
@@ -37,7 +38,7 @@ class BookPredicate {
     }
 
     static let titleSort = NSSortDescriptor(key: titleFieldName, ascending: true)
-    static let authorSort = NSSortDescriptor(key: "authors[LAST].lastName", ascending: true)
+    static let authorSort = NSSortDescriptor(key: firstAuthorLastNameFieldName, ascending: true)
     static let startedReadingSort = NSSortDescriptor(key: startedReadingFieldName, ascending: true)
     static let startedReadingDescendingSort = NSSortDescriptor(key: startedReadingFieldName, ascending: false)
     static let finishedReadingSort = NSSortDescriptor(key: finishedReadingFieldName, ascending: true)

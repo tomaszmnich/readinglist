@@ -54,8 +54,10 @@
 		4994706A1DB42067008CB06E /* ReadingTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 499470691DB42067008CB06E /* ReadingTable.swift */; };
 		4994706C1DB421A2008CB06E /* FinishedTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4994706B1DB421A2008CB06E /* FinishedTable.swift */; };
 		49B2CEF81F39A4D300C6B45D /* SortOrderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B2CEF71F39A4D300C6B45D /* SortOrderViewController.swift */; };
-		49B8D8DF1F489BCD00D4C4EF /* BookMapping_6_7.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 49B8D8DE1F489BCD00D4C4EF /* BookMapping_6_7.xcmappingmodel */; };
 		49B8D8E11F499A5300D4C4EF /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B8D8E01F499A5300D4C4EF /* UserSettings.swift */; };
+		49B8D8E31F49F79700D4C4EF /* BookMapping_5_6.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 49B8D8E21F49F79700D4C4EF /* BookMapping_5_6.xcmappingmodel */; };
+		49B8D8E71F4A08E700D4C4EF /* BookMappingModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B8D8E61F4A08E700D4C4EF /* BookMappingModels.swift */; };
+		49B8D8E91F4A092700D4C4EF /* BookMapping_6_7.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 49B8D8E81F4A092700D4C4EF /* BookMapping_6_7.xcmappingmodel */; };
 		49BD08701EA2A85C00B21A01 /* Observables.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BD086F1EA2A85C00B21A01 /* Observables.swift */; };
 		49BDCC631CD2A00F00F20AAE /* BookMetadataForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BDCC621CD2A00F00F20AAE /* BookMetadataForm.swift */; };
 		49BDCC6C1CD6120400F20AAE /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BDCC6B1CD6120400F20AAE /* Utilities.swift */; };
@@ -148,7 +150,9 @@
 		49B2CEF71F39A4D300C6B45D /* SortOrderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SortOrderViewController.swift; sourceTree = "<group>"; };
 		49B8D8D91F44C96E00D4C4EF /* books_7.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = books_7.xcdatamodel; sourceTree = "<group>"; };
 		49B8D8E01F499A5300D4C4EF /* UserSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
-		49B8D8DE1F489BCD00D4C4EF /* BookMapping_6_7.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = BookMapping_6_7.xcmappingmodel; sourceTree = "<group>"; };
+		49B8D8E21F49F79700D4C4EF /* BookMapping_5_6.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = BookMapping_5_6.xcmappingmodel; sourceTree = "<group>"; };
+		49B8D8E61F4A08E700D4C4EF /* BookMappingModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookMappingModels.swift; sourceTree = "<group>"; };
+		49B8D8E81F4A092700D4C4EF /* BookMapping_6_7.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = BookMapping_6_7.xcmappingmodel; sourceTree = "<group>"; };
 		49BD086F1EA2A85C00B21A01 /* Observables.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Observables.swift; sourceTree = "<group>"; };
 		49BDCC621CD2A00F00F20AAE /* BookMetadataForm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookMetadataForm.swift; sourceTree = "<group>"; };
 		49BDCC6B1CD6120400F20AAE /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
@@ -305,6 +309,7 @@
 				495FDC2D1CF8C676006DCF2E /* Extensions.swift */,
 				4973C7A21E905A04001CFABC /* Isbn13.swift */,
 				49BD086F1EA2A85C00B21A01 /* Observables.swift */,
+				49B8D8E61F4A08E700D4C4EF /* BookMappingModels.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -342,10 +347,11 @@
 				49F386341E869F78001F5D75 /* TestData */,
 				495C5D0F1BF1404D00E00C07 /* AppDelegate.swift */,
 				498CD1E41F2A8369007E98B5 /* books.xcdatamodeld */,
+				49B8D8E21F49F79700D4C4EF /* BookMapping_5_6.xcmappingmodel */,
+				49B8D8E81F4A092700D4C4EF /* BookMapping_6_7.xcmappingmodel */,
 				49EEF6861E943691003FF31E /* Reading List.entitlements */,
 				495C5D161BF1404D00E00C07 /* Assets.xcassets */,
 				495C5D1B1BF1404D00E00C07 /* Info.plist */,
-				49B8D8DE1F489BCD00D4C4EF /* BookMapping_6_7.xcmappingmodel */,
 			);
 			path = books;
 			sourceTree = "<group>";
@@ -760,6 +766,7 @@
 				49812BB41CA95F0600A49EBA /* BookPredicate.swift in Sources */,
 				495C5D3F1BF1412600E00C07 /* BookTable.swift in Sources */,
 				4943DB791DBD5104004CAF30 /* Settings.swift in Sources */,
+				49B8D8E31F49F79700D4C4EF /* BookMapping_5_6.xcmappingmodel in Sources */,
 				49B2CEF81F39A4D300C6B45D /* SortOrderViewController.swift in Sources */,
 				491C842F1CF6281B00894313 /* EditReadState.swift in Sources */,
 				49B8D8E11F499A5300D4C4EF /* UserSettings.swift in Sources */,
@@ -767,6 +774,7 @@
 				492710531F35BF3100286352 /* ExportViewController.swift in Sources */,
 				491C84331CF630B600894313 /* CreateBook.swift in Sources */,
 				49160F5F1E809DFE00168FD0 /* BookImport.swift in Sources */,
+				49B8D8E91F4A092700D4C4EF /* BookMapping_6_7.xcmappingmodel in Sources */,
 				49BDCC631CD2A00F00F20AAE /* BookMetadataForm.swift in Sources */,
 				495C5D431BF14BEB00E00C07 /* BookDetails.swift in Sources */,
 				498CD1E61F2A8369007E98B5 /* books.xcdatamodeld in Sources */,
@@ -774,6 +782,7 @@
 				492500781C0B1B0000C149B5 /* BooksStore.swift in Sources */,
 				49E95D0F1DD7D9EC00C215F8 /* GoogleBooksAPI.swift in Sources */,
 				49D0FAAB1F2B284000101EE1 /* UserEngagement.swift in Sources */,
+				49B8D8E71F4A08E700D4C4EF /* BookMappingModels.swift in Sources */,
 				493056431DB1561C0086FDAD /* TableUpdater.swift in Sources */,
 				49F6AC651E98F36B000B7D17 /* ImportViewController.swift in Sources */,
 				495879651BF7E76200000131 /* CoreDataStack.swift in Sources */,
@@ -788,7 +797,6 @@
 				494D96E21E71EDAE00299752 /* GeneralUIAction.swift in Sources */,
 				498B4D4D1CB1AB7A00C5F38B /* SplitViewController.swift in Sources */,
 				491F14621C02228C0052B355 /* ScanBarcode.swift in Sources */,
-				49B8D8DF1F489BCD00D4C4EF /* BookMapping_6_7.xcmappingmodel in Sources */,
 				49CEB80A1E9D8C06003FD859 /* DebugSettingsViewController.swift in Sources */,
 				49BDCC6C1CD6120400F20AAE /* Utilities.swift in Sources */,
 			);

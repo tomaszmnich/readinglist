@@ -27,7 +27,7 @@ class BookTableViewCell: UITableViewCell, ConfigurableCell {
     
     func configureFrom(_ book: Book) {
         titleLabel.text = book.title
-        authorsLabel.text = book.authorList
+        authorsLabel.text = book.authorsFirstLast
         bookCover.image = UIImage(optionalData: book.coverImage) ?? #imageLiteral(resourceName: "CoverPlaceholder")
         if book.readState == .reading {
             readTimeLabel.text = book.startedReading!.toPrettyString()

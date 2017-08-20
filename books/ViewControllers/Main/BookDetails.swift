@@ -115,7 +115,7 @@ class BookDetails: UIViewController {
             shareButton.toggleHidden(hidden: false)
             
             titleLabel.text = viewModel.book.title
-            authorsLabel.text = viewModel.book.authorList
+            authorsLabel.text = viewModel.book.authorsFirstLast
             
             readStateLabel.text = viewModel.readState
             readDatesLabel.text = viewModel.readDates
