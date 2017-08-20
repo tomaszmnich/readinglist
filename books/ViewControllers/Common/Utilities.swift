@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Eureka
 
 class NavWithReadState: UINavigationController {
     var readState: BookReadState!
@@ -53,5 +54,29 @@ extension UIBarButtonItem {
     func toggleHidden(hidden: Bool) {
         isEnabled = !hidden
         tintColor = hidden ? UIColor.clear : nil
+    }
+}
+
+func NavigationRow(title: String, segueName: String, initialiser: ((ButtonRow) -> Void)? = nil, updater: ((ButtonCellOf<String>, ButtonRow) -> Void)? = nil) -> ButtonRow {
+    return ButtonRow() {
+        $0.title = title
+        $0.presentationMode = .segueName(segueName: segueName, onDismiss: nil)
+        initialiser?($0)
+        }.cellUpdate{ cell, row in
+            cell.textLabel?.textAlignment = .left
+            cell.textLabel?.textColor = .black
+            cell.accessoryType = .disclosureIndicator
+            updater?(cell, row)
+    }
+}
+
+func ActionButton(title: String, updater: ((ButtonCellOf<String>, ButtonRow) -> Void)? = nil, action: @escaping (Void) -> Void) -> ButtonRow {
+    return ButtonRow() {
+        $0.title = title
+        }.cellUpdate{ cell, row in
+            cell.textLabel?.textAlignment = .left
+            updater?(cell, row)
+        }.onCellSelection{_,_ in
+            action()
     }
 }

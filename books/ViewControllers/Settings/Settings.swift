@@ -19,27 +19,6 @@ class Settings: FormViewController, MFMailComposeViewControllerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-    
-        func NavigationRow(title: String, segueName: String) -> ButtonRow {
-            return ButtonRow() {
-                $0.title = title
-                $0.presentationMode = .segueName(segueName: segueName, onDismiss: nil)
-            }.cellUpdate{ cell, _ in
-                cell.textLabel?.textAlignment = .left
-                cell.textLabel?.textColor = .black
-                cell.accessoryType = .disclosureIndicator
-            }
-        }
-        
-        func ActionButton(title: String, action: @escaping (Void) -> Void) -> ButtonRow {
-            return ButtonRow() {
-                $0.title = title
-            }.cellUpdate{ cell, _ in
-                cell.textLabel?.textAlignment = .left
-            }.onCellSelection{_,_ in
-                action()
-            }
-        }
         
         form +++ Section(header: "General", footer: "If you find Reading List useful, please consider giving it a rating. If you have any suggestions, feedback is welcome 👍")
             <<< ActionButton(title: "📚 About") {
@@ -56,27 +35,17 @@ class Settings: FormViewController, MFMailComposeViewControllerDelegate {
             }
         
         +++ Section(header: "Options", footer: "")
-            <<< ButtonRow() {
-                $0.tag = bookSortOrderKey
-                $0.title = "Book Sort Order"
-                $0.cellStyle = .value1
-                $0.presentationMode = .segueName(segueName: "sortOrder", onDismiss: nil)
-            }.cellUpdate{ cell, _ in
-                cell.detailTextLabel?.text = UserSettings.tableSortOrder.displayName
-                cell.textLabel!.textColor = .black
-                cell.textLabel!.textAlignment = .left
-                cell.accessoryType = .disclosureIndicator
+            <<< NavigationRow(title: "Book Sort Order", segueName: "sortOrder", initialiser: { [unowned self] row in
+                row.cellStyle = .value1
+                row.tag = self.bookSortOrderKey
+            }) { cell, _ in
+                cell.detailTextLabel!.text = UserSettings.tableSortOrder.displayName
             }
         
         +++ Section(header: "Data", footer: "")
             <<< NavigationRow(title: "Import", segueName: "import")
             <<< NavigationRow(title: "Export", segueName: "export")
-            <<< ButtonRow() {
-                $0.title = "Delete All"
-            }.cellUpdate{ cell, _ in
-                cell.textLabel?.textAlignment = .left
-                cell.textLabel?.textColor = .red
-            }.onCellSelection{[unowned self] _,_ in
+            <<< ActionButton(title: "Delete All", updater: {$0.0.textLabel?.textColor = .red}) {[unowned self] in
                 self.deleteAllData()
             }
         
@@ -89,11 +58,12 @@ class Settings: FormViewController, MFMailComposeViewControllerDelegate {
         #if DEBUG
             form.allSections.last! <<< NavigationRow(title: "Debug Settings", segueName: "debugSettings")
         #endif
-        
-    }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+        // Watch for changes in book sort order
+        NotificationCenter.default.addObserver(self, selector: #selector(bookSortChanged), name: NSNotification.Name.onBookSortOrderChanged, object: nil)
+    }
+
+    @objc func bookSortChanged() {
         form.rowBy(tag: bookSortOrderKey)!.updateCell()
     }
     
