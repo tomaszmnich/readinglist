@@ -91,6 +91,7 @@ class BookImporter {
     private let fileUrl: URL
     private let callback: (Int, Int, Int) -> Void
     private let missingHeadersCallback: () -> ()
+    private let supplementBookCallback: ((Book, DispatchGroup) -> ())?
     
     private var duplicateBookCount = 0
     private var importedBookCount = 0
@@ -98,16 +99,16 @@ class BookImporter {
     
     private var sortIndex = -1
     private var supplementBookCover: Bool
-    private var supplementBookMetadata: Bool
     
     // Keep track of the potentially numerous calls
     private let dispatchGroup = DispatchGroup()
     
-    init(csvFileUrl: URL, supplementBookCover: Bool, supplementBookMetadata: Bool, missingHeadersCallback: @escaping () -> (), callback: @escaping (Int, Int, Int) -> Void) {
+    init(csvFileUrl: URL, supplementBookCover: Bool = true, missingHeadersCallback: @escaping (Void) -> Void,
+         supplementBookCallback: ((Book, DispatchGroup) -> Void)? = nil, callback: @escaping (Int, Int, Int) -> Void) {
         self.fileUrl = csvFileUrl
         self.callback = callback
         self.supplementBookCover = supplementBookCover
-        self.supplementBookMetadata = supplementBookMetadata
+        self.supplementBookCallback = supplementBookCallback
         self.missingHeadersCallback = missingHeadersCallback
     }
     
@@ -133,7 +134,7 @@ class BookImporter {
         let parsedData = BookMetadata.csvImport(csvData: cellValues)
         
         // Check for invalid data, OR that we are supplementing metadata
-        guard parsedData.0.isValid() || (parsedData.0.googleBooksId?.isEmptyOrWhitespace == false && supplementBookMetadata) else {
+        guard parsedData.0.isValid() else {
             invalidCount += 1
             return
         }
@@ -156,24 +157,10 @@ class BookImporter {
         
         dispatchGroup.enter()
         
-        // TODO: This could do with a big ol' refactor
-        if !parsedData.0.isValid() && supplementBookMetadata {
-            GoogleBooks.fetch(googleBooksId: parsedData.0.googleBooksId!){ resultPage in
-                guard resultPage.result.isSuccess else { self.invalidCount += 1; self.dispatchGroup.leave(); return }
-                
-                let bookMetadata = resultPage.result.value!.toBookMetadata()
-                bookMetadata.coverUrl = parsedData.0.coverUrl
-                
-                BookImporter.supplementBook(bookMetadata) {
-                    appDelegate.booksStore.create(from: bookMetadata, readingInformation: parsedData.1, bookSort: specifiedSort, readingNotes: parsedData.2)
-                    self.importedBookCount += 1
-                    self.dispatchGroup.leave()
-                }
-            }
-        }
-        else if supplementBookCover {
+        if supplementBookCover {
             BookImporter.supplementBook(parsedData.0) {
-                appDelegate.booksStore.create(from: parsedData.0, readingInformation: parsedData.1, bookSort: specifiedSort, readingNotes: parsedData.2)
+                let book = appDelegate.booksStore.create(from: parsedData.0, readingInformation: parsedData.1, bookSort: specifiedSort, readingNotes: parsedData.2)
+                self.supplementBookCallback?(book, self.dispatchGroup)
                 self.importedBookCount += 1
                 self.dispatchGroup.leave()
             }
@@ -201,15 +188,12 @@ class BookImporter {
             }
         }
         
-        if let coverUrl = bookMetadata.coverUrl {
-            GoogleBooks.requestData(from: coverUrl, callback: getCoverCallback)
-        }
         // GoogleBooks ID takes priority over ISBN.
-        else if let googleBookdId = bookMetadata.googleBooksId {
+        if let googleBookdId = bookMetadata.googleBooksId {
             GoogleBooks.getCover(googleBooksId: googleBookdId, callback: getCoverCallback)
         }
-            // but we'll try the ISBN is there was no Google Books ID
-            // TODO: would be nice to supplement with GBID too
+        // but we'll try the ISBN is there was no Google Books ID
+        // TODO: would be nice to supplement with GBID too
         else if let isbn = bookMetadata.isbn13 {
             GoogleBooks.getCover(isbn: isbn, callback: getCoverCallback)
         }

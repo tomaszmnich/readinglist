@@ -19,12 +19,6 @@ class BookTableViewCell: UITableViewCell, ConfigurableCell {
     
     typealias ResultType = Book
     
-    func configureFrom(_ book: BookMetadata) {
-        titleLabel.text = book.title
-        authorsLabel.text = book.authorList
-        bookCover.image = UIImage(optionalData: book.coverImage)
-    }
-    
     func configureFrom(_ book: Book) {
         titleLabel.text = book.title
         authorsLabel.text = book.authorsFirstLast

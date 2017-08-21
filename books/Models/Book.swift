@@ -182,20 +182,12 @@ class BookMetadata {
     let googleBooksId: String?
     var title: String?
     var authors = [(firstNames: String?, lastName: String)]()
-    var authorList: String {
-        get {
-            return authors.map{($0.0 == nil ? "" : ($0.0! + " ")) + $0.1}.joined(separator: " ")
-        }
-    }
+    var subjects = [String]()
     var pageCount: Int?
     var publicationDate: Date?
     var bookDescription: String?
     var isbn13: String?
     var coverImage: Data?
-    var subjects = [String]()
-    
-    // ONLY used for import; not a usually populated field
-    var coverUrl: URL?
     
     init(googleBooksId: String? = nil) {
         self.googleBooksId = googleBooksId
@@ -220,7 +212,7 @@ class BookMetadata {
         self.subjects = book.subjects.map{($0 as! Subject).name}
     }
     
-    static func csvImport(csvData: [String: String]) -> (BookMetadata, BookReadingInformation, String?) {
+    static func csvImport(csvData: [String: String]) -> (BookMetadata, BookReadingInformation, notes: String?) {
         
         let bookMetadata = BookMetadata(googleBooksId: csvData["Google Books ID"]?.nilIfWhitespace())
         bookMetadata.title = csvData["Title"]?.nilIfWhitespace()
@@ -245,7 +237,6 @@ class BookMetadata {
         bookMetadata.publicationDate = csvData["Publication Date"] == nil ? nil : Date(dateString: csvData["Publication Date"]!)
         bookMetadata.bookDescription = csvData["Description"]?.nilIfWhitespace()
         bookMetadata.subjects = csvData["Subjects"]?.components(separatedBy: ";").flatMap{$0.trimming().nilIfWhitespace()} ?? []
-        bookMetadata.coverUrl = URL(optionalString: csvData["Cover URL"])
         
         let startedReading = Date(dateString: csvData["Started Reading"])
         let finishedReading = Date(dateString: csvData["Finished Reading"])

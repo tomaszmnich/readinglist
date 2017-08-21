@@ -48,7 +48,7 @@ class ImportViewController : FormViewController, UIDocumentPickerDelegate, UIDoc
         SVProgressHUD.show(withStatus: "Importing")
         UserEngagement.logEvent(.csvImport)
         
-        BookImporter(csvFileUrl: url, supplementBookCover: true, supplementBookMetadata: false, missingHeadersCallback: {
+        BookImporter(csvFileUrl: url, supplementBookCover: true, missingHeadersCallback: {
             
         }, callback: {
             importedCount, duplicateCount, invalidCount in

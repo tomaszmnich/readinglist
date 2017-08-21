@@ -99,23 +99,21 @@ class DebugSettingsViewController: FormViewController {
         
         SVProgressHUD.show(withStatus: "Loading Data...")
         
-        BookImporter(csvFileUrl: csvPath!, supplementBookCover: true, supplementBookMetadata: false, missingHeadersCallback: {
+        BookImporter(csvFileUrl: csvPath!, supplementBookCover: true, missingHeadersCallback: {
             print("Missing headers!")
-        }) { importedCount, duplicateCount, invalidCount in
-
-            var statusMessage = "\(importedCount) books imported."
-            
-            if duplicateCount != 0 {
-                statusMessage += " \(duplicateCount) rows ignored due pre-existing data."
+        }, supplementBookCallback: { book, dispatchGroup in
+            // Extra supplementary details
+            if book.title == "Your First Swift App" {
+                dispatchGroup.enter()
+                (URLSession.shared.dataTask(with: URL(string: "https://s3.amazonaws.com/titlepages.leanpub.com/yourfirstswiftapp/hero?1455119428")!) { data, _, _ in
+                    book.coverImage = data
+                    dispatchGroup.leave()
+                }).resume()
             }
-            
-            if invalidCount != 0 {
-                statusMessage += " \(invalidCount) rows ignored due to invalid data."
-            }
+        }) { _, _, _ in
             SVProgressHUD.dismiss()
-            SVProgressHUD.showInfo(withStatus: statusMessage)
         }.StartImport()
-    }
+    }    
 }
 
 #endif
