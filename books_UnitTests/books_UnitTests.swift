@@ -9,6 +9,7 @@
 import XCTest
 import Foundation
 import SwiftyJSON
+import CoreData
 @testable import Reading_List
 
 class books_UnitTests: XCTestCase {
@@ -42,7 +43,9 @@ class books_UnitTests: XCTestCase {
         currentTestBook += 1
         let testBookMetadata = BookMetadata(googleBooksId: "ABC123\(currentTestBook)")
         testBookMetadata.title = "Test Book Title \(currentTestBook)"
-        testBookMetadata.authors = "Test Book Authors \(currentTestBook)"
+        testBookMetadata.authors = [(firstNames: "A", lastName: "Lastname \(currentTestBook)"),
+                                    (firstNames: "Author 2", lastName: "Lastname \(currentTestBook)"),
+                                    (firstNames: nil, lastName: "Lastname \(currentTestBook)")]
         testBookMetadata.bookDescription = "Test Book Description \(currentTestBook)"
         testBookMetadata.isbn13 = "1234567890\(String(format: "%03d", currentTestBook))"
         testBookMetadata.pageCount = 100 + currentTestBook
@@ -61,7 +64,11 @@ class books_UnitTests: XCTestCase {
         // Test that the metadata is all the same
         XCTAssertEqual(testBookMetadata.googleBooksId, book.googleBooksId)
         XCTAssertEqual(testBookMetadata.title, book.title)
-        XCTAssertEqual(testBookMetadata.authors, book.authorList)
+        XCTAssertEqual(testBookMetadata.authors.count, book.authors.count)
+        for (index, authorDetails) in testBookMetadata.authors.enumerated() {
+            XCTAssertEqual(authorDetails.firstNames, book.authorsArray[index].firstNames)
+            XCTAssertEqual(authorDetails.lastName, book.authorsArray[index].lastName)
+        }
         XCTAssertEqual(testBookMetadata.bookDescription, book.bookDescription)
         XCTAssertEqual(testBookMetadata.isbn13, book.isbn13)
         XCTAssertEqual(testBookMetadata.pageCount, book.pageCount as? Int)
@@ -214,7 +221,8 @@ class books_UnitTests: XCTestCase {
         let parseResult = GoogleBooks.Parser.parseFetchResults(json)
         XCTAssertNotNil(parseResult)
         XCTAssertEqual("The Sellout", parseResult!.title)
-        XCTAssertEqual("Paul Beatty", parseResult!.authors)
+        XCTAssertEqual(1, parseResult!.authors.count)
+        XCTAssertEqual("Paul Beatty", parseResult!.authors.first!)
         XCTAssertEqual("Fiction", parseResult!.subjects[0])
         XCTAssertEqual("Satire", parseResult!.subjects[1])
         XCTAssertEqual(304, parseResult!.pageCount)
@@ -284,17 +292,12 @@ class books_UnitTests: XCTestCase {
         let book2Metadata = getTestBookMetadata()
         book2Metadata.subjects = ["Subject 1"]
         let newBook2 = booksStore.create(from: book2Metadata, readingInformation: BookReadingInformation.toRead())
-        
-        booksStore.save()
-
         XCTAssertEqual(1, booksStore.getAllSubjects().count)
         
         booksStore.deleteBook(newBook1)
-        booksStore.save()
         XCTAssertEqual(1, booksStore.getAllSubjects().count)
         
         booksStore.deleteBook(newBook2)
-        booksStore.save()
         XCTAssertEqual(0, booksStore.getAllSubjects().count)
     }
     
@@ -303,12 +306,33 @@ class books_UnitTests: XCTestCase {
         book1Metadata.subjects = ["Subject 1"]
         let newBook1 = booksStore.create(from: book1Metadata, readingInformation: BookReadingInformation.toRead())
         
-        booksStore.save()
-        
         XCTAssertEqual(1, booksStore.getAllSubjects().count)
         book1Metadata.subjects = ["Subject 2"]
         booksStore.update(book: newBook1, withMetadata: book1Metadata)
-        booksStore.save()
         XCTAssertEqual(1, booksStore.getAllSubjects().count)
+    }
+    
+    func testAuthorObjectsUpdate() {
+        let bookMetadata = getTestBookMetadata()
+        let newBook = booksStore.create(from: bookMetadata, readingInformation: BookReadingInformation.toRead())
+        let newAuthors = newBook.authorsArray
+        XCTAssertGreaterThan(newAuthors.count, 0)
+        XCTAssertEqual(bookMetadata.authors.count, newAuthors.count)
+        
+        bookMetadata.authors.removeAll(keepingCapacity: true)
+        booksStore.update(book: newBook, withMetadata: bookMetadata)
+        XCTAssertEqual(0, newBook.authors.count)
+        
+        XCTAssertEqual(0, booksStore.getAllAuthors().count)
+    }
+    
+    func testAuthorAutomaticDeletionUponSubjectRemoval() {
+        let bookMetadata = getTestBookMetadata()
+        let newBook = booksStore.create(from: bookMetadata, readingInformation: BookReadingInformation.toRead())
+        XCTAssertGreaterThan(newBook.authors.count, 0)
+        XCTAssertGreaterThan(booksStore.getAllAuthors().count, 0)
+        
+        booksStore.deleteBook(newBook)
+        XCTAssertEqual(0, booksStore.getAllAuthors().count)
     }
 }

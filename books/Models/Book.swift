@@ -13,7 +13,7 @@ import CoreData
 public class Author: NSManagedObject {
     @NSManaged var lastName: String
     @NSManaged var firstNames: String?
-    @NSManaged var book: Book!
+    @NSManaged var book: Book
     
     var displayFirstLast: String {
         get { return (firstNames == nil ? "" : "\(firstNames!) ") + lastName }
@@ -21,13 +21,6 @@ public class Author: NSManagedObject {
     
     var displayLastCommaFirst: String {
         get { return lastName + (firstNames == nil ? "" : ", \(firstNames!)") }
-    }
-
-    override public func willSave() {
-        super.willSave()
-        if !isDeleted && book == nil {
-            managedObjectContext?.delete(self)
-        }
     }
 }
 

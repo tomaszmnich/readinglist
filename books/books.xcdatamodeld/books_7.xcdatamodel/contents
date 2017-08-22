@@ -21,7 +21,7 @@
         <attribute name="sort" optional="YES" attributeType="Integer 32" usesScalarValueType="NO" indexed="YES" syncable="YES"/>
         <attribute name="startedReading" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="title" attributeType="String" indexed="YES" syncable="YES"/>
-        <relationship name="authors" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Author" inverseName="book" inverseEntity="Author" syncable="YES"/>
+        <relationship name="authors" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="Author" inverseName="book" inverseEntity="Author" syncable="YES"/>
         <relationship name="subjects" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Subject" inverseName="books" inverseEntity="Subject" syncable="YES"/>
     </entity>
     <entity name="Subject" representedClassName="Subject" syncable="YES">

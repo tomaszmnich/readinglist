@@ -126,6 +126,21 @@ class BooksStore {
     }
     
     /**
+     Gets all authors in the store
+     */
+    func getAllAuthors() -> [Author] {
+        let fetchRequest = NSFetchRequest<Author>(entityName: authorEntityName)
+        
+        do {
+            return try coreDataStack.managedObjectContext.fetch(fetchRequest)
+        }
+        catch {
+            print("Error fetching all subjects")
+            return []
+        }
+    }
+    
+    /**
      Adds or updates the book in the Spotlight index.
     */
     func updateSpotlightIndex(for book: Book) {
@@ -162,26 +177,12 @@ class BooksStore {
         book.bookDescription = metadata.bookDescription
         book.coverImage = metadata.coverImage
         
-        // Update the authors in order. Add any extras, remove any surplus
-        var authors = book.authorsArray
-        for (index, authorMetadata) in metadata.authors.enumerated() {
-            if index < authors.count {
-                authors[index].firstNames = authorMetadata.firstNames
-                authors[index].lastName = authorMetadata.lastName
-            }
-            else {
-                authors.append(createAuthor(lastName: authorMetadata.lastName, firstNames: authorMetadata.firstNames))
-            }
-        }
-        if authors.count > metadata.authors.count {
-            for oldAuthorIndex in metadata.authors.count...(authors.count - 1) {
-                let oldAuthor = authors.remove(at: oldAuthorIndex)
-                managedObjectContext.delete(oldAuthor)
-            }
-        }
+        // Brute force - delete and remove all authors, then create them all again
+        book.authorsArray.forEach{deleteObject($0)}
+        let newAuthors = metadata.authors.map{createAuthor(lastName: $0.lastName, firstNames: $0.firstNames)}
+        book.authors = NSOrderedSet(array: newAuthors)
+        book.firstAuthorLastName = newAuthors.first?.lastName
         
-        book.authors = NSOrderedSet(array: authors)
-        book.firstAuthorLastName = authors.first?.lastName
         book.subjects = NSOrderedSet(array: metadata.subjects.map{getOrCreateSubject(withName: $0)})
     }
     

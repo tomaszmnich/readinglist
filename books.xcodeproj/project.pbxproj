@@ -57,7 +57,7 @@
 		49B8D8E11F499A5300D4C4EF /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B8D8E01F499A5300D4C4EF /* UserSettings.swift */; };
 		49B8D8E31F49F79700D4C4EF /* BookMapping_5_6.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 49B8D8E21F49F79700D4C4EF /* BookMapping_5_6.xcmappingmodel */; };
 		49B8D8E71F4A08E700D4C4EF /* BookMappingModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B8D8E61F4A08E700D4C4EF /* BookMappingModels.swift */; };
-		49B8D8E91F4A092700D4C4EF /* BookMapping_6_7.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 49B8D8E81F4A092700D4C4EF /* BookMapping_6_7.xcmappingmodel */; };
+		49B8D8EB1F4CC85E00D4C4EF /* BookMapping_6_7.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 49B8D8EA1F4CC85E00D4C4EF /* BookMapping_6_7.xcmappingmodel */; };
 		49BD08701EA2A85C00B21A01 /* Observables.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BD086F1EA2A85C00B21A01 /* Observables.swift */; };
 		49BDCC631CD2A00F00F20AAE /* BookMetadataForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BDCC621CD2A00F00F20AAE /* BookMetadataForm.swift */; };
 		49BDCC6C1CD6120400F20AAE /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BDCC6B1CD6120400F20AAE /* Utilities.swift */; };
@@ -152,7 +152,7 @@
 		49B8D8E01F499A5300D4C4EF /* UserSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
 		49B8D8E21F49F79700D4C4EF /* BookMapping_5_6.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = BookMapping_5_6.xcmappingmodel; sourceTree = "<group>"; };
 		49B8D8E61F4A08E700D4C4EF /* BookMappingModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookMappingModels.swift; sourceTree = "<group>"; };
-		49B8D8E81F4A092700D4C4EF /* BookMapping_6_7.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = BookMapping_6_7.xcmappingmodel; sourceTree = "<group>"; };
+		49B8D8EA1F4CC85E00D4C4EF /* BookMapping_6_7.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = BookMapping_6_7.xcmappingmodel; sourceTree = "<group>"; };
 		49BD086F1EA2A85C00B21A01 /* Observables.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Observables.swift; sourceTree = "<group>"; };
 		49BDCC621CD2A00F00F20AAE /* BookMetadataForm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookMetadataForm.swift; sourceTree = "<group>"; };
 		49BDCC6B1CD6120400F20AAE /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
@@ -348,7 +348,7 @@
 				495C5D0F1BF1404D00E00C07 /* AppDelegate.swift */,
 				498CD1E41F2A8369007E98B5 /* books.xcdatamodeld */,
 				49B8D8E21F49F79700D4C4EF /* BookMapping_5_6.xcmappingmodel */,
-				49B8D8E81F4A092700D4C4EF /* BookMapping_6_7.xcmappingmodel */,
+				49B8D8EA1F4CC85E00D4C4EF /* BookMapping_6_7.xcmappingmodel */,
 				49EEF6861E943691003FF31E /* Reading List.entitlements */,
 				495C5D161BF1404D00E00C07 /* Assets.xcassets */,
 				495C5D1B1BF1404D00E00C07 /* Info.plist */,
@@ -774,7 +774,6 @@
 				492710531F35BF3100286352 /* ExportViewController.swift in Sources */,
 				491C84331CF630B600894313 /* CreateBook.swift in Sources */,
 				49160F5F1E809DFE00168FD0 /* BookImport.swift in Sources */,
-				49B8D8E91F4A092700D4C4EF /* BookMapping_6_7.xcmappingmodel in Sources */,
 				49BDCC631CD2A00F00F20AAE /* BookMetadataForm.swift in Sources */,
 				495C5D431BF14BEB00E00C07 /* BookDetails.swift in Sources */,
 				498CD1E61F2A8369007E98B5 /* books.xcdatamodeld in Sources */,
@@ -798,6 +797,7 @@
 				498B4D4D1CB1AB7A00C5F38B /* SplitViewController.swift in Sources */,
 				491F14621C02228C0052B355 /* ScanBarcode.swift in Sources */,
 				49CEB80A1E9D8C06003FD859 /* DebugSettingsViewController.swift in Sources */,
+				49B8D8EB1F4CC85E00D4C4EF /* BookMapping_6_7.xcmappingmodel in Sources */,
 				49BDCC6C1CD6120400F20AAE /* Utilities.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
