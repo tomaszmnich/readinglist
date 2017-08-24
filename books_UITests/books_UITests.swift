@@ -33,12 +33,17 @@ class books_UITests: XCTestCase {
         let initialNumberOfCells = Int(app.tables.cells.count)
         app.clickAddButton(addMethod: .enterManually)
         
-        // Add some book metadata
-        app.textFields.element(boundBy: 0).tap()
+        app.tables.staticTexts["Title"].tap()
         app.typeText("The Catcher in the Rye")
-        app.textFields.element(boundBy: 1).tap()
-        app.typeText("J. D. Salinger")
         
+        app.tables.staticTexts["Add Author"].tap()
+        app.tables.textFields["First Name(s)"].tap()
+        app.typeText("J.D.")
+
+        app.tables.textFields["Last Name"].tap()
+        app.typeText("Salinger")
+        
+        app.topNavBar.buttons["Back"].tap()
         app.topNavBar.buttons["Next"].tap()
         app.topNavBar.buttons["Done"].tap()
         
@@ -134,7 +139,7 @@ class books_UITests: XCTestCase {
         
         // Not found ISBN
         scanBarcode(app: app, mode: .unfoundIsbn)
-        sleep(2)
+        sleep(3)
         XCTAssertEqual(app.alerts.count, 1)
         let noMatchAlert = app.alerts.element(boundBy: 0)
         XCTAssertEqual("No Exact Match", noMatchAlert.label)
