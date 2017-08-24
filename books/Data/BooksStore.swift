@@ -25,7 +25,7 @@ class BooksStore {
     }
     
     init(storeType: CoreDataStack.PersistentStoreType) {
-        self.coreDataStack = CoreDataStack(momdFileName: "books", persistentStoreType: storeType)
+        self.coreDataStack = CoreDataStack(momDirectoryName: "books", persistentStoreType: storeType)
         self.coreSpotlightStack = CoreSpotlightStack(domainIdentifier: productBundleIdentifier)
     }
     
