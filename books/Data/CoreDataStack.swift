@@ -7,6 +7,8 @@
 //
 
 import CoreData
+import Fabric
+import Crashlytics
 
 /**
  Standard CoreData boilerplate code.
@@ -73,10 +75,15 @@ class CoreDataStack {
             }
             catch {
                 print("Error migrating store at \(storeUrl)")
+                #if DEBUG
+                Crashlytics.sharedInstance().recordError(error)
+                #endif
             }
         }
         else {
+            #if DEBUG
             print("No persistent store; migration unnecessary")
+            #endif
         }
         
         // Once all necessary migrations are done, create the PersistentStoreCoordinator and add it to the MOC
@@ -86,6 +93,9 @@ class CoreDataStack {
         }
         catch {
             print("Error adding persistent store")
+            #if DEBUG
+            Crashlytics.sharedInstance().recordError(error)
+            #endif
         }
     }
     
@@ -102,7 +112,12 @@ class CoreDataStack {
     func migrateStore(at storeURL: URL, moms: [NSManagedObjectModel]) throws {
         let idx = try indexOfCompatibleMom(at: storeURL, moms: moms)
         let remaining = moms.suffix(from: (idx + 1))
-        guard remaining.count > 0 else { print("No migration necessary"); return }
+        guard remaining.count > 0 else {
+            #if DEBUG
+            print("No migration necessary");
+            #endif
+            return
+        }
         _ = try remaining.reduce(moms[idx]) { smom, dmom in
             try migrateStore(at: storeURL, from: smom, to: dmom)
             return dmom
@@ -120,7 +135,9 @@ class CoreDataStack {
     }
     
     func migrateStore(at storeURL: URL, from smom: NSManagedObjectModel, to dmom: NSManagedObjectModel) throws {
-        print("Migrating store one version")
+        #if DEBUG
+        print("Performing incremental migration")
+        #endif
         
         // Prepare temp directory
         let dir = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(UUID().uuidString)
@@ -135,26 +152,18 @@ class CoreDataStack {
         let manager = NSMigrationManager(sourceModel: smom, destinationModel: dmom)
         try autoreleasepool {
             try manager.migrateStore(from: storeURL, sourceType: storeDescriptor, options: nil, with: mapping,
-                toDestinationURL: destURL,
-                destinationType: storeDescriptor,
-                destinationOptions: nil
-            )
+                toDestinationURL: destURL, destinationType: storeDescriptor, destinationOptions: nil)
         }
         
         // Replace source store
         let psc = NSPersistentStoreCoordinator(managedObjectModel: dmom)
-        try psc.replacePersistentStore(
-            at: storeURL,
-            destinationOptions: nil,
-            withPersistentStoreFrom: destURL,
-            sourceOptions: nil,
-            ofType: storeDescriptor
-        )
+        try psc.replacePersistentStore(at: storeURL, destinationOptions: nil, withPersistentStoreFrom: destURL,
+            sourceOptions: nil, ofType: storeDescriptor)
     }
     
     func findMapping(from smom: NSManagedObjectModel, to dmom: NSManagedObjectModel) throws -> NSMappingModel {
         if let mapping = NSMappingModel(from: Bundle.allBundles, forSourceModel: smom, destinationModel: dmom) {
-            return mapping // found custom mapping
+            return mapping
         }
         return try NSMappingModel.inferredMappingModel(forSourceModel: smom, destinationModel: dmom)
     }
