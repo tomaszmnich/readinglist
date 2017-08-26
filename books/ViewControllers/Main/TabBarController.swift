@@ -52,8 +52,9 @@ class TabBarController: UITabBarController {
                selectedSplitViewController.masterNavigationController.popToRootViewController(animated: true)
             }
             else if let topVc = selectedSplitViewController.masterNavigationController.viewControllers.first,
-                let topTable = (topVc as? UITableViewController)?.tableView ?? (topVc as? FormViewController)?.tableView {
-                topTable.setContentOffset(CGPoint(x: 0, y: 0 - topTable.contentInset.top), animated: true)
+                let topTable = (topVc as? UITableViewController)?.tableView ?? (topVc as? FormViewController)?.tableView,
+                topTable.numberOfSections > 0 {
+                topTable.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
             }
         }
     }
