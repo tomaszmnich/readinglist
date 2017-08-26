@@ -33,7 +33,7 @@ class books_UITests: XCTestCase {
         let initialNumberOfCells = Int(app.tables.cells.count)
         app.clickAddButton(addMethod: .enterManually)
         
-        app.tables.staticTexts["Title"].tap()
+        app.tables.textFields.element(boundBy: 0).tap()
         app.typeText("The Catcher in the Rye")
         
         app.tables.staticTexts["Add Author"].tap()
@@ -59,7 +59,7 @@ class books_UITests: XCTestCase {
         app.navigationBars.matching(identifier: "Reading_List.BookDetails").buttons["Edit"].tap()
         app.sheets.buttons.element(boundBy: 1).tap()
         
-        app.tables.staticTexts["Title"].tap()
+        app.tables.textFields.element(boundBy: 0).tap()
         app.typeText("changed!")
         app.topNavBar.buttons["Done"].tap()
     }
