@@ -7,7 +7,6 @@
 //
 
 import Eureka
-import ImageRow
 import UIKit
 
 class BookMetadataForm: FormViewController {
@@ -38,7 +37,7 @@ class BookMetadataForm: FormViewController {
                 authorRow.authorLastName = authorValue.lastName
             }
             else if authorRow != nil {
-                var section = form.sectionBy(tag: authorsSectionKey)!
+                let section = form.sectionBy(tag: authorsSectionKey)!
                 section.remove(at: index)
             }
         }
