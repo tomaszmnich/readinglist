@@ -57,7 +57,7 @@ protocol ConfigurableCell {
 class TableUpdater<ResultType, CellType> : NSObject, GeneralTableUpdater
 where ResultType : NSFetchRequestResult, CellType : UITableViewCell, CellType: ConfigurableCell, CellType.ResultType == ResultType {
     
-    private let tableView: UITableView
+    let tableView: UITableView
     private let controller: NSFetchedResultsController<ResultType>
     private let cellIdentifier = String(describing: CellType.self)
     private var createdSectionIndexes = [Int]()

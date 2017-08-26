@@ -41,7 +41,31 @@ class BookTableViewCell: UITableViewCell, ConfigurableCell {
     }
 }
 
+class BookTableUpdater: TableUpdater<Book, BookTableViewCell> {
+    
+    override func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange object: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?)  {
+        super.controller(controller, didChange: object, at: indexPath, for: type, newIndexPath: newIndexPath)
+
+        func updateFooter(forSection section: Int) {
+            if let footer = self.tableView.footerView(forSection: section){
+                footer.textLabel?.text = titleForFooterInSection(section)
+                footer.setNeedsLayout()
+            }
+        }
+        
+        if let oldSectionIndex = indexPath?.section { updateFooter(forSection: oldSectionIndex) }
+        if let newSectionIndex = newIndexPath?.section { updateFooter(forSection: newSectionIndex) }
+    }
+    
+    func titleForFooterInSection(_ section: Int) -> String? {
+        guard section < numberOfSections() else { return nil }
+        let rowCount = numberOfRows(inSection: section)
+        return "\(rowCount) book\(rowCount == 1 ? "" : "s")"
+    }
+}
+
 class BookTable: AutoUpdatingTableViewController {
+    
     var resultsController: NSFetchedResultsController<Book>!
     var resultsFilterer: FetchedResultsFilterer<Book, BookPredicateBuilder>!
     var readStates: [BookReadState]!
@@ -88,7 +112,7 @@ class BookTable: AutoUpdatingTableViewController {
     func buildResultsController() {
         let readStatePredicate = NSPredicate.Or(readStates.map{BookPredicate.readState(equalTo: $0)})
         resultsController = appDelegate.booksStore.fetchedResultsController(readStatePredicate, initialSortDescriptors: UserSettings.selectedSortOrder)
-        tableUpdater = TableUpdater<Book, BookTableViewCell>(table: tableView, controller: resultsController)
+        tableUpdater = BookTableUpdater(table: tableView, controller: resultsController)
         
         let predicateBuilder = BookPredicateBuilder(readStatePredicate: readStatePredicate)
         resultsFilterer = FetchedResultsFilterer(uiSearchController: searchController, tableView: self.tableView, fetchedResultsController: resultsController, predicateBuilder: predicateBuilder)
@@ -243,6 +267,18 @@ class BookTable: AutoUpdatingTableViewController {
         
         return rowActions
     }
+    
+    override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+        return (tableUpdater as! BookTableUpdater).titleForFooterInSection(section)
+    }
+    
+    override func tableView(_ tableView: UITableView, willDisplayFooterView view: UIView, forSection section: Int) {
+        // Center the footers
+        if let footer = view as? UITableViewHeaderFooterView {
+            footer.textLabel?.textAlignment = .center
+        }
+    }
+    
 }
 
 /// DZNEmptyDataSetSource functions
