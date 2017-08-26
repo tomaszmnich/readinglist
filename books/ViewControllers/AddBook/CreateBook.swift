@@ -19,8 +19,8 @@ class CreateBook: BookMetadataForm {
         
         // Hide the ISBN field's section and the delete button
         isbnField.section!.remove(at: isbnField.indexPath!.row)
-        deleteRow.section!.hidden = true
-        deleteRow.section!.evaluateHidden()
+        updateRow.section!.remove(at: updateRow.indexPath!.row)
+        deleteRow.section!.remove(at: deleteRow.indexPath!.row)
         
         if let initialBookMetadata = initialBookMetadata {
             // Change the title if we are prepopulating the fields

@@ -21,6 +21,7 @@ class BookMetadataForm: FormViewController {
     private let descriptionKey = "description"
     private let imageKey = "image"
     private let deleteKey = "delete"
+    private let updateKey = "update"
     private let editAuthorSegueName = "editAuthorSegue"
     
     var authors = [(firstNames: String?, lastName: String)]()
@@ -59,9 +60,9 @@ class BookMetadataForm: FormViewController {
         super.viewDidLoad()
         
         // Title
-        form +++ Section()
+        form +++ Section(header: "Title", footer: "")
             <<< TextRow(titleKey) {
-                $0.title = "Title"
+                $0.placeholder = "Title"
                 $0.add(rule: RuleRequired())
                 $0.validationOptions = .validatesOnChange
             }.onRowValidationChanged{[unowned self] _ in
@@ -126,6 +127,10 @@ class BookMetadataForm: FormViewController {
             <<< NavigationRow(title: "Subjects", segueName: "editSubjectsSegue", initialiser: {$0.cellStyle = .value1}){ [unowned self] cell, _ in
                 cell.detailTextLabel?.text = self.subjects.joined(separator: ", ")
             }
+            <<< ImageRow(imageKey){
+                $0.title = "Cover Image"
+                $0.cell.height = {return 100}
+            }
         
         // Description section
         +++ Section(header: "Description", footer: "")
@@ -135,20 +140,17 @@ class BookMetadataForm: FormViewController {
                 $0.0.height = {return 200}
             }
         
+        // Update and delete buttons
         +++ Section()
-            <<< ImageRow(imageKey){
-                $0.title = "Cover Image"
-                $0.cell.height = {return 100}
+            <<< ButtonRow(updateKey){
+                $0.title = "Update from Google Books"
             }
-        
-        // Delete button
-        +++ Section()
             <<< ButtonRow(deleteKey){
                 $0.title = "Delete"
             }.cellSetup{ cell, row in
                 cell.tintColor = UIColor.red
             }
-        
+
         // Validate on load
         form.validate()
         
@@ -198,6 +200,10 @@ class BookMetadataForm: FormViewController {
         get { return form.rowBy(tag: imageKey) as! ImageRow }
     }
     
+    var updateRow: ButtonRow {
+        get { return form.rowBy(tag: updateKey) as! ButtonRow }
+    }
+
     var deleteRow: ButtonRow {
         get { return form.rowBy(tag: deleteKey) as! ButtonRow }
     }

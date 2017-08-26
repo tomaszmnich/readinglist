@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import SVProgressHUD
+import Eureka
 
 class EditBook: BookMetadataForm {
     var bookToEdit: Book!
@@ -22,6 +24,16 @@ class EditBook: BookMetadataForm {
         // Disable the ISBN field (disallow editing of the ISBN), and wire up the delete button
         isbnField.disabled = true
         isbnField.evaluateDisabled()
+        
+        if bookToEdit.googleBooksId == nil {
+            updateRow.section!.remove(at: updateRow.indexPath!.row)
+        }
+        else {
+            updateRow.onCellSelection { [unowned self] _ in
+                self.presentUpdateAltert()
+            }
+        }
+        
         deleteRow.onCellSelection{ [unowned self] _ in
             self.presentDeleteAlert()
         }
@@ -37,6 +49,23 @@ class EditBook: BookMetadataForm {
         publicationDate.value = bookToEdit.publicationDate
         descriptionField.value = bookToEdit.bookDescription
         image.value = UIImage(optionalData: bookToEdit.coverImage)
+    }
+    
+    func presentUpdateAltert() {
+        SVProgressHUD.show(withStatus: "Downloading...")
+        GoogleBooks.fetch(googleBooksId: bookToEdit.googleBooksId!) { [unowned self] fetchResultPage in
+            DispatchQueue.main.async {
+                SVProgressHUD.dismiss()
+                guard fetchResultPage.result.isSuccess else {
+                    SVProgressHUD.showError(withStatus: "Could not update book details")
+                    return
+                }
+                appDelegate.booksStore.update(book: self.bookToEdit, withMetadata: fetchResultPage.result.value!.toBookMetadata())
+                self.dismiss {
+                    SVProgressHUD.showInfo(withStatus: "Book updated")
+                }
+            }
+        }
     }
     
     func presentDeleteAlert(){
