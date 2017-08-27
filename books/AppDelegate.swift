@@ -38,9 +38,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             Fabric.with([Crashlytics.self])
         #endif
         
-        // Prepare the progress display style
+        // Prepare the progress display style. Switched to dark in 1.4 due to a bug in the display of light style
+        SVProgressHUD.setDefaultStyle(.dark)
         SVProgressHUD.setDefaultAnimationType(.native)
-        SVProgressHUD.setDefaultMaskType(.black)
+        SVProgressHUD.setDefaultMaskType(.gradient)
         SVProgressHUD.setMinimumDismissTimeInterval(2)
 
         return true
