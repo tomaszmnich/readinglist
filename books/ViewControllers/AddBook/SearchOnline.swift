@@ -44,25 +44,30 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
         // Remove cell separators between blank cells
         tableView.tableFooterView = UIView()
         
-        let autoSearch = Observable<Void>.create { [unowned self] observer in
+        let autoSearch = Observable<String>.create { [unowned self] observer in
             // If we arrived with a search string, we want to fire off the search
-            if self.initialSearchString != nil {
-                observer.onNext()
+            if let initialSearchString = self.initialSearchString {
+                observer.onNext(initialSearchString)
             }
             return Disposables.create()
         }
         
         // Map the click of the Search button (when there is non whitespace text)
         // to a google books searchcells
-        let searchButtonClicked = searchBar.rx.searchButtonClicked.observeOn(ConcurrentDispatchQueueScheduler(qos: .userInitiated))
+        let searchButtonClicked = searchBar.rx.searchButtonClicked
+            .map{ [unowned self] in
+                self.searchBar.text!
+            }
+            .observeOn(ConcurrentDispatchQueueScheduler(qos: .userInitiated))
+
         let searchResults = Observable.merge([autoSearch, searchButtonClicked])
-            .flatMapLatest { [unowned self] Void -> Observable<GoogleBooks.SearchResultsPage> in
+            .flatMapLatest { searchText -> Observable<GoogleBooks.SearchResultsPage> in
                 SVProgressHUD.show(withStatus: "Searching...")
 
-                if self.searchBar.text?.isEmptyOrWhitespace == false {
+                if searchText.isEmptyOrWhitespace == false {
                 
                     // Search on the Google API
-                    return GoogleBooks.searchTextObservable(self.searchBar.text!)
+                    return GoogleBooks.searchTextObservable(searchText)
                         .observeOn(MainScheduler.instance)
                 }
                 return Observable.just(GoogleBooks.SearchResultsPage.empty())
