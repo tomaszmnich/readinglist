@@ -100,7 +100,9 @@ class BooksStore {
     */
     func getAllBooksAsync(callback: @escaping (([Book]) -> Void), onFail: @escaping ((Error) -> Void)) {
         do {
-            try coreDataStack.managedObjectContext.execute(NSAsynchronousFetchRequest(fetchRequest: self.bookFetchRequest()) {
+            let fetchRequest = self.bookFetchRequest()
+            fetchRequest.sortDescriptors = [BookPredicate.readStateSort, BookPredicate.sortIndexSort, BookPredicate.startedReadingSort, BookPredicate.finishedReadingSort]
+            try coreDataStack.managedObjectContext.execute(NSAsynchronousFetchRequest(fetchRequest: fetchRequest) {
                 callback($0.finalResult ?? [])
             })
         }
