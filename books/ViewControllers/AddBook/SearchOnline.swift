@@ -203,7 +203,7 @@ extension SearchOnline: DZNEmptyDataSetSource {
     }
     
     func verticalOffset(forEmptyDataSet scrollView: UIScrollView!) -> CGFloat {
-        return -scrollView.frame.size.height/4
+        return -(tableView.frame.height - 219)/2
     }
 }
 

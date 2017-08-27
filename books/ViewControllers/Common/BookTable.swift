@@ -301,7 +301,8 @@ extension BookTable : DZNEmptyDataSetSource {
     
     func verticalOffset(forEmptyDataSet scrollView: UIScrollView!) -> CGFloat {
         if resultsFilterer.showingSearchResults {
-            return -scrollView.frame.height / 4 + self.tableView.tableHeaderView!.frame.size.height / 2.0
+            // Shift the "no search results" view up a bit, so the keyboard doesn't obscure it
+            return -(tableView.frame.height - 150)/4
         }
         else {
             return 0
