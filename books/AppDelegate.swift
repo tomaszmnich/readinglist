@@ -94,13 +94,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
-    func appVersionDisplay() -> String {
-        if let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"],
-            let buildVersion = Bundle.main.infoDictionary?["CFBundleVersion"] {
-            return "v\(appVersion) (\(buildVersion))"
+    var appVersion: String {
+        get {
+            guard let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String else { return "Unknown" }
+            return appVersion
         }
-        else {
-            return "Unknown"
+    }
+    
+    var appBuildNumber: String {
+        get {
+            guard let buildVersion = Bundle.main.infoDictionary?["CFBundleVersion"] as? String else { return "Unknown" }
+            return buildVersion
         }
     }
 }

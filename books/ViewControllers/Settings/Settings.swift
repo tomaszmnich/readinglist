@@ -49,7 +49,7 @@ class Settings: FormViewController, MFMailComposeViewControllerDelegate {
                 self.deleteAllData()
             }
         
-        +++ Section(header: "Open Source", footer: "Reading List \(appDelegate.appVersionDisplay())\nDeveloped by Andrew Bennet")
+        +++ Section(header: "Open Source", footer: "Reading List v\(appDelegate.appVersion)\nDeveloped by Andrew Bennet")
             <<< ActionButton(title: "View Source Code") {
                 UIApplication.shared.openUrlPlatformSpecific(url: URL(string: "https://github.com/AndrewBennet/readinglist")!)
             }
@@ -106,17 +106,15 @@ class Settings: FormViewController, MFMailComposeViewControllerDelegate {
     
     func sendFeedbackEmail() {
         let toEmail = "feedback@readinglistapp.xyz"
-        if MFMailComposeViewController.canSendMail() {
-            
-            let appVersion = appDelegate.appVersionDisplay()
-            
+        if MFMailComposeViewController.canSendMail() {            
             let mailComposer = MFMailComposeViewController()
             mailComposer.mailComposeDelegate = self
             mailComposer.setToRecipients(["Reading List Developer <\(toEmail)>"])
             mailComposer.setSubject("Reading List Feedback")
             let messageBody = "\n\n\n" +
                 "Reading List\n" +
-                "App Version: \(appVersion)\n" +
+                "App Version: \(appDelegate.appVersion)\n" +
+                "Build Number: \(appDelegate.appBuildNumber)\n" +
                 "iOS Version: \(UIDevice.current.systemVersion)\n" +
                 "Device: \(UIDevice.current.modelIdentifier)"
             mailComposer.setMessageBody(messageBody, isHTML: false)

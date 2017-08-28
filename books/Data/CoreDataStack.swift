@@ -74,8 +74,9 @@ class CoreDataStack {
                 try migrateStore(at: storeUrl, moms: managedObjectModels)
             }
             catch {
-                print("Error migrating store at \(storeUrl)")
                 #if DEBUG
+                print("Error migrating store at \(storeUrl)")
+                #else
                 Crashlytics.sharedInstance().recordError(error)
                 #endif
             }
@@ -92,8 +93,9 @@ class CoreDataStack {
             try managedObjectContext.persistentStoreCoordinator!.addPersistentStore(ofType: storeDescriptor, configurationName: nil, at: storeUrl, options: nil)
         }
         catch {
-            print("Error adding persistent store")
             #if DEBUG
+            print("Error adding persistent store")
+            #else
             Crashlytics.sharedInstance().recordError(error)
             #endif
         }
@@ -112,12 +114,7 @@ class CoreDataStack {
     func migrateStore(at storeURL: URL, moms: [NSManagedObjectModel]) throws {
         let idx = try indexOfCompatibleMom(at: storeURL, moms: moms)
         let remaining = moms.suffix(from: (idx + 1))
-        guard remaining.count > 0 else {
-            #if DEBUG
-            print("No migration necessary");
-            #endif
-            return
-        }
+        guard remaining.count > 0 else { return }
         _ = try remaining.reduce(moms[idx]) { smom, dmom in
             try migrateStore(at: storeURL, from: smom, to: dmom)
             return dmom

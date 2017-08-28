@@ -89,8 +89,8 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
             .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [unowned self] resultPage in
                 SVProgressHUD.dismiss()
-                if !resultPage.searchResults.isSuccess {
-                    Crashlytics.sharedInstance().recordError(resultPage.searchResults.error!)
+                if !resultPage.searchResults.isSuccess, let googleError = resultPage.searchResults.error as? GoogleBooks.GoogleError {
+                    Crashlytics.sharedInstance().recordError(googleError, withAdditionalUserInfo: ["GoogleErrorMessage": googleError.message])
                     self.setEmptyDatasetReason(.error)
                 }
                 else if resultPage.searchText?.isEmptyOrWhitespace != false {

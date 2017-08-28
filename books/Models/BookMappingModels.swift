@@ -28,7 +28,7 @@ class BookMapping_6_7: NSEntityMigrationPolicy {
         return newAuthor
     }
     
-    func extractAuthorComponents(authorListString: String?) -> [(String, String?)] {
+    func extractAuthorComponents(authorListString: String?) -> [(lastName: String, firstNames: String?)] {
         var components = [(lastName: String, firstNames: String?)]()
         guard let authors = authorListString?.components(separatedBy: ","), authors.count > 0 else { return components }
         
@@ -48,7 +48,25 @@ class BookMapping_6_7: NSEntityMigrationPolicy {
     override func createDestinationInstances(forSource sInstance: NSManagedObject, in mapping: NSEntityMapping, manager: NSMigrationManager) throws {
         let newBook = NSEntityDescription.insertNewObject(forEntityName: "Book", into: manager.destinationContext)
         
-        // Copy easy properties
+        /*
+        @NSManaged var title: String
+        @NSManaged var isbn13: String?
+        @NSManaged var googleBooksId: String?
+        @NSManaged var pageCount: NSNumber?
+        @NSManaged var publicationDate: Date?
+        @NSManaged var bookDescription: String?
+        @NSManaged var coverImage: Data?
+        @NSManaged var firstAuthorLastName: String? *** NEW ***
+        @NSManaged var readState: BookReadState
+        @NSManaged var startedReading: Date?
+        @NSManaged var finishedReading: Date?
+        @NSManaged var notes: String?
+        @NSManaged var currentPage: NSNumber?
+        @NSManaged var sort: NSNumber?
+        @NSManaged var createdWhen: Date
+        @NSManaged var subjects: NSOrderedSet
+        @NSManaged var authors: NSOrderedSet *** NEW ***
+         */
         copyValues(oldObject: sInstance, newObject: newBook, keys: "title", "isbn13", "googleBooksId", "pageCount", "publicationDate", "bookDescription", "coverImage", "readState", "startedReading", "finishedReading", "notes", "currentPage", "sort", "createdWhen")
         
         // Copy subjects
@@ -63,9 +81,9 @@ class BookMapping_6_7: NSEntityMigrationPolicy {
         let newAuthorsComponents = extractAuthorComponents(authorListString: previousAuthorList)
         var newAuthorObjects = [NSManagedObject]()
         for authorComponents in newAuthorsComponents {
-            newAuthorObjects.append(newAuthor(manager: manager, lastName: authorComponents.0, firstNames: authorComponents.1))
+            newAuthorObjects.append(newAuthor(manager: manager, lastName: authorComponents.lastName, firstNames: authorComponents.firstNames))
         }
         newBook.setValue(NSOrderedSet(array: newAuthorObjects), forKey: "authors")
-        newBook.setValue(newAuthorsComponents.first?.0, forKey: "firstAuthorLastName")
+        newBook.setValue(newAuthorsComponents.first?.lastName, forKey: "firstAuthorLastName")
     }
 }
