@@ -71,6 +71,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <label key="tableFooterView" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Reading: 1 book To Read: 17 books" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="qjR-Ii-EZk">
+                            <rect key="frame" x="0.0" y="165.5" width="375" height="44"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="15"/>
+                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                            <nil key="highlightedColor"/>
+                        </label>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="0.0" reuseIdentifier="BookTableViewCell" rowHeight="92" id="ujU-fd-qpO" customClass="BookTableViewCell" customModule="Reading_List" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="55.5" width="375" height="92"/>
@@ -148,6 +155,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="tableFooter" destination="qjR-Ii-EZk" id="HmG-rb-hEC"/>
                         <segue destination="MoR-st-owh" kind="presentation" identifier="scanBarcode" modalPresentationStyle="formSheet" id="mGr-4c-eH0"/>
                         <segue destination="ciW-Jd-Gs4" kind="presentation" identifier="searchByText" modalPresentationStyle="formSheet" id="1QE-Vi-xhY"/>
                         <segue destination="Mfc-92-vqK" kind="presentation" identifier="addManually" modalPresentationStyle="formSheet" id="d3M-5n-0h8"/>
@@ -269,6 +277,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <label key="tableFooterView" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Reading: 1 book To Read: 17 books" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="0H8-1U-XOm">
+                            <rect key="frame" x="0.0" y="165.5" width="375" height="44"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="15"/>
+                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                            <nil key="highlightedColor"/>
+                        </label>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="0.0" reuseIdentifier="BookTableViewCell" rowHeight="92" id="BAy-3n-IU4" customClass="BookTableViewCell" customModule="Reading_List" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="55.5" width="375" height="92"/>
@@ -346,6 +361,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="tableFooter" destination="0H8-1U-XOm" id="DsI-a6-k6L"/>
                         <segue destination="bVe-1v-p1Z" kind="presentation" identifier="scanBarcode" modalPresentationStyle="formSheet" id="Mve-Yh-84G"/>
                         <segue destination="pWR-wO-ZT3" kind="presentation" identifier="searchByText" modalPresentationStyle="formSheet" id="nBH-TK-aGq"/>
                         <segue destination="4Ae-aU-quh" kind="presentation" identifier="addManually" modalPresentationStyle="formSheet" id="h2N-8E-GkS"/>
@@ -397,7 +413,7 @@
         <image name="to-do-filled" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Nby-6z-xHm"/>
-        <segue reference="kjk-Kz-aZ6"/>
+        <segue reference="dr8-2Z-AsX"/>
+        <segue reference="gr1-gZ-0yj"/>
     </inferredMetricsTieBreakers>
 </document>

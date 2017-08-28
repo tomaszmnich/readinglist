@@ -16,23 +16,15 @@ class ReadingTable: BookTable {
         navigationItem.title = "To Read"
         super.viewDidLoad()
     }
-    
-    var toReadSectionIndex: Int? {
-        get {
-            if let toReadSectionIndex = resultsController.sections?.index(where: {$0.name == String.init(describing: BookReadState.toRead.rawValue)}) {
-                return resultsController.sections!.startIndex.distance(to: toReadSectionIndex)
-            }
-            return nil
-        }
-    }
 
     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         // Disable reorderng when searching, or when the sort order is not by date
         guard !resultsFilterer.showingSearchResults else { return false }
         guard UserSettings.tableSortOrder == .byDate else { return false }
-        
+        guard let toReadSectionIndex = sectionIndex(forReadState: .toRead) else { return false }
+
         // We can reorder the "ToRead" books if there are more than one
-        return indexPath.section == toReadSectionIndex && self.tableView(tableView, numberOfRowsInSection: toReadSectionIndex!) > 1
+        return indexPath.section == toReadSectionIndex && self.tableView(tableView, numberOfRowsInSection: toReadSectionIndex) > 1
     }
     
     
@@ -41,14 +33,14 @@ class ReadingTable: BookTable {
             return proposedDestinationIndexPath
         }
         else {
-            return IndexPath(row: 0, section: toReadSectionIndex!)
+            return IndexPath(row: 0, section: sectionIndex(forReadState: .toRead)!)
         }
     }
     
     override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         
         // We should only have movement in the ToRead secion. We also ignore moves which have no effect
-        guard let toReadSectionIndex = toReadSectionIndex else { return }
+        guard let toReadSectionIndex = sectionIndex(forReadState: .toRead) else { return }
         guard sourceIndexPath.section == toReadSectionIndex && destinationIndexPath.section == toReadSectionIndex else { return }
         guard sourceIndexPath.row != destinationIndexPath.row else { return }
         
@@ -97,6 +89,23 @@ class ReadingTable: BookTable {
     }
     
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        let toReadSectionIndex = sectionIndex(forReadState: .toRead)
         return rowActionsForBookInState(indexPath.section == toReadSectionIndex ? .toRead : .reading)
+    }
+    
+    override func footerText() -> String? {
+        var footerPieces = [String]()
+        if let toReadSectionIndex = self.sectionIndex(forReadState: .toRead) {
+            let toReadCount = tableView(tableView, numberOfRowsInSection: toReadSectionIndex)
+            footerPieces.append("To Read: \(toReadCount) book\(toReadCount == 1 ? "" : "s")")
+        }
+        
+        if let readingSectionIndex = self.sectionIndex(forReadState: .reading) {
+            let readingCount = tableView(tableView, numberOfRowsInSection: readingSectionIndex)
+            footerPieces.append("Reading: \(readingCount) book\(readingCount == 1 ? "" : "s")")
+        }
+
+        guard footerPieces.count != 0 else { return nil }
+        return footerPieces.joined(separator: "\n")
     }
 }

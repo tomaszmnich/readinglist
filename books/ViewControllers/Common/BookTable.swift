@@ -43,24 +43,23 @@ class BookTableViewCell: UITableViewCell, ConfigurableCell {
 
 class BookTableUpdater: TableUpdater<Book, BookTableViewCell> {
     
-    override func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange object: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?)  {
-        super.controller(controller, didChange: object, at: indexPath, for: type, newIndexPath: newIndexPath)
-
-        func updateFooter(forSection section: Int) {
-            if let footer = self.tableView.footerView(forSection: section){
-                footer.textLabel?.text = titleForFooterInSection(section)
-                footer.setNeedsLayout()
-            }
-        }
-        
-        if let oldSectionIndex = indexPath?.section { updateFooter(forSection: oldSectionIndex) }
-        if let newSectionIndex = newIndexPath?.section { updateFooter(forSection: newSectionIndex) }
+    let onChange: (() -> ())
+    
+    init(table: UITableView, controller: NSFetchedResultsController<Book>, onChange: @escaping (() -> ())) {
+        self.onChange = onChange
+        super.init(table: table, controller: controller)
     }
     
-    func titleForFooterInSection(_ section: Int) -> String? {
-        guard section < numberOfSections() else { return nil }
-        let rowCount = numberOfRows(inSection: section)
-        return "\(rowCount) book\(rowCount == 1 ? "" : "s")"
+    override func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange object: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?)  {
+        super.controller(controller, didChange: object, at: indexPath, for: type, newIndexPath: newIndexPath)
+        
+        onChange()
+    }
+    
+    override func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
+        super.controller(controller, didChange: sectionInfo, atSectionIndex: sectionIndex, for: type)
+        
+        onChange()
     }
 }
 
@@ -74,6 +73,7 @@ class BookTable: AutoUpdatingTableViewController {
     var parentSplitViewController: SplitViewController {
         get { return splitViewController as! SplitViewController }
     }
+    @IBOutlet weak var tableFooter: UILabel!
     
     override func viewDidLoad() {
     
@@ -86,10 +86,9 @@ class BookTable: AutoUpdatingTableViewController {
         // We will manage the clearing of selections ourselves.
         clearsSelectionOnViewWillAppear = false
         
-        // Setting the table footer removes the cell separators.
         tableView.tableHeaderView = searchController.searchBar
         tableView.setContentOffset(CGPoint(x: 0, y: searchController.searchBar.frame.height), animated: false)
-        tableView.tableFooterView = UIView()
+        tableFooter.text = footerText()
         
         // Set the DZN data set source
         tableView.emptyDataSetSource = self
@@ -109,13 +108,29 @@ class BookTable: AutoUpdatingTableViewController {
         tableView.reloadData()
     }
     
+    func footerText() -> String? {
+        // Override to configure table footer label text
+        return nil
+    }
+    
+    func sectionIndex(forReadState readState: BookReadState) -> Int? {
+        if let sectionIndex = resultsController.sections?.index(where: {$0.name == String.init(describing: readState.rawValue)}) {
+            return resultsController.sections!.startIndex.distance(to: sectionIndex)
+        }
+        return nil
+    }
+    
     func buildResultsController() {
         let readStatePredicate = NSPredicate.Or(readStates.map{BookPredicate.readState(equalTo: $0)})
         resultsController = appDelegate.booksStore.fetchedResultsController(readStatePredicate, initialSortDescriptors: UserSettings.selectedSortOrder)
-        tableUpdater = BookTableUpdater(table: tableView, controller: resultsController)
+        tableUpdater = BookTableUpdater(table: tableView, controller: resultsController){ [unowned self] in
+            self.tableFooter.text = self.footerText()
+        }
         
         let predicateBuilder = BookPredicateBuilder(readStatePredicate: readStatePredicate)
-        resultsFilterer = FetchedResultsFilterer(uiSearchController: searchController, tableView: self.tableView, fetchedResultsController: resultsController, predicateBuilder: predicateBuilder)
+        resultsFilterer = FetchedResultsFilterer(uiSearchController: searchController, tableView: self.tableView, fetchedResultsController: resultsController, predicateBuilder: predicateBuilder){ [unowned self] in
+            self.tableFooter.text = self.footerText()
+        }
     }
     
     func configureSearchController() {
@@ -267,18 +282,6 @@ class BookTable: AutoUpdatingTableViewController {
         
         return rowActions
     }
-    
-    override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
-        return (tableUpdater as! BookTableUpdater).titleForFooterInSection(section)
-    }
-    
-    override func tableView(_ tableView: UITableView, willDisplayFooterView view: UIView, forSection section: Int) {
-        // Center the footers
-        if let footer = view as? UITableViewHeaderFooterView {
-            footer.textLabel?.textAlignment = .center
-        }
-    }
-    
 }
 
 /// DZNEmptyDataSetSource functions

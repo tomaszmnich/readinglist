@@ -16,15 +16,17 @@ import CoreData
 class FetchedResultsFilterer<ResultType, PredicateBuilderType>: NSObject, UISearchResultsUpdating where ResultType : NSFetchRequestResult, PredicateBuilderType : SearchPredicateBuilder {
     let searchController: UISearchController
     let predicateBuilder: PredicateBuilderType
+    let onChange: (() -> ())?
     
     private let fetchedResultsController: NSFetchedResultsController<ResultType>
     private let tableView: UITableView
 
-    init(uiSearchController: UISearchController, tableView: UITableView, fetchedResultsController: NSFetchedResultsController<ResultType>, predicateBuilder: PredicateBuilderType) {
+    init(uiSearchController: UISearchController, tableView: UITableView, fetchedResultsController: NSFetchedResultsController<ResultType>, predicateBuilder: PredicateBuilderType, onChange: (() -> ())?) {
         self.searchController = uiSearchController
         self.fetchedResultsController = fetchedResultsController
         self.tableView = tableView
         self.predicateBuilder = predicateBuilder
+        self.onChange = onChange
         super.init()
         
         self.searchController.searchResultsUpdater = self
@@ -42,6 +44,7 @@ class FetchedResultsFilterer<ResultType, PredicateBuilderType>: NSObject, UISear
             fetchedResultsController.fetchRequest.predicate = predicate
             try? fetchedResultsController.performFetch()
             tableView.reloadData()
+            onChange?()
         }
     }
 
