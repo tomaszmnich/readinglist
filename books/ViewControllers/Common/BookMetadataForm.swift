@@ -82,6 +82,8 @@ class BookMetadataForm: FormViewController {
             $0.multivaluedRowToInsertAt = { _ in
                 return AuthorButtonRow(){
                     $0.cellStyle = .value1
+                }.onCellSelection{ [unowned self] _, row in
+                    self.performSegue(withIdentifier: self.editAuthorSegueName, sender: row)
                 }.cellUpdate{ cell, _ in
                     cell.textLabel?.textColor = UIColor.black
                     cell.textLabel?.textAlignment = .left
@@ -123,7 +125,10 @@ class BookMetadataForm: FormViewController {
             <<< DateRow(publishedDateKey) {
                 $0.title = "Publication Date"
             }
-            <<< NavigationRow(title: "Subjects", segueName: "editSubjectsSegue", initialiser: {$0.cellStyle = .value1}){ [unowned self] cell, _ in
+            <<< NavigationRow(title: "Subjects", segueName: "editSubjectsSegue", initialiser: { [unowned self] in
+                $0.cellStyle = .value1
+                $0.tag = self.subjectsKey
+            }){ [unowned self] cell, _ in
                 cell.detailTextLabel?.text = self.subjects.joined(separator: ", ")
             }
             <<< ImageRow(imageKey){
