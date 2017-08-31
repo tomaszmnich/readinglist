@@ -70,7 +70,7 @@ func NavigationRow(title: String, segueName: String, initialiser: ((ButtonRow) -
     }
 }
 
-func ActionButton(title: String, updater: ((ButtonCellOf<String>, ButtonRow) -> Void)? = nil, action: @escaping (Void) -> Void) -> ButtonRow {
+func ActionButton(title: String, updater: ((ButtonCellOf<String>, ButtonRow) -> Void)? = nil, action: @escaping () -> Void) -> ButtonRow {
     return ButtonRow() {
         $0.title = title
         }.cellUpdate{ cell, row in

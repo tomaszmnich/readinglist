@@ -38,7 +38,7 @@ protocol GeneralTableUpdater : NSFetchedResultsControllerDelegate {
     func numberOfSections() -> Int
     func numberOfRows(inSection section: Int) -> Int
     func cellForRow(at indexPath: IndexPath) -> UITableViewCell
-    func withoutUpdates(closure: ((Void) -> Void))
+    func withoutUpdates(closure: (() -> Void))
 }
 
 /**
@@ -55,7 +55,7 @@ protocol ConfigurableCell {
  and also expose the current values for the number of rows and sections, and provide a configured cell for a given IndexPath.
  */
 class TableUpdater<ResultType, CellType> : NSObject, GeneralTableUpdater
-where ResultType : NSFetchRequestResult, CellType : UITableViewCell, CellType: ConfigurableCell, CellType.ResultType == ResultType {
+where CellType : UITableViewCell, CellType: ConfigurableCell, CellType.ResultType == ResultType {
     
     let tableView: UITableView
     private let controller: NSFetchedResultsController<ResultType>
@@ -130,7 +130,7 @@ where ResultType : NSFetchRequestResult, CellType : UITableViewCell, CellType: C
         }
     }
     
-    func withoutUpdates(closure: ((Void) -> Void)) {
+    func withoutUpdates(closure: (() -> Void)) {
         controller.delegate = nil
         closure()
         controller.delegate = self

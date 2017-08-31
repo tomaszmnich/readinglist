@@ -103,7 +103,7 @@ class BookImporter {
     // Keep track of the potentially numerous calls
     private let dispatchGroup = DispatchGroup()
     
-    init(csvFileUrl: URL, supplementBookCover: Bool = true, missingHeadersCallback: @escaping (Void) -> Void,
+    init(csvFileUrl: URL, supplementBookCover: Bool = true, missingHeadersCallback: @escaping () -> Void,
          supplementBookCallback: ((Book, DispatchGroup) -> Void)? = nil, callback: @escaping (Int, Int, Int) -> Void) {
         self.fileUrl = csvFileUrl
         self.callback = callback
@@ -177,7 +177,7 @@ class BookImporter {
     }
 
     /// Callback is run on the main thread
-    static func supplementBook(_ bookMetadata: BookMetadata, callback: @escaping (Void) -> Void) {
+    static func supplementBook(_ bookMetadata: BookMetadata, callback: @escaping () -> Void) {
         
         func getCoverCallback(coverResult: Result<Data>) {
             if coverResult.isSuccess {
