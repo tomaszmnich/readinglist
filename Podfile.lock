@@ -3,11 +3,11 @@ PODS:
   - Crashlytics (3.8.5):
     - Fabric (~> 1.6.3)
   - DZNEmptyDataSet (1.8.1)
-  - Eureka (3.1.0)
+  - Eureka (3.0.0)
   - Fabric (1.6.12)
-  - RxCocoa (3.6.1):
-    - RxSwift (~> 3.6)
-  - RxSwift (3.6.1)
+  - RxCocoa (4.0.0-alpha.1):
+    - RxSwift (~> 4.0.0-alpha.1)
+  - RxSwift (4.0.0-alpha.1)
   - SimulatorStatusMagic (1.9.5)
   - SVProgressHUD (2.1.2)
   - SwiftyJSON (3.1.4)
@@ -16,10 +16,10 @@ DEPENDENCIES:
   - CHCSVParser (from `https://github.com/davedelong/CHCSVParser.git`)
   - Crashlytics
   - DZNEmptyDataSet (~> 1.8)
-  - Eureka (~> 3.1)
+  - Eureka (from `https://github.com/xmartlabs/Eureka.git`, branch `feature/Xcode9-Swift3_2`)
   - Fabric
-  - RxCocoa (~> 3.6)
-  - RxSwift (~> 3.6)
+  - RxCocoa (~> 4.0.0-alpha)
+  - RxSwift (~> 4.0.0-alpha)
   - SimulatorStatusMagic
   - SVProgressHUD (~> 2.1)
   - SwiftyJSON (~> 3.1)
@@ -27,24 +27,30 @@ DEPENDENCIES:
 EXTERNAL SOURCES:
   CHCSVParser:
     :git: https://github.com/davedelong/CHCSVParser.git
+  Eureka:
+    :branch: feature/Xcode9-Swift3_2
+    :git: https://github.com/xmartlabs/Eureka.git
 
 CHECKOUT OPTIONS:
   CHCSVParser:
     :commit: 3ee99563177e8b59c90b85516a868338212ab671
     :git: https://github.com/davedelong/CHCSVParser.git
+  Eureka:
+    :commit: 170433bedb6db4228da60eb6c866156b6b29e666
+    :git: https://github.com/xmartlabs/Eureka.git
 
 SPEC CHECKSUMS:
   CHCSVParser: 64da26e2b4ddbf7527f7f03120bf91d83d28f354
   Crashlytics: dfbae35ef22ca189240d230ad501feea4ee85d2d
   DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
-  Eureka: d6725c38d0dcdceaa331d1468f75e76315715ae0
+  Eureka: 5b9418d7bfdc21ca977d69d124a6409f3e9af2c7
   Fabric: f050464eac45a2ce5a8e6e6a07e977c0df32fe28
-  RxCocoa: 84a08739ab186248c7f31ce4ee92d6f8a947d690
-  RxSwift: f9de85ea20cd2f7716ee5409fc13523dc638e4e4
+  RxCocoa: d6038768c2ec4e7157ca40396fdbd8d28de9b8ce
+  RxSwift: 62bea72da2c1b2653320c516267c2b8a347c02b6
   SimulatorStatusMagic: b3b4c5c49a07e8b1c452cc0327275e267a865fea
   SVProgressHUD: c404a55d78acbeb7ebb78b76d3faf986475a6994
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
 
-PODFILE CHECKSUM: e60d78c689ce24677e711bb50caf220170ad35d6
+PODFILE CHECKSUM: a9695d5e0528781cbf5e724188f34fb4885cc9f9
 
 COCOAPODS: 1.2.1
