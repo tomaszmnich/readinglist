@@ -347,7 +347,7 @@ class BookSubjectsForm: FormViewController {
         
         super.viewDidLoad()
         
-        form +++ MultivaluedSection(multivaluedOptions: [.Insert, .Delete, .Reorder], header: "Subjects", footer: "Add subjects to catergorise this book") {
+        form +++ MultivaluedSection(multivaluedOptions: [.Insert, .Delete, .Reorder], header: "Subjects", footer: "Add subjects to categorise this book") {
             $0.addButtonProvider = { _ in
                 return ButtonRow(){
                     $0.title = "Add New Subject"
