@@ -64,7 +64,7 @@ class BookMetadataForm: FormViewController {
                 $0.placeholder = "Title"
                 $0.add(rule: RuleRequired())
                 $0.validationOptions = .validatesOnChange
-            }.onRowValidationChanged{[unowned self] _ in
+            }.onRowValidationChanged{[unowned self] _,_ in
                 self.validationChanged()
             }
         
@@ -116,7 +116,7 @@ class BookMetadataForm: FormViewController {
                     return nil
                 })
                 $0.validationOptions = .validatesOnChange
-                }.onRowValidationChanged{[unowned self] _ in
+                }.onRowValidationChanged{[unowned self] _,_ in
                     self.validationChanged()
             }
             <<< IntRow(pageCountKey) {
@@ -140,8 +140,8 @@ class BookMetadataForm: FormViewController {
         +++ Section(header: "Description", footer: "")
             <<< TextAreaRow(descriptionKey){
                 $0.placeholder = "Description"
-            }.cellSetup{
-                $0.0.height = {return 200}
+            }.cellSetup{ cell, _ in
+                cell.height = {return 200}
             }
         
         // Update and delete buttons

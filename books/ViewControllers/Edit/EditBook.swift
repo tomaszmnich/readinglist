@@ -29,12 +29,12 @@ class EditBook: BookMetadataForm {
             updateRow.section!.remove(at: updateRow.indexPath!.row)
         }
         else {
-            updateRow.onCellSelection { [unowned self] _ in
+            updateRow.onCellSelection { [unowned self] _,_ in
                 self.presentUpdateAltert()
             }
         }
         
-        deleteRow.onCellSelection{ [unowned self] _ in
+        deleteRow.onCellSelection{ [unowned self] _,_ in
             self.presentDeleteAlert()
         }
         
@@ -44,7 +44,7 @@ class EditBook: BookMetadataForm {
             isbnField.section!.remove(at: isbnField.indexPath!.row)
         }
         titleField.value = bookToEdit.title
-        pageCount.value = bookToEdit.pageCount == nil ? nil : Int(bookToEdit.pageCount!)
+        pageCount.value = bookToEdit.pageCount == nil ? nil : Int(truncating: bookToEdit.pageCount!)
         publicationDate.value = bookToEdit.publicationDate
         descriptionField.value = bookToEdit.bookDescription
         image.value = UIImage(optionalData: bookToEdit.coverImage)

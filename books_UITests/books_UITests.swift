@@ -48,7 +48,7 @@ class books_UITests: XCTestCase {
         app.topNavBar.buttons["Done"].tap()
         
         sleep(1)
-        XCTAssertEqual(app.tables.cells.count, UInt(initialNumberOfCells + 1))
+        XCTAssertEqual(app.tables.cells.count, initialNumberOfCells + 1)
     }
     
     func testEditBook() {
@@ -78,7 +78,7 @@ class books_UITests: XCTestCase {
         app.sheets.buttons["Delete"].tap()
         
         sleep(1)
-        XCTAssertEqual(app.tables.cells.count, UInt(bookCount - 1))
+        XCTAssertEqual(app.tables.cells.count, bookCount - 1)
     }
     
     func testExportBook() {

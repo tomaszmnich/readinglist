@@ -72,8 +72,8 @@ class ReadStateForm: FormViewController {
             <<< TextAreaRow(notesKey){
                 $0.placeholder = "Add your personal notes here..."
                 }
-            .cellSetup{
-                $0.0.height = {return 250}
+            .cellSetup{cell, _ in
+                cell.height = {return 250}
             }
     }
     

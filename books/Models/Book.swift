@@ -214,8 +214,8 @@ class BookMetadata {
                 .flatMap{$0.trimming().nilIfWhitespace()}
                 .map{
                     if let firstCommaPos = $0.range(of: ","),
-                        let lastName = $0.substring(to: firstCommaPos.lowerBound).trimming().nilIfWhitespace()  {
-                        return ($0.substring(from: firstCommaPos.upperBound).trimming().nilIfWhitespace(), lastName)
+                        let lastName = $0[..<firstCommaPos.lowerBound].trimming().nilIfWhitespace()  {
+                        return ($0[firstCommaPos.upperBound...].trimming().nilIfWhitespace(), lastName)
                     }
                     else {
                         return (nil, $0)

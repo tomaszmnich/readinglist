@@ -11,8 +11,13 @@ import UIKit
 import SwiftyJSON
 
 extension UIColor {
-    convenience init(fromHex: UInt32){
-        self.init(colorLiteralRed: Float(((fromHex & 0xFF0000) >> 16))/255.0, green: Float(((fromHex & 0x00FF00) >> 8))/255.0, blue: Float(((fromHex & 0x0000FF) >> 0))/255.0, alpha: 1.0)
+    convenience init(fromHex hex: UInt32){
+        self.init(
+            red: CGFloat((hex & 0xFF0000) >> 16) / 255.0,
+            green: CGFloat((hex & 0x00FF00) >> 8) / 255.0,
+            blue: CGFloat(hex & 0x0000FF) / 255.0,
+            alpha: CGFloat(1.0)
+        )
     }
     
     static let flatGreen: UIColor = UIColor(fromHex: 0x2ecc71)
@@ -21,8 +26,8 @@ extension UIColor {
 }
 
 public extension NSAttributedString {
-    public convenience init(_ string: String, withFont font: UIFont) {
-        self.init(string: string, attributes: [NSFontAttributeName: font])
+    @objc public convenience init(_ string: String, withFont font: UIFont) {
+        self.init(string: string, attributes: [NSAttributedStringKey.font: font])
     }
 }
 
@@ -31,7 +36,7 @@ extension NSLayoutConstraint {
     static let highPriority: Float = 999
     
     func highPriorityIff(_ condition: Bool) {
-        priority = condition ? NSLayoutConstraint.highPriority : NSLayoutConstraint.lowPriority
+        priority = UILayoutPriority(rawValue: condition ? NSLayoutConstraint.highPriority : NSLayoutConstraint.lowPriority)
     }
 }
 
@@ -59,7 +64,7 @@ extension NSMutableAttributedString {
     @discardableResult func hyperlinkText(_ textToLink: String, to linkURL: URL) -> Bool {
         let foundRange = self.mutableString.range(of: textToLink)
         if foundRange.location != NSNotFound {
-            self.addAttribute(NSLinkAttributeName, value: linkURL, range: foundRange)
+            self.addAttribute(NSAttributedStringKey.link, value: linkURL, range: foundRange)
             return true
         }
         return false
@@ -200,6 +205,12 @@ extension Array where Element: Equatable {
     }
 }
 
+extension String.SubSequence {
+    func trimming() -> String {
+        return self.trimmingCharacters(in: CharacterSet.whitespaces)
+    }
+}
+
 extension String {
     /// Return whether the string contains any characters which are not whitespace.
     var isEmptyOrWhitespace: Bool {
@@ -215,12 +226,12 @@ extension String {
         return self.trimmingCharacters(in: CharacterSet.whitespaces)
     }
     
-    func toAttributedString(_ attributes: [String: Any]?) -> NSAttributedString {
+    func toAttributedString(_ attributes: [NSAttributedStringKey: Any]?) -> NSAttributedString {
         return NSAttributedString(string: self, attributes: attributes)
     }
     
     func toAttributedStringWithFont(_ font: UIFont) -> NSAttributedString {
-        return self.toAttributedString([NSFontAttributeName: font])
+        return self.toAttributedString([NSAttributedStringKey.font: font])
     }
     
     func withTextStyle(_ textStyle: UIFontTextStyle) -> NSAttributedString {

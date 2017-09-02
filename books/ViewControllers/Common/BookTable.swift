@@ -299,7 +299,7 @@ extension BookTable : DZNEmptyDataSetSource {
             titleText = "🎉 Finished"
         }
         
-        return NSAttributedString(string: titleText, attributes: [NSFontAttributeName: UIFont(name: "GillSans", size: 32)!, NSForegroundColorAttributeName: UIColor.gray])
+        return NSAttributedString(string: titleText, attributes: [NSAttributedStringKey.font: UIFont(name: "GillSans", size: 32)!, NSAttributedStringKey.foregroundColor: UIColor.gray])
     }
     
     func verticalOffset(forEmptyDataSet scrollView: UIScrollView!) -> CGFloat {

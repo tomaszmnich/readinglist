@@ -52,7 +52,7 @@ class CoreDataStack {
         managedObjectContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
         
         let allMomUrls = Bundle.main.urls(forResourcesWithExtension: "mom", subdirectory: "\(momDirectoryName).momd")!
-            .sorted{$0.0.absoluteString.compare($0.1.absoluteString) == .orderedAscending}
+            .sorted{$0.absoluteString.compare($1.absoluteString) == .orderedAscending}
         
         // Desired mom name will likely only be specified in test cases, to create old MOM stores
         // and then subsequently migrate them.

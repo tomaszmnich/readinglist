@@ -34,9 +34,9 @@ class BookMapping_6_7: NSEntityMigrationPolicy {
         
         for authorString in (authors.flatMap{$0.trimming().nilIfWhitespace()}) {
             if let range = authorString.range(of: " ", options: .backwards),
-                let lastName = authorString.substring(from: range.upperBound).trimming().nilIfWhitespace() {
+                let lastName = authorString[range.upperBound...].trimming().nilIfWhitespace() {
                 components.append((lastName: lastName,
-                                   firstNames: authorString.substring(to: range.upperBound).trimming().nilIfWhitespace()))
+                                   firstNames: authorString[..<range.upperBound].trimming().nilIfWhitespace()))
             }
             else {
                 components.append((lastName: authorString, firstNames: nil))

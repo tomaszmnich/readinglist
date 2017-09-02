@@ -30,7 +30,7 @@ class EditReadState: ReadStateForm {
             finishedReading.value = finished
         }
         
-        currentPage.value = bookToEdit.currentPage == nil ? nil : Int(bookToEdit.currentPage!)
+        currentPage.value = bookToEdit.currentPage == nil ? nil : Int(truncating: bookToEdit.currentPage!)
         notes.value = bookToEdit.notes
     }
     

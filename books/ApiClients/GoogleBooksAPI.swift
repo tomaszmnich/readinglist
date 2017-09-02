@@ -321,7 +321,10 @@ class GoogleBooks {
             metadata.title = title
             metadata.authors = authors.map{
                 if let range = $0.range(of: " ", options: .backwards) {
-                    return (firstNames: $0.substring(to: range.upperBound).trimming(), lastName: $0.substring(from: range.upperBound).trimming())
+                    let firstNames = $0[..<range.upperBound].trimming()
+                    let lastName = $0[range.lowerBound...].trimming()
+                    
+                    return (firstNames: firstNames, lastName: lastName)
                 }
                 else {
                     return (firstNames: nil, lastName: $0)

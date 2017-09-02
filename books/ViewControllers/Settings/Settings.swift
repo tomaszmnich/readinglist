@@ -45,7 +45,9 @@ class Settings: FormViewController, MFMailComposeViewControllerDelegate {
         +++ Section(header: "Data", footer: "")
             <<< NavigationRow(title: "Import", segueName: "import")
             <<< NavigationRow(title: "Export", segueName: "export")
-            <<< ActionButton(title: "Delete All", updater: {$0.0.textLabel?.textColor = .red}) {[unowned self] in
+            <<< ActionButton(title: "Delete All", updater: { cell, _ in
+                cell.textLabel?.textColor = .red
+            }) {[unowned self] in
                 self.deleteAllData()
             }
         

@@ -77,8 +77,8 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
             }
         #endif
     
-        let camera = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo)
-        guard let input = try? AVCaptureDeviceInput(device: camera) else {
+        let camera = AVCaptureDevice.default(for: AVMediaType.video)
+        guard let input = try? AVCaptureDeviceInput(device: camera!) else {
             presentCameraPermissionsAlert()
             return
         }
@@ -104,14 +104,14 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         session!.addOutput(output)
         
         // This line must be after session outputs are added
-        output.metadataObjectTypes = [AVMetadataObjectTypeEAN13Code]
+        output.metadataObjectTypes = [AVMetadataObject.ObjectType.ean13]
         
         // Begin the capture session.
         session!.startRunning()
         
         // We want to view what the camera is seeing
         previewLayer = AVCaptureVideoPreviewLayer(session: session!)
-        previewLayer!.videoGravity = AVLayerVideoGravityResizeAspectFill
+        previewLayer!.videoGravity = AVLayerVideoGravity.resizeAspectFill
         previewLayer!.frame = view.bounds
         setVideoOrientation()
         
@@ -131,7 +131,7 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         }
     }
     
-    func captureOutput(_ captureOutput: AVCaptureOutput!, didOutputMetadataObjects metadataObjects: [Any]!, from connection: AVCaptureConnection!) {
+    func metadataOutput(captureOutput: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {
         
         guard let avMetadata = metadataObjects.first as? AVMetadataMachineReadableCodeObject,
             let isbn = Isbn13.tryParse(inputString: avMetadata.stringValue) else { return }
