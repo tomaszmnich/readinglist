@@ -49,7 +49,7 @@ class ExportViewController: FormViewController {
         DispatchQueue.global(qos: .userInitiated).async {
             
             // Write the document to a temporary file
-            let exportFileName = "Reading List Export - \(Date().toString(withDateFormat: "yyyy-MM-dd hh-mm")).csv"
+            let exportFileName = "Reading List - \(UIDevice.current.name) - \(Date().toString(withDateFormat: "yyyy-MM-dd hh-mm")).csv"
             let temporaryFilePath = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(exportFileName)
             do {
                 try exporter.write(to: temporaryFilePath)
