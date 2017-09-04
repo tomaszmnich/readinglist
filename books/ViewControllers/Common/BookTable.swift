@@ -307,7 +307,8 @@ extension BookTable : DZNEmptyDataSetSource {
             titleText = "🎉 Finished"
         }
         
-        return NSAttributedString(string: titleText, attributes: [NSAttributedStringKey.font: UIFont(name: "GillSans", size: 32)!, NSAttributedStringKey.foregroundColor: UIColor.gray])
+        return NSAttributedString(string: titleText, attributes: [NSAttributedStringKey.font: Fonts.gillSans(ofSize: 32),
+                                                                  NSAttributedStringKey.foregroundColor: UIColor.gray])
     }
     
     func verticalOffset(forEmptyDataSet scrollView: UIScrollView!) -> CGFloat {
@@ -321,8 +322,8 @@ extension BookTable : DZNEmptyDataSetSource {
     }
     
     func description(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
-        let bodyFont = UIFont(name: "GillSans", size: 18)!
-        let boldFont = UIFont(name: "GillSans-Semibold", size: 18)!
+        let bodyFont = Fonts.gillSans(forTextStyle: .title2)
+        let boldFont = Fonts.gillSansSemiBold(forTextStyle: .title2)
         
         let descriptionText: NSMutableAttributedString
         if resultsFilterer.showingSearchResults {

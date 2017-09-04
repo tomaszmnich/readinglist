@@ -43,6 +43,7 @@
 		495C5D3F1BF1412600E00C07 /* BookTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 495C5D3E1BF1412600E00C07 /* BookTable.swift */; };
 		495C5D411BF1423900E00C07 /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = 495C5D401BF1423900E00C07 /* Book.swift */; };
 		495C5D431BF14BEB00E00C07 /* BookDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 495C5D421BF14BEB00E00C07 /* BookDetails.swift */; };
+		495EB66A1F5AE2DD009CEF39 /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 495EB6691F5AE2DD009CEF39 /* Fonts.swift */; };
 		495FDC2E1CF8C676006DCF2E /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 495FDC2D1CF8C676006DCF2E /* Extensions.swift */; };
 		4962700C1DBF83840009CC3C /* books_UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4962700B1DBF83840009CC3C /* books_UITests.swift */; };
 		4968A2B21CB3E0BF00CBF3F0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4968A2B11CB3E0BF00CBF3F0 /* LaunchScreen.storyboard */; };
@@ -138,6 +139,7 @@
 		495C5D3E1BF1412600E00C07 /* BookTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookTable.swift; sourceTree = "<group>"; };
 		495C5D401BF1423900E00C07 /* Book.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Book.swift; sourceTree = "<group>"; };
 		495C5D421BF14BEB00E00C07 /* BookDetails.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookDetails.swift; sourceTree = "<group>"; };
+		495EB6691F5AE2DD009CEF39 /* Fonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
 		495FDC2D1CF8C676006DCF2E /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		496270091DBF83840009CC3C /* books_UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = books_UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4962700B1DBF83840009CC3C /* books_UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = books_UITests.swift; sourceTree = "<group>"; };
@@ -437,6 +439,7 @@
 				494D96E11E71EDAE00299752 /* GeneralUIAction.swift */,
 				493056421DB1561C0086FDAD /* TableUpdater.swift */,
 				4973C79E1E901A6A001CFABC /* CommonUIElements.swift */,
+				495EB6691F5AE2DD009CEF39 /* Fonts.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -803,6 +806,7 @@
 				492500781C0B1B0000C149B5 /* BooksStore.swift in Sources */,
 				49E95D0F1DD7D9EC00C215F8 /* GoogleBooksAPI.swift in Sources */,
 				49D0FAAB1F2B284000101EE1 /* UserEngagement.swift in Sources */,
+				495EB66A1F5AE2DD009CEF39 /* Fonts.swift in Sources */,
 				49B8D8E71F4A08E700D4C4EF /* BookMappingModels.swift in Sources */,
 				493056431DB1561C0086FDAD /* TableUpdater.swift in Sources */,
 				49F6AC651E98F36B000B7D17 /* ImportViewController.swift in Sources */,
