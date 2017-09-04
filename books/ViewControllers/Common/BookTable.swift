@@ -86,15 +86,18 @@ class BookTable: AutoUpdatingTableViewController {
         // We will manage the clearing of selections ourselves.
         clearsSelectionOnViewWillAppear = false
         
+        // Some search bar styles are slightly different on iOS 11
         if #available(iOS 11.0, *) {
             navigationItem.searchController = searchController
         }
         else {
             searchController.searchBar.backgroundColor = tableView.backgroundColor!
+            searchController.hidesNavigationBarDuringPresentation = false
             tableView.tableHeaderView = searchController.searchBar
             tableView.setContentOffset(CGPoint(x: 0, y: searchController.searchBar.frame.height), animated: false)
         }
         
+        // Set the table footer text
         tableFooter.text = footerText()
         
         // Set the DZN data set source
@@ -146,7 +149,6 @@ class BookTable: AutoUpdatingTableViewController {
         searchController.searchBar.returnKeyType = .done
         searchController.searchBar.placeholder = "Your Library"
         searchController.searchBar.searchBarStyle = .minimal
-        searchController.hidesNavigationBarDuringPresentation = false
     }
     
     override func viewDidAppear(_ animated: Bool) {
