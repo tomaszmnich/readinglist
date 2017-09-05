@@ -16,7 +16,7 @@ DEPENDENCIES:
   - CHCSVParser (from `https://github.com/davedelong/CHCSVParser.git`)
   - Crashlytics
   - DZNEmptyDataSet (~> 1.8)
-  - Eureka (from `https://github.com/xmartlabs/Eureka.git`, branch `feature/Xcode9-Swift3_2`)
+  - Eureka (from `https://github.com/xmartlabs/Eureka.git`, branch `feature/Xcode9-Swift4`)
   - Fabric
   - RxCocoa (~> 4.0.0-alpha)
   - RxSwift (~> 4.0.0-alpha)
@@ -28,7 +28,7 @@ EXTERNAL SOURCES:
   CHCSVParser:
     :git: https://github.com/davedelong/CHCSVParser.git
   Eureka:
-    :branch: feature/Xcode9-Swift3_2
+    :branch: feature/Xcode9-Swift4
     :git: https://github.com/xmartlabs/Eureka.git
 
 CHECKOUT OPTIONS:
@@ -36,7 +36,7 @@ CHECKOUT OPTIONS:
     :commit: 3ee99563177e8b59c90b85516a868338212ab671
     :git: https://github.com/davedelong/CHCSVParser.git
   Eureka:
-    :commit: 170433bedb6db4228da60eb6c866156b6b29e666
+    :commit: 3bd78630d1df00d2acd995bbd69395e72960f257
     :git: https://github.com/xmartlabs/Eureka.git
 
 SPEC CHECKSUMS:
@@ -51,6 +51,6 @@ SPEC CHECKSUMS:
   SVProgressHUD: c404a55d78acbeb7ebb78b76d3faf986475a6994
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
 
-PODFILE CHECKSUM: a9695d5e0528781cbf5e724188f34fb4885cc9f9
+PODFILE CHECKSUM: d4c2fc3d512b195eeb24ddbd55b2c45bddd9447d
 
 COCOAPODS: 1.2.1

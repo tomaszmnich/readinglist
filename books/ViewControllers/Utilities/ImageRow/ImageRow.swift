@@ -69,7 +69,7 @@ protocol ImageRowProtocol {
 
 //MARK: Row
 
-open class _ImageRow<VCType: TypedRowControllerType, Cell: CellType>: SelectorRow<Cell, VCType>, ImageRowProtocol where VCType: UIImagePickerController, VCType.RowValue == UIImage, Cell: BaseCell, Cell: TypedCellType, Cell.Value == UIImage {
+open class _ImageRow<VCType: TypedRowControllerType, Cell: CellType>: SelectorRow<Cell, VCType>, ImageRowProtocol where VCType: UIImagePickerController, VCType.RowValue == UIImage, Cell: BaseCell, /*Cell: TypedCellType,*/ Cell.Value == UIImage {
     
 
     open var sourceTypes: ImageRowSourceTypes
