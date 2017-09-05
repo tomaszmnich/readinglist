@@ -32,9 +32,13 @@ class TabBarController: UITabBarController {
         get { return selectedViewController as? SplitViewController }
     }
     
+    var selectedBookTable: BookTable? {
+        get { return (selectedSplitViewController?.masterNavigationController.viewControllers.first as? BookTable) }
+    }
+    
     func simulateBookSelection(_ book: Book){
         selectTab(book.readState == .finished ? TabOption.finished : TabOption.toRead)
-        (selectedSplitViewController?.masterNavigationController.viewControllers.first as? BookTable)?.triggerBookSelection(book)
+        selectedBookTable?.triggerBookSelection(book)
     }
     
     override func restoreUserActivityState(_ activity: NSUserActivity) {
