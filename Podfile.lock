@@ -1,10 +1,10 @@
 PODS:
   - CHCSVParser (2.1.0)
-  - Crashlytics (3.8.5):
+  - Crashlytics (3.8.6):
     - Fabric (~> 1.6.3)
   - DZNEmptyDataSet (1.8.1)
   - Eureka (3.0.0)
-  - Fabric (1.6.12)
+  - Fabric (1.6.13)
   - RxCocoa (4.0.0-alpha.1):
     - RxSwift (~> 4.0.0-alpha.1)
   - RxSwift (4.0.0-alpha.1)
@@ -41,10 +41,10 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   CHCSVParser: 64da26e2b4ddbf7527f7f03120bf91d83d28f354
-  Crashlytics: dfbae35ef22ca189240d230ad501feea4ee85d2d
+  Crashlytics: 95d05f4e4c19a771250c4bd9ce344d996de32bbf
   DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
   Eureka: 5b9418d7bfdc21ca977d69d124a6409f3e9af2c7
-  Fabric: f050464eac45a2ce5a8e6e6a07e977c0df32fe28
+  Fabric: 2fb5676bc811af011a04513451f463dac6803206
   RxCocoa: d6038768c2ec4e7157ca40396fdbd8d28de9b8ce
   RxSwift: 62bea72da2c1b2653320c516267c2b8a347c02b6
   SimulatorStatusMagic: b3b4c5c49a07e8b1c452cc0327275e267a865fea
