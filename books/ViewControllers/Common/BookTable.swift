@@ -130,6 +130,10 @@ class BookTable: AutoUpdatingTableViewController {
         return nil
     }
     
+    func readStateForSection(_ section: Int) -> BookReadState {
+        return readStates.first{sectionIndex(forReadState: $0) == section}!
+    }
+    
     func buildResultsController() {
         let readStatePredicate = NSPredicate.Or(readStates.map{BookPredicate.readState(equalTo: $0)})
         resultsController = appDelegate.booksStore.fetchedResultsController(readStatePredicate, initialSortDescriptors: UserSettings.selectedSortOrder)
@@ -238,44 +242,29 @@ class BookTable: AutoUpdatingTableViewController {
         self.present(optionsAlert, animated: true, completion: nil)
     }
     
-    /// Returns the row actions to be used for a book in a given state
-    func rowActionsForBookInState(_ readState: BookReadState) -> [UITableViewRowAction] {
-        
-        func getBookFromIndexPath(rowAction: UITableViewRowAction, indexPath: IndexPath) -> Book {
-            return self.resultsController.object(at: indexPath)
-        }
+    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        let toReadIndex = sectionIndex(forReadState: .toRead)
+        let readingIndex = sectionIndex(forReadState: .reading)
         
         // Start with the delete action
-        var rowActions = [UITableViewRowAction(style: .destructive, title: "Delete") { [unowned self] rowAction, indexPath in
-            
-            let bookToDelete = getBookFromIndexPath(rowAction: rowAction, indexPath: indexPath)
-            let confirmDeleteAlert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-            if let popPresenter = confirmDeleteAlert.popoverPresentationController {
-                let cell = self.tableView.cellForRow(at: indexPath)!
-                popPresenter.sourceRect = cell.frame
-                popPresenter.sourceView = self.tableView
-                popPresenter.permittedArrowDirections = .any
-            }
-        
-            confirmDeleteAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-            confirmDeleteAlert.addAction(UIAlertAction(title: "Delete", style: .destructive) { _ in
-                appDelegate.booksStore.deleteBook(bookToDelete)
-            })
-            self.present(confirmDeleteAlert, animated: true) {
-                UserEngagement.logEvent(.deleteBook)
-            }
+        var rowActions = [UITableViewRowAction(style: .destructive, title: "Delete") { [unowned self] _, indexPath in
+            self.presentDeleteBookAlert(indexPath: indexPath, callback: nil)
         }]
         
         // Add the other state change actions where appropriate
-        if readState == .toRead {
-            let transitionToReading = Book.transistionToReadingStateAction.toUITableViewRowAction(getActionableObject: getBookFromIndexPath)
-            transitionToReading.backgroundColor = UIColor.buttonBlue
-            rowActions.append(transitionToReading)
+        if indexPath.section == toReadIndex {
+            let startAction = UITableViewRowAction(style: .normal, title: "Start") { [unowned self] rowAction, indexPath in
+                self.resultsController.object(at: indexPath).transistionToReading()
+            }
+            startAction.backgroundColor = UIColor.buttonBlue
+            rowActions.append(startAction)
         }
-        else if readState == .reading {
-            let transitionToFinished = Book.transistionToFinishedStateAction.toUITableViewRowAction(getActionableObject: getBookFromIndexPath)
-            transitionToFinished.backgroundColor = UIColor.flatGreen
-            rowActions.append(transitionToFinished)
+        else if indexPath.section == readingIndex {
+            let finishAction = UITableViewRowAction(style: .normal, title: "Finish") { [unowned self] rowAction, indexPath in
+                self.resultsController.object(at: indexPath).transistionToFinished()
+            }
+            finishAction.backgroundColor = UIColor.flatGreen
+            rowActions.append(finishAction)
         }
         
         #if DEBUG
@@ -289,6 +278,36 @@ class BookTable: AutoUpdatingTableViewController {
         #endif
         
         return rowActions
+    }
+    
+    @available(iOS 11.0, *)
+    override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { [unowned self] _,_,callback in
+            self.presentDeleteBookAlert(indexPath: indexPath, callback: callback)
+        }
+        let configuration = UISwipeActionsConfiguration(actions: [deleteAction])
+        configuration.performsFirstActionWithFullSwipe = false
+        return configuration
+    }
+    
+    func presentDeleteBookAlert(indexPath: IndexPath, callback: ((Bool) -> ())?) {
+        let bookToDelete = self.resultsController.object(at: indexPath)
+        let confirmDeleteAlert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        if let popPresenter = confirmDeleteAlert.popoverPresentationController {
+            let cell = self.tableView.cellForRow(at: indexPath)!
+            popPresenter.sourceRect = cell.frame
+            popPresenter.sourceView = self.tableView
+            popPresenter.permittedArrowDirections = .any
+        }
+        
+        confirmDeleteAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel) { _ in
+            callback?(false)
+        })
+        confirmDeleteAlert.addAction(UIAlertAction(title: "Delete", style: .destructive) { _ in
+            bookToDelete.deleteAndLog()
+            callback?(true)
+        })
+        self.present(confirmDeleteAlert, animated: true, completion: nil)
     }
 }
 

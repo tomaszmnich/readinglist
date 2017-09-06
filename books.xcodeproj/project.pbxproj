@@ -35,7 +35,6 @@
 		4943DB791DBD5104004CAF30 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4943DB781DBD5104004CAF30 /* Settings.swift */; };
 		494D65D31EB71BC400764DC1 /* DebugSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4937A1471E9E1FB900A3B0D1 /* DebugSettings.swift */; };
 		494D65D51EB906CB00764DC1 /* examplebooks.csv in Resources */ = {isa = PBXBuildFile; fileRef = 494D65D41EB906CB00764DC1 /* examplebooks.csv */; };
-		494D96E21E71EDAE00299752 /* GeneralUIAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494D96E11E71EDAE00299752 /* GeneralUIAction.swift */; };
 		494D96E41E759D8900299752 /* AttributionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494D96E31E759D8900299752 /* AttributionsViewController.swift */; };
 		495879651BF7E76200000131 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 495879641BF7E76200000131 /* CoreDataStack.swift */; };
 		495C5D101BF1404D00E00C07 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 495C5D0F1BF1404D00E00C07 /* AppDelegate.swift */; };
@@ -129,7 +128,6 @@
 		494234921E70B24400CEEB4C /* BookDetails.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = BookDetails.storyboard; sourceTree = "<group>"; };
 		4943DB781DBD5104004CAF30 /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		494D65D41EB906CB00764DC1 /* examplebooks.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = examplebooks.csv; path = TestData/examplebooks.csv; sourceTree = "<group>"; };
-		494D96E11E71EDAE00299752 /* GeneralUIAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneralUIAction.swift; sourceTree = "<group>"; };
 		494D96E31E759D8900299752 /* AttributionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AttributionsViewController.swift; sourceTree = "<group>"; };
 		495879641BF7E76200000131 /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		495C5D0C1BF1404D00E00C07 /* Reading List.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Reading List.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -436,7 +434,6 @@
 				49225FAE1F522856008686B8 /* ImageRow */,
 				49C5339E1DB281A10043E50E /* BookPredicateBuilder.swift */,
 				49097BA71CFB102B001AF1F9 /* FetchedResultsFilterer.swift */,
-				494D96E11E71EDAE00299752 /* GeneralUIAction.swift */,
 				493056421DB1561C0086FDAD /* TableUpdater.swift */,
 				4973C79E1E901A6A001CFABC /* CommonUIElements.swift */,
 				495EB6691F5AE2DD009CEF39 /* Fonts.swift */,
@@ -819,7 +816,6 @@
 				4994706A1DB42067008CB06E /* ReadingTable.swift in Sources */,
 				49FE2ED51D6F675D00F04239 /* SearchOnline.swift in Sources */,
 				4937A1481E9E1FB900A3B0D1 /* DebugSettings.swift in Sources */,
-				494D96E21E71EDAE00299752 /* GeneralUIAction.swift in Sources */,
 				498B4D4D1CB1AB7A00C5F38B /* SplitViewController.swift in Sources */,
 				491F14621C02228C0052B355 /* ScanBarcode.swift in Sources */,
 				49CEB80A1E9D8C06003FD859 /* DebugSettingsViewController.swift in Sources */,

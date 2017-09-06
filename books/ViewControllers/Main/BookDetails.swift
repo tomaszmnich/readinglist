@@ -262,17 +262,20 @@ class BookDetails: UIViewController {
         get {
             guard let book = viewModel?.book else { return [UIPreviewActionItem]() }
             
-            // Very simple function, exists to shorten the method calls below
-            func getBook(previewAction: UIPreviewAction, viewController: UIViewController) -> Book { return book }
-            
             var previewActions = [UIPreviewActionItem]()
             if book.readState == .toRead {
-                previewActions.append(Book.transistionToReadingStateAction.toUIPreviewAction(getActionableObject: getBook))
+                previewActions.append(UIPreviewAction(title: "Start", style: .default){ _,_ in
+                    book.transistionToReading()
+                })
             }
             else if book.readState == .reading {
-                previewActions.append(Book.transistionToFinishedStateAction.toUIPreviewAction(getActionableObject: getBook))
+                previewActions.append(UIPreviewAction(title: "Finish", style: .default){ _,_ in
+                    book.transistionToReading()
+                })
             }
-            previewActions.append(Book.deleteAction.toUIPreviewAction(getActionableObject: getBook))
+            previewActions.append(UIPreviewAction(title: "Delete", style: .destructive) { _,_ in
+                book.deleteAndLog()
+            })
             return previewActions
         }
     }

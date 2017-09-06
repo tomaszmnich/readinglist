@@ -27,7 +27,6 @@ class ReadingTable: BookTable {
         return indexPath.section == toReadSectionIndex && self.tableView(tableView, numberOfRowsInSection: toReadSectionIndex) > 1
     }
     
-    
     override func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath, toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
         if sourceIndexPath.section == proposedDestinationIndexPath.section {
             return proposedDestinationIndexPath
@@ -88,11 +87,28 @@ class ReadingTable: BookTable {
         }
     }
     
-    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        let toReadSectionIndex = sectionIndex(forReadState: .toRead)
-        return rowActionsForBookInState(indexPath.section == toReadSectionIndex ? .toRead : .reading)
+    @available(iOS 11.0, *)
+    override func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let readStateOfSection = readStateForSection(indexPath.section)
+        
+        let leadingSwipeAction = UIContextualAction(style: .normal, title: readStateOfSection == .toRead ? "Start" : "Finish") { [unowned self] _,_,callback in
+            let book = self.resultsController.object(at: indexPath)
+            if readStateOfSection == .toRead {
+                book.transistionToReading()
+            }
+            else {
+                book.transistionToFinished()
+            }
+            callback(true)
+        }
+        leadingSwipeAction.backgroundColor = readStateOfSection == .toRead ? UIColor.buttonBlue : UIColor.flatGreen
+        
+        let configuration = UISwipeActionsConfiguration(actions: [leadingSwipeAction])
+        configuration.performsFirstActionWithFullSwipe = false
+        
+        return configuration
     }
-    
+
     override func footerText() -> String? {
         var footerPieces = [String]()
         if let toReadSectionIndex = self.sectionIndex(forReadState: .toRead) {

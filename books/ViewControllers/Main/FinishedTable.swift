@@ -17,10 +17,6 @@ class FinishedTable: BookTable {
         super.viewDidLoad()
     }
     
-    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        return rowActionsForBookInState(.finished)
-    }
-    
     override func footerText() -> String? {
         guard let finishedSectionIndex = self.sectionIndex(forReadState: .finished) else { return nil }
         

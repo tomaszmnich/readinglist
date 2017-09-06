@@ -125,24 +125,24 @@ extension Book {
         return SpotlightItem(uniqueIdentifier: objectID.uriRepresentation().absoluteString, title: spotlightTitle, description: bookDescription, thumbnailImageData: coverImage)
     }
     
-    static let transistionToReadingStateAction = GeneralUIAction<Book>(style: .normal, title: "Start") { book in
+    func transistionToReading() {
         let reading = BookReadingInformation(readState: .reading, startedWhen: Date(), finishedWhen: nil, currentPage: nil)
-        updateReadStateAndLog(book: book, readingInformation: reading)
+        updateReadStateAndLog(readingInformation: reading)
     }
     
-    static let transistionToFinishedStateAction = GeneralUIAction<Book>(style: .normal, title: "Finish") { book in
-        let finished = BookReadingInformation(readState: .finished, startedWhen: book.startedReading!, finishedWhen: Date(), currentPage: nil)
-        updateReadStateAndLog(book: book, readingInformation: finished)
+    func transistionToFinished() {
+        let finished = BookReadingInformation(readState: .finished, startedWhen: self.startedReading!, finishedWhen: Date(), currentPage: nil)
+        updateReadStateAndLog(readingInformation: finished)
     }
     
-    private static func updateReadStateAndLog(book: Book, readingInformation: BookReadingInformation) {
-        appDelegate.booksStore.update(book: book, withReadingInformation: readingInformation)
+    private func updateReadStateAndLog(readingInformation: BookReadingInformation) {
+        appDelegate.booksStore.update(book: self, withReadingInformation: readingInformation)
         UserEngagement.logEvent(.transitionReadState)
         UserEngagement.onReviewTrigger()
     }
     
-    static let deleteAction = GeneralUIAction<Book>(style: .destructive, title: "Delete") { book in
-        appDelegate.booksStore.deleteBook(book)
+    func deleteAndLog() {
+        appDelegate.booksStore.deleteBook(self)
         UserEngagement.logEvent(.deleteBook)
     }
     
