@@ -11,7 +11,7 @@ target 'books' do
   pod 'RxSwift', '~> 4.0.0-alpha'
   pod 'RxCocoa', '~> 4.0.0-alpha'
   pod 'SVProgressHUD', '~> 2.1'
-  pod 'SimulatorStatusMagic', :configurations => ['Debug']
+  pod 'SimulatorStatusMagic', :configurations => ['Debug'], :git => 'https://github.com/shinydevelopment/SimulatorStatusMagic', :branch => 'master'
   pod 'Fabric'
   pod 'Crashlytics'
   pod 'CHCSVParser', :git => 'https://github.com/davedelong/CHCSVParser.git'

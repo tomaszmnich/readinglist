@@ -20,7 +20,7 @@ DEPENDENCIES:
   - Fabric
   - RxCocoa (~> 4.0.0-alpha)
   - RxSwift (~> 4.0.0-alpha)
-  - SimulatorStatusMagic
+  - SimulatorStatusMagic (from `https://github.com/shinydevelopment/SimulatorStatusMagic`, branch `master`)
   - SVProgressHUD (~> 2.1)
   - SwiftyJSON (~> 3.1)
 
@@ -30,6 +30,9 @@ EXTERNAL SOURCES:
   Eureka:
     :branch: feature/Xcode9-Swift4
     :git: https://github.com/xmartlabs/Eureka.git
+  SimulatorStatusMagic:
+    :branch: master
+    :git: https://github.com/shinydevelopment/SimulatorStatusMagic
 
 CHECKOUT OPTIONS:
   CHCSVParser:
@@ -38,6 +41,9 @@ CHECKOUT OPTIONS:
   Eureka:
     :commit: 3bd78630d1df00d2acd995bbd69395e72960f257
     :git: https://github.com/xmartlabs/Eureka.git
+  SimulatorStatusMagic:
+    :commit: 04d506e2a3a79d3b6f2c8b8637babed24a2583c9
+    :git: https://github.com/shinydevelopment/SimulatorStatusMagic
 
 SPEC CHECKSUMS:
   CHCSVParser: 64da26e2b4ddbf7527f7f03120bf91d83d28f354
@@ -51,6 +57,6 @@ SPEC CHECKSUMS:
   SVProgressHUD: c404a55d78acbeb7ebb78b76d3faf986475a6994
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
 
-PODFILE CHECKSUM: d4c2fc3d512b195eeb24ddbd55b2c45bddd9447d
+PODFILE CHECKSUM: 067f551149d9ea07821daf4b7cae4878e53f7a56
 
 COCOAPODS: 1.2.1
