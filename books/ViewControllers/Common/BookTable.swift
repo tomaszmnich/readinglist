@@ -89,6 +89,7 @@ class BookTable: AutoUpdatingTableViewController {
         // Some search bar styles are slightly different on iOS 11
         if #available(iOS 11.0, *) {
             navigationItem.searchController = searchController
+            navigationController!.navigationBar.prefersLargeTitles = true
         }
         else {
             searchController.searchBar.backgroundColor = tableView.backgroundColor!
@@ -334,6 +335,12 @@ extension BookTable : DZNEmptyDataSetSource {
         if resultsFilterer.showingSearchResults {
             // Shift the "no search results" view up a bit, so the keyboard doesn't obscure it
             return -(tableView.frame.height - 150)/4
+        }
+        
+        // The large titles make the empty data set look weirdly low down. Adjust this,
+        // by - fairly randomly - the height of the nav bar
+        if #available(iOS 11.0, *), navigationController!.navigationBar.prefersLargeTitles {
+            return -navigationController!.navigationBar.frame.height
         }
         else {
             return 0
