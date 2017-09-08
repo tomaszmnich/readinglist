@@ -123,7 +123,6 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
             }
             .addDisposableTo(disposeBag)
         
-        
         // On cell selection, go to the next page
         tableView.rx.modelSelected(SearchResultViewModel.self)
             .subscribe(onNext: { [unowned self] model in
@@ -151,11 +150,11 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
                 self.dismiss(animated: true) {
                     appDelegate.tabBarController.simulateBookSelection(existingBook)
                 }
-                }, cancel: { [unowned self] in
-                    // Deselect the row after dismissing the alert
-                    if let selectedRow = self.tableView.indexPathForSelectedRow {
-                        self.tableView.deselectRow(at: selectedRow, animated: true)
-                    }
+            }, cancel: { [unowned self] in
+                // Deselect the row after dismissing the alert
+                if let selectedRow = self.tableView.indexPathForSelectedRow {
+                    self.tableView.deselectRow(at: selectedRow, animated: true)
+                }
             })
             present(alert, animated: true)
         }
@@ -194,7 +193,6 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
         searchBar.resignFirstResponder()
         self.dismiss(animated: true, completion: nil)
     }
-    
     
     func setEmptyDatasetReason(_ reason: SearchBooksEmptyDataset.EmptySetReason) {
         emptyDatasetView.setEmptyDatasetReason(reason)
@@ -268,6 +266,9 @@ class SearchResultCell : UITableViewCell {
     var viewModel: SearchResultViewModel? {
         didSet {
             guard let viewModel = viewModel else { return }
+            
+            titleOutlet.font = Fonts.gillSans(forTextStyle: .headline)
+            authorOutlet.font = Fonts.gillSans(forTextStyle: .subheadline)
             
             titleOutlet.text = viewModel.title
             authorOutlet.text = viewModel.author
