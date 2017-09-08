@@ -77,6 +77,7 @@ class BookTable: AutoUpdatingTableViewController {
     var parentSplitViewController: SplitViewController {
         get { return splitViewController as! SplitViewController }
     }
+
     @IBOutlet weak var tableFooter: UILabel!
     
     override func viewDidLoad() {

@@ -18,6 +18,7 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
     
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
+    let feedbackGeneratorWrapper = UIFeedbackGeneratorWrapper()
     
     var initialSearchString: String?
     
@@ -52,15 +53,20 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
             return Disposables.create()
         }
         
-        // Map the click of the Search button (when there is non whitespace text)
-        // to a google books searchcells
-        let searchButtonClicked = searchBar.rx.searchButtonClicked
+        let searchTriggered = searchBar.rx.searchButtonClicked
             .map{ [unowned self] in
                 self.searchBar.text!
             }
-            .observeOn(ConcurrentDispatchQueueScheduler(qos: .userInitiated))
+        
+        let searchTest = Observable.merge([autoSearch, searchTriggered])
+        if #available(iOS 10.0, *) {
+            searchTest.subscribe(onNext: { [unowned self] _ in
+                self.feedbackGeneratorWrapper.generator.prepare()
+            }).addDisposableTo(disposeBag)
+        }
 
-        let searchResults = Observable.merge([autoSearch, searchButtonClicked])
+        let searchResults = searchTest
+            .observeOn(ConcurrentDispatchQueueScheduler(qos: .userInitiated))
             .flatMapLatest { searchText -> Observable<GoogleBooks.SearchResultsPage> in
                 SVProgressHUD.show(withStatus: "Searching...")
 
@@ -89,16 +95,31 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
             .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [unowned self] resultPage in
                 SVProgressHUD.dismiss()
-                if !resultPage.searchResults.isSuccess, let googleError = resultPage.searchResults.error as? GoogleBooks.GoogleError {
-                    Crashlytics.sharedInstance().recordError(googleError, withAdditionalUserInfo: ["GoogleErrorMessage": googleError.message])
-                    self.setEmptyDatasetReason(.error)
-                }
-                else if resultPage.searchText?.isEmptyOrWhitespace != false {
+                guard resultPage.searchText?.isEmptyOrWhitespace == false else {
                     self.tableView.setContentOffset(CGPoint.zero, animated: false)
                     self.setEmptyDatasetReason(.noSearch)
+                    return
+                }
+
+                if !resultPage.searchResults.isSuccess {
+                    if #available(iOS 10.0, *) {
+                        self.feedbackGeneratorWrapper.generator.notificationOccurred(.error)
+                    }
+                    if let googleError = resultPage.searchResults.error as? GoogleBooks.GoogleError {
+                        Crashlytics.sharedInstance().recordError(googleError, withAdditionalUserInfo: ["GoogleErrorMessage": googleError.message])
+                    }
+                    self.setEmptyDatasetReason(.error)
+                }
+                else if resultPage.searchResults.value!.count == 0 {
+                    if #available(iOS 10.0, *) {
+                        self.feedbackGeneratorWrapper.generator.notificationOccurred(.warning)
+                    }
+                    self.setEmptyDatasetReason(.noResults)
                 }
                 else {
-                    self.setEmptyDatasetReason(.noResults)
+                    if #available(iOS 10.0, *) {
+                        self.feedbackGeneratorWrapper.generator.notificationOccurred(.success)
+                    }
                 }
             })
             .addDisposableTo(disposeBag)
@@ -206,7 +227,7 @@ extension SearchOnline: DZNEmptyDataSetSource {
     }
     
     func verticalOffset(forEmptyDataSet scrollView: UIScrollView!) -> CGFloat {
-        return -(tableView.frame.height - 219)/2
+        return -(tableView.frame.height - 250)/2
     }
 }
 
