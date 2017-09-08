@@ -264,16 +264,19 @@
                     <connections>
                         <outlet property="authorsLabel" destination="pRN-sy-kyO" id="QOF-UZ-N2x"/>
                         <outlet property="changeReadState" destination="UsS-JI-U2z" id="mva-4H-xoS"/>
+                        <outlet property="descriptionHeader" destination="3sM-fZ-EBZ" id="A3x-Ad-wOv"/>
                         <outlet property="descriptionHeadingSeparator" destination="Dge-Ol-Iu3" id="ugf-87-tsu"/>
                         <outlet property="descriptionStack" destination="NHz-ha-h8l" id="dgJ-9I-Ryc"/>
                         <outlet property="descriptionTextView" destination="HLi-FL-4vx" id="Mew-ZK-4yU"/>
                         <outlet property="imageView" destination="YTX-8q-xHR" id="zj3-Wi-8EJ"/>
+                        <outlet property="informationHeader" destination="qMm-e5-ftM" id="nzh-Za-a8k"/>
                         <outlet property="informationHeadingSeparator" destination="J6f-k6-BSf" id="Bqn-Do-rTH"/>
                         <outlet property="informationStack" destination="FdT-t6-WNr" id="wzY-X7-Czb"/>
                         <outlet property="pagesLabel" destination="Hgv-IS-QFG" id="gN0-tH-KXd"/>
                         <outlet property="publishedLabel" destination="BBH-Bz-CnC" id="6nY-5J-tYy"/>
                         <outlet property="readDatesLabel" destination="1h1-rT-5zk" id="qn4-sp-5Bv"/>
                         <outlet property="readStateLabel" destination="uOW-Me-7IQ" id="mrZ-Pj-HTw"/>
+                        <outlet property="readingLogHeader" destination="PPC-ji-WGD" id="N9Z-jd-ol0"/>
                         <outlet property="readingLogHeadingSeparator" destination="fRM-jc-KD8" id="3fi-BM-sLd"/>
                         <outlet property="readingLogNotes" destination="DIU-fB-bFG" id="7yO-w1-JBo"/>
                         <outlet property="readingLogStack" destination="BiL-Wy-pMy" id="XeT-Bx-Yib"/>

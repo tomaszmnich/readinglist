@@ -87,16 +87,19 @@ class BookDetails: UIViewController {
     
     @IBOutlet weak var informationHeadingSeparator: UIView!
     @IBOutlet weak var informationStack: UIStackView!
+    @IBOutlet weak var informationHeader: UILabel!
     @IBOutlet weak var pagesLabel: UILabel!
     @IBOutlet weak var publishedLabel: UILabel!
     @IBOutlet weak var subjectsLabel: UILabel!
     
     @IBOutlet weak var descriptionHeadingSeparator: UIView!
+    @IBOutlet weak var descriptionHeader: UILabel!
     @IBOutlet weak var descriptionStack: UIStackView!
     @IBOutlet weak var descriptionTextView: UILabel!
     
     @IBOutlet weak var readingLogHeadingSeparator: UIView!
     @IBOutlet weak var readingLogStack: UIStackView!
+    @IBOutlet weak var readingLogHeader: UILabel!
     @IBOutlet weak var readingLogNotes: UILabel!
     
     var viewModel: BookDetailsViewModel? {
@@ -190,6 +193,23 @@ class BookDetails: UIViewController {
             let widthConstraint = (imageView.constraints.filter{$0.firstAttribute == .width}).first {
             widthConstraint.constant = (imageViewHeight / uiImage.size.height) * uiImage.size.width
         }
+        
+        titleLabel.font = Fonts.gillSansSemiBold(forTextStyle: .title1)
+        authorsLabel.font = Fonts.gillSans(forTextStyle: .title2)
+        
+        let headline = Fonts.gillSans(forTextStyle: .headline)
+        readStateLabel.font = headline
+        informationHeader.font = headline
+        descriptionHeader.font = headline
+        readingLogHeader.font = headline
+        
+        let subheadline = Fonts.gillSans(forTextStyle: .subheadline)
+        readDatesLabel.font = subheadline
+        pagesLabel.font = subheadline
+        subjectsLabel.font = subheadline
+        publishedLabel.font = subheadline
+        descriptionTextView.font = subheadline
+        readingLogNotes.font = subheadline
 
         // Watch for changes in the managed object context
         NotificationCenter.default.addObserver(self, selector: #selector(bookChanged(_:)), name: NSNotification.Name.NSManagedObjectContextDidSave, object: appDelegate.booksStore.managedObjectContext)

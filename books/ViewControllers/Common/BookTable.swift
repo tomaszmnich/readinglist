@@ -20,6 +20,10 @@ class BookTableViewCell: UITableViewCell, ConfigurableCell {
     typealias ResultType = Book
     
     func configureFrom(_ book: Book) {
+        titleLabel.font = Fonts.gillSans(forTextStyle: .headline)
+        authorsLabel.font = Fonts.gillSans(forTextStyle: .subheadline)
+        readTimeLabel.font = Fonts.gillSans(forTextStyle: .footnote)
+        
         titleLabel.text = book.title
         authorsLabel.text = book.authorsFirstLast
         bookCover.image = UIImage(optionalData: book.coverImage) ?? #imageLiteral(resourceName: "CoverPlaceholder")
@@ -100,6 +104,7 @@ class BookTable: AutoUpdatingTableViewController {
         
         // Set the table footer text
         tableFooter.text = footerText()
+        tableFooter.font = Fonts.gillSans(forTextStyle: .subheadline)
         
         // Set the DZN data set source
         tableView.emptyDataSetSource = self

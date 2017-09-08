@@ -92,7 +92,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6yM-Y4-3b7">
-                                            <rect key="frame" x="63" y="8" width="220" height="20"/>
+                                            <rect key="frame" x="63" y="8" width="224" height="20"/>
                                             <accessibility key="accessibilityConfiguration" identifier="title"/>
                                             <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="17"/>
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -105,13 +105,13 @@
                                             </constraints>
                                         </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Authors" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tbV-Bq-1sp">
-                                            <rect key="frame" x="63" y="28" width="300" height="17.5"/>
+                                            <rect key="frame" x="63" y="28" width="304" height="17.5"/>
                                             <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="15"/>
                                             <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="30 Oct " textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mH8-23-2mb">
-                                            <rect key="frame" x="283" y="10" width="80" height="17.5"/>
+                                            <rect key="frame" x="287" y="10" width="80" height="17.5"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" relation="lessThanOrEqual" constant="80" id="wRx-gK-7k1"/>
                                             </constraints>
@@ -123,7 +123,7 @@
                                     <constraints>
                                         <constraint firstAttribute="bottom" secondItem="W0a-Sj-pXu" secondAttribute="bottom" constant="4" id="36A-S6-vSI"/>
                                         <constraint firstItem="tbV-Bq-1sp" firstAttribute="leading" secondItem="6yM-Y4-3b7" secondAttribute="leading" id="HND-un-MfL"/>
-                                        <constraint firstAttribute="trailingMargin" secondItem="mH8-23-2mb" secondAttribute="trailing" constant="4" id="LeZ-kV-AIg"/>
+                                        <constraint firstAttribute="trailing" secondItem="mH8-23-2mb" secondAttribute="trailing" constant="8" id="LeZ-kV-AIg"/>
                                         <constraint firstItem="W0a-Sj-pXu" firstAttribute="leading" secondItem="ehr-3I-1XE" secondAttribute="leading" constant="4" id="OwR-7f-jKH"/>
                                         <constraint firstItem="mH8-23-2mb" firstAttribute="trailing" secondItem="tbV-Bq-1sp" secondAttribute="trailing" id="Pec-zc-6h6"/>
                                         <constraint firstItem="mH8-23-2mb" firstAttribute="leading" secondItem="6yM-Y4-3b7" secondAttribute="trailing" id="SR7-cb-O38"/>
@@ -298,7 +298,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iem-qK-ntp">
-                                            <rect key="frame" x="63" y="8" width="220" height="20"/>
+                                            <rect key="frame" x="63" y="8" width="224" height="20"/>
                                             <accessibility key="accessibilityConfiguration" identifier="title"/>
                                             <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="17"/>
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -311,13 +311,13 @@
                                             </constraints>
                                         </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Authors" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fw2-GX-5Wy">
-                                            <rect key="frame" x="63" y="28" width="300" height="17.5"/>
+                                            <rect key="frame" x="63" y="28" width="304" height="17.5"/>
                                             <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="15"/>
                                             <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="30 Oct " textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Eig-6y-bh0">
-                                            <rect key="frame" x="283" y="10" width="80" height="17.5"/>
+                                            <rect key="frame" x="287" y="10" width="80" height="17.5"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" relation="lessThanOrEqual" constant="80" id="X2N-hT-DbQ"/>
                                             </constraints>
@@ -328,7 +328,7 @@
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="iem-qK-ntp" firstAttribute="top" secondItem="6cx-em-g8v" secondAttribute="topMargin" id="3F1-P9-Dsi"/>
-                                        <constraint firstAttribute="trailingMargin" secondItem="Eig-6y-bh0" secondAttribute="trailing" constant="4" id="8Vq-ra-vDf"/>
+                                        <constraint firstAttribute="trailing" secondItem="Eig-6y-bh0" secondAttribute="trailing" constant="8" id="8Vq-ra-vDf"/>
                                         <constraint firstItem="fw2-GX-5Wy" firstAttribute="leading" secondItem="iem-qK-ntp" secondAttribute="leading" id="A1t-gP-B7O"/>
                                         <constraint firstItem="oGg-u4-5Nb" firstAttribute="top" secondItem="6cx-em-g8v" secondAttribute="top" constant="4" id="Di7-pf-0qr"/>
                                         <constraint firstItem="iem-qK-ntp" firstAttribute="leading" secondItem="oGg-u4-5Nb" secondAttribute="trailing" constant="8" id="FSf-ga-39Q"/>
