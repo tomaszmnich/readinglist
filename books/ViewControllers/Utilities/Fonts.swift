@@ -25,27 +25,8 @@ class Fonts {
         return scaledFont(gillSansSemiBoldFont, forTextStyle: textStyle)
     }
     
-    static func scaled(font: UIFont, textStyle: UIFontTextStyle) -> UIFont {
-        if #available(iOS 11.0, *) {
-            let fontMetrics = UIFontMetrics(forTextStyle: textStyle)
-            let fontSize = fontMetrics.scaledValue(for: font.pointSize)
-            return font.withSize(fontSize)
-        }
-        else {
-            return font
-        }
-    }
-    
     static func scaledFont(_ font: UIFont, forTextStyle textStyle: UIFontTextStyle) -> UIFont {
         let fontSize = UIFont.preferredFont(forTextStyle: textStyle).pointSize
-        let sizedFont = font.withSize(fontSize)
-        
-        if #available(iOS 11.0, *) {
-            let fontMetrics = UIFontMetrics(forTextStyle: textStyle)
-            return fontMetrics.scaledFont(for: sizedFont)
-        }
-        else {
-            return sizedFont
-        }
+        return font.withSize(fontSize)
     }
 }
