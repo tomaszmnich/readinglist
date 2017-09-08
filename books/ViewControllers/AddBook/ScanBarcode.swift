@@ -15,12 +15,18 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     var session: AVCaptureSession?
     var previewLayer: AVCaptureVideoPreviewLayer?
     var foundMetadata: BookMetadata?
+    let feedbackGeneratorWrapper = UIFeedbackGeneratorWrapper()
     
     @IBOutlet weak var cameraPreviewView: UIView!
     @IBOutlet weak var previewOverlay: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Prepare for feedback
+        if #available(iOS 10.0, *) {
+            feedbackGeneratorWrapper.generator.prepare()
+        }
         
         // Setup the camera preview asynchronously
         DispatchQueue.main.async {
@@ -31,6 +37,7 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     }
     
     @IBAction func cancelWasPressed(_ sender: AnyObject) {
+        SVProgressHUD.dismiss()
         self.dismiss(animated: true, completion: nil)
     }
     
@@ -95,12 +102,15 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         // Check that we can add the input and output to the session
         guard session!.canAddInput(input) && session!.canAddOutput(output) else {
             presentInfoAlert(title: "Error ⚠️", message: "The camera could not be used. Sorry about that.")
+            if #available(iOS 10.0, *) {
+                feedbackGeneratorWrapper.generator.notificationOccurred(.error)
+            }
             return
         }
         
         // Prepare the metadata output and add to the session
         session!.addInput(input)
-        output.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
+        output.setMetadataObjectsDelegate(self, queue: DispatchQueue.global(qos: .userInteractive))
         session!.addOutput(output)
         
         // This line must be after session outputs are added
@@ -131,25 +141,34 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         }
     }
     
-    func metadataOutput(captureOutput: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {
+    func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {
         
         guard let avMetadata = metadataObjects.first as? AVMetadataMachineReadableCodeObject,
             let isbn = Isbn13.tryParse(inputString: avMetadata.stringValue) else { return }
-        respondToCapturedIsbn(isbn)
+        DispatchQueue.main.sync {
+            respondToCapturedIsbn(isbn)
+        }
     }
     
     func respondToCapturedIsbn(_ isbn: String) {
+        if #available(iOS 10.0, *) {
+            feedbackGeneratorWrapper.generator.prepare()
+        }
+        
         // Since we have a result, stop the session and hide the preview
         session?.stopRunning()
         
-        // Event logging
-        UserEngagement.logEvent(.scanBarcode)
-        
         // Check that the book hasn't already been added
         if let existingBook = appDelegate.booksStore.getIfExists(isbn: isbn) {
+            if #available(iOS 10.0, *) {
+                feedbackGeneratorWrapper.generator.notificationOccurred(.warning)
+            }
             presentDuplicateAlert(existingBook)
         }
         else {
+            if #available(iOS 10.0, *) {
+                feedbackGeneratorWrapper.generator.notificationOccurred(.success)
+            }
             searchForFoundIsbn(isbn: isbn)
         }
     }
@@ -170,18 +189,31 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
 
         // We're going to be doing a search online, so bring up a spinner
         SVProgressHUD.show(withStatus: "Searching...")
-        GoogleBooks.fetchIsbn(isbn) { resultPage in
+        
+        // self is weak since the barcode callback is on another thread, and it is possible (with careful timing)
+        // to get the view controller to dismiss after the barcode has been detected but before the callback runs.
+        GoogleBooks.fetchIsbn(isbn) { [weak self] resultPage in
             DispatchQueue.main.async {
-                
                 SVProgressHUD.dismiss()
+                guard self != nil else { return }
+                
+                if #available(iOS 10.0, *) {
+                    self!.feedbackGeneratorWrapper.generator.prepare()
+                }
                 
                 guard resultPage.result.isSuccess else {
                     let error = resultPage.result.error!
                     if (error as? GoogleBooks.GoogleErrorType) == .noResult {
-                        self.presentNoExactMatchAlert(forIsbn: isbn)
+                        if #available(iOS 10.0, *) {
+                            self!.feedbackGeneratorWrapper.generator.notificationOccurred(.error)
+                        }
+                        self!.presentNoExactMatchAlert(forIsbn: isbn)
                     }
                     else {
-                        self.onSearchError(error)
+                        if #available(iOS 10.0, *) {
+                            self!.feedbackGeneratorWrapper.generator.notificationOccurred(.error)
+                        }
+                        self!.onSearchError(error)
                     }
                     return
                 }
@@ -189,12 +221,22 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
                 let fetchResult = resultPage.result.value!
                 // We may now have a book which matches the Google Books ID (but didn't match the ISBN), so check again
                 if let existingBook = appDelegate.booksStore.getIfExists(googleBooksId: fetchResult.id) {
-                    self.presentDuplicateAlert(existingBook)
+                    if #available(iOS 10.0, *) {
+                        self!.feedbackGeneratorWrapper.generator.notificationOccurred(.warning)
+                    }
+                    self!.presentDuplicateAlert(existingBook)
                 }
                 else {
+                    if #available(iOS 10.0, *) {
+                        self!.feedbackGeneratorWrapper.generator.notificationOccurred(.success)
+                    }
+                    
+                    // Event logging
+                    UserEngagement.logEvent(.scanBarcode)
+
                     // If there is no duplicate, we can safely go to the next page
-                    self.foundMetadata = fetchResult.toBookMetadata()
-                    self.performSegue(withIdentifier: "barcodeScanResult", sender: self)
+                    self!.foundMetadata = fetchResult.toBookMetadata()
+                    self!.performSegue(withIdentifier: "barcodeScanResult", sender: self)
                 }
             }
         }
@@ -202,12 +244,12 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     
     func presentNoExactMatchAlert(forIsbn isbn: String) {
         let alert = UIAlertController(title: "No Exact Match", message: "We couldn't find an exact match. Would you like to do a more general search instead?", preferredStyle: UIAlertControllerStyle.alert)
-        alert.addAction(UIAlertAction(title: "No", style: UIAlertActionStyle.cancel, handler: { _ in
+        alert.addAction(UIAlertAction(title: "No", style: UIAlertActionStyle.cancel, handler: { [unowned self] _ in
             self.session?.startRunning()
         }))
-        alert.addAction(UIAlertAction(title: "Yes", style: UIAlertActionStyle.default, handler: { _ in
+        alert.addAction(UIAlertAction(title: "Yes", style: UIAlertActionStyle.default, handler: { [unowned self] _ in
             self.dismiss(animated: true) {
-                appDelegate.tabBarController.selectedSplitViewController!.masterNavigationController.viewControllers[0].performSegue(withIdentifier: "searchByText", sender: isbn)
+                appDelegate.tabBarController.selectedBookTable!.performSegue(withIdentifier: "searchByText", sender: isbn)
             }
         }))
         self.present(alert, animated: true, completion: nil)
@@ -227,7 +269,7 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     
     func presentInfoAlert(title: String, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
-        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: { _ in
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: { [unowned self] _ in
             self.dismiss(animated: true, completion: nil)
         }))
         self.present(alert, animated: true, completion: nil)
@@ -241,9 +283,12 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
                 self.dismiss(animated: false)
             }
         }))
-        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: { _ in
+        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: { [unowned self] _ in
             self.dismiss(animated: true)
         }))
+        if #available(iOS 10.0, *) {
+            self.feedbackGeneratorWrapper.generator.notificationOccurred(.error)
+        }
         self.present(alert, animated: true, completion: nil)
     }
     

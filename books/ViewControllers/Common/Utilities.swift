@@ -80,3 +80,27 @@ func ActionButton(title: String, updater: ((ButtonCellOf<String>, ButtonRow) -> 
             action()
     }
 }
+
+/**
+ Wraps an instance of UINotificationFeedbackGenerator (if running on iOS >= 10), so that
+ a reference can be held on a VC which supports iOS < 10.
+ */
+class UIFeedbackGeneratorWrapper {
+    private let _notificationGenerator: NSObject?
+
+    @available(iOS 10.0, *)
+    var generator: UINotificationFeedbackGenerator {
+        get {
+            return _notificationGenerator as! UINotificationFeedbackGenerator
+        }
+    }
+
+    init() {
+        if #available(iOS 10.0, *) {
+            _notificationGenerator = UINotificationFeedbackGenerator()
+        }
+        else {
+            _notificationGenerator = nil
+        }
+    }
+}
