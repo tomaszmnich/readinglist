@@ -14,14 +14,16 @@ import SVProgressHUD
 import DZNEmptyDataSet
 import Crashlytics
 
-class SearchOnline: UIViewController, UISearchBarDelegate {
+class SearchOnline: UIViewController {
     
-    @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var stackView: UIStackView!
+    
     let feedbackGeneratorWrapper = UIFeedbackGeneratorWrapper()
     
-    var initialSearchString: String?
+    var searchBar: UISearchBar!
     
+    var initialSearchString: String?
     let disposeBag = DisposeBag()
     
     let emptyDatasetView = UINib(nibName: "SearchBooksEmptyDataset", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! SearchBooksEmptyDataset
@@ -29,15 +31,28 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Set DZN delegate
         tableView.emptyDataSetSource = self
+
+        if #available(iOS 11.0, *) {
+            let searchController = UISearchController(searchResultsController: nil)
+            searchController.obscuresBackgroundDuringPresentation = false
+            searchController.hidesNavigationBarDuringPresentation = false
+
+            searchBar = searchController.searchBar
+            navigationItem.searchController = searchController
+            navigationItem.hidesSearchBarWhenScrolling = false
+        }
+        else {
+            searchBar = UISearchBar()
+            stackView.insertArrangedSubview(searchBar, at: 0)
+            // We need to make the navigation bar non-translucent to avoid a big blank space being scrollable to
+            navigationController!.navigationBar.isTranslucent = false
+        }
         
         // The search bar delegate is used only to dismiss the keyboard when Done is pressed
         searchBar.returnKeyType = .search
-        searchBar.delegate = self
         searchBar.text = initialSearchString
-        
-        // Bring up the keyboard
-        searchBar.becomeFirstResponder()
         
         // Hide the keyboard when scrolling
         tableView.keyboardDismissMode = .onDrag
@@ -80,11 +95,12 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
             }
             .shareReplay(1)
         
-        // The Clear Result button should map to an empty set of results. Hook into the text observable
+        // The Cancel button should map to an empty set of results. Hook into the text observable
         // and filter to only include the events where the text box is empty
-        let clearResults = searchBar.rx.text.orEmpty
+        let emptySearch = searchBar.rx.text.orEmpty.filter { return $0.isEmpty }.map{_ in return}
+        
+        let clearResults = Observable.merge([searchBar.rx.cancelButtonClicked.asObservable(), emptySearch])
             .observeOn(ConcurrentDispatchQueueScheduler(qos: .userInitiated))
-            .filter { return $0.isEmpty }
             .map { _ in GoogleBooks.SearchResultsPage.empty() }
             .shareReplay(1)
         
@@ -95,13 +111,11 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
             .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [unowned self] resultPage in
                 SVProgressHUD.dismiss()
-                guard resultPage.searchText?.isEmptyOrWhitespace == false else {
+                if resultPage.searchText?.isEmptyOrWhitespace != false {
                     self.tableView.setContentOffset(CGPoint.zero, animated: false)
                     self.setEmptyDatasetReason(.noSearch)
-                    return
                 }
-
-                if !resultPage.searchResults.isSuccess {
+                else if !resultPage.searchResults.isSuccess {
                     if #available(iOS 10.0, *) {
                         self.feedbackGeneratorWrapper.generator.notificationOccurred(.error)
                     }
@@ -159,6 +173,11 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
         if let selectedIndexPath = tableView.indexPathForSelectedRow {
             tableView.deselectRow(at: selectedIndexPath, animated: true)
         }
+        
+        // Pop up the keyboard
+        DispatchQueue.main.async { [weak self] in
+            self?.searchBar.becomeFirstResponder()
+        }
     }
     
     func onModelSelected(_ model: SearchResultViewModel) {
@@ -197,11 +216,6 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
                 }
             }
         }
-    }
-    
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        // Dismiss the keyboard when the Done button is clicked. That is all.
-        searchBar.endEditing(true)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
