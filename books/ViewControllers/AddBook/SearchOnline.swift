@@ -174,9 +174,11 @@ class SearchOnline: UIViewController {
             tableView.deselectRow(at: selectedIndexPath, animated: true)
         }
         
-        // Pop up the keyboard
-        DispatchQueue.main.async { [weak self] in
-            self?.searchBar.becomeFirstResponder()
+        // Pop up the keyboard, if not in a pre-populated search mode
+        if initialSearchString == nil {
+            DispatchQueue.main.async { [weak self] in
+                self?.searchBar.becomeFirstResponder()
+            }
         }
     }
     
