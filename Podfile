@@ -10,7 +10,7 @@ target 'books' do
   pod 'Eureka', :git => 'https://github.com/xmartlabs/Eureka.git', :branch => 'feature/Xcode9-Swift4'
   pod 'RxSwift', '~> 4.0.0-alpha'
   pod 'RxCocoa', '~> 4.0.0-alpha'
-  pod 'SVProgressHUD', '~> 2.1'
+  pod 'SVProgressHUD', '~> 2.2'
   pod 'SimulatorStatusMagic', :configurations => ['Debug'], :git => 'https://github.com/shinydevelopment/SimulatorStatusMagic', :branch => 'master'
   pod 'Fabric'
   pod 'Crashlytics'
