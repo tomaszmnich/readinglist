@@ -101,14 +101,10 @@ class DebugSettingsViewController: FormViewController {
         
         BookImporter(csvFileUrl: csvPath!, supplementBookCover: true, missingHeadersCallback: {
             print("Missing headers!")
-        }, supplementBookCallback: { book, dispatchGroup in
+        }, supplementBookCallback: { book, _ in
             // Extra supplementary details
             if book.title == "Your First Swift App" {
-                dispatchGroup.enter()
-                (URLSession.shared.dataTask(with: URL(string: "https://s3.amazonaws.com/titlepages.leanpub.com/yourfirstswiftapp/hero?1455119428")!) { data, _, _ in
-                    book.coverImage = data
-                    dispatchGroup.leave()
-                }).resume()
+                book.coverImage = UIImagePNGRepresentation(#imageLiteral(resourceName: "yourfirstswiftapp.png"))
             }
         }) { _, _, _ in
             SVProgressHUD.dismiss()

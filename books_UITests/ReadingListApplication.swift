@@ -27,7 +27,7 @@ class ReadingListApplication : XCUIApplication {
     }
     
     func getTab(_ tab: tab) -> XCUIElement {
-        return tabBars.buttons.element(boundBy: UInt(tab.rawValue))
+        return tabBars.buttons.element(boundBy: tab.rawValue)
     }
     
     func waitUntilHittable(_ element: XCUIElement, failureMessage: String) {
@@ -90,12 +90,12 @@ class ReadingListApplication : XCUIApplication {
     
     func clickAddButton(addMethod: addMethod) {
         navigationBars.element(boundBy: 0).buttons["Add"].tap()
-        sheets.buttons.element(boundBy: UInt(addMethod.rawValue)).tap()
+        sheets.buttons.element(boundBy: addMethod.rawValue).tap()
     }
     
     var topNavBar: XCUIElement {
         get {
-            return navigationBars.element(boundBy: UInt(navigationBars.count - 1))
+            return navigationBars.element(boundBy: navigationBars.count - 1)
         }
     }
 }

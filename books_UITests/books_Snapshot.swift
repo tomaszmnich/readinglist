@@ -63,8 +63,16 @@ class books_Snapshot: XCTestCase {
         else {
             app.topNavBar.buttons.element(boundBy: 0).tap()
         }
-        app.tables.searchFields.element(boundBy: 0).tap()
-        app.typeText("Orwell")
+        if #available(iOS 11.0, *) {
+            app.tables.element(boundBy: 0).swipeDown()
+            let yourLibrarySearchField = app.searchFields["Your Library"]
+            yourLibrarySearchField.tap()
+            yourLibrarySearchField.typeText("Orwell")
+        }
+        else {
+            app.tables.searchFields.element(boundBy: 0).tap()
+            app.typeText("Orwell")
+        }
         app.buttons["Done"].tap()
         
         if isIpad {
