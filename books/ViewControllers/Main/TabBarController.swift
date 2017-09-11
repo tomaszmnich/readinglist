@@ -22,23 +22,25 @@ class TabBarController: UITabBarController {
         selectedIndex = tab.rawValue
     }
     
+    func selectTab(forState state: BookReadState) -> BookTable {
+        selectTab(state == .finished ? .finished : .toRead)
+        return selectedBookTable!
+    }
+    
     var selectedTab: TabOption {
-        get {
-            return TabOption(rawValue: selectedIndex)!
-        }
+        get { return TabOption(rawValue: selectedIndex)! }
     }
     
     var selectedSplitViewController: SplitViewController? {
         get { return selectedViewController as? SplitViewController }
     }
-    
+
     var selectedBookTable: BookTable? {
         get { return (selectedSplitViewController?.masterNavigationController.viewControllers.first as? BookTable) }
     }
     
-    func simulateBookSelection(_ book: Book){
-        selectTab(book.readState == .finished ? TabOption.finished : TabOption.toRead)
-        selectedBookTable?.triggerBookSelection(book)
+    func simulateBookSelection(_ book: Book, allowTableObscuring: Bool) {
+        selectTab(forState: book.readState).simulateBookSelection(book, allowTableObscuring: allowTableObscuring)
     }
     
     override func restoreUserActivityState(_ activity: NSUserActivity) {
@@ -46,7 +48,7 @@ class TabBarController: UITabBarController {
         guard let identifier = activity.userInfo?[CSSearchableItemActivityIdentifier] as? String,
             let identifierUrl = URL(string: identifier),
             let selectedBook = appDelegate.booksStore.get(bookIdUrl: identifierUrl) else { return }
-        simulateBookSelection(selectedBook)
+        simulateBookSelection(selectedBook, allowTableObscuring: true)
     }
     
     override func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {

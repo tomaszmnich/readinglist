@@ -190,7 +190,7 @@ class SearchOnline: UIViewController {
             
             let alert = duplicateBookAlertController(goToExistingBook: { [unowned self] in
                 self.dismiss(animated: true) {
-                    appDelegate.tabBarController.simulateBookSelection(existingBook)
+                    appDelegate.tabBarController.simulateBookSelection(existingBook, allowTableObscuring: true)
                 }
             }, cancel: { [unowned self] in
                 // Deselect the row after dismissing the alert
@@ -198,7 +198,12 @@ class SearchOnline: UIViewController {
                     self.tableView.deselectRow(at: selectedRow, animated: true)
                 }
             })
-            present(alert, animated: true)
+            if let presentedController = presentedViewController {
+                presentedController.present(alert, animated: true)
+            }
+            else {
+                present(alert, animated: true)
+            }
         }
         else {
             fetchAndSegue(googleBooksId: model.googleBooksId)
@@ -227,7 +232,7 @@ class SearchOnline: UIViewController {
     }
     
     @IBAction func cancelWasPressed(_ sender: AnyObject) {
-        searchBar.resignFirstResponder()
+        self.searchBar.resignFirstResponder()
         self.dismiss(animated: true, completion: nil)
     }
     

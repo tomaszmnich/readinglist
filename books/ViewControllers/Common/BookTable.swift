@@ -177,28 +177,33 @@ class BookTable: AutoUpdatingTableViewController {
         return BookReadState(rawValue: sectionAsInt)!.description
     }
     
-    func triggerBookSelection(_ book: Book){
-        // There must be a row corresponding to this book
-        guard let indexPathOfSelectedBook = self.resultsController.indexPath(forObject: book) else { return }
+    /**
+     selectBook determines whether the book details page should actually be shown, or whether
+     the book should just be scrolled to.
+    */
+    func simulateBookSelection(_ book: Book, allowTableObscuring: Bool = true) {
+        // If there is a row (there might not be is there is a search filtering the results,
+        // and clearing the search creates animations which mess up push segues), then
+        // scroll to it.
+        if let indexPathOfSelectedBook = self.resultsController.indexPath(forObject: book) {
+            tableView.scrollToRow(at: indexPathOfSelectedBook, at: .none, animated: false)
+            tableView.selectRow(at: indexPathOfSelectedBook, animated: false, scrollPosition: .none)
+        }
+        
+        if allowTableObscuring || parentSplitViewController.isSplit {
             
-        // Dismiss the search if there is one
-        resultsFilterer.dismissSearch()
-        
-        // Scroll to and select the row
-        self.tableView.scrollToRow(at: indexPathOfSelectedBook, at: .none, animated: false)
-        self.tableView.selectRow(at: indexPathOfSelectedBook, animated: false, scrollPosition: .none)
-        
-        // If there is a detail view presented, pop back to the tabbed page.
-        if parentSplitViewController.detailIsPresented {
-            (parentSplitViewController.displayedDetailViewController as? BookDetails)?.viewModel = BookDetailsViewModel(book: book)
-        }
-        else{
-            // Segue to the details view, with the cell corresponding to the book as the sender
-            self.performSegue(withIdentifier: "showDetail", sender: tableView.cellForRow(at: indexPathOfSelectedBook))
+            // If there is a detail view presented, update the book
+            if parentSplitViewController.detailIsPresented {
+                (parentSplitViewController.displayedDetailViewController as? BookDetails)?.viewModel = BookDetailsViewModel(book: book)
+            }
+            else {
+                // Segue to the details view, with the cell corresponding to the book as the sender.
+                performSegue(withIdentifier: "showDetail", sender: book)
+            }
         }
         
-        // Get rid of any modal controllers (e.g. edit views, etc)
-        self.presentedViewController?.dismiss(animated: false, completion: nil)
+        // Dismiss any modally presented VCs (edit book, etc).
+        presentedViewController?.dismiss(animated: false, completion: nil)
     }
     
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
@@ -219,11 +224,15 @@ class BookTable: AutoUpdatingTableViewController {
                 searchOnline.initialSearchString = searchText
             }
         }
-        if let detailsViewController = (segue.destination as? UINavigationController)?.topViewController as? BookDetails,
-            let cell = sender as? UITableViewCell,
-            let selectedIndex = self.tableView.indexPath(for: cell) {
+        if let detailsViewController = (segue.destination as? UINavigationController)?.topViewController as? BookDetails {
+            if let cell = sender as? UITableViewCell,
+                let selectedIndex = self.tableView.indexPath(for: cell) {
          
-            detailsViewController.viewModel = BookDetailsViewModel(book: self.resultsController.object(at: selectedIndex))
+                detailsViewController.viewModel = BookDetailsViewModel(book: self.resultsController.object(at: selectedIndex))
+            }
+            else if let book = sender as? Book {
+                detailsViewController.viewModel = BookDetailsViewModel(book: book)
+            }
         }
     }
 

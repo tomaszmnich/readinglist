@@ -25,13 +25,16 @@ class SplitViewController: UISplitViewController, UISplitViewControllerDelegate 
     }
     
     var detailIsPresented: Bool {
-        return viewControllers.count >= 2 || masterNavigationController.viewControllers.count >= 2
+        return isSplit || masterNavigationController.viewControllers.count >= 2
     }
     
+    var isSplit: Bool {
+        return viewControllers.count >= 2
+    }
     
     var displayedDetailViewController: UIViewController? {
         // If the master and detail are separate, the detail will be the second item in viewControllers
-        if viewControllers.count >= 2,
+        if isSplit,
             let detailNavController = viewControllers[1] as? UINavigationController {
             return detailNavController.viewControllers.first
         }
