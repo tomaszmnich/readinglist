@@ -14,13 +14,13 @@ import SVProgressHUD
 import DZNEmptyDataSet
 import Crashlytics
 
-class SearchOnline: UIViewController {
+class SearchOnline: UIViewController, UISearchBarDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var stackView: UIStackView!
     
     let feedbackGeneratorWrapper = UIFeedbackGeneratorWrapper()
-    
+
     var searchBar: UISearchBar!
     
     var initialSearchString: String?
@@ -48,11 +48,20 @@ class SearchOnline: UIViewController {
             stackView.insertArrangedSubview(searchBar, at: 0)
             // We need to make the navigation bar non-translucent to avoid a big blank space being scrollable to
             navigationController!.navigationBar.isTranslucent = false
+            
+            // Pop up the keyboard, if not in a pre-populated search mode.
+            // Doing this here doesn't work in iOS 11 - instead it is done in viewDidAppear
+            if initialSearchString == nil {
+                DispatchQueue.main.async { [weak self] in
+                    self?.searchBar.becomeFirstResponder()
+                }
+            }
         }
         
         // The search bar delegate is used only to dismiss the keyboard when Done is pressed
         searchBar.returnKeyType = .search
         searchBar.text = initialSearchString
+        searchBar.delegate = self
         
         // Hide the keyboard when scrolling
         tableView.keyboardDismissMode = .onDrag
@@ -174,8 +183,9 @@ class SearchOnline: UIViewController {
             tableView.deselectRow(at: selectedIndexPath, animated: true)
         }
         
-        // Pop up the keyboard, if not in a pre-populated search mode
-        if initialSearchString == nil {
+        // Becoming active in viewDidLoad doesn't seem to work in iOS 11
+        // Do it here instead
+        if #available(iOS 11.0, *) {
             DispatchQueue.main.async { [weak self] in
                 self?.searchBar.becomeFirstResponder()
             }
@@ -234,6 +244,10 @@ class SearchOnline: UIViewController {
     @IBAction func cancelWasPressed(_ sender: AnyObject) {
         self.searchBar.resignFirstResponder()
         self.dismiss(animated: true, completion: nil)
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
     }
     
     func setEmptyDatasetReason(_ reason: SearchBooksEmptyDataset.EmptySetReason) {
