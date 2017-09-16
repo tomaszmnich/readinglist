@@ -192,6 +192,14 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
         }
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        // See https://stackoverflow.com/q/46228862/5513562
+        if #available(iOS 11.0, *) {
+            navigationItem.searchController!.isActive = false
+        }
+    }
+    
     func onModelSelected(_ model: SearchResultViewModel) {
         UserEngagement.logEvent(.searchOnline)
         
@@ -199,7 +207,10 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
         if let existingBook = appDelegate.booksStore.getIfExists(googleBooksId: model.googleBooksId, isbn: model.isbn13) {
             
             let alert = duplicateBookAlertController(goToExistingBook: { [unowned self] in
-                self.dismiss(animated: true) {
+                if #available(iOS 11.0, *) {
+                    self.navigationItem.searchController!.isActive = false
+                }
+                self.presentingViewController!.dismiss(animated: true) {
                     appDelegate.tabBarController.simulateBookSelection(existingBook, allowTableObscuring: true)
                 }
             }, cancel: { [unowned self] in
@@ -242,7 +253,9 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
     }
     
     @IBAction func cancelWasPressed(_ sender: AnyObject) {
-        self.searchBar.resignFirstResponder()
+        if #available(iOS 11.0, *) {
+            self.navigationItem.searchController!.isActive = false
+        }
         self.dismiss(animated: true, completion: nil)
     }
     

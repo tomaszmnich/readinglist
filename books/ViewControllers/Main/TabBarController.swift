@@ -48,6 +48,10 @@ class TabBarController: UITabBarController {
         guard let identifier = activity.userInfo?[CSSearchableItemActivityIdentifier] as? String,
             let identifierUrl = URL(string: identifier),
             let selectedBook = appDelegate.booksStore.get(bookIdUrl: identifierUrl) else { return }
+        
+        // Dismiss any modally presented VCs (edit book, etc).
+        presentedViewController?.dismiss(animated: false)
+
         simulateBookSelection(selectedBook, allowTableObscuring: true)
     }
     

@@ -182,15 +182,19 @@ class BookTable: AutoUpdatingTableViewController {
      the book should just be scrolled to.
     */
     func simulateBookSelection(_ book: Book, allowTableObscuring: Bool = true) {
+        let indexPathOfSelectedBook = self.resultsController.indexPath(forObject: book)
+        
         // If there is a row (there might not be is there is a search filtering the results,
         // and clearing the search creates animations which mess up push segues), then
         // scroll to it.
-        if let indexPathOfSelectedBook = self.resultsController.indexPath(forObject: book) {
-            tableView.scrollToRow(at: indexPathOfSelectedBook, at: .none, animated: false)
-            tableView.selectRow(at: indexPathOfSelectedBook, animated: false, scrollPosition: .none)
+        if let indexPathOfSelectedBook = indexPathOfSelectedBook {
+            tableView.scrollToRow(at: indexPathOfSelectedBook, at: .none, animated: true)
         }
         
         if allowTableObscuring || parentSplitViewController.isSplit {
+            if let indexPathOfSelectedBook = indexPathOfSelectedBook {
+                tableView.selectRow(at: indexPathOfSelectedBook, animated: true, scrollPosition: .none)
+            }
             
             // If there is a detail view presented, update the book
             if parentSplitViewController.detailIsPresented {
@@ -201,9 +205,6 @@ class BookTable: AutoUpdatingTableViewController {
                 performSegue(withIdentifier: "showDetail", sender: book)
             }
         }
-        
-        // Dismiss any modally presented VCs (edit book, etc).
-        presentedViewController?.dismiss(animated: false, completion: nil)
     }
     
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
