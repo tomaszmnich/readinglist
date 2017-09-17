@@ -8,8 +8,8 @@ PODS:
   - RxCocoa (4.0.0-alpha.1):
     - RxSwift (~> 4.0.0-alpha.1)
   - RxSwift (4.0.0-alpha.1)
-  - SimulatorStatusMagic (1.9.5)
-  - SVProgressHUD (2.2)
+  - SimulatorStatusMagic (2.0)
+  - SVProgressHUD (2.2.1)
   - SwiftyJSON (3.1.4)
 
 DEPENDENCIES:
@@ -39,10 +39,10 @@ CHECKOUT OPTIONS:
     :commit: 3ee99563177e8b59c90b85516a868338212ab671
     :git: https://github.com/davedelong/CHCSVParser.git
   Eureka:
-    :commit: 3bd78630d1df00d2acd995bbd69395e72960f257
+    :commit: 142d80535b27b3634ac5a38514bde948b8ed42de
     :git: https://github.com/xmartlabs/Eureka.git
   SimulatorStatusMagic:
-    :commit: 04d506e2a3a79d3b6f2c8b8637babed24a2583c9
+    :commit: df187b70b735eee1c1766a00299dc9dd09759136
     :git: https://github.com/shinydevelopment/SimulatorStatusMagic
 
 SPEC CHECKSUMS:
@@ -53,8 +53,8 @@ SPEC CHECKSUMS:
   Fabric: 2fb5676bc811af011a04513451f463dac6803206
   RxCocoa: d6038768c2ec4e7157ca40396fdbd8d28de9b8ce
   RxSwift: 62bea72da2c1b2653320c516267c2b8a347c02b6
-  SimulatorStatusMagic: b3b4c5c49a07e8b1c452cc0327275e267a865fea
-  SVProgressHUD: 3f37f3409ddb15f35c99315ae7dc33c474aa3256
+  SimulatorStatusMagic: c8e958d70e0e0cd2d7cf33bb95014a222ddecf0a
+  SVProgressHUD: db27c54e6e18bc903341661fc9feb55e04905cc4
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
 
 PODFILE CHECKSUM: a72a1dbd682801f5061905756c68f5586646c3c2
