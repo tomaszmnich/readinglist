@@ -14,7 +14,7 @@ import Eureka
 
 class Settings: FormViewController, MFMailComposeViewControllerDelegate {
     
-    let appStoreAddress = "appsto.re/gb/ZtbJib.i"
+    let appStoreAddress = "itunes.apple.com/gb/app/reading-list-book-tracker/id1217139955"
     private let bookSortOrderKey = "sortOrder"
     
     override func viewDidLoad() {
