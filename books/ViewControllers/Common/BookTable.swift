@@ -160,6 +160,7 @@ class BookTable: AutoUpdatingTableViewController {
         searchController.searchBar.returnKeyType = .done
         searchController.searchBar.placeholder = "Your Library"
         searchController.searchBar.searchBarStyle = .minimal
+        tableView.keyboardDismissMode = .onDrag
     }
     
     override func viewDidAppear(_ animated: Bool) {
