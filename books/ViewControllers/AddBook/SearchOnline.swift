@@ -31,6 +31,9 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Fixes issue at https://stackoverflow.com/q/46228862/5513562
+        self.definesPresentationContext = true
+        
         // Set DZN delegate
         tableView.emptyDataSetSource = self
 
@@ -192,14 +195,6 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
         }
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        // See https://stackoverflow.com/q/46228862/5513562
-        if #available(iOS 11.0, *) {
-            navigationItem.searchController!.isActive = false
-        }
-    }
-    
     func onModelSelected(_ model: SearchResultViewModel) {
         UserEngagement.logEvent(.searchOnline)
         
@@ -207,9 +202,6 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
         if let existingBook = appDelegate.booksStore.getIfExists(googleBooksId: model.googleBooksId, isbn: model.isbn13) {
             
             let alert = duplicateBookAlertController(goToExistingBook: { [unowned self] in
-                if #available(iOS 11.0, *) {
-                    self.navigationItem.searchController!.isActive = false
-                }
                 self.presentingViewController!.dismiss(animated: true) {
                     appDelegate.tabBarController.simulateBookSelection(existingBook, allowTableObscuring: true)
                 }
