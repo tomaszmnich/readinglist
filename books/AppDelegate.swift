@@ -82,6 +82,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         func performSegueFromToReadPage(segueName: String) {
             tabBarController.selectTab(.toRead)
             let navController = tabBarController.selectedSplitViewController!.masterNavigationController
+            // Dismiss any modal views
+            navController.dismiss(animated: false)
             navController.popToRootViewController(animated: false)
             navController.viewControllers[0].performSegue(withIdentifier: segueName, sender: self)
         }
