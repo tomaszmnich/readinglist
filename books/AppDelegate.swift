@@ -67,6 +67,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([Any]?) -> Void) -> Bool {
         if userActivity.activityType == CSSearchableItemActionType && userActivity.userInfo?[CSSearchableItemActivityIdentifier] is String {
+            UserEngagement.logEvent(.spotlightSearch)
             tabBarController.restoreUserActivityState(userActivity)
             return true
         }
@@ -89,9 +90,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         if shortcutType == AppDelegate.barcodeScanActionName {
+            UserEngagement.logEvent(.scanBarcodeQuickAction)
             performSegueFromToReadPage(segueName: "scanBarcode")
         }
         else if shortcutType == AppDelegate.searchOnlineActionName {
+            UserEngagement.logEvent(.searchOnlineQuickAction)
             performSegueFromToReadPage(segueName: "searchByText")
         }
     }

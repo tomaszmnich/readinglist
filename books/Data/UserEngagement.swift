@@ -35,6 +35,9 @@ class UserEngagement {
         case deleteBook = "Delete Book"
         case editBook = "Edit Book"
         case editReadState = "Edit Read State"
+        case searchOnlineQuickAction = "Quick Action Search Online"
+        case scanBarcodeQuickAction = "Quick Action Scan Barcode"
+        case spotlightSearch = "Spotlight Search"
     }
     
     static func logEvent(_ event: Event) {
@@ -42,9 +45,9 @@ class UserEngagement {
     }
     
     private static func shouldTryRequestReview() -> Bool {
-        let appStartCountMinRequirement = 3
+        let appStartCountMinRequirement = 2
         let userEngagementCountRemainder = 10
-        let userEngagementModulo = 20
+        let userEngagementModulo = 10
         
         let appStartCount = PersistedCounter.getCount(withKey: appStartupCountKey)
         let userEngagementCount = PersistedCounter.getCount(withKey: userEngagementCountKey)
