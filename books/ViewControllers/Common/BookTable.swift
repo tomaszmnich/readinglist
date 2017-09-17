@@ -168,6 +168,11 @@ class BookTable: AutoUpdatingTableViewController {
             self.tableView.deselectRow(at: selectedIndexPath, animated: animated)
         }
         
+        // Work around a stupid bug (https://stackoverflow.com/q/46239530/5513562)
+        if #available(iOS 11.0, *), searchController.searchBar.frame.height == 0 {
+            navigationItem.searchController?.isActive = false
+        }
+        
         super.viewDidAppear(animated)
     }
 
