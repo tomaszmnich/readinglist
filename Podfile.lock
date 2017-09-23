@@ -3,11 +3,11 @@ PODS:
   - Crashlytics (3.8.6):
     - Fabric (~> 1.6.3)
   - DZNEmptyDataSet (1.8.1)
-  - Eureka (3.0.0)
+  - Eureka (3.1.0)
   - Fabric (1.6.13)
-  - RxCocoa (4.0.0-alpha.1):
-    - RxSwift (~> 4.0.0-alpha.1)
-  - RxSwift (4.0.0-alpha.1)
+  - RxCocoa (4.0.0-beta.0):
+    - RxSwift (~> 4.0.0-beta.0)
+  - RxSwift (4.0.0-beta.0)
   - SimulatorStatusMagic (2.0)
   - SVProgressHUD (2.2.1)
   - SwiftyJSON (3.1.4)
@@ -39,7 +39,7 @@ CHECKOUT OPTIONS:
     :commit: 3ee99563177e8b59c90b85516a868338212ab671
     :git: https://github.com/davedelong/CHCSVParser.git
   Eureka:
-    :commit: 142d80535b27b3634ac5a38514bde948b8ed42de
+    :commit: e0d3ecfe6238207daa6d099c5d779e762e79f159
     :git: https://github.com/xmartlabs/Eureka.git
   SimulatorStatusMagic:
     :commit: df187b70b735eee1c1766a00299dc9dd09759136
@@ -49,10 +49,10 @@ SPEC CHECKSUMS:
   CHCSVParser: 64da26e2b4ddbf7527f7f03120bf91d83d28f354
   Crashlytics: 95d05f4e4c19a771250c4bd9ce344d996de32bbf
   DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
-  Eureka: 5b9418d7bfdc21ca977d69d124a6409f3e9af2c7
+  Eureka: 06695c5795c7be2ed84261d652c266228e19820d
   Fabric: 2fb5676bc811af011a04513451f463dac6803206
-  RxCocoa: d6038768c2ec4e7157ca40396fdbd8d28de9b8ce
-  RxSwift: 62bea72da2c1b2653320c516267c2b8a347c02b6
+  RxCocoa: 8d809675f4e89c5c4c5a6900bbd11fe632ad5d86
+  RxSwift: e0899fae37065c16db976cc5e3c957e4e388869c
   SimulatorStatusMagic: c8e958d70e0e0cd2d7cf33bb95014a222ddecf0a
   SVProgressHUD: db27c54e6e18bc903341661fc9feb55e04905cc4
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220

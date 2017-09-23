@@ -1,5 +1,5 @@
 //  ImagePickerController.swift
-//  ImageRow ( https://github.com/EurekaCommunity/ImageRow )
+//  Eureka ( https://github.com/xmartlabs/Eureka )
 //
 //  Copyright (c) 2016 Xmartlabs SRL ( http://xmartlabs.com )
 //
@@ -21,9 +21,8 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-
-import Eureka
 import Foundation
+import Eureka
 
 /// Selector Controller used to pick an image
 open class ImagePickerController : UIImagePickerController, TypedRowControllerType, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
@@ -48,5 +47,4 @@ open class ImagePickerController : UIImagePickerController, TypedRowControllerTy
     open func imagePickerControllerDidCancel(_ picker: UIImagePickerController){
         onDismissCallback?(self)
     }
-    
 }

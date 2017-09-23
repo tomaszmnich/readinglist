@@ -19,7 +19,6 @@
 		491C84331CF630B600894313 /* CreateBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491C84321CF630B600894313 /* CreateBook.swift */; };
 		491C84351CF6519800894313 /* EditBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491C84341CF6519800894313 /* EditBook.swift */; };
 		491F14621C02228C0052B355 /* ScanBarcode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491F14611C02228C0052B355 /* ScanBarcode.swift */; };
-		49225FAB1F52284E008686B8 /* ImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49225FA81F52284E008686B8 /* ImageCell.swift */; };
 		49225FAC1F52284E008686B8 /* ImageRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49225FA91F52284E008686B8 /* ImageRow.swift */; };
 		49225FAD1F52284E008686B8 /* ImagePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49225FAA1F52284E008686B8 /* ImagePickerController.swift */; };
 		492500781C0B1B0000C149B5 /* BooksStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 492500771C0B1B0000C149B5 /* BooksStore.swift */; };
@@ -113,7 +112,6 @@
 		491C84321CF630B600894313 /* CreateBook.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateBook.swift; sourceTree = "<group>"; };
 		491C84341CF6519800894313 /* EditBook.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditBook.swift; sourceTree = "<group>"; };
 		491F14611C02228C0052B355 /* ScanBarcode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScanBarcode.swift; sourceTree = "<group>"; };
-		49225FA81F52284E008686B8 /* ImageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ImageCell.swift; path = ImageRow/ImageCell.swift; sourceTree = "<group>"; };
 		49225FA91F52284E008686B8 /* ImageRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ImageRow.swift; path = ImageRow/ImageRow.swift; sourceTree = "<group>"; };
 		49225FAA1F52284E008686B8 /* ImagePickerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ImagePickerController.swift; path = ImageRow/ImagePickerController.swift; sourceTree = "<group>"; };
 		492500771C0B1B0000C149B5 /* BooksStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BooksStore.swift; sourceTree = "<group>"; };
@@ -271,7 +269,6 @@
 		49225FAE1F522856008686B8 /* ImageRow */ = {
 			isa = PBXGroup;
 			children = (
-				49225FA81F52284E008686B8 /* ImageCell.swift */,
 				49225FA91F52284E008686B8 /* ImageRow.swift */,
 				49225FAA1F52284E008686B8 /* ImagePickerController.swift */,
 			);
@@ -794,7 +791,6 @@
 				4943DB791DBD5104004CAF30 /* Settings.swift in Sources */,
 				49B2CEF81F39A4D300C6B45D /* SortOrderViewController.swift in Sources */,
 				491C842F1CF6281B00894313 /* EditReadState.swift in Sources */,
-				49225FAB1F52284E008686B8 /* ImageCell.swift in Sources */,
 				49B8D8E11F499A5300D4C4EF /* UserSettings.swift in Sources */,
 				495C5D101BF1404D00E00C07 /* AppDelegate.swift in Sources */,
 				492710531F35BF3100286352 /* ExportViewController.swift in Sources */,

@@ -19,7 +19,6 @@ class AttributionsViewController : UIViewController {
         let mutableText = NSMutableAttributedString(attributedString: textView.attributedText)
         mutableText.hyperlinkText("Icons8", to: URL(string: "https://icons8.com")!)
         mutableText.hyperlinkText("Eureka", to: URL(string: "https://github.com/xmartlabs/Eureka")!)
-        mutableText.hyperlinkText("ImageRow", to: URL(string: "https://github.com/EurekaCommunity/ImageRow/")!)
         mutableText.hyperlinkText("DZNEmptyDataSet", to: URL(string: "https://github.com/dzenbot/DZNEmptyDataSet")!)
         mutableText.hyperlinkText("SwiftyJSON", to: URL(string: "https://github.com/SwiftyJSON/SwiftyJSON")!)
         mutableText.hyperlinkText("RxSwift", to: URL(string: "https://github.com/ReactiveX/RxSwift")!)
