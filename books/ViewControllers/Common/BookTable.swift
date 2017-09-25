@@ -373,30 +373,16 @@ extension BookTable : DZNEmptyDataSetSource {
         let bodyFont = Fonts.gillSans(forTextStyle: .title2)
         let boldFont = Fonts.gillSansSemiBold(forTextStyle: .title2)
         
-        let descriptionText: NSMutableAttributedString
+        let markdown = MarkdownWriter(font: bodyFont, boldFont: boldFont)
         if resultsFilterer.showingSearchResults {
-            descriptionText = NSMutableAttributedString("Try changing your search, or add a new book by tapping the ", withFont: bodyFont)
-                .chainAppend("+", withFont: boldFont)
-                .chainAppend(" button above.", withFont: bodyFont)
+            return markdown.write("Try changing your search, or add a new book by tapping the **+** button above.")
         }
-        else if readStates.contains(.reading) {
-            descriptionText = NSMutableAttributedString("Books you add to your ", withFont: bodyFont)
-                .chainAppend("To Read", withFont: boldFont)
-                .chainAppend(" list, or mark as currently ", withFont: bodyFont)
-                .chainAppend("Reading", withFont: boldFont)
-                .chainAppend(", will show up here.\n\nAdd a book by tapping the ", withFont: bodyFont)
-                .chainAppend("+", withFont: boldFont)
-                .chainAppend(" button above.", withFont: bodyFont)
+        if readStates.contains(.reading) {
+            return markdown.write("Books you add to your **To Read** list, or mark as currently **Reading** will show up here.\n\nAdd a book by tapping the **+** button above.")
         }
         else {
-            descriptionText = NSMutableAttributedString("Books you mark as ", withFont: bodyFont)
-                .chainAppend("Finished", withFont: boldFont)
-                .chainAppend(" will show up here.\n\nAdd a book by tapping the ", withFont: bodyFont)
-                .chainAppend("+", withFont: boldFont)
-                .chainAppend(" button above.", withFont: bodyFont)
+            return markdown.write("Books you mark as **Finished** will show up here.\n\nAdd a book by tapping the **+** button above.")
         }
-        
-        return descriptionText
     }
 }
 

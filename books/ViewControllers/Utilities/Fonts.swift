@@ -30,3 +30,27 @@ class Fonts {
         return font.withSize(fontSize)
     }
 }
+
+class MarkdownWriter {
+    let font: UIFont
+    let boldFont: UIFont
+    
+    init(font: UIFont, boldFont: UIFont?) {
+        self.font = font
+        if let boldFont = boldFont {
+            self.boldFont = boldFont
+        }
+        else {
+            self.boldFont = UIFont(descriptor: font.fontDescriptor.withSymbolicTraits(.traitBold) ?? font.fontDescriptor, size: font.pointSize)
+        }
+    }
+    
+    func write(_ markdown: String) -> NSAttributedString {
+        let separatedByBold = markdown.components(separatedBy: "**")
+        let result = NSMutableAttributedString()
+        for (index, component) in separatedByBold.enumerated() {
+            result.append(NSAttributedString(component, withFont: index % 2 == 0 ? font : boldFont))
+        }
+        return result
+    }
+}
