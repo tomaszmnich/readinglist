@@ -15,6 +15,7 @@ target 'books' do
   pod 'Fabric'
   pod 'Crashlytics'
   pod 'CHCSVParser', :git => 'https://github.com/davedelong/CHCSVParser.git'
+  pod 'Ensembles', '~> 1.7'
 
   target 'books_UITests' do
     inherit! :search_paths

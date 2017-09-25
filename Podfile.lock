@@ -3,6 +3,9 @@ PODS:
   - Crashlytics (3.8.6):
     - Fabric (~> 1.6.3)
   - DZNEmptyDataSet (1.8.1)
+  - Ensembles (1.7):
+    - Ensembles/Core (= 1.7)
+  - Ensembles/Core (1.7)
   - Eureka (3.1.0)
   - Fabric (1.6.13)
   - RxCocoa (4.0.0-beta.0):
@@ -16,6 +19,7 @@ DEPENDENCIES:
   - CHCSVParser (from `https://github.com/davedelong/CHCSVParser.git`)
   - Crashlytics
   - DZNEmptyDataSet (~> 1.8)
+  - Ensembles (~> 1.7)
   - Eureka (from `https://github.com/xmartlabs/Eureka.git`, branch `feature/Xcode9-Swift4`)
   - Fabric
   - RxCocoa (~> 4.0.0-alpha)
@@ -49,6 +53,7 @@ SPEC CHECKSUMS:
   CHCSVParser: 64da26e2b4ddbf7527f7f03120bf91d83d28f354
   Crashlytics: 95d05f4e4c19a771250c4bd9ce344d996de32bbf
   DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
+  Ensembles: b82f0747092d11aff476471244e2cfc660861c76
   Eureka: 06695c5795c7be2ed84261d652c266228e19820d
   Fabric: 2fb5676bc811af011a04513451f463dac6803206
   RxCocoa: 8d809675f4e89c5c4c5a6900bbd11fe632ad5d86
@@ -57,6 +62,6 @@ SPEC CHECKSUMS:
   SVProgressHUD: db27c54e6e18bc903341661fc9feb55e04905cc4
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
 
-PODFILE CHECKSUM: a72a1dbd682801f5061905756c68f5586646c3c2
+PODFILE CHECKSUM: b4d631248a990a5f771737b6afd436af041f4e9f
 
 COCOAPODS: 1.2.1
