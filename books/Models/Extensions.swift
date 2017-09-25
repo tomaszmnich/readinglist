@@ -73,15 +73,6 @@ extension NSMutableAttributedString {
     convenience init(_ string: String, withFont font: UIFont) {
         self.init(attributedString: NSAttributedString(string, withFont: font))
     }
-
-    func append(_ string: String, withFont font: UIFont) {
-        self.append(NSAttributedString(string, withFont: font))
-    }
-    
-    func chainAppend(_ string: String, withFont font: UIFont) -> NSMutableAttributedString {
-        self.append(NSAttributedString(string, withFont: font))
-        return self
-    }
 }
 
 public extension Date {
