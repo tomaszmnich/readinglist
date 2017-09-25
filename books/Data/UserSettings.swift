@@ -41,6 +41,18 @@ class UserSettings {
         }
     }
     
+    private static let iCloudSyncKey = "iCloudSync"
+    static var iCloudSync: Bool {
+        get {
+            return UserDefaults.standard.bool(forKey: iCloudSyncKey)
+        }
+        set {
+            if newValue != iCloudSync {
+                UserDefaults.standard.set(newValue, forKey: iCloudSyncKey)
+            }
+        }
+    }
+    
     static var selectedSortOrder: [NSSortDescriptor] {
         get { return SortOrders[UserSettings.tableSortOrder]! }
     }

@@ -69,6 +69,7 @@
 		49D0FAAB1F2B284000101EE1 /* UserEngagement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49D0FAAA1F2B284000101EE1 /* UserEngagement.swift */; };
 		49D93AA51CAB16F800AE6611 /* CoreSpotlightStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49D93AA41CAB16F800AE6611 /* CoreSpotlightStack.swift */; };
 		49E95D0F1DD7D9EC00C215F8 /* GoogleBooksAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E95D0E1DD7D9EC00C215F8 /* GoogleBooksAPI.swift */; };
+		49EC8F761F79A4EC0067B0A4 /* iCloudSyncViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49EC8F751F79A4EC0067B0A4 /* iCloudSyncViewController.swift */; };
 		49F1EC801ED06F5B00C7060F /* ReadingListApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F1EC7F1ED06F5B00C7060F /* ReadingListApplication.swift */; };
 		49F3863C1E86D64A001F5D75 /* example_barcode.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 49F3863B1E86D64A001F5D75 /* example_barcode.jpg */; };
 		49F6AC651E98F36B000B7D17 /* ImportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F6AC641E98F36B000B7D17 /* ImportViewController.swift */; };
@@ -168,6 +169,7 @@
 		49D93AA41CAB16F800AE6611 /* CoreSpotlightStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreSpotlightStack.swift; sourceTree = "<group>"; };
 		49E0C8931CA4945700703A9A /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
 		49E95D0E1DD7D9EC00C215F8 /* GoogleBooksAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleBooksAPI.swift; sourceTree = "<group>"; };
+		49EC8F751F79A4EC0067B0A4 /* iCloudSyncViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iCloudSyncViewController.swift; sourceTree = "<group>"; };
 		49EEF6861E943691003FF31E /* Reading List.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Reading List.entitlements"; sourceTree = "<group>"; };
 		49F1EC7F1ED06F5B00C7060F /* ReadingListApplication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadingListApplication.swift; sourceTree = "<group>"; };
 		49F3863B1E86D64A001F5D75 /* example_barcode.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = example_barcode.jpg; path = TestData/example_barcode.jpg; sourceTree = "<group>"; };
@@ -314,6 +316,7 @@
 				49CEB8091E9D8C06003FD859 /* DebugSettingsViewController.swift */,
 				492710521F35BF3100286352 /* ExportViewController.swift */,
 				49B2CEF71F39A4D300C6B45D /* SortOrderViewController.swift */,
+				49EC8F751F79A4EC0067B0A4 /* iCloudSyncViewController.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -809,6 +812,7 @@
 				49F6AC651E98F36B000B7D17 /* ImportViewController.swift in Sources */,
 				495879651BF7E76200000131 /* CoreDataStack.swift in Sources */,
 				499470681DB40D22008CB06E /* TabBarController.swift in Sources */,
+				49EC8F761F79A4EC0067B0A4 /* iCloudSyncViewController.swift in Sources */,
 				4973C7A31E905A04001CFABC /* Isbn13.swift in Sources */,
 				49097BA81CFB102B001AF1F9 /* FetchedResultsFilterer.swift in Sources */,
 				495C5D411BF1423900E00C07 /* Book.swift in Sources */,

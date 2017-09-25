@@ -41,6 +41,7 @@ class Settings: FormViewController, MFMailComposeViewControllerDelegate {
             }) { cell, _ in
                 cell.detailTextLabel!.text = UserSettings.tableSortOrder.displayName
             }
+            <<< NavigationRow(title: "iCloud Sync", segueName: "icloudSync")
         
         +++ Section(header: "Data", footer: "")
             <<< NavigationRow(title: "Import", segueName: "import")

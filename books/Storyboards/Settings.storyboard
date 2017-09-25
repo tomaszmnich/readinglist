@@ -45,6 +45,7 @@
                         <segue destination="LPf-H4-Q9r" kind="showDetail" identifier="attributions" id="lt0-sz-BiD"/>
                         <segue destination="B4I-sX-WdA" kind="showDetail" identifier="debugSettings" id="bDp-S7-l0M"/>
                         <segue destination="stP-Vs-oLA" kind="showDetail" identifier="sortOrder" id="wkO-hH-qZf"/>
+                        <segue destination="cFR-7i-kYo" kind="showDetail" identifier="icloudSync" id="fTf-Py-IjJ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mpy-1I-ozc" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -65,6 +66,41 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="s52-yL-y65" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-948" y="-279"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="yFE-Zd-fbn">
+            <objects>
+                <navigationController id="cFR-7i-kYo" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="5xB-N4-5aS">
+                        <rect key="frame" x="0.0" y="20" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="m3K-Bb-hF5" kind="relationship" relationship="rootViewController" id="nMn-0P-sbu"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="E5Q-rW-6Z9" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1622" y="-2100"/>
+        </scene>
+        <!--iCloud Sync-->
+        <scene sceneID="hTc-Aj-DS8">
+            <objects>
+                <viewController id="m3K-Bb-hF5" customClass="iCloudSyncViewController" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="NRl-Q6-F9T"/>
+                        <viewControllerLayoutGuide type="bottom" id="qEC-jU-NSv"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="YMI-1W-Idi">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="iCloud Sync" id="K2v-BV-nct"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="0OZ-bd-8KO" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2431" y="-2016"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="xPe-Ul-zKt">
@@ -385,10 +421,10 @@ Cg
                                 </attributes>
                             </fragment>
                             <fragment>
-                                <mutableString key="content">The MIT Licence
+                                <string key="content">The MIT Licence
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE</mutableString>
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE</string>
                                 <attributes>
                                     <font key="NSFont" size="14" name="CourierNewPSMT"/>
                                     <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" firstLineHeadIndent="8" headIndent="8" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
