@@ -113,12 +113,16 @@ class Settings: FormViewController, MFMailComposeViewControllerDelegate {
             mailComposer.mailComposeDelegate = self
             mailComposer.setToRecipients(["Reading List Developer <\(toEmail)>"])
             mailComposer.setSubject("Reading List Feedback")
-            let messageBody = "\n\n\n" +
-                "Reading List\n" +
-                "App Version: \(appDelegate.appVersion)\n" +
-                "Build Number: \(appDelegate.appBuildNumber)\n" +
-                "iOS Version: \(UIDevice.current.systemVersion)\n" +
-                "Device: \(UIDevice.current.modelIdentifier)"
+            let messageBody = """
+
+
+
+                Reading List
+                App Version: \(appDelegate.appVersion)
+                Build Number: \(appDelegate.appBuildNumber)
+                iOS Version: \(UIDevice.current.systemVersion)
+                Device: \(UIDevice.current.modelIdentifier)
+            """
             mailComposer.setMessageBody(messageBody, isHTML: false)
             self.present(mailComposer, animated: true)
         }

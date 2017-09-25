@@ -17,9 +17,17 @@ class ImportViewController : FormViewController, UIDocumentPickerDelegate, UIDoc
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        form +++ Section(footer: "Tap the button to import books from a CSV file. The CSV file should have the following headers:\n\n"
-                + Book.csvColumnHeaders.map{ "  \u{2022} \($0)" }.joined(separator: "\n")
-                + "\n\nTitle and Author cells are mandatory. Authors should be separated by semicolons and be entered in the form: \"Lastname, Firstnames\". Subjects should be separated by semicolons.\n\nBook covers will be downloaded where the import document has either an ISBN-13 or a Google Books ID. Duplicates and invalid entries will be skipped.\n\nAn example input document can be obtained by saving the result of an Export.")
+        form +++ Section(footer: """
+                Tap the button to import books from a CSV file. The CSV file should have the following headers:
+
+                \(Book.csvColumnHeaders.map{ "  \u{2022} \($0)" }.joined(separator: "\n"))
+            
+                Title and Author cells are mandatory. Authors should be separated by semicolons and be entered in the form: "Lastname, Firstnames". Subjects should be separated by semicolons.
+            
+                Book covers will be downloaded where the import document has either an ISBN-13 or a Google Books ID. Duplicates and invalid entries will be skipped.
+            
+                An example input document can be obtained by saving the result of an Export.
+            """)
             <<< ButtonRow() {
                 $0.title = "Select File"
                 $0.onCellSelection{ [unowned self] cell,_ in

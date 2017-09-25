@@ -22,8 +22,15 @@ class SortOrderViewController: FormViewController {
             }
         }
         
-        form +++ SelectableSection<ListCheckRow<TableSortOrder>>(header: "Order", footer: "Choose the sort order to be used when displaying your books:\n\n • By Date: orders books you are currently reading by start date; books you have finished by finish date. The order of books in the To Read state is customisable - tap Edit and drag to reorder the books.\n\n • By Title: orders all books by title\n\n • By Author: orders all books by the first author's surname", selectionType: .singleSelection(enableDeselection: false))
-        
+        form +++ SelectableSection<ListCheckRow<TableSortOrder>>(header: "Order", footer: """
+            Choose the sort order to be used when displaying your books:
+
+             • By Date: orders books you are currently reading by start date; books you have finished by finish date. The order of books in the To Read state is customisable - tap Edit and drag to reorder the books.
+
+             • By Title: orders all books by title
+
+             • By Author: orders all books by the first author's surname
+            """, selectionType: .singleSelection(enableDeselection: false))
         
             <<< tableSortRow(.byDate)
             <<< tableSortRow(.byTitle)
