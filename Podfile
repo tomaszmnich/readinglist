@@ -7,7 +7,7 @@ target 'books' do
   # Pods for books
   pod 'DZNEmptyDataSet', '~> 1.8'
   pod 'SwiftyJSON', '~> 3.1'
-  pod 'Eureka', :git => 'https://github.com/xmartlabs/Eureka.git', :branch => 'feature/Xcode9-Swift4'
+  pod 'Eureka', '~> 4.0'
   pod 'RxSwift', '~> 4.0.0-alpha'
   pod 'RxCocoa', '~> 4.0.0-alpha'
   pod 'SVProgressHUD', '~> 2.2'

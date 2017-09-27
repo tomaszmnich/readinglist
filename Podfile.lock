@@ -3,7 +3,7 @@ PODS:
   - Crashlytics (3.8.6):
     - Fabric (~> 1.6.3)
   - DZNEmptyDataSet (1.8.1)
-  - Eureka (3.1.0)
+  - Eureka (4.0.0)
   - Fabric (1.6.13)
   - RxCocoa (4.0.0-beta.0):
     - RxSwift (~> 4.0.0-beta.0)
@@ -16,7 +16,7 @@ DEPENDENCIES:
   - CHCSVParser (from `https://github.com/davedelong/CHCSVParser.git`)
   - Crashlytics
   - DZNEmptyDataSet (~> 1.8)
-  - Eureka (from `https://github.com/xmartlabs/Eureka.git`, branch `feature/Xcode9-Swift4`)
+  - Eureka (~> 4.0)
   - Fabric
   - RxCocoa (~> 4.0.0-alpha)
   - RxSwift (~> 4.0.0-alpha)
@@ -27,9 +27,6 @@ DEPENDENCIES:
 EXTERNAL SOURCES:
   CHCSVParser:
     :git: https://github.com/davedelong/CHCSVParser.git
-  Eureka:
-    :branch: feature/Xcode9-Swift4
-    :git: https://github.com/xmartlabs/Eureka.git
   SimulatorStatusMagic:
     :branch: master
     :git: https://github.com/shinydevelopment/SimulatorStatusMagic
@@ -38,9 +35,6 @@ CHECKOUT OPTIONS:
   CHCSVParser:
     :commit: 3ee99563177e8b59c90b85516a868338212ab671
     :git: https://github.com/davedelong/CHCSVParser.git
-  Eureka:
-    :commit: e0d3ecfe6238207daa6d099c5d779e762e79f159
-    :git: https://github.com/xmartlabs/Eureka.git
   SimulatorStatusMagic:
     :commit: df187b70b735eee1c1766a00299dc9dd09759136
     :git: https://github.com/shinydevelopment/SimulatorStatusMagic
@@ -49,7 +43,7 @@ SPEC CHECKSUMS:
   CHCSVParser: 64da26e2b4ddbf7527f7f03120bf91d83d28f354
   Crashlytics: 95d05f4e4c19a771250c4bd9ce344d996de32bbf
   DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
-  Eureka: 06695c5795c7be2ed84261d652c266228e19820d
+  Eureka: c0b55d2aec82050c1400c7d65960b700be8d10ef
   Fabric: 2fb5676bc811af011a04513451f463dac6803206
   RxCocoa: 8d809675f4e89c5c4c5a6900bbd11fe632ad5d86
   RxSwift: e0899fae37065c16db976cc5e3c957e4e388869c
@@ -57,6 +51,6 @@ SPEC CHECKSUMS:
   SVProgressHUD: db27c54e6e18bc903341661fc9feb55e04905cc4
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
 
-PODFILE CHECKSUM: a72a1dbd682801f5061905756c68f5586646c3c2
+PODFILE CHECKSUM: e7d0da854a4208fdae04792975c829dc70fa98f8
 
-COCOAPODS: 1.2.1
+COCOAPODS: 1.3.1
