@@ -9,13 +9,15 @@
 import CoreData
 import Fabric
 import Crashlytics
+import Ensembles
+import UIKit
 
 /**
  Standard CoreData boilerplate code.
  An instance of CoreDataStack can be held by a more specific accessing class.
  Post iOS 10 this could potentially be replaced by NSPersistentContainer
 */
-class CoreDataStack {
+class CoreDataStack: NSObject, CDEPersistentStoreEnsembleDelegate {
     
     let managedObjectContext: NSManagedObjectContext
     let storeDescriptor: String
@@ -24,6 +26,9 @@ class CoreDataStack {
         case sqlite
         case inMemory
     }
+    
+    let storeUrl: URL?
+    let modelUrl: URL
     
     /**
      Constructs a CoreDataStack which represents the model contained in the .momd file with the specified
@@ -38,14 +43,12 @@ class CoreDataStack {
             storeDescriptor = NSInMemoryStoreType
         }
         
-        let storeUrl: URL? = {
-            switch persistentStoreType {
-            case .sqlite:
-                return FileManager.default.urls(for: FileManager.SearchPathDirectory.documentDirectory, in: FileManager.SearchPathDomainMask.userDomainMask).first!.appendingPathComponent("\(persistentStoreName ?? momDirectoryName).sqlite")
-            case .inMemory:
-                return nil
-            }
-        }()
+        switch persistentStoreType {
+        case .sqlite:
+            storeUrl = FileManager.default.urls(for: FileManager.SearchPathDirectory.documentDirectory, in: FileManager.SearchPathDomainMask.userDomainMask).first!.appendingPathComponent("\(persistentStoreName ?? momDirectoryName).sqlite")
+        case .inMemory:
+            storeUrl = nil
+        }
         
         // Create the MOC
         managedObjectContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
@@ -66,9 +69,11 @@ class CoreDataStack {
         }
         
         // Build the ManagedObjectModels from the momd/mom files
+        modelUrl = desiredMomUrls.last!
         let managedObjectModels = desiredMomUrls.map{NSManagedObjectModel(contentsOf: $0)!}
 
         // Store URL will be null if using an in-memory store
+        super.init()
         if let storeUrl = storeUrl, FileManager.default.fileExists(atPath: storeUrl.path) {
             do {
                 try migrateStore(at: storeUrl, moms: managedObjectModels)
@@ -101,11 +106,44 @@ class CoreDataStack {
         }
     }
     
+    var cloudFileSystem: CDECloudFileSystem!
+    var ensemble: CDEPersistentStoreEnsemble!
+    
+    func initialiseEnsembles() {
+        cloudFileSystem = CDEICloudFileSystem(ubiquityContainerIdentifier: nil)
+        ensemble = CDEPersistentStoreEnsemble(ensembleIdentifier: "BookStore", persistentStore: storeUrl, managedObjectModelURL: modelUrl, cloudFileSystem: cloudFileSystem)
+        ensemble.delegate = self
+        
+        // Listen for local saves, and trigger merges
+        NotificationCenter.default.addObserver(self, selector:#selector(CoreDataStack.localSaveOccurred(_:)), name:NSNotification.Name.CDEMonitoredManagedObjectContextDidSave, object:nil)
+        NotificationCenter.default.addObserver(self, selector:#selector(CoreDataStack.cloudDataDidDownload(_:)), name:NSNotification.Name.CDEICloudFileSystemDidDownloadFiles, object:nil)
+    }
+    
+    @objc func localSaveOccurred(_ notif: Notification) {
+        self.sync(nil)
+    }
+    
+    @objc func cloudDataDidDownload(_ notif: Notification) {
+        self.sync(nil)
+    }
+    
+    func sync(_ completion: (() -> Void)?) {
+        if !ensemble.isLeeched {
+            ensemble.leechPersistentStore { _ in
+                completion?()
+            }
+        }
+        else {
+            ensemble.merge { _ in
+                completion?()
+            }
+        }
+    }
+    
     /*
         Core Data progressive migration code, taken from https://gist.github.com/kean/28439b29532993b620497621a4545789
         Also see http://kean.github.io/post/core-data-progressive-migrations
      */
-    
     enum MigrationError: Error {
         case IncompatibleModels
     }
