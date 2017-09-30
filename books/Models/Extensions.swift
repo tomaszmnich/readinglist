@@ -248,6 +248,11 @@ extension String {
         }
         return escapedString
     }
+    
+    func urlEncoded() -> String {
+        let allowedCharacterSet = (CharacterSet(charactersIn: "!*'();:@&=+$,/?%#[] ").inverted)
+        return self.addingPercentEncoding(withAllowedCharacters: allowedCharacterSet)!
+    }
 }
 
 extension NSPredicate {    

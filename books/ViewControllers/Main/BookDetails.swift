@@ -142,8 +142,6 @@ class BookDetails: UIViewController {
             readingLogNotes.text = viewModel.book.notes
             
             imageView.image = viewModel.cover
-            
-            shareButton.toggleHidden(hidden: viewModel.book.googleBooksId == nil)
             changeReadState.isHidden = viewModel.book.readState == .finished
             switch viewModel.book.readState {
             case .toRead:
@@ -261,13 +259,25 @@ class BookDetails: UIViewController {
     }
     
     @IBAction func shareButtonPressed(_ sender: UIBarButtonItem) {
-        guard let googleBooksId = viewModel?.book.googleBooksId else { return }
+        guard let book = viewModel?.book else { return }
         
         let optionsAlert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
-        optionsAlert.addAction(UIAlertAction(title: "Open on Google Books", style: .default) { _ in
-            UIApplication.shared.openURL(GoogleBooks.Request.webpage(googleBooksId).url)
+        // Open on Google Books
+        if let googleBooksId = book.googleBooksId {
+            optionsAlert.addAction(UIAlertAction(title: "Open on Google Books", style: .default) { _ in
+                UIApplication.shared.openURL(GoogleBooks.Request.webpage(googleBooksId).url)
+            })
+        }
+        
+        // Find on Amazon
+        let amazonUrl = "https://www.amazon.com/s?url=search-alias%3Dstripbooks&field-author=\(viewModel!.book.authorsArray.first?.displayFirstLast ?? "")&field-title=\(viewModel!.book.title)"
+        optionsAlert.addAction(UIAlertAction(title: "Find on Amazon", style: .default) { _ in
+            // Use https://bestazon.io/#WebService to localize Amazon links
+            let azonUrl = "http://lnks.io/r.php?Conf_Source=API&destURL=\(amazonUrl.urlEncoded())&Amzn_AfiliateID_GB=readinglistap-21"
+            UIApplication.shared.openURL(URL(string: azonUrl)!)
         })
+
         optionsAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         
         // For iPad, set the popover presentation controller's source
