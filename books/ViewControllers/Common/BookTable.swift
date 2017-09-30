@@ -253,7 +253,7 @@ class BookTable: AutoUpdatingTableViewController {
         
         let optionsAlert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         optionsAlert.addAction(segueAction(title: "Scan Barcode", identifier: "scanBarcode"))
-        optionsAlert.addAction(segueAction(title: "Search Books", identifier: "searchByText"))
+        optionsAlert.addAction(segueAction(title: "Search Online", identifier: "searchByText"))
         optionsAlert.addAction(segueAction(title: "Enter Manually", identifier: "addManually"))
         optionsAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         
