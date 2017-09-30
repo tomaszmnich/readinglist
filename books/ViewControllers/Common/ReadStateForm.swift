@@ -71,9 +71,9 @@ class ReadStateForm: FormViewController {
         +++ Section(header: "Notes", footer: "")
             <<< TextAreaRow(notesKey){
                 $0.placeholder = "Add your personal notes here..."
-                }
-            .cellSetup{cell, _ in
-                cell.height = {return 250}
+            }
+            .cellSetup{ [unowned self] cell, _ in
+                cell.height = {return (self.view.frame.height / 3) - 10}
             }
     }
     

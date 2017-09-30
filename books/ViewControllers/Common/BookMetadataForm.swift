@@ -140,8 +140,8 @@ class BookMetadataForm: FormViewController {
         +++ Section(header: "Description", footer: "")
             <<< TextAreaRow(descriptionKey){
                 $0.placeholder = "Description"
-            }.cellSetup{ cell, _ in
-                cell.height = {return 200}
+            }.cellSetup{ [unowned self] cell, _ in
+                cell.height = {return (self.view.frame.height / 3) - 10}
             }
         
         // Update and delete buttons
