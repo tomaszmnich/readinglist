@@ -26,7 +26,19 @@ class CreateBook: BookMetadataForm {
     }
     
     @IBAction func cancelButtonWasPressed(_ sender: AnyObject) {
-        dismiss()
+        // Check for changes
+        if anyData() {
+            // Confirm exit dialog
+            let confirmExit = UIAlertController(title: "Unsaved changes", message: "Are you sure you want to discard your unsaved changes?", preferredStyle: .actionSheet)
+            confirmExit.addAction(UIAlertAction(title: "Discard", style: .destructive){ [unowned self] _ in
+                self.dismiss()
+            })
+            confirmExit.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            present(confirmExit, animated: true, completion: nil)
+        }
+        else {
+            dismiss()
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

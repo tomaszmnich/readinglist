@@ -227,6 +227,11 @@ class BookMetadataForm: FormViewController {
         self.navigationController?.dismiss(animated: true, completion: completion)
     }
     
+    func anyData() -> Bool {
+        return titleField.value != nil || !authors.isEmpty || pageCount.value != nil || !subjects.isEmpty
+            || publicationDate.value != nil || descriptionField.value != nil || image.value != nil
+    }
+    
     @discardableResult
     func populateMetadata(_ metadata: BookMetadata) -> Bool {
         var changes = false
