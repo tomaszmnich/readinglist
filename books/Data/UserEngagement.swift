@@ -46,15 +46,12 @@ class UserEngagement {
     
     private static func shouldTryRequestReview() -> Bool {
         let appStartCountMinRequirement = 2
-        let userEngagementCountRemainder = 10
         let userEngagementModulo = 10
         
         let appStartCount = PersistedCounter.getCount(withKey: appStartupCountKey)
         let userEngagementCount = PersistedCounter.getCount(withKey: userEngagementCountKey)
         
-        return appStartCount >= appStartCountMinRequirement
-            && userEngagementCount >= userEngagementCountRemainder
-            && userEngagementCount % userEngagementModulo == userEngagementCountRemainder
+        return appStartCount >= appStartCountMinRequirement && userEngagementCount % userEngagementModulo == 0
     }
 }
 
