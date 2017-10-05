@@ -10,8 +10,6 @@ import UIKit
 
 class CreateBook: BookMetadataForm {
     
-    var initialBookMetadata: BookMetadata?
-    
     @IBOutlet weak var nextButton: UIBarButtonItem!
     
     override func viewDidLoad() {
@@ -21,21 +19,6 @@ class CreateBook: BookMetadataForm {
         isbnField.section!.remove(at: isbnField.indexPath!.row)
         updateRow.section!.remove(at: updateRow.indexPath!.row)
         deleteRow.section!.remove(at: deleteRow.indexPath!.row)
-        
-        if let initialBookMetadata = initialBookMetadata {
-            // Change the title if we are prepopulating the fields
-            navigationItem.title = "Add Book"
-            
-            // Set the field values
-            titleField.value = initialBookMetadata.title
-            authors = initialBookMetadata.authors
-            descriptionField.value = initialBookMetadata.bookDescription
-            pageCount.value = initialBookMetadata.pageCount
-            publicationDate.value = initialBookMetadata.publicationDate
-            if let data = initialBookMetadata.coverImage {
-                image.value = UIImage(data: data)
-            }
-        }
     }
     
     override func formValidated(isValid: Bool) {
@@ -51,7 +34,7 @@ class CreateBook: BookMetadataForm {
         if let createReadState = segue.destination as? CreateReadState {
             UserEngagement.logEvent(.addManualBook)
             
-            let finalBookMetadata = initialBookMetadata ?? BookMetadata()
+            let finalBookMetadata = BookMetadata()
             populateMetadata(finalBookMetadata)
             createReadState.bookMetadata = finalBookMetadata
         }
