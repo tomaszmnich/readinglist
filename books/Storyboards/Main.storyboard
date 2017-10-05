@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13189.4" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="C9v-sl-9fR">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="C9v-sl-9fR">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13165.3"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Segues with Peek and Pop" minToolsVersion="7.1"/>
@@ -164,6 +164,8 @@
                         <segue destination="MoR-st-owh" kind="presentation" identifier="scanBarcode" modalPresentationStyle="formSheet" id="mGr-4c-eH0"/>
                         <segue destination="ciW-Jd-Gs4" kind="presentation" identifier="searchByText" modalPresentationStyle="formSheet" id="1QE-Vi-xhY"/>
                         <segue destination="Mfc-92-vqK" kind="presentation" identifier="addManually" modalPresentationStyle="formSheet" id="d3M-5n-0h8"/>
+                        <segue destination="OWE-eG-rNf" kind="presentation" identifier="editBook" modalPresentationStyle="formSheet" id="jO5-9m-FtQ"/>
+                        <segue destination="bV3-xR-aQg" kind="presentation" identifier="editReadState" modalPresentationStyle="formSheet" id="vo8-Ad-IJ0"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x3g-rQ-Wjw" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -200,6 +202,22 @@
             </objects>
             <point key="canvasLocation" x="-6289" y="-798"/>
         </scene>
+        <!--EditReadState-->
+        <scene sceneID="jNu-cr-P3Z">
+            <objects>
+                <viewControllerPlaceholder storyboardName="EditReadState" id="bV3-xR-aQg" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="vJr-xG-U8g" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-6283" y="-1031"/>
+        </scene>
+        <!--EditBook-->
+        <scene sceneID="LUV-0R-DM6">
+            <objects>
+                <viewControllerPlaceholder storyboardName="EditBook" id="OWE-eG-rNf" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Yfo-NE-yYe" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-6287" y="-958"/>
+        </scene>
         <!--SearchOnline-->
         <scene sceneID="JUq-IZ-EpW">
             <objects>
@@ -226,7 +244,7 @@
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Bak-2y-CpM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-9400" y="743"/>
+            <point key="canvasLocation" x="-9857" y="672"/>
         </scene>
         <!--Finished-->
         <scene sceneID="aMs-tS-HdJ">
@@ -240,7 +258,7 @@
                 </splitViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cBY-4f-qU7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-8150" y="887"/>
+            <point key="canvasLocation" x="-8542" y="557"/>
         </scene>
         <!--Previewing Navigation Controller-->
         <scene sceneID="vTw-Rx-83p">
@@ -256,7 +274,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fng-vB-yrv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-7241" y="1433"/>
+            <point key="canvasLocation" x="-8460" y="1558"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="k8d-HE-GN7">
@@ -272,7 +290,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sxL-4b-JxX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-7212" y="684"/>
+            <point key="canvasLocation" x="-7746" y="768"/>
         </scene>
         <!--Finished-->
         <scene sceneID="WZD-Bb-sCl">
@@ -370,11 +388,13 @@
                         <segue destination="bVe-1v-p1Z" kind="presentation" identifier="scanBarcode" modalPresentationStyle="formSheet" id="Mve-Yh-84G"/>
                         <segue destination="pWR-wO-ZT3" kind="presentation" identifier="searchByText" modalPresentationStyle="formSheet" id="nBH-TK-aGq"/>
                         <segue destination="4Ae-aU-quh" kind="presentation" identifier="addManually" modalPresentationStyle="formSheet" id="h2N-8E-GkS"/>
+                        <segue destination="2Rz-jC-qCX" kind="presentation" identifier="editBook" modalPresentationStyle="formSheet" id="2Bl-ye-cvk"/>
+                        <segue destination="dIz-iw-L88" kind="presentation" identifier="editReadState" modalPresentationStyle="formSheet" id="rrm-zV-yyp"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mEs-Fh-yGM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-6426" y="683"/>
+            <point key="canvasLocation" x="-6938" y="768"/>
         </scene>
         <!--ScanBarcode-->
         <scene sceneID="O8a-hc-lBs">
@@ -382,7 +402,7 @@
                 <viewControllerPlaceholder storyboardName="ScanBarcode" id="bVe-1v-p1Z" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IkU-H6-d9H" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-5776" y="744"/>
+            <point key="canvasLocation" x="-6074" y="839"/>
         </scene>
         <!--AddManually-->
         <scene sceneID="Ohe-Zv-DjP">
@@ -390,7 +410,23 @@
                 <viewControllerPlaceholder storyboardName="AddManually" id="4Ae-aU-quh" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Qf3-JC-Vpu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-5778" y="672"/>
+            <point key="canvasLocation" x="-6076" y="767"/>
+        </scene>
+        <!--EditReadState-->
+        <scene sceneID="fTZ-yL-u7I">
+            <objects>
+                <viewControllerPlaceholder storyboardName="EditReadState" id="dIz-iw-L88" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="scP-jz-jlU" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-6172" y="532"/>
+        </scene>
+        <!--EditBook-->
+        <scene sceneID="VDK-iN-vci">
+            <objects>
+                <viewControllerPlaceholder storyboardName="EditBook" id="2Rz-jC-qCX" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="OZp-r6-8nf" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-6119" y="610"/>
         </scene>
         <!--SearchOnline-->
         <scene sceneID="xob-jQ-Pd0">
@@ -398,7 +434,7 @@
                 <viewControllerPlaceholder storyboardName="SearchOnline" id="pWR-wO-ZT3" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Bnh-Aq-PQg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-5775" y="601"/>
+            <point key="canvasLocation" x="-6073" y="696"/>
         </scene>
         <!--BookDetails-->
         <scene sceneID="zwR-8Z-ZZB">
@@ -408,7 +444,7 @@
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gJk-7Y-L2f" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-6517" y="1392"/>
+            <point key="canvasLocation" x="-7508" y="1542"/>
         </scene>
     </scenes>
     <resources>

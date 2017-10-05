@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1CA61FF61F861AAB00DD88F1 /* EditReadState.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CA61FF51F861AAB00DD88F1 /* EditReadState.storyboard */; };
+		1CA61FF81F861ABC00DD88F1 /* EditBook.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CA61FF71F861ABC00DD88F1 /* EditBook.storyboard */; };
 		49043DB71EBF1E0B00E74370 /* SearchBooksEmptyDataset.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49043DB61EBF1E0B00E74370 /* SearchBooksEmptyDataset.xib */; };
 		49097BA81CFB102B001AF1F9 /* FetchedResultsFilterer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49097BA71CFB102B001AF1F9 /* FetchedResultsFilterer.swift */; };
 		49160F5B1E7FC59200168FD0 /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49160F5A1E7FC59200168FD0 /* SnapshotHelper.swift */; };
@@ -96,6 +98,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1CA61FF51F861AAB00DD88F1 /* EditReadState.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = EditReadState.storyboard; sourceTree = "<group>"; };
+		1CA61FF71F861ABC00DD88F1 /* EditBook.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = EditBook.storyboard; sourceTree = "<group>"; };
 		297D92A68CB2906FDBD31ED9 /* Pods_books_UnitTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_books_UnitTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3AC962F935D7BE333849CA18 /* Pods-books_UnitTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-books_UnitTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-books_UnitTests/Pods-books_UnitTests.debug.xcconfig"; sourceTree = "<group>"; };
 		49043DB61EBF1E0B00E74370 /* SearchBooksEmptyDataset.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SearchBooksEmptyDataset.xib; sourceTree = "<group>"; };
@@ -295,6 +299,8 @@
 			children = (
 				4936B5831D2C3A2C00600562 /* AddManually.storyboard */,
 				494234921E70B24400CEEB4C /* BookDetails.storyboard */,
+				1CA61FF71F861ABC00DD88F1 /* EditBook.storyboard */,
+				1CA61FF51F861AAB00DD88F1 /* EditReadState.storyboard */,
 				4968A2B11CB3E0BF00CBF3F0 /* LaunchScreen.storyboard */,
 				494234891E70AFA100CEEB4C /* Main.storyboard */,
 				492710551F362E7E00286352 /* Settings.storyboard */,
@@ -592,11 +598,13 @@
 				4942348E1E70AFA100CEEB4C /* SearchOnline.storyboard in Resources */,
 				4942348F1E70AFA100CEEB4C /* ScanBarcode.storyboard in Resources */,
 				494234931E70B24400CEEB4C /* BookDetails.storyboard in Resources */,
+				1CA61FF81F861ABC00DD88F1 /* EditBook.storyboard in Resources */,
 				49409EFC1F6535D40047C2B2 /* yourfirstswiftapp.png in Resources */,
 				4942348D1E70AFA100CEEB4C /* Main.storyboard in Resources */,
 				49F3863C1E86D64A001F5D75 /* example_barcode.jpg in Resources */,
 				494D65D51EB906CB00764DC1 /* examplebooks.csv in Resources */,
 				4936B5841D2C3A2C00600562 /* AddManually.storyboard in Resources */,
+				1CA61FF61F861AAB00DD88F1 /* EditReadState.storyboard in Resources */,
 				49043DB71EBF1E0B00E74370 /* SearchBooksEmptyDataset.xib in Resources */,
 				4968A2B21CB3E0BF00CBF3F0 /* LaunchScreen.storyboard in Resources */,
 			);

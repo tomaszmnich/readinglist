@@ -223,6 +223,8 @@ class BookTable: AutoUpdatingTableViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let navController = segue.destination as? UINavigationController
+        
         if let navWithReadState = segue.destination as? NavWithReadState {
             navWithReadState.readState = readStates.first!
             
@@ -231,7 +233,7 @@ class BookTable: AutoUpdatingTableViewController {
                 searchOnline.initialSearchString = searchText
             }
         }
-        if let detailsViewController = (segue.destination as? UINavigationController)?.topViewController as? BookDetails {
+        else if let detailsViewController = navController?.topViewController as? BookDetails {
             if let cell = sender as? UITableViewCell,
                 let selectedIndex = self.tableView.indexPath(for: cell) {
          
@@ -240,6 +242,12 @@ class BookTable: AutoUpdatingTableViewController {
             else if let book = sender as? Book {
                 detailsViewController.viewModel = BookDetailsViewModel(book: book)
             }
+        }
+        else if let editBookController = navController?.viewControllers.first as? EditBook, let book = sender as? Book {
+            editBookController.bookToEdit = book
+        }
+        else if let editReadStateController = navController?.viewControllers.first as? EditReadState, let book = sender as? Book {
+            editReadStateController.bookToEdit = book
         }
     }
 
@@ -308,7 +316,22 @@ class BookTable: AutoUpdatingTableViewController {
         let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { [unowned self] _,_,callback in
             self.presentDeleteBookAlert(indexPath: indexPath, callback: callback)
         }
-        let configuration = UISwipeActionsConfiguration(actions: [deleteAction])
+        let editAction = UIContextualAction(style: .normal, title: "Edit Book") { [unowned self] _,_,callback in
+            self.performSegue(withIdentifier: "editBook", sender: self.resultsController.object(at: indexPath))
+            callback(true)
+        }
+        let configuration = UISwipeActionsConfiguration(actions: [deleteAction, editAction])
+        configuration.performsFirstActionWithFullSwipe = false
+        return configuration
+    }
+    
+    @available(iOS 11.0, *)
+    override func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let editReadStateAction = UIContextualAction(style: .normal, title: "Edit Log") { [unowned self] _,_,callback in
+            self.performSegue(withIdentifier: "editReadState", sender: self.resultsController.object(at: indexPath))
+            callback(true)
+        }
+        let configuration = UISwipeActionsConfiguration(actions: [editReadStateAction])
         configuration.performsFirstActionWithFullSwipe = false
         return configuration
     }

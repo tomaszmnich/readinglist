@@ -89,8 +89,12 @@ class ReadingTable: BookTable {
     
     @available(iOS 11.0, *)
     override func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let readStateOfSection = readStateForSection(indexPath.section)
+        var actions = [UIContextualAction]()
+        if let superConfiguration = super.tableView(tableView, leadingSwipeActionsConfigurationForRowAt: indexPath) {
+            actions.append(contentsOf: superConfiguration.actions)
+        }
         
+        let readStateOfSection = readStateForSection(indexPath.section)
         let leadingSwipeAction = UIContextualAction(style: .normal, title: readStateOfSection == .toRead ? "Start" : "Finish") { [unowned self] _,_,callback in
             let book = self.resultsController.object(at: indexPath)
             if readStateOfSection == .toRead {
@@ -102,8 +106,9 @@ class ReadingTable: BookTable {
             callback(true)
         }
         leadingSwipeAction.backgroundColor = readStateOfSection == .toRead ? UIColor.buttonBlue : UIColor.flatGreen
+        actions.insert(leadingSwipeAction, at: 0)
         
-        let configuration = UISwipeActionsConfiguration(actions: [leadingSwipeAction])
+        let configuration = UISwipeActionsConfiguration(actions: actions)
         configuration.performsFirstActionWithFullSwipe = false
         
         return configuration
