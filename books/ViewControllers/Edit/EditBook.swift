@@ -89,7 +89,20 @@ class EditBook: BookMetadataForm {
     }
     
     @IBAction func cancelButtonWasPressed(_ sender: AnyObject) {
-        dismiss()
+        // Check for changes
+        let newMetadata = BookMetadata(book: bookToEdit)
+        if populateMetadata(newMetadata) {
+            // Confirm exit dialog
+            let confirmExit = UIAlertController(title: "Unsaved changes", message: "Are you sure you want to discard your unsaved changes?", preferredStyle: .actionSheet)
+            confirmExit.addAction(UIAlertAction(title: "Discard", style: .destructive){ [unowned self] _ in
+                self.dismiss()
+            })
+            confirmExit.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            present(confirmExit, animated: true, completion: nil)
+        }
+        else {
+            dismiss()
+        }
     }
     
     @IBAction func doneButtonWasPressed(_ sender: AnyObject) {
