@@ -22,7 +22,7 @@ class ExportViewController: FormViewController {
 
             The CSV file will have the following headers:
 
-            \(Book.csvColumnHeaders.map{ "  \u{2022} \($0)" }.joined(separator: "\n")))
+            \(Book.csvColumnHeaders.map{ "  \u{2022} \($0)" }.joined(separator: "\n"))
             """)
             <<< ButtonRow() {
                 $0.title = "Export"
