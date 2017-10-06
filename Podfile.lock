@@ -5,9 +5,9 @@ PODS:
   - DZNEmptyDataSet (1.8.1)
   - Eureka (4.0.0)
   - Fabric (1.6.13)
-  - RxCocoa (4.0.0-beta.0):
-    - RxSwift (~> 4.0.0-beta.0)
-  - RxSwift (4.0.0-beta.0)
+  - RxCocoa (4.0.0-beta.1):
+    - RxSwift (~> 4.0.0-beta.1)
+  - RxSwift (4.0.0-beta.1)
   - SimulatorStatusMagic (2.0)
   - SVProgressHUD (2.2.1)
   - SwiftyJSON (3.1.4)
@@ -45,8 +45,8 @@ SPEC CHECKSUMS:
   DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
   Eureka: c0b55d2aec82050c1400c7d65960b700be8d10ef
   Fabric: 2fb5676bc811af011a04513451f463dac6803206
-  RxCocoa: 8d809675f4e89c5c4c5a6900bbd11fe632ad5d86
-  RxSwift: e0899fae37065c16db976cc5e3c957e4e388869c
+  RxCocoa: ca6cc0f4453145d90002d80df8f9c83dd8fb7338
+  RxSwift: 29f07e0e72cc5b40f146c64cc520ea6a6a0c73e9
   SimulatorStatusMagic: c8e958d70e0e0cd2d7cf33bb95014a222ddecf0a
   SVProgressHUD: db27c54e6e18bc903341661fc9feb55e04905cc4
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
