@@ -17,7 +17,6 @@ class BooksStore {
     private let subjectEntityName = "Subject"
     
     private let coreDataStack: CoreDataStack
-    private let coreSpotlightStack: CoreSpotlightStack
     var managedObjectContext: NSManagedObjectContext {
         get {
             return coreDataStack.managedObjectContext
@@ -26,7 +25,6 @@ class BooksStore {
     
     init(storeType: CoreDataStack.PersistentStoreType) {
         self.coreDataStack = CoreDataStack(momDirectoryName: "books", persistentStoreType: storeType)
-        self.coreSpotlightStack = CoreSpotlightStack(domainIdentifier: productBundleIdentifier)
     }
     
     /**
@@ -143,13 +141,6 @@ class BooksStore {
     }
     
     /**
-     Adds or updates the book in the Spotlight index.
-    */
-    func updateSpotlightIndex(for book: Book) {
-        coreSpotlightStack.updateItems([book.toSpotlightItem()])
-    }
-    
-    /**
      Gets the current maximum sort index in the books store
     */
     func maxSort() -> Int? {
@@ -189,8 +180,7 @@ class BooksStore {
     }
     
     /**
-     Creates a new Book object, populates with the provided metadata, saves the
-     object context, and adds the book to the Spotlight index.
+     Creates a new Book object, populates with the provided metadata, saves the object context.
      */
     @discardableResult func create(from metadata: BookMetadata, readingInformation: BookReadingInformation, bookSort: Int? = nil, readingNotes: String? = nil) -> Book {
         let book = coreDataStack.createNew(entity: bookEntityName) as! Book
@@ -203,7 +193,6 @@ class BooksStore {
         updateSort(book: book, requestedSort: bookSort)
         
         save()
-        updateSpotlightIndex(for: book)
         return book
     }
     
@@ -215,14 +204,11 @@ class BooksStore {
     }
     
     /**
-        Updates the provided book with the provided metadata and reading information (whichever are provided).
-        Saves and reindexes in spotlight.
+        Updates the provided book with the provided metadata and reading information (whichever are provided), and saves.
     */
     func update(book: Book, withMetadata metadata: BookMetadata) {
         populateBook(book, withMetadata: metadata)
-        
         save()
-        updateSpotlightIndex(for: book)
     }
     
     /**
@@ -277,10 +263,8 @@ class BooksStore {
     
     /**
      Deletes the given book from the managed object context.
-     Deindexes from Spotlight if necessary.
      */
     func deleteBook(_ book: Book) {
-        coreSpotlightStack.deindexItems(withIdentifiers: [book.objectID.uriRepresentation().absoluteString])
         deleteObject(book)
         save()
     }
@@ -297,10 +281,8 @@ class BooksStore {
     
     /**
      Deletes **all** book objects from the managed object conte][xt.
-     Deindexes all items from Spotlight if necessary.
     */
     func deleteAll() {
-
         do {
             let results = try coreDataStack.managedObjectContext.fetch(bookFetchRequest())
             for result in results {

@@ -69,7 +69,6 @@
 		49C5339F1DB281A10043E50E /* BookPredicateBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C5339E1DB281A10043E50E /* BookPredicateBuilder.swift */; };
 		49CEB80A1E9D8C06003FD859 /* DebugSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49CEB8091E9D8C06003FD859 /* DebugSettingsViewController.swift */; };
 		49D0FAAB1F2B284000101EE1 /* UserEngagement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49D0FAAA1F2B284000101EE1 /* UserEngagement.swift */; };
-		49D93AA51CAB16F800AE6611 /* CoreSpotlightStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49D93AA41CAB16F800AE6611 /* CoreSpotlightStack.swift */; };
 		49E95D0F1DD7D9EC00C215F8 /* GoogleBooksAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E95D0E1DD7D9EC00C215F8 /* GoogleBooksAPI.swift */; };
 		49F1EC801ED06F5B00C7060F /* ReadingListApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F1EC7F1ED06F5B00C7060F /* ReadingListApplication.swift */; };
 		49F3863C1E86D64A001F5D75 /* example_barcode.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 49F3863B1E86D64A001F5D75 /* example_barcode.jpg */; };
@@ -169,7 +168,6 @@
 		49C5339E1DB281A10043E50E /* BookPredicateBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookPredicateBuilder.swift; sourceTree = "<group>"; };
 		49CEB8091E9D8C06003FD859 /* DebugSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DebugSettingsViewController.swift; sourceTree = "<group>"; };
 		49D0FAAA1F2B284000101EE1 /* UserEngagement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserEngagement.swift; sourceTree = "<group>"; };
-		49D93AA41CAB16F800AE6611 /* CoreSpotlightStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreSpotlightStack.swift; sourceTree = "<group>"; };
 		49E0C8931CA4945700703A9A /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
 		49E95D0E1DD7D9EC00C215F8 /* GoogleBooksAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleBooksAPI.swift; sourceTree = "<group>"; };
 		49EEF6861E943691003FF31E /* Reading List.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Reading List.entitlements"; sourceTree = "<group>"; };
@@ -285,7 +283,6 @@
 				49812BB31CA95F0600A49EBA /* BookPredicate.swift */,
 				492500771C0B1B0000C149B5 /* BooksStore.swift */,
 				495879641BF7E76200000131 /* CoreDataStack.swift */,
-				49D93AA41CAB16F800AE6611 /* CoreSpotlightStack.swift */,
 				49160F5E1E809DFE00168FD0 /* BookImport.swift */,
 				4937A1471E9E1FB900A3B0D1 /* DebugSettings.swift */,
 				49D0FAAA1F2B284000101EE1 /* UserEngagement.swift */,
@@ -846,7 +843,6 @@
 				4973C7A31E905A04001CFABC /* Isbn13.swift in Sources */,
 				49097BA81CFB102B001AF1F9 /* FetchedResultsFilterer.swift in Sources */,
 				495C5D411BF1423900E00C07 /* Book.swift in Sources */,
-				49D93AA51CAB16F800AE6611 /* CoreSpotlightStack.swift in Sources */,
 				4994706A1DB42067008CB06E /* ReadingTable.swift in Sources */,
 				49FE2ED51D6F675D00F04239 /* SearchOnline.swift in Sources */,
 				4937A1481E9E1FB900A3B0D1 /* DebugSettings.swift in Sources */,
