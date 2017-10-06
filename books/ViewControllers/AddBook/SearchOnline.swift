@@ -89,7 +89,7 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
         if #available(iOS 10.0, *) {
             searchTest.subscribe(onNext: { [unowned self] _ in
                 self.feedbackGeneratorWrapper.generator.prepare()
-            }).addDisposableTo(disposeBag)
+            }).disposed(by: disposeBag)
         }
 
         let searchResults = searchTest
@@ -105,7 +105,7 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
                 }
                 return Observable.just(GoogleBooks.SearchResultsPage.empty())
             }
-            .shareReplay(1)
+            .share(replay: 1)
         
         // The Cancel button should map to an empty set of results. Hook into the text observable
         // and filter to only include the events where the text box is empty
@@ -114,7 +114,7 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
         let clearResults = Observable.merge([searchBar.rx.cancelButtonClicked.asObservable(), emptySearch])
             .observeOn(ConcurrentDispatchQueueScheduler(qos: .userInitiated))
             .map { _ in GoogleBooks.SearchResultsPage.empty() }
-            .shareReplay(1)
+            .share(replay: 1)
         
         let aggregateResults = Observable.merge([searchResults, clearResults])
         
@@ -148,7 +148,7 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
                     }
                 }
             })
-            .addDisposableTo(disposeBag)
+            .disposed(by: disposeBag)
         
         // Set up the table footer; hide it until there are results
         let poweredByGoogle = UIImageView(image: #imageLiteral(resourceName: "PoweredByGoogle"))
@@ -159,7 +159,7 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
         aggregateResults.map{ ($0.searchResults.value?.count ?? 0) == 0 }
             .asDriver(onErrorJustReturn: true)
             .drive(tableView.tableFooterView!.rx.isHidden)
-            .addDisposableTo(disposeBag)
+            .disposed(by: disposeBag)
         
         // Map the actual results to SearchResultViewModel items (or empty if failure)
         // and use them to drive the table cells
@@ -168,14 +168,14 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
             .drive(tableView.rx.items(cellIdentifier: "SearchResultCell", cellType: SearchResultCell.self)) { _, viewModel, cell in
                 cell.viewModel = viewModel
             }
-            .addDisposableTo(disposeBag)
+            .disposed(by: disposeBag)
         
         // On cell selection, go to the next page
         tableView.rx.modelSelected(SearchResultViewModel.self)
             .subscribe(onNext: { [unowned self] model in
                 self.onModelSelected(model)
             })
-            .addDisposableTo(disposeBag)
+            .disposed(by: disposeBag)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -335,7 +335,7 @@ class SearchResultCell : UITableViewCell {
             authorOutlet.text = viewModel.author
             
             disposeBag = DisposeBag()
-            viewModel.coverImage.drive(imageOutlet.rx.image).addDisposableTo(disposeBag!)
+            viewModel.coverImage.drive(imageOutlet.rx.image).disposed(by: disposeBag!)
         }
     }
     
