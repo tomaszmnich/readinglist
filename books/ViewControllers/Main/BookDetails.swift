@@ -145,10 +145,10 @@ class BookDetails: UIViewController {
             switch viewModel.book.readState {
             case .toRead:
                 changeReadState.setColor(UIColor.buttonBlue)
-                changeReadState.setTitle("Start", for: .normal)
+                changeReadState.setTitle("START", for: .normal)
             case .reading:
                 changeReadState.setColor(UIColor.flatGreen)
-                changeReadState.setTitle("Finish", for: .normal)
+                changeReadState.setTitle("FINISH", for: .normal)
             case .finished:
                 changeReadState.isHidden = true
             }

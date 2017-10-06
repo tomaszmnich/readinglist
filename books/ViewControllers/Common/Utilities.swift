@@ -34,19 +34,25 @@ class HairlineConstraint: NSLayoutConstraint {
     }
 }
 
+@IBDesignable
 class BorderedButton: UIButton {
+    @IBInspectable var cornerRadius: CGFloat = 12
+    
     override func awakeFromNib() {
         super.awakeFromNib()
-        
-        // Style the button
-        layer.cornerRadius = 4
-        layer.borderWidth = 1
+        layer.cornerRadius = cornerRadius
+        layer.borderWidth = 0
+        setTitleColor(UIColor.white, for: state)
         setColor(tintColor)
     }
     
     func setColor(_ colour: UIColor) {
-        tintColor = colour
-        layer.borderColor = colour.cgColor
+        backgroundColor = colour
+    }
+    
+    override func prepareForInterfaceBuilder() {
+        super.prepareForInterfaceBuilder()
+        awakeFromNib()
     }
 }
 

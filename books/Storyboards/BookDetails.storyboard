@@ -66,8 +66,13 @@
                                                     <constraint firstAttribute="height" constant="25" id="0U1-yl-QTJ"/>
                                                     <constraint firstAttribute="width" constant="75" id="0sn-07-FdR"/>
                                                 </constraints>
-                                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="14"/>
-                                                <state key="normal" title="Start"/>
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
+                                                <state key="normal" title="START"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                        <real key="value" value="12"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
                                                 <connections>
                                                     <action selector="readStateButtonPressed:" destination="svF-c1-e4g" eventType="touchUpInside" id="qaR-Zw-89L"/>
                                                 </connections>
