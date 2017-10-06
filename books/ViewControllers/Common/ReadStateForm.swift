@@ -86,6 +86,11 @@ class ReadStateForm: FormViewController {
         }
     }
     
+    func dismiss(completion: (() -> Void)? = nil) {
+        self.view.endEditing(true)
+        self.navigationController?.dismiss(animated: true, completion: completion)
+    }
+    
     func formValidated(isValid: Bool) {
         // Should be overriden
     }

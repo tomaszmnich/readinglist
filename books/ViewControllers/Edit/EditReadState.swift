@@ -53,9 +53,34 @@ class EditReadState: ReadStateForm {
         }
     }
     
+    func anyChanges() -> Bool {
+        if readState.value != bookToEdit.readState || currentPage.value != bookToEdit.currentPage?.intValue || notes.value != bookToEdit.notes {
+            return true
+        }
+        
+        if readState.value == .toRead {
+            return false
+        }
+        if readState.value == .reading {
+            return startedReading.value != bookToEdit.startedReading
+        }
+        else {
+            return startedReading.value != bookToEdit.startedReading || finishedReading.value != bookToEdit.finishedReading
+        }
+    }
+    
     @IBAction func cancelWasPressed(_ sender: UIBarButtonItem) {
-        // Just exit
-        self.view.endEditing(true)
-        self.navigationController?.dismiss(animated: true, completion: nil)
+        if anyChanges() {
+            // Confirm exit dialog
+            let confirmExit = UIAlertController(title: "Unsaved changes", message: "Are you sure you want to discard your unsaved changes?", preferredStyle: .actionSheet)
+            confirmExit.addAction(UIAlertAction(title: "Discard", style: .destructive){ [unowned self] _ in
+                self.dismiss()
+            })
+            confirmExit.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            present(confirmExit, animated: true, completion: nil)
+        }
+        else {
+            dismiss()
+        }
     }
 }
