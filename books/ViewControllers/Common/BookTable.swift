@@ -122,7 +122,7 @@ class BookTable: AutoUpdatingTableViewController {
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         if editing {
-            let actionButton = UIBarButtonItem(image: #imageLiteral(resourceName: "MoreIcon"), style: .plain, target: self, action: #selector(editActionButtonPressed(_:)))
+            let actionButton = UIBarButtonItem(image: #imageLiteral(resourceName: "MoreFilledIcon"), style: .plain, target: self, action: #selector(editActionButtonPressed(_:)))
             actionButton.isEnabled = false
             navigationItem.rightBarButtonItem = actionButton
         }
@@ -143,7 +143,9 @@ class BookTable: AutoUpdatingTableViewController {
     
     override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         guard isEditing else { return }
-        navigationItem.rightBarButtonItem!.isEnabled = tableView.indexPathsForSelectedRows != nil && tableView.indexPathsForSelectedRows!.count > 0
+        if tableView.indexPathsForSelectedRows?.isEmpty ?? true {
+            navigationItem.rightBarButtonItem!.isEnabled = false
+        }
     }
     
     @objc func editActionButtonPressed(_ sender: UIBarButtonItem) {
