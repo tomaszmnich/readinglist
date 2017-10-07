@@ -106,10 +106,11 @@ class ReadingTable: BookTable {
             callback(true)
         }
         leadingSwipeAction.backgroundColor = readStateOfSection == .toRead ? UIColor.buttonBlue : UIColor.flatGreen
+        leadingSwipeAction.image = readStateOfSection == .toRead ? #imageLiteral(resourceName: "Play") : #imageLiteral(resourceName: "Complete")
         actions.insert(leadingSwipeAction, at: 0)
         
         let configuration = UISwipeActionsConfiguration(actions: actions)
-        configuration.performsFirstActionWithFullSwipe = false
+        configuration.performsFirstActionWithFullSwipe = true
         
         return configuration
     }

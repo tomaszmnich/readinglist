@@ -315,10 +315,12 @@ class BookTable: AutoUpdatingTableViewController {
         let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { [unowned self] _,_,callback in
             self.presentDeleteBookAlert(indexPath: indexPath, callback: callback)
         }
-        let editAction = UIContextualAction(style: .normal, title: "Edit Book") { [unowned self] _,_,callback in
+        deleteAction.image = #imageLiteral(resourceName: "Trash")
+        let editAction = UIContextualAction(style: .normal, title: "Edit") { [unowned self] _,_,callback in
             self.performSegue(withIdentifier: "editBook", sender: self.resultsController.object(at: indexPath))
             callback(true)
         }
+        editAction.image = #imageLiteral(resourceName: "Literature")
         let configuration = UISwipeActionsConfiguration(actions: [deleteAction, editAction])
         configuration.performsFirstActionWithFullSwipe = false
         return configuration
@@ -326,10 +328,11 @@ class BookTable: AutoUpdatingTableViewController {
     
     @available(iOS 11.0, *)
     override func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let editReadStateAction = UIContextualAction(style: .normal, title: "Edit Log") { [unowned self] _,_,callback in
+        let editReadStateAction = UIContextualAction(style: .normal, title: "Log") { [unowned self] _,_,callback in
             self.performSegue(withIdentifier: "editReadState", sender: self.resultsController.object(at: indexPath))
             callback(true)
         }
+        editReadStateAction.image = #imageLiteral(resourceName: "Timetable")
         let configuration = UISwipeActionsConfiguration(actions: [editReadStateAction])
         configuration.performsFirstActionWithFullSwipe = false
         return configuration
