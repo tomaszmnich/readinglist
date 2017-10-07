@@ -60,14 +60,14 @@ class EditBook: BookMetadataForm {
             return true
         }
         
-        let metadataCopy = BookMetadata(book: bookToEdit)
-        populateMetadata(metadataCopy)
+        let newMetadata = BookMetadata(book: bookToEdit)
+        populateMetadata(newMetadata)
         
-        if !initialMetadata.authors.elementsEqual(metadataCopy.authors, by: {$0.lastName == $1.lastName && $0.firstNames == $1.firstNames}) {
-            return false
+        if !initialMetadata.authors.elementsEqual(newMetadata.authors, by: {$0.lastName == $1.lastName && $0.firstNames == $1.firstNames}) {
+            return true
         }
-        if !initialMetadata.subjects.elementsEqual(metadataCopy.subjects, by: {$0 == $1}) {
-            return false
+        if !initialMetadata.subjects.elementsEqual(newMetadata.subjects, by: {$0 == $1}) {
+            return true
         }
 
         if let existingDataHash = initialCoverImageDataHash, let currentImage = image.value {
