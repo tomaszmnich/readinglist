@@ -303,7 +303,7 @@ class BookDetails: UIViewController {
                 })
             }
             previewActions.append(UIPreviewAction(title: "Delete", style: .destructive) { _,_ in
-                book.deleteAndLog()
+                book.delete()
             })
             return previewActions
         }

@@ -67,7 +67,7 @@ class BookTableUpdater: TableUpdater<Book, BookTableViewCell> {
 }
 
 class BookTable: AutoUpdatingTableViewController {
-    
+
     var resultsController: NSFetchedResultsController<Book>!
     var resultsFilterer: FetchedResultsFilterer<Book, BookPredicateBuilder>!
     var readStates: [BookReadState]!
@@ -119,9 +119,92 @@ class BookTable: AutoUpdatingTableViewController {
         super.viewDidLoad()
     }
     
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        if editing {
+            let actionButton = UIBarButtonItem(image: #imageLiteral(resourceName: "MoreIcon"), style: .plain, target: self, action: #selector(editActionButtonPressed(_:)))
+            actionButton.isEnabled = false
+            navigationItem.rightBarButtonItem = actionButton
+        }
+        else {
+            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addWasPressed(_:)))
+        }
+    }
+    
     @objc func bookSortChanged() {
         buildResultsController()
         tableView.reloadData()
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard isEditing else { return }
+        navigationItem.rightBarButtonItem!.isEnabled = true
+    }
+    
+    override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        guard isEditing else { return }
+        navigationItem.rightBarButtonItem!.isEnabled = tableView.indexPathsForSelectedRows != nil && tableView.indexPathsForSelectedRows!.count > 0
+    }
+    
+    @objc func editActionButtonPressed(_ sender: UIBarButtonItem) {
+        guard let selectedRows = tableView.indexPathsForSelectedRows, selectedRows.count > 0 else { return }
+        
+        let optionsAlert = UIAlertController(title: "Edit \(selectedRows.count) book\(selectedRows.count == 1 ? "" : "s")", message: nil, preferredStyle: .actionSheet)
+        
+        let sectionIndexes = selectedRows.map{$0.section}.distinct()
+        if sectionIndexes.count == 1 {
+            let readState = readStateForSection(sectionIndexes[0])
+            if readState == .toRead || readState == .reading {
+                var title = readState == .toRead ? "Start" : "Finish"
+                if selectedRows.count > 1 {
+                    title += " All"
+                }
+                optionsAlert.addAction(UIAlertAction(title: title, style: .default) { [unowned self] _ in
+                    let books = selectedRows.map{ [unowned self] in
+                        self.resultsController.object(at: $0)
+                    }
+                    for book in books {
+                        if readState == .toRead {
+                            book.transistionToReading(log: false)
+                        }
+                        else {
+                            book.transistionToFinished(log: false)
+                        }
+                    }
+                    UserEngagement.logEvent(.bulkEditReadState)
+                    UserEngagement.onReviewTrigger()
+                })
+            }
+        }
+        
+        optionsAlert.addAction(UIAlertAction(title: "Delete\(selectedRows.count > 1 ? " All" : "")", style: .destructive) { [unowned self] _ in
+            // Are you sure?
+            let confirmDeleteAlert = UIAlertController(title: "Confirm deletion of \(selectedRows.count) book\(selectedRows.count == 1 ? "" : "s")", message: nil, preferredStyle: .actionSheet)
+            if let popPresenter = confirmDeleteAlert.popoverPresentationController {
+                popPresenter.barButtonItem = sender
+            }
+            confirmDeleteAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            confirmDeleteAlert.addAction(UIAlertAction(title: "Delete", style: .destructive) { [unowned self] _ in
+                // Collect the books up-front, since the selected row indexes will change as we modify them
+                let books = selectedRows.map{ [unowned self] in
+                    self.resultsController.object(at: $0)
+                }
+                for book in books {
+                    book.delete(log: false)
+                }
+                UserEngagement.logEvent(.bulkDeleteBook)
+                UserEngagement.onReviewTrigger()
+            })
+            self.present(confirmDeleteAlert, animated: true)
+        })
+        optionsAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        
+        // For iPad, set the popover presentation controller's source
+        if let popPresenter = optionsAlert.popoverPresentationController {
+            popPresenter.barButtonItem = sender
+        }
+        
+        self.present(optionsAlert, animated: true, completion: nil)
     }
     
     func footerText() -> String? {
@@ -218,7 +301,7 @@ class BookTable: AutoUpdatingTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
-        return false
+        return true
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -340,7 +423,7 @@ class BookTable: AutoUpdatingTableViewController {
     
     func presentDeleteBookAlert(indexPath: IndexPath, callback: ((Bool) -> ())?) {
         let bookToDelete = self.resultsController.object(at: indexPath)
-        let confirmDeleteAlert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        let confirmDeleteAlert = UIAlertController(title: "Confirm delete", message: nil, preferredStyle: .actionSheet)
         if let popPresenter = confirmDeleteAlert.popoverPresentationController {
             let cell = self.tableView.cellForRow(at: indexPath)!
             popPresenter.sourceRect = cell.frame
@@ -352,7 +435,7 @@ class BookTable: AutoUpdatingTableViewController {
             callback?(false)
         })
         confirmDeleteAlert.addAction(UIAlertAction(title: "Delete", style: .destructive) { _ in
-            bookToDelete.deleteAndLog()
+            bookToDelete.delete()
             callback?(true)
         })
         self.present(confirmDeleteAlert, animated: true, completion: nil)

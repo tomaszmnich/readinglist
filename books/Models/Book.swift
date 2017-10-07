@@ -119,25 +119,29 @@ extension Book {
         currentPage = readingInformation.currentPage == nil ? nil : NSNumber(integerLiteral: readingInformation.currentPage!)
     }
     
-    func transistionToReading() {
+    func transistionToReading(log: Bool = true) {
         let reading = BookReadingInformation(readState: .reading, startedWhen: Date(), finishedWhen: nil, currentPage: nil)
-        updateReadStateAndLog(readingInformation: reading)
+        updateReadState(with: reading, log: log)
     }
     
-    func transistionToFinished() {
+    func transistionToFinished(log: Bool = true) {
         let finished = BookReadingInformation(readState: .finished, startedWhen: self.startedReading!, finishedWhen: Date(), currentPage: nil)
-        updateReadStateAndLog(readingInformation: finished)
+        updateReadState(with: finished, log: log)
     }
     
-    private func updateReadStateAndLog(readingInformation: BookReadingInformation) {
+    private func updateReadState(with readingInformation: BookReadingInformation, log: Bool) {
         appDelegate.booksStore.update(book: self, withReadingInformation: readingInformation)
-        UserEngagement.logEvent(.transitionReadState)
-        UserEngagement.onReviewTrigger()
+        if log {
+            UserEngagement.logEvent(.transitionReadState)
+            UserEngagement.onReviewTrigger()
+        }
     }
     
-    func deleteAndLog() {
+    func delete(log: Bool = true) {
         appDelegate.booksStore.deleteBook(self)
-        UserEngagement.logEvent(.deleteBook)
+        if log {
+            UserEngagement.logEvent(.deleteBook)
+        }
     }
     
     static let csvExport = CsvExport<Book>(columns:
