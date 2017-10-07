@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreSpotlight
 import Eureka
 
 class TabBarController: UITabBarController {
@@ -40,6 +41,18 @@ class TabBarController: UITabBarController {
     
     func simulateBookSelection(_ book: Book, allowTableObscuring: Bool) {
         selectTab(forState: book.readState).simulateBookSelection(book, allowTableObscuring: allowTableObscuring)
+    }
+    
+    override func restoreUserActivityState(_ activity: NSUserActivity) {
+        // Check that the user activity corresponds to a book which we have a row for
+        guard let identifier = activity.userInfo?[CSSearchableItemActivityIdentifier] as? String,
+            let identifierUrl = URL(string: identifier),
+            let selectedBook = appDelegate.booksStore.get(bookIdUrl: identifierUrl) else { return }
+        
+        // Dismiss any modally presented VCs (edit book, etc).
+        presentedViewController?.dismiss(animated: false)
+
+        simulateBookSelection(selectedBook, allowTableObscuring: true)
     }
     
     override func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {

@@ -39,6 +39,7 @@ class UserEngagement {
         case editReadState = "Edit Read State"
         case searchOnlineQuickAction = "Quick Action Search Online"
         case scanBarcodeQuickAction = "Quick Action Scan Barcode"
+        case spotlightSearch = "Spotlight Search"
     }
     
     static func logEvent(_ event: Event) {

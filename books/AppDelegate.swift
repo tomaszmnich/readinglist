@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreSpotlight
 import Fabric
 import Crashlytics
 import SVProgressHUD
@@ -58,6 +59,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         #endif
         UserEngagement.onAppOpen()
+    }
+    
+    func application(_ application: UIApplication, willContinueUserActivityWithType userActivityType: String) -> Bool {
+        return userActivityType == CSSearchableItemActionType
+    }
+
+    func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([Any]?) -> Void) -> Bool {
+        if userActivity.activityType == CSSearchableItemActionType && userActivity.userInfo?[CSSearchableItemActivityIdentifier] is String {
+            UserEngagement.logEvent(.spotlightSearch)
+            tabBarController.restoreUserActivityState(userActivity)
+            return true
+        }
+        return false
     }
     
     func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {

@@ -118,6 +118,12 @@ extension Book {
         finishedReading = readingInformation.finishedReading
         currentPage = readingInformation.currentPage == nil ? nil : NSNumber(integerLiteral: readingInformation.currentPage!)
     }
+
+    func toSpotlightItem() -> SpotlightItem {
+        let spotlightTitle = "\(title) - \(authorsFirstLast)"
+        
+        return SpotlightItem(uniqueIdentifier: objectID.uriRepresentation().absoluteString, title: spotlightTitle, description: bookDescription, thumbnailImageData: coverImage)
+    }
     
     func transistionToReading(log: Bool = true) {
         let reading = BookReadingInformation(readState: .reading, startedWhen: Date(), finishedWhen: nil, currentPage: nil)

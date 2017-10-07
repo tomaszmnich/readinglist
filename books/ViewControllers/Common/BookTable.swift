@@ -9,6 +9,7 @@
 import UIKit
 import DZNEmptyDataSet
 import CoreData
+import CoreSpotlight
 
 class BookTableViewCell: UITableViewCell, ConfigurableCell {
     @IBOutlet weak var titleLabel: UILabel!

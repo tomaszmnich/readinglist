@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import CoreSpotlight
 import SVProgressHUD
 
 class BookDetailsViewModel {
