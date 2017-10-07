@@ -232,43 +232,16 @@ class BookMetadataForm: FormViewController {
             || publicationDate.value != nil || descriptionField.value != nil || image.value != nil
     }
     
-    @discardableResult
-    func populateMetadata(_ metadata: BookMetadata) -> Bool {
-        var changes = false
-        if metadata.title != titleField.value {
-            metadata.title = titleField.value
-            changes = true
-        }
-        if !metadata.authors.elementsEqual(authors, by: {ele1, ele2 -> Bool in
-            return ele1.firstNames == ele2.firstNames && ele1.lastName == ele2.lastName
-        }) {
-            metadata.authors = authors
-            changes = true
-        }
-        if metadata.pageCount != pageCount.value {
-            metadata.pageCount = pageCount.value
-            changes = true
-        }
-        if metadata.subjects != subjects {
-            metadata.subjects = subjects
-            changes = true
-        }
-        if metadata.publicationDate != publicationDate.value {
-            metadata.publicationDate = publicationDate.value
-            changes = true
-        }
-        if metadata.bookDescription != descriptionField.value {
-            metadata.bookDescription = descriptionField.value
-            changes = true
-        }
+    func populateMetadata(_ metadata: BookMetadata) {
+        metadata.title = titleField.value
+        metadata.authors = authors
+        metadata.pageCount = pageCount.value
+        metadata.subjects = subjects
+        metadata.publicationDate = publicationDate.value
+        metadata.bookDescription = descriptionField.value
+        
         // FUTURE: it would be nice if we didn't have to reencode to JPEG every time
-        let newImage = image.value == nil ? nil : UIImageJPEGRepresentation(image.value!, 0.7)
-        if metadata.coverImage != newImage {
-            metadata.coverImage = newImage
-            changes = true
-        }
-
-        return changes
+        metadata.coverImage = image.value == nil ? nil : UIImageJPEGRepresentation(image.value!, 0.7)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

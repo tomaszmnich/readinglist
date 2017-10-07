@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1C8D13781F88F224004A7F18 /* MD5.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C8D13771F88F224004A7F18 /* MD5.swift */; };
 		1CA61FF61F861AAB00DD88F1 /* EditReadState.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CA61FF51F861AAB00DD88F1 /* EditReadState.storyboard */; };
 		1CA61FF81F861ABC00DD88F1 /* EditBook.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CA61FF71F861ABC00DD88F1 /* EditBook.storyboard */; };
 		49043DB71EBF1E0B00E74370 /* SearchBooksEmptyDataset.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49043DB61EBF1E0B00E74370 /* SearchBooksEmptyDataset.xib */; };
@@ -97,6 +98,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1C8D13771F88F224004A7F18 /* MD5.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MD5.swift; sourceTree = "<group>"; };
+		1C8D137A1F88F316004A7F18 /* books-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "books-Bridging-Header.h"; sourceTree = "<group>"; };
 		1CA61FF51F861AAB00DD88F1 /* EditReadState.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = EditReadState.storyboard; sourceTree = "<group>"; };
 		1CA61FF71F861ABC00DD88F1 /* EditBook.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = EditBook.storyboard; sourceTree = "<group>"; };
 		297D92A68CB2906FDBD31ED9 /* Pods_books_UnitTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_books_UnitTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -287,6 +290,7 @@
 				4937A1471E9E1FB900A3B0D1 /* DebugSettings.swift */,
 				49D0FAAA1F2B284000101EE1 /* UserEngagement.swift */,
 				49B8D8E01F499A5300D4C4EF /* UserSettings.swift */,
+				1C8D13771F88F224004A7F18 /* MD5.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -342,6 +346,7 @@
 				241740D919B869177546F852 /* Frameworks */,
 				14655047BD58646296558121 /* Pods */,
 				495C5D0D1BF1404D00E00C07 /* Products */,
+				1C8D137A1F88F316004A7F18 /* books-Bridging-Header.h */,
 			);
 			sourceTree = "<group>";
 		};
@@ -848,6 +853,7 @@
 				4937A1481E9E1FB900A3B0D1 /* DebugSettings.swift in Sources */,
 				498B4D4D1CB1AB7A00C5F38B /* SplitViewController.swift in Sources */,
 				491F14621C02228C0052B355 /* ScanBarcode.swift in Sources */,
+				1C8D13781F88F224004A7F18 /* MD5.swift in Sources */,
 				49CEB80A1E9D8C06003FD859 /* DebugSettingsViewController.swift in Sources */,
 				49B8D8EB1F4CC85E00D4C4EF /* BookMapping_6_7.xcmappingmodel in Sources */,
 				49BDCC6C1CD6120400F20AAE /* Utilities.swift in Sources */,
@@ -1026,6 +1032,7 @@
 			baseConfigurationReference = 76A2E2AAC7E93BC8BDDE2157 /* Pods-books.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "books/Reading List.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -1036,6 +1043,8 @@
 				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\" \"-D\" \"DEBUG\"";
 				PRODUCT_BUNDLE_IDENTIFIER = com.andrewbennet.books;
 				PRODUCT_NAME = "Reading List";
+				SWIFT_OBJC_BRIDGING_HEADER = "books-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1047,6 +1056,7 @@
 			baseConfigurationReference = BCE0CE831B8E4C2F1ABC627E /* Pods-books.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "books/Reading List.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer: Andrew Bennet (NSVAF8RDK6)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -1055,6 +1065,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.andrewbennet.books;
 				PRODUCT_NAME = "Reading List";
+				SWIFT_OBJC_BRIDGING_HEADER = "books-Bridging-Header.h";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

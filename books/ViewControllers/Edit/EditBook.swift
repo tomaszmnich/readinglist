@@ -12,6 +12,8 @@ import Eureka
 
 class EditBook: BookMetadataForm {
     var bookToEdit: Book!
+    var initialMetadata: BookMetadata!
+    var initialCoverImageDataHash: MD5?
     
     @IBOutlet weak var doneButton: UIBarButtonItem!
     
@@ -39,15 +41,41 @@ class EditBook: BookMetadataForm {
         }
         
         // Initialise the form with the book values
-        isbnField.value = bookToEdit.isbn13
-        if bookToEdit.isbn13 == nil {
+        initialMetadata = BookMetadata(book: bookToEdit)
+        isbnField.value = initialMetadata.isbn13
+        if initialMetadata.isbn13 == nil {
             isbnField.section!.remove(at: isbnField.indexPath!.row)
         }
-        titleField.value = bookToEdit.title
-        pageCount.value = bookToEdit.pageCount == nil ? nil : Int(truncating: bookToEdit.pageCount!)
-        publicationDate.value = bookToEdit.publicationDate
-        descriptionField.value = bookToEdit.bookDescription
-        image.value = UIImage(optionalData: bookToEdit.coverImage)
+        titleField.value = initialMetadata.title
+        pageCount.value = initialMetadata.pageCount
+        publicationDate.value = initialMetadata.publicationDate
+        descriptionField.value = initialMetadata.bookDescription
+        image.value = UIImage(optionalData: initialMetadata.coverImage)
+        initialCoverImageDataHash = image.value == nil ? nil : MD5(data: UIImagePNGRepresentation(image.value!)!)
+    }
+    
+    func metadataChanges() -> Bool {
+        if initialMetadata.title != titleField.value || initialMetadata.pageCount != pageCount.value
+            || initialMetadata.publicationDate != publicationDate.value || initialMetadata.bookDescription != descriptionField.value {
+            return true
+        }
+        
+        let metadataCopy = BookMetadata(book: bookToEdit)
+        populateMetadata(metadataCopy)
+        
+        if !initialMetadata.authors.elementsEqual(metadataCopy.authors, by: {$0.lastName == $1.lastName && $0.firstNames == $1.firstNames}) {
+            return false
+        }
+        if !initialMetadata.subjects.elementsEqual(metadataCopy.subjects, by: {$0 == $1}) {
+            return false
+        }
+
+        if let existingDataHash = initialCoverImageDataHash, let currentImage = image.value {
+            return existingDataHash != MD5(data: UIImagePNGRepresentation(currentImage)!)
+        }
+        else {
+            return !(bookToEdit.coverImage == nil && image.value == nil)
+        }
     }
     
     func presentUpdateAltert() {
@@ -90,8 +118,7 @@ class EditBook: BookMetadataForm {
     
     @IBAction func cancelButtonWasPressed(_ sender: AnyObject) {
         // Check for changes
-        let newMetadata = BookMetadata(book: bookToEdit)
-        if populateMetadata(newMetadata) {
+        if metadataChanges() {
             // Confirm exit dialog
             let confirmExit = UIAlertController(title: "Unsaved changes", message: "Are you sure you want to discard your unsaved changes?", preferredStyle: .actionSheet)
             confirmExit.addAction(UIAlertAction(title: "Discard", style: .destructive){ [unowned self] _ in
