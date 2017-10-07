@@ -8,6 +8,7 @@
 
 import Eureka
 import UIKit
+import ImageRow
 
 class BookMetadataForm: FormViewController {
     

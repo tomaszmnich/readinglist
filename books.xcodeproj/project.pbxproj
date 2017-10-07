@@ -22,8 +22,6 @@
 		491C84331CF630B600894313 /* CreateBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491C84321CF630B600894313 /* CreateBook.swift */; };
 		491C84351CF6519800894313 /* EditBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491C84341CF6519800894313 /* EditBook.swift */; };
 		491F14621C02228C0052B355 /* ScanBarcode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491F14611C02228C0052B355 /* ScanBarcode.swift */; };
-		49225FAC1F52284E008686B8 /* ImageRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49225FA91F52284E008686B8 /* ImageRow.swift */; };
-		49225FAD1F52284E008686B8 /* ImagePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49225FAA1F52284E008686B8 /* ImagePickerController.swift */; };
 		492500781C0B1B0000C149B5 /* BooksStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 492500771C0B1B0000C149B5 /* BooksStore.swift */; };
 		492710531F35BF3100286352 /* ExportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 492710521F35BF3100286352 /* ExportViewController.swift */; };
 		492710561F362E7E00286352 /* Settings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 492710551F362E7E00286352 /* Settings.storyboard */; };
@@ -118,8 +116,6 @@
 		491C84321CF630B600894313 /* CreateBook.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateBook.swift; sourceTree = "<group>"; };
 		491C84341CF6519800894313 /* EditBook.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditBook.swift; sourceTree = "<group>"; };
 		491F14611C02228C0052B355 /* ScanBarcode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScanBarcode.swift; sourceTree = "<group>"; };
-		49225FA91F52284E008686B8 /* ImageRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ImageRow.swift; path = ImageRow/ImageRow.swift; sourceTree = "<group>"; };
-		49225FAA1F52284E008686B8 /* ImagePickerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ImagePickerController.swift; path = ImageRow/ImagePickerController.swift; sourceTree = "<group>"; };
 		492500771C0B1B0000C149B5 /* BooksStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BooksStore.swift; sourceTree = "<group>"; };
 		492710521F35BF3100286352 /* ExportViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExportViewController.swift; sourceTree = "<group>"; };
 		492710541F360E9D00286352 /* books_6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = books_6.xcdatamodel; sourceTree = "<group>"; };
@@ -269,15 +265,6 @@
 				491C84271CF5027800894313 /* ReadStateForm.swift */,
 			);
 			path = Common;
-			sourceTree = "<group>";
-		};
-		49225FAE1F522856008686B8 /* ImageRow */ = {
-			isa = PBXGroup;
-			children = (
-				49225FA91F52284E008686B8 /* ImageRow.swift */,
-				49225FAA1F52284E008686B8 /* ImagePickerController.swift */,
-			);
-			name = ImageRow;
 			sourceTree = "<group>";
 		};
 		4925007A1C0B1CFC00C149B5 /* Data */ = {
@@ -438,7 +425,6 @@
 		49C5339D1DB280D80043E50E /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				49225FAE1F522856008686B8 /* ImageRow */,
 				49C5339E1DB281A10043E50E /* BookPredicateBuilder.swift */,
 				49097BA71CFB102B001AF1F9 /* FetchedResultsFilterer.swift */,
 				493056421DB1561C0086FDAD /* TableUpdater.swift */,
@@ -650,6 +636,7 @@
 				"${BUILT_PRODUCTS_DIR}/CHCSVParser/CHCSVParser.framework",
 				"${BUILT_PRODUCTS_DIR}/DZNEmptyDataSet/DZNEmptyDataSet.framework",
 				"${BUILT_PRODUCTS_DIR}/Eureka/Eureka.framework",
+				"${BUILT_PRODUCTS_DIR}/ImageRow/ImageRow.framework",
 				"${BUILT_PRODUCTS_DIR}/RxCocoa/RxCocoa.framework",
 				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/SVProgressHUD/SVProgressHUD.framework",
@@ -661,6 +648,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CHCSVParser.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DZNEmptyDataSet.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Eureka.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ImageRow.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SVProgressHUD.framework",
@@ -817,8 +805,6 @@
 				494D96E41E759D8900299752 /* AttributionsViewController.swift in Sources */,
 				4994706C1DB421A2008CB06E /* FinishedTable.swift in Sources */,
 				491C84351CF6519800894313 /* EditBook.swift in Sources */,
-				49225FAD1F52284E008686B8 /* ImagePickerController.swift in Sources */,
-				49225FAC1F52284E008686B8 /* ImageRow.swift in Sources */,
 				49C5339F1DB281A10043E50E /* BookPredicateBuilder.swift in Sources */,
 				491C84281CF5027800894313 /* ReadStateForm.swift in Sources */,
 				495FDC2E1CF8C676006DCF2E /* Extensions.swift in Sources */,
