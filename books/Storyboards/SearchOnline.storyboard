@@ -160,7 +160,7 @@
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
                     <navigationItem key="navigationItem" id="rf4-kT-NHt">
-                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="Z0U-W0-Vs9">
+                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="done" id="Z0U-W0-Vs9">
                             <connections>
                                 <action selector="doneWasPressed:" destination="7vF-2L-Pie" id="xVe-F4-yJC"/>
                             </connections>
