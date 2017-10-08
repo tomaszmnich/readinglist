@@ -18,7 +18,10 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var stackView: UIStackView!
-    
+    @IBOutlet weak var selectManyOrSingleToggle: UIBarButtonItem!
+    @IBOutlet weak var addAllButton: UIBarButtonItem!
+    @IBOutlet weak var toolbar: UIToolbar!
+
     let feedbackGeneratorWrapper = UIFeedbackGeneratorWrapper()
 
     var searchBar: UISearchBar!
@@ -27,15 +30,16 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
     let disposeBag = DisposeBag()
     
     let emptyDatasetView = UINib(nibName: "SearchBooksEmptyDataset", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! SearchBooksEmptyDataset
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // Fixes issue at https://stackoverflow.com/q/46228862/5513562
         self.definesPresentationContext = true
         
-        // Set DZN delegate
+        // Set DZN source and delegate
         tableView.emptyDataSetSource = self
+        tableView.emptyDataSetDelegate = self
 
         if #available(iOS 11.0, *) {
             let searchController = NoCancelButtonSearchController(searchResultsController: nil)
@@ -85,14 +89,15 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
                 self.searchBar.text!
             }
         
-        let searchTest = Observable.merge([autoSearch, searchTriggered])
+        let searchText = Observable.merge([autoSearch, searchTriggered])
+
         if #available(iOS 10.0, *) {
-            searchTest.subscribe(onNext: { [unowned self] _ in
+            searchText.subscribe(onNext: { [unowned self] _ in
                 self.feedbackGeneratorWrapper.generator.prepare()
             }).disposed(by: disposeBag)
         }
 
-        let searchResults = searchTest
+        let searchResults = searchText
             .observeOn(ConcurrentDispatchQueueScheduler(qos: .userInitiated))
             .flatMapLatest { searchText -> Observable<GoogleBooks.SearchResultsPage> in
                 SVProgressHUD.show(withStatus: "Searching...")
@@ -168,10 +173,20 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
             }
             .disposed(by: disposeBag)
         
-        // On cell selection, go to the next page
-        tableView.rx.modelSelected(SearchResultViewModel.self)
-            .subscribe(onNext: { [unowned self] model in
-                self.onModelSelected(model)
+        // On cell deselection, disable the Add button if there are no selected rows
+        tableView.rx.modelDeselected(SearchResultViewModel.self)
+            .subscribe(onNext: { [unowned self] _ in
+                guard self.tableView.isEditing else { return }
+                if (self.tableView.indexPathsForSelectedRows?.count ?? 0) == 0 {
+                    self.addAllButton.isEnabled = false
+                }
+            })
+            .disposed(by: disposeBag)
+
+        // On cell selection, go to the next page (or enable the Add button)
+        tableView.rx.itemSelected
+            .subscribe(onNext: { [unowned self] indexPath in
+                self.onBookSelection(indexPath)
             })
             .disposed(by: disposeBag)
     }
@@ -193,21 +208,18 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
         }
     }
     
-    func onModelSelected(_ model: SearchResultViewModel) {
-        UserEngagement.logEvent(.searchOnline)
+    func onBookSelection(_ indexPath: IndexPath) {
+        let model = (tableView.cellForRow(at: indexPath) as! SearchResultCell).viewModel!
         
         // Duplicate check
-        if let existingBook = appDelegate.booksStore.getIfExists(googleBooksId: model.googleBooksId, isbn: model.isbn13) {
-            
+        let existingBook = appDelegate.booksStore.getIfExists(googleBooksId: model.googleBooksId, isbn: model.isbn13)
+        guard existingBook == nil else {
             let alert = duplicateBookAlertController(goToExistingBook: { [unowned self] in
                 self.presentingViewController!.dismiss(animated: true) {
-                    appDelegate.tabBarController.simulateBookSelection(existingBook, allowTableObscuring: true)
+                    appDelegate.tabBarController.simulateBookSelection(existingBook!, allowTableObscuring: true)
                 }
             }, cancel: { [unowned self] in
-                // Deselect the row after dismissing the alert
-                if let selectedRow = self.tableView.indexPathForSelectedRow {
-                    self.tableView.deselectRow(at: selectedRow, animated: true)
-                }
+                self.tableView.deselectRow(at: indexPath, animated: true)
             })
             if let presentedController = presentedViewController {
                 presentedController.present(alert, animated: true)
@@ -215,8 +227,16 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
             else {
                 present(alert, animated: true)
             }
+            return
+        }
+
+        // If we are in multiple selection mode (i.e. Edit mode), switch the Add All button on
+        if self.tableView.isEditing {
+            self.addAllButton.isEnabled = true
         }
         else {
+            // Otherwise, fetch and segue
+            UserEngagement.logEvent(.searchOnline)
             fetchAndSegue(googleBooksId: model.googleBooksId)
         }
     }
@@ -249,6 +269,71 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
         self.dismiss(animated: true, completion: nil)
     }
     
+    @IBAction func selectManyOrSingleTogglePressed(_ sender: Any) {
+        tableView.setEditing(!tableView.isEditing, animated: true)
+        selectManyOrSingleToggle.title = tableView.isEditing ? "Select Single" : "Select Many"
+        if !tableView.isEditing {
+            addAllButton.isEnabled = false
+        }
+    }
+    
+    @IBAction func addAllPressed(_ sender: Any) {
+        guard tableView.isEditing, let selectedRows = tableView.indexPathsForSelectedRows, selectedRows.count > 0 else { return }
+        
+        // If there is only 1 cell selected, we might as well proceed as we could in single selection mode
+        guard selectedRows.count > 1 else {
+            let model: SearchResultViewModel = try! self.tableView.rx.model(at: selectedRows[0])
+            fetchAndSegue(googleBooksId: model.googleBooksId)
+            return
+        }
+
+        let alert = UIAlertController(title: "Add \(selectedRows.count) books", message: "Are you sure you want to add all \(selectedRows.count) selected books? They will be added to the 'To Read' section.", preferredStyle: .actionSheet)
+        
+        alert.addAction(UIAlertAction(title: "Add All", style: .default, handler: {[unowned self] _ in
+            SVProgressHUD.show(withStatus: "Adding...")
+            let fetches = DispatchGroup()
+            var lastAddedBook: Book?
+            for selectedIndex in selectedRows {
+                let model: SearchResultViewModel = try! self.tableView.rx.model(at: selectedIndex)
+                
+                var errorCount = 0
+                fetches.enter()
+                GoogleBooks.fetch(googleBooksId: model.googleBooksId) { resultPage in
+                    DispatchQueue.main.async {
+                        if let metadata = resultPage.result.value?.toBookMetadata() {
+                            lastAddedBook = appDelegate.booksStore.create(from: metadata, readingInformation: BookReadingInformation.toRead())
+                        }
+                        else {
+                            errorCount += 1
+                        }
+                        fetches.leave()
+                    }
+                }
+                fetches.notify(queue: .main) {
+                    SVProgressHUD.dismiss()
+                    if errorCount == selectedRows.count {
+                        // If they all errored, don't dismiss and show an error
+                        SVProgressHUD.showError(withStatus: "An error occurred. No books were added.")
+                    }
+                    else {
+                        self.presentingViewController!.dismiss(animated: true) {
+                            if let lastAddedBook = lastAddedBook {
+                                // Scroll to the last added book. This is a bit random, but better than nothing probably
+                                appDelegate.tabBarController.simulateBookSelection(lastAddedBook, allowTableObscuring: false)
+                            }
+                            // Display an error if any books could not be added
+                            if errorCount != 0 {
+                                SVProgressHUD.showError(withStatus: "\(errorCount) book\(errorCount == 1 ? "" : "s") could not be added due to an error.")
+                            }
+                        }
+                    }
+                }
+            }
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
+    
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
     }
@@ -259,13 +344,21 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
     }
 }
 
-extension SearchOnline: DZNEmptyDataSetSource {
+extension SearchOnline: DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     func customView(forEmptyDataSet scrollView: UIScrollView!) -> UIView! {
         return emptyDatasetView
     }
     
     func verticalOffset(forEmptyDataSet scrollView: UIScrollView!) -> CGFloat {
         return -(tableView.frame.height - 250)/2
+    }
+    
+    func emptyDataSetDidAppear(_ scrollView: UIScrollView!) {
+        toolbar.isHidden = true
+    }
+    
+    func emptyDataSetDidDisappear(_ scrollView: UIScrollView!) {
+        toolbar.isHidden = false
     }
 }
 

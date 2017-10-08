@@ -47,8 +47,8 @@
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="jHg-wa-mMg">
                                 <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <subviews>
-                                    <tableView contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="92" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="1nj-su-2IL">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
+                                    <tableView contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelectionDuringEditing="YES" allowsMultipleSelectionDuringEditing="YES" rowHeight="92" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="1nj-su-2IL">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="570"/>
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <prototypes>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="0.0" reuseIdentifier="SearchResultCell" rowHeight="92" id="pxp-e4-NYa" customClass="SearchResultCell" customModule="Reading_List" customModuleProvider="target">
@@ -98,6 +98,22 @@
                                             </tableViewCell>
                                         </prototypes>
                                     </tableView>
+                                    <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JrW-mz-Egf">
+                                        <rect key="frame" x="0.0" y="570" width="375" height="33"/>
+                                        <items>
+                                            <barButtonItem title="Select Many" id="aGQ-VQ-E9i">
+                                                <connections>
+                                                    <action selector="selectManyOrSingleTogglePressed:" destination="coT-wT-mpQ" id="mAi-Ae-zyD"/>
+                                                </connections>
+                                            </barButtonItem>
+                                            <barButtonItem style="plain" systemItem="flexibleSpace" id="4Zk-uv-usy"/>
+                                            <barButtonItem enabled="NO" title="Add All" style="done" id="GmD-Nk-kw9">
+                                                <connections>
+                                                    <action selector="addAllPressed:" destination="coT-wT-mpQ" id="SEo-Cl-Akk"/>
+                                                </connections>
+                                            </barButtonItem>
+                                        </items>
+                                    </toolbar>
                                 </subviews>
                             </stackView>
                         </subviews>
@@ -118,8 +134,11 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="addAllButton" destination="GmD-Nk-kw9" id="1Y8-q8-owa"/>
+                        <outlet property="selectManyOrSingleToggle" destination="aGQ-VQ-E9i" id="BZr-Nh-XCL"/>
                         <outlet property="stackView" destination="jHg-wa-mMg" id="CL7-ef-SOU"/>
                         <outlet property="tableView" destination="1nj-su-2IL" id="yBi-z1-ZuF"/>
+                        <outlet property="toolbar" destination="JrW-mz-Egf" id="QG0-58-mEA"/>
                         <segue destination="7vF-2L-Pie" kind="show" identifier="searchResultSelected" id="S39-PJ-HRt"/>
                     </connections>
                 </viewController>
