@@ -236,12 +236,12 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
         }
         else {
             // Otherwise, fetch and segue
-            UserEngagement.logEvent(.searchOnline)
             fetchAndSegue(googleBooksId: model.googleBooksId)
         }
     }
     
     func fetchAndSegue(googleBooksId: String) {
+        UserEngagement.logEvent(.searchOnline)
         SVProgressHUD.show(withStatus: "Loading...")
         GoogleBooks.fetch(googleBooksId: googleBooksId) { resultPage in
             DispatchQueue.main.async {
@@ -280,7 +280,7 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
     @IBAction func addAllPressed(_ sender: Any) {
         guard tableView.isEditing, let selectedRows = tableView.indexPathsForSelectedRows, selectedRows.count > 0 else { return }
         
-        // If there is only 1 cell selected, we might as well proceed as we could in single selection mode
+        // If there is only 1 cell selected, we might as well proceed as we would in single selection mode
         guard selectedRows.count > 1 else {
             let model: SearchResultViewModel = try! self.tableView.rx.model(at: selectedRows[0])
             fetchAndSegue(googleBooksId: model.googleBooksId)
@@ -290,13 +290,16 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
         let alert = UIAlertController(title: "Add \(selectedRows.count) books", message: "Are you sure you want to add all \(selectedRows.count) selected books? They will be added to the 'To Read' section.", preferredStyle: .actionSheet)
         
         alert.addAction(UIAlertAction(title: "Add All", style: .default, handler: {[unowned self] _ in
+            UserEngagement.logEvent(.searchOnlineMultiple)
             SVProgressHUD.show(withStatus: "Adding...")
             let fetches = DispatchGroup()
             var lastAddedBook: Book?
+            var errorCount = 0
+            
+            // Queue up the fetches
             for selectedIndex in selectedRows {
                 let model: SearchResultViewModel = try! self.tableView.rx.model(at: selectedIndex)
                 
-                var errorCount = 0
                 fetches.enter()
                 GoogleBooks.fetch(googleBooksId: model.googleBooksId) { resultPage in
                     DispatchQueue.main.async {
@@ -309,22 +312,24 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
                         fetches.leave()
                     }
                 }
-                fetches.notify(queue: .main) {
-                    SVProgressHUD.dismiss()
-                    if errorCount == selectedRows.count {
-                        // If they all errored, don't dismiss and show an error
-                        SVProgressHUD.showError(withStatus: "An error occurred. No books were added.")
-                    }
-                    else {
-                        self.presentingViewController!.dismiss(animated: true) {
-                            if let lastAddedBook = lastAddedBook {
-                                // Scroll to the last added book. This is a bit random, but better than nothing probably
-                                appDelegate.tabBarController.simulateBookSelection(lastAddedBook, allowTableObscuring: false)
-                            }
-                            // Display an error if any books could not be added
-                            if errorCount != 0 {
-                                SVProgressHUD.showError(withStatus: "\(errorCount) book\(errorCount == 1 ? "" : "s") could not be added due to an error.")
-                            }
+            }
+            
+            // On completion, dismiss this view (or show an error if they all failed)
+            fetches.notify(queue: .main) {
+                SVProgressHUD.dismiss()
+                if errorCount == selectedRows.count {
+                    // If they all errored, don't dismiss and show an error
+                    SVProgressHUD.showError(withStatus: "An error occurred. No books were added.")
+                }
+                else {
+                    self.presentingViewController!.dismiss(animated: true) {
+                        if let lastAddedBook = lastAddedBook {
+                            // Scroll to the last added book. This is a bit random, but better than nothing probably
+                            appDelegate.tabBarController.simulateBookSelection(lastAddedBook, allowTableObscuring: false)
+                        }
+                        // Display an error if any books could not be added
+                        if errorCount != 0 {
+                            SVProgressHUD.showInfo(withStatus: "\(selectedRows.count - errorCount) book\(selectedRows.count - errorCount == 1 ? "" : "s") successfully added; \(errorCount) book\(errorCount == 1 ? "" : "s") could not be added due to an error.")
                         }
                     }
                 }
