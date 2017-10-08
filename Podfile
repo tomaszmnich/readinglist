@@ -12,7 +12,7 @@ target 'books' do
   pod 'RxSwift', '~> 4.0.0-beta'
   pod 'RxCocoa', '~> 4.0.0-beta'
   pod 'SVProgressHUD', '~> 2.2'
-  pod 'SimulatorStatusMagic', '~> 2.0'
+  pod 'SimulatorStatusMagic', :configurations => ['Debug']
   pod 'Fabric'
   pod 'Crashlytics'
   pod 'CHCSVParser', :git => 'https://github.com/davedelong/CHCSVParser.git'
