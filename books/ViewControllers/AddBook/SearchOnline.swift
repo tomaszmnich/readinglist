@@ -38,10 +38,10 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
         tableView.emptyDataSetSource = self
 
         if #available(iOS 11.0, *) {
-            let searchController = UISearchController(searchResultsController: nil)
+            let searchController = NoCancelButtonSearchController(searchResultsController: nil)
             searchController.obscuresBackgroundDuringPresentation = false
             searchController.hidesNavigationBarDuringPresentation = false
-
+            
             searchBar = searchController.searchBar
             navigationItem.searchController = searchController
             navigationItem.hidesSearchBarWhenScrolling = false
@@ -107,11 +107,9 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
             }
             .share(replay: 1)
         
-        // The Cancel button should map to an empty set of results. Hook into the text observable
+        // The clear search button should map to an empty set of results. Hook into the text observable
         // and filter to only include the events where the text box is empty
-        let emptySearch = searchBar.rx.text.orEmpty.filter { return $0.isEmpty }.map{_ in return}
-        
-        let clearResults = Observable.merge([searchBar.rx.cancelButtonClicked.asObservable(), emptySearch])
+        let clearResults = searchBar.rx.text.orEmpty.filter { return $0.isEmpty }
             .observeOn(ConcurrentDispatchQueueScheduler(qos: .userInitiated))
             .map { _ in GoogleBooks.SearchResultsPage.empty() }
             .share(replay: 1)
