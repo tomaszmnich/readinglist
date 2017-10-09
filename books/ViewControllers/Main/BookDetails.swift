@@ -235,7 +235,7 @@ class BookDetails: UIViewController {
         optionsAlert.addAction(UIAlertAction(title: "Edit Reading Log", style: .default) { [unowned self] _ in
             self.performSegue(withIdentifier: "editReadStateSegue", sender: self)
         })
-        optionsAlert.addAction(UIAlertAction(title: "Edit Book Details", style: .default){ [unowned self] _ in
+        optionsAlert.addAction(UIAlertAction(title: "Edit Book Details", style: .default) { [unowned self] _ in
             self.performSegue(withIdentifier: "editBookSegue", sender: self)
         })
         optionsAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
@@ -300,7 +300,7 @@ class BookDetails: UIViewController {
             }
             else if book.readState == .reading {
                 previewActions.append(UIPreviewAction(title: "Finish", style: .default){ _,_ in
-                    book.transistionToReading()
+                    book.transistionToFinished()
                 })
             }
             previewActions.append(UIPreviewAction(title: "Delete", style: .destructive) { _,_ in
