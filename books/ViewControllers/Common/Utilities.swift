@@ -76,7 +76,7 @@ func NavigationRow(title: String, segueName: String, initialiser: ((ButtonRow) -
     }
 }
 
-func ActionButton(title: String, updater: ((ButtonCellOf<String>, ButtonRow) -> Void)? = nil, action: @escaping () -> Void) -> ButtonRow {
+func ActionButton(title: String, action: @escaping () -> Void, updater: ((ButtonCellOf<String>, ButtonRow) -> Void)? = nil) -> ButtonRow {
     return ButtonRow() {
         $0.title = title
         }.cellUpdate{ cell, row in
@@ -85,6 +85,10 @@ func ActionButton(title: String, updater: ((ButtonCellOf<String>, ButtonRow) -> 
         }.onCellSelection{_,_ in
             action()
     }
+}
+
+func ActionButton(title: String, updater: ((ButtonCellOf<String>, ButtonRow) -> Void)? = nil, url: URL) -> ButtonRow {
+    return ActionButton(title: title, action: {UIApplication.shared.openUrlPlatformSpecific(url: url)}, updater: updater)
 }
 
 /**

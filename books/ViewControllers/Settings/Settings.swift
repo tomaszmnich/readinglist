@@ -21,18 +21,10 @@ class Settings: FormViewController, MFMailComposeViewControllerDelegate {
         super.viewDidLoad()
         
         form +++ Section(header: "General", footer: "If you find Reading List useful, please consider giving it a rating. If you have any suggestions, feedback is welcome 👍")
-            <<< ActionButton(title: "📚 About") {
-                UIApplication.shared.openUrlPlatformSpecific(url: URL(string: "https://www.readinglistapp.xyz")!)
-            }
-            <<< ActionButton(title: "👋 Share") { [unowned self] in
-                self.share()
-            }
-            <<< ActionButton(title: "❤️ Rate") {
-                UIApplication.shared.openUrlPlatformSpecific(url: URL(string: "itms-apps://\(self.appStoreAddress)?action=write-review")!)
-            }
-            <<< ActionButton(title: "💡 Feedback"){ [unowned self] in
-                self.sendFeedbackEmail()
-            }
+            <<< ActionButton(title: "📚 About", url: URL(string: "https://www.readinglistapp.xyz")!)
+            <<< ActionButton(title: "👋 Share", action: self.share)
+            <<< ActionButton(title: "❤️ Rate", url: URL(string: "itms-apps://\(self.appStoreAddress)?action=write-review")!)
+            <<< ActionButton(title: "💡 Feedback", action: self.sendFeedbackEmail)
         
         +++ Section(header: "Options", footer: "")
             <<< NavigationRow(title: "Book Sort Order", segueName: "sortOrder", initialiser: { [unowned self] row in
@@ -45,16 +37,12 @@ class Settings: FormViewController, MFMailComposeViewControllerDelegate {
         +++ Section(header: "Data", footer: "")
             <<< NavigationRow(title: "Import", segueName: "import")
             <<< NavigationRow(title: "Export", segueName: "export")
-            <<< ActionButton(title: "Delete All", updater: { cell, _ in
+            <<< ActionButton(title: "Delete All", action: self.deleteAllData) { cell, _ in
                 cell.textLabel?.textColor = .red
-            }) {[unowned self] in
-                self.deleteAllData()
             }
         
         +++ Section(header: "Open Source", footer: "Reading List v\(appDelegate.appVersion)\nDeveloped by Andrew Bennet")
-            <<< ActionButton(title: "View Source Code") {
-                UIApplication.shared.openUrlPlatformSpecific(url: URL(string: "https://github.com/AndrewBennet/readinglist")!)
-            }
+            <<< ActionButton(title: "View Source Code", url: URL(string: "https://github.com/AndrewBennet/readinglist")!)
             <<< NavigationRow(title: "Attributions", segueName: "attributions")
         
         #if DEBUG
