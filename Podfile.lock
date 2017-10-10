@@ -1,15 +1,15 @@
 PODS:
   - CHCSVParser (2.1.0)
-  - Crashlytics (3.8.6):
-    - Fabric (~> 1.6.3)
+  - Crashlytics (3.9.0):
+    - Fabric (~> 1.7.0)
   - DZNEmptyDataSet (1.8.1)
   - Eureka (4.0.1)
-  - Fabric (1.6.13)
-  - ImageRow (2.0.0):
+  - Fabric (1.7.0)
+  - ImageRow (3.0.0):
     - Eureka (~> 4.0)
-  - RxCocoa (4.0.0-beta.1):
-    - RxSwift (~> 4.0.0-beta.1)
-  - RxSwift (4.0.0-beta.1)
+  - RxCocoa (4.0.0-rc.0):
+    - RxSwift (~> 4.0.0-rc.0)
+  - RxSwift (4.0.0-rc.0)
   - SimulatorStatusMagic (2.0)
   - SVProgressHUD (2.2.1)
   - SwiftyJSON (3.1.4)
@@ -38,18 +38,18 @@ CHECKOUT OPTIONS:
     :commit: 3ee99563177e8b59c90b85516a868338212ab671
     :git: https://github.com/davedelong/CHCSVParser.git
   ImageRow:
-    :commit: 8616017237c16edfba722efae16d3eb764ca753f
+    :commit: a673639b85e83e5a6bd2841dc9cad948b62ed0d0
     :git: https://github.com/EurekaCommunity/ImageRow.git
 
 SPEC CHECKSUMS:
   CHCSVParser: 64da26e2b4ddbf7527f7f03120bf91d83d28f354
-  Crashlytics: 95d05f4e4c19a771250c4bd9ce344d996de32bbf
+  Crashlytics: 64aad5dd97249dd3ff94b979fea140144590cdd3
   DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
   Eureka: c8bd5cc07143b6f66268c208d28a246c99b41955
-  Fabric: 2fb5676bc811af011a04513451f463dac6803206
-  ImageRow: 4244313176b639ac15b8bf10e59de3b8db40a8fb
-  RxCocoa: ca6cc0f4453145d90002d80df8f9c83dd8fb7338
-  RxSwift: 29f07e0e72cc5b40f146c64cc520ea6a6a0c73e9
+  Fabric: e6be012366472553807dada21243c5ab8d904151
+  ImageRow: 2683a3b621210ea05c1f3a2fa294d8d14342d24c
+  RxCocoa: 62457355be73369670fbdf053a79a491552b64ed
+  RxSwift: 1dd09ceb11531c39adff4efe23556b1484e16967
   SimulatorStatusMagic: c8e958d70e0e0cd2d7cf33bb95014a222ddecf0a
   SVProgressHUD: db27c54e6e18bc903341661fc9feb55e04905cc4
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
