@@ -86,12 +86,12 @@ class Settings: FormViewController, MFMailComposeViewControllerDelegate {
         
         // The initial WARNING action
         let areYouSure = UIAlertController(title: "Warning", message: "This will delete all books saved in the application. Are you sure you want to continue?", preferredStyle: .alert)
-        areYouSure.addAction(UIAlertAction(title: "Delete", style: .destructive) { _ in
+        areYouSure.addAction(UIAlertAction(title: "Delete", style: .destructive) { [unowned self] _ in
             self.present(confirmDelete, animated: true)
         })
         areYouSure.addAction(UIAlertAction(title: "Cancel", style: .cancel))
         
-        self.present(areYouSure, animated: true)
+        present(areYouSure, animated: true)
     }
     
     func sendFeedbackEmail() {
