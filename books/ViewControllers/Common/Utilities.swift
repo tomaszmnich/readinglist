@@ -68,14 +68,9 @@ class NavRow<T: UIViewController> : Row<ButtonCellOf<String>> {
     
     init(title: String, embedInNav: Bool = true) {
         presentationMode = PresentationMode.show(controllerProvider: ControllerProvider.callback(builder: {
-            if embedInNav {
-                let nav = UINavigationController()
-                nav.viewControllers.append(T())
-                return nav
-            }
-            else {
-                return T()
-            }
+            let vc = T()
+            vc.navigationItem.title = title
+            return embedInNav ? UINavigationController(rootViewController: vc) : vc
         }), onDismiss: nil)
         super.init(tag: nil)
         displayValueFor = nil

@@ -35,7 +35,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 
         #if !DEBUG
-            Fabric.with([Crashlytics.self])
+            if UserSettings.sendAnalytics.value {
+                Fabric.with([Crashlytics.self])
+            }
         #endif
         
         // Prepare the progress display style. Switched to dark in 1.4 due to a bug in the display of light style
