@@ -16,7 +16,6 @@ class ImportViewController : FormViewController, UIDocumentPickerDelegate, UIDoc
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.title = "Import"
         
         form +++ Section(footer: """
             Tap the button to import books from a CSV file. The CSV file should have the following headers:
