@@ -16,6 +16,7 @@ class Settings: FormViewController, MFMailComposeViewControllerDelegate {
     
     let appStoreAddress = "itunes.apple.com/gb/app/reading-list-book-tracker/id1217139955"
     private let bookSortOrderKey = "sortOrder"
+    private let sendAnalyticsKey = "sendAnalytics"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,10 +36,28 @@ class Settings: FormViewController, MFMailComposeViewControllerDelegate {
             }
         
         +++ Section(header: "Data", footer: "")
-            <<< NavigationRow(title: "Import", segueName: "import")
-            <<< NavigationRow(title: "Export", segueName: "export")
+            <<< NavRow<ImportViewController>(title: "Import")
+            <<< NavRow<ExportViewController>(title: "Export")
             <<< ActionButton(title: "Delete All", action: self.deleteAllData) { cell, _ in
                 cell.textLabel?.textColor = .red
+            }
+            
+        +++ Section(header: "Privacy", footer: "To help improve this app, Reading List sends some anonymous usage statistics and crash reports.")
+            <<< SwitchRow() {
+                $0.tag = sendAnalyticsKey
+                $0.title = "Send Analytics"
+                $0.value = UserSettings.sendAnalytics.value
+                $0.onChange { [weak self] row in
+                    UserSettings.sendAnalytics.value = row.value!
+                    if row.value! {
+                        UserEngagement.logEvent(.enableAnalytics)
+                    }
+                    else {
+                        // If this is being turned off, let's try to persuade them to turn it back on
+                        UserEngagement.logEvent(.disableAnalytics)
+                        self?.analyticsPersuation()
+                    }
+                }
             }
         
         +++ Section(header: "Open Source", footer: "Reading List v\(appDelegate.appVersion)\nDeveloped by Andrew Bennet")
@@ -46,11 +65,23 @@ class Settings: FormViewController, MFMailComposeViewControllerDelegate {
             <<< NavigationRow(title: "Attributions", segueName: "attributions")
         
         #if DEBUG
-            form.allSections.last! <<< NavigationRow(title: "Debug Settings", segueName: "debugSettings")
+            form.allSections.last! <<< NavRow<DebugSettingsViewController>(title: "Debug Settings")
         #endif
     
         // Watch for changes in book sort order
         NotificationCenter.default.addObserver(self, selector: #selector(bookSortChanged), name: NSNotification.Name.onBookSortOrderChanged, object: nil)
+    }
+    
+    func analyticsPersuation() {
+        let alert = UIAlertController(title: "Turn off analytics?", message: "Reading List sends some anonymous usage statistics to helps me prioritise development. This never includes any information about your books.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Turn Off", style: .destructive))
+        alert.addAction(UIAlertAction(title: "Leave On", style: .default) { [unowned self] _ in
+            // Switch it back on
+            let switchRow = self.form.rowBy(tag: self.sendAnalyticsKey) as! SwitchRow
+            switchRow.value = true
+            switchRow.updateCell()
+        })
+        present(alert, animated: true)
     }
 
     @objc func bookSortChanged() {
@@ -58,7 +89,8 @@ class Settings: FormViewController, MFMailComposeViewControllerDelegate {
     }
     
     func tableView(_ tableView: UITableView, willDisplayFooterView view: UIView, forSection section: Int) {
-        // Center the footers
+        // Center the first and last footer
+        guard section == 0 || section == 4 else { return }
         if let footer = view as? UITableViewHeaderFooterView {
             footer.textLabel?.textAlignment = .center
         }

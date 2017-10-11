@@ -63,6 +63,54 @@ extension UIBarButtonItem {
     }
 }
 
+class NavRow<T: UIViewController> : Row<ButtonCellOf<String>> {
+    var presentationMode: PresentationMode<UIViewController>
+    
+    init(title: String, embedInNav: Bool = true) {
+        presentationMode = PresentationMode.show(controllerProvider: ControllerProvider.callback(builder: {
+            if embedInNav {
+                let nav = UINavigationController()
+                nav.viewControllers.append(T())
+                return nav
+            }
+            else {
+                return T()
+            }
+        }), onDismiss: nil)
+        super.init(tag: nil)
+        displayValueFor = nil
+        cellStyle = .default
+        self.title = title
+    }
+    
+    required init(tag: String?) {
+        presentationMode = PresentationMode.show(controllerProvider: ControllerProvider.callback(builder: { return T() }), onDismiss: nil)
+        super.init(tag: tag)
+        displayValueFor = nil
+        cellStyle = .default
+    }
+    
+    open override func customDidSelect() {
+        super.customDidSelect()
+        guard !isDisabled else { return }
+        if let controller = presentationMode.makeController() {
+            presentationMode.present(controller, row: self, presentingController: self.cell.formViewController()!)
+        }
+    }
+    
+    open override func customUpdateCell() {
+        super.customUpdateCell()
+        cell.textLabel?.textAlignment = .left
+        cell.textLabel?.textColor = .black
+        cell.accessoryType = .disclosureIndicator
+    }
+    
+    open override func prepare(for segue: UIStoryboardSegue) {
+        super.prepare(for: segue)
+        (segue.destination as? RowControllerType)?.onDismissCallback = presentationMode.onDismissCallback
+    }
+}
+
 func NavigationRow(title: String, segueName: String, initialiser: ((ButtonRow) -> Void)? = nil, updater: ((ButtonCellOf<String>, ButtonRow) -> Void)? = nil) -> ButtonRow {
     return ButtonRow() {
         $0.title = title

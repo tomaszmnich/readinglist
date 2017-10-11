@@ -41,6 +41,7 @@ class UserSettings {
         }
     }
     
+    // FUTURE: The predicates probably shouldn't be stored in this class
     static var selectedSortOrder: [NSSortDescriptor] {
         get { return SortOrders[UserSettings.tableSortOrder]! }
     }
@@ -53,6 +54,27 @@ class UserSettings {
                                                               BookPredicate.titleSort],
                                      TableSortOrder.byAuthor: [BookPredicate.readStateSort,
                                                                BookPredicate.authorSort]]
+
+    static var sendAnalytics = UserSetting<Bool>(key: "sendAnalytics", defaultValue: true)
+}
+
+struct UserSetting<SettingType> {
+    private let key: String
+    private let defaultValue: SettingType
+
+    init(key: String, defaultValue: SettingType) {
+        self.key = key
+        self.defaultValue = defaultValue
+    }
+    
+    var value: SettingType {
+        get {
+            return UserDefaults.standard.object(forKey: key) as? SettingType ?? defaultValue
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: key)
+        }
+    }
 }
 
 extension Notification.Name {

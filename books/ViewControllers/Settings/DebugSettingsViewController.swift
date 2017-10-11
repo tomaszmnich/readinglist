@@ -17,6 +17,7 @@ class DebugSettingsViewController: FormViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationItem.title = "Debug Settings"
         
         form +++ Section(header: "Screenshot helpers", footer: "Useful toggles for generating screenshots.")
             <<< SwitchRow() {

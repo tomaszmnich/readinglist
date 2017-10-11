@@ -41,6 +41,8 @@ class UserEngagement {
         case scanBarcodeQuickAction = "Quick Action Scan Barcode"
         case spotlightSearch = "Spotlight Search"
         case searchOnlineMultiple = "Search Online Multiple"
+        case disableAnalytics = "Disable Analytics"
+        case enableAnalytics = "Enable Analytics"
     }
     
     static func logEvent(_ event: Event) {
