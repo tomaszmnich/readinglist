@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1C60922A1F922A0D0055AC5E /* Storyboards.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C6092291F922A0D0055AC5E /* Storyboards.swift */; };
 		1C6CC34F1F8A25B7001B54A1 /* NoCancelButtonSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C6CC34E1F8A25B7001B54A1 /* NoCancelButtonSearchBar.swift */; };
 		1C8D13781F88F224004A7F18 /* MD5.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C8D13771F88F224004A7F18 /* MD5.swift */; };
 		1CA61FF61F861AAB00DD88F1 /* EditReadState.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CA61FF51F861AAB00DD88F1 /* EditReadState.storyboard */; };
@@ -99,6 +100,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1C6092291F922A0D0055AC5E /* Storyboards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storyboards.swift; sourceTree = "<group>"; };
 		1C6CC34E1F8A25B7001B54A1 /* NoCancelButtonSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoCancelButtonSearchBar.swift; sourceTree = "<group>"; };
 		1C8D13771F88F224004A7F18 /* MD5.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MD5.swift; sourceTree = "<group>"; };
 		1C8D137A1F88F316004A7F18 /* books-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "books-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -439,6 +441,7 @@
 				4973C79E1E901A6A001CFABC /* CommonUIElements.swift */,
 				495EB6691F5AE2DD009CEF39 /* Fonts.swift */,
 				1C6CC34E1F8A25B7001B54A1 /* NoCancelButtonSearchBar.swift */,
+				1C6092291F922A0D0055AC5E /* Storyboards.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -845,6 +848,7 @@
 				4973C7A31E905A04001CFABC /* Isbn13.swift in Sources */,
 				49097BA81CFB102B001AF1F9 /* FetchedResultsFilterer.swift in Sources */,
 				495C5D411BF1423900E00C07 /* Book.swift in Sources */,
+				1C60922A1F922A0D0055AC5E /* Storyboards.swift in Sources */,
 				49D93AA51CAB16F800AE6611 /* CoreSpotlightStack.swift in Sources */,
 				4994706A1DB42067008CB06E /* ReadingTable.swift in Sources */,
 				49FE2ED51D6F675D00F04239 /* SearchOnline.swift in Sources */,

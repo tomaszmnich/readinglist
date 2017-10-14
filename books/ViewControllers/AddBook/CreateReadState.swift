@@ -21,7 +21,7 @@ class CreateReadState: ReadStateForm {
         navigationItem.title = bookMetadata.title
         
         // Set the read state on the form; add some default form values for the dates
-        readState.value = (self.navigationController as! NavWithReadState).readState
+        readState.value = appDelegate.tabBarController.selectedReadState
     }
     
     @IBAction func doneWasPressed(_ sender: UIBarButtonItem) {

@@ -9,10 +9,6 @@
 import UIKit
 import Eureka
 
-class NavWithReadState: UINavigationController {
-    var readState: BookReadState!
-}
-
 class PreviewingNavigationController: UINavigationController {
     
     override func viewDidLoad() {

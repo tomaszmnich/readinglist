@@ -249,7 +249,9 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         }))
         alert.addAction(UIAlertAction(title: "Yes", style: UIAlertActionStyle.default, handler: { [unowned self] _ in
             self.dismiss(animated: true) {
-                appDelegate.tabBarController.selectedBookTable!.performSegue(withIdentifier: "searchByText", sender: isbn)
+                let searchOnlineNav = Storyboard.SearchOnline.instantiateRoot() as! UINavigationController
+                (searchOnlineNav.viewControllers.first as! SearchOnline).initialSearchString = isbn
+                self.present(searchOnlineNav, animated: true, completion: nil)
             }
         }))
         self.present(alert, animated: true, completion: nil)

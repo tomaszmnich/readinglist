@@ -31,6 +31,10 @@ class TabBarController: UITabBarController {
         get { return TabOption(rawValue: selectedIndex)! }
     }
     
+    var selectedReadState: BookReadState {
+        get { return selectedTab == .finished ? .finished : .toRead }
+    }
+    
     var selectedSplitViewController: SplitViewController? {
         get { return selectedViewController as? SplitViewController }
     }

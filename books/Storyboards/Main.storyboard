@@ -161,9 +161,6 @@
                     </navigationItem>
                     <connections>
                         <outlet property="tableFooter" destination="qjR-Ii-EZk" id="HmG-rb-hEC"/>
-                        <segue destination="MoR-st-owh" kind="presentation" identifier="scanBarcode" modalPresentationStyle="formSheet" id="mGr-4c-eH0"/>
-                        <segue destination="ciW-Jd-Gs4" kind="presentation" identifier="searchByText" modalPresentationStyle="formSheet" id="1QE-Vi-xhY"/>
-                        <segue destination="Mfc-92-vqK" kind="presentation" identifier="addManually" modalPresentationStyle="formSheet" id="d3M-5n-0h8"/>
                         <segue destination="OWE-eG-rNf" kind="presentation" identifier="editBook" modalPresentationStyle="formSheet" id="jO5-9m-FtQ"/>
                         <segue destination="bV3-xR-aQg" kind="presentation" identifier="editReadState" modalPresentationStyle="formSheet" id="vo8-Ad-IJ0"/>
                     </connections>
@@ -186,22 +183,6 @@
             </objects>
             <point key="canvasLocation" x="-8675" y="-461"/>
         </scene>
-        <!--ScanBarcode-->
-        <scene sceneID="Tqo-m5-JKU">
-            <objects>
-                <viewControllerPlaceholder storyboardName="ScanBarcode" id="MoR-st-owh" sceneMemberID="viewController"/>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="nEo-eW-fdL" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-6288" y="-726"/>
-        </scene>
-        <!--AddManually-->
-        <scene sceneID="M2Z-UZ-dyI">
-            <objects>
-                <viewControllerPlaceholder storyboardName="AddManually" id="Mfc-92-vqK" sceneMemberID="viewController"/>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="xi8-sU-oQg" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-6289" y="-798"/>
-        </scene>
         <!--EditReadState-->
         <scene sceneID="jNu-cr-P3Z">
             <objects>
@@ -217,14 +198,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Yfo-NE-yYe" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-6287" y="-958"/>
-        </scene>
-        <!--SearchOnline-->
-        <scene sceneID="JUq-IZ-EpW">
-            <objects>
-                <viewControllerPlaceholder storyboardName="SearchOnline" id="ciW-Jd-Gs4" sceneMemberID="viewController"/>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="9UH-iZ-rNO" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-6287" y="-869"/>
         </scene>
         <!--BookDetails-->
         <scene sceneID="Nwv-F8-0xK">
@@ -385,9 +358,6 @@
                     </navigationItem>
                     <connections>
                         <outlet property="tableFooter" destination="0H8-1U-XOm" id="DsI-a6-k6L"/>
-                        <segue destination="bVe-1v-p1Z" kind="presentation" identifier="scanBarcode" modalPresentationStyle="formSheet" id="Mve-Yh-84G"/>
-                        <segue destination="pWR-wO-ZT3" kind="presentation" identifier="searchByText" modalPresentationStyle="formSheet" id="nBH-TK-aGq"/>
-                        <segue destination="4Ae-aU-quh" kind="presentation" identifier="addManually" modalPresentationStyle="formSheet" id="h2N-8E-GkS"/>
                         <segue destination="2Rz-jC-qCX" kind="presentation" identifier="editBook" modalPresentationStyle="formSheet" id="2Bl-ye-cvk"/>
                         <segue destination="dIz-iw-L88" kind="presentation" identifier="editReadState" modalPresentationStyle="formSheet" id="rrm-zV-yyp"/>
                     </connections>
@@ -395,22 +365,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mEs-Fh-yGM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-6938" y="768"/>
-        </scene>
-        <!--ScanBarcode-->
-        <scene sceneID="O8a-hc-lBs">
-            <objects>
-                <viewControllerPlaceholder storyboardName="ScanBarcode" id="bVe-1v-p1Z" sceneMemberID="viewController"/>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="IkU-H6-d9H" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-6074" y="839"/>
-        </scene>
-        <!--AddManually-->
-        <scene sceneID="Ohe-Zv-DjP">
-            <objects>
-                <viewControllerPlaceholder storyboardName="AddManually" id="4Ae-aU-quh" sceneMemberID="viewController"/>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Qf3-JC-Vpu" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-6076" y="767"/>
         </scene>
         <!--EditReadState-->
         <scene sceneID="fTZ-yL-u7I">
@@ -427,14 +381,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OZp-r6-8nf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-6119" y="610"/>
-        </scene>
-        <!--SearchOnline-->
-        <scene sceneID="xob-jQ-Pd0">
-            <objects>
-                <viewControllerPlaceholder storyboardName="SearchOnline" id="pWR-wO-ZT3" sceneMemberID="viewController"/>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Bnh-Aq-PQg" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-6073" y="696"/>
         </scene>
         <!--BookDetails-->
         <scene sceneID="zwR-8Z-ZZB">

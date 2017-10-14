@@ -9,10 +9,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Nav With Read State-->
+        <!--Navigation Controller-->
         <scene sceneID="Qfq-zR-BEZ">
             <objects>
-                <navigationController id="xds-k5-GLF" customClass="NavWithReadState" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
+                <navigationController id="xds-k5-GLF" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="9VJ-8V-b5Y">
                         <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>

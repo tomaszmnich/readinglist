@@ -310,15 +310,7 @@ class BookTable: AutoUpdatingTableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let navController = segue.destination as? UINavigationController
         
-        if let navWithReadState = segue.destination as? NavWithReadState {
-            navWithReadState.readState = readStates.first!
-            
-            // If this is going to the SearchOnline page, and our sender was Text, prepopulate with that text
-            if let searchOnline = navWithReadState.topViewController as? SearchOnline, let searchText = sender as? String {
-                searchOnline.initialSearchString = searchText
-            }
-        }
-        else if let detailsViewController = navController?.topViewController as? BookDetails {
+        if let detailsViewController = navController?.topViewController as? BookDetails {
             if let cell = sender as? UITableViewCell,
                 let selectedIndex = self.tableView.indexPath(for: cell) {
          
@@ -338,16 +330,16 @@ class BookTable: AutoUpdatingTableViewController {
 
     @IBAction func addWasPressed(_ sender: UIBarButtonItem) {
     
-        func segueAction(title: String, identifier: String) -> UIAlertAction {
+        func storyboardAction(title: String, storyboard: UIStoryboard) -> UIAlertAction {
             return UIAlertAction(title: title, style: .default){[unowned self] _ in
-                self.performSegue(withIdentifier: identifier, sender: self)
+                self.present(storyboard.instantiateRoot(), animated: true, completion: nil)
             }
         }
         
-        let optionsAlert = UIAlertController(title: "Add new book", message: nil, preferredStyle: .actionSheet)
-        optionsAlert.addAction(segueAction(title: "Scan Barcode", identifier: "scanBarcode"))
-        optionsAlert.addAction(segueAction(title: "Search Online", identifier: "searchByText"))
-        optionsAlert.addAction(segueAction(title: "Enter Manually", identifier: "addManually"))
+        let optionsAlert = UIAlertController(title: "Add New Book", message: nil, preferredStyle: .actionSheet)
+        optionsAlert.addAction(storyboardAction(title: "Scan Barcode", storyboard: Storyboard.ScanBarcode))
+        optionsAlert.addAction(storyboardAction(title: "Search Online", storyboard: Storyboard.SearchOnline))
+        optionsAlert.addAction(storyboardAction(title: "Enter Manually", storyboard: Storyboard.AddManually))
         optionsAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         
         // For iPad, set the popover presentation controller's source

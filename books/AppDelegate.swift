@@ -82,22 +82,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func performQuickAction(shortcutType: String) {
-        func performSegueFromToReadPage(segueName: String) {
+        func presentFromToRead(_ viewController: UIViewController) {
+            // Select the To Read tab
             tabBarController.selectTab(.toRead)
-            let navController = tabBarController.selectedSplitViewController!.masterNavigationController
+            
             // Dismiss any modal views
+            let navController = tabBarController.selectedSplitViewController!.masterNavigationController
             navController.dismiss(animated: false)
             navController.popToRootViewController(animated: false)
-            navController.viewControllers[0].performSegue(withIdentifier: segueName, sender: self)
+            navController.viewControllers[0].present(viewController, animated: true, completion: nil)
         }
         
         if shortcutType == AppDelegate.barcodeScanActionName {
             UserEngagement.logEvent(.scanBarcodeQuickAction)
-            performSegueFromToReadPage(segueName: "scanBarcode")
+            presentFromToRead(Storyboard.ScanBarcode.instantiateRoot())
         }
         else if shortcutType == AppDelegate.searchOnlineActionName {
             UserEngagement.logEvent(.searchOnlineQuickAction)
-            performSegueFromToReadPage(segueName: "searchByText")
+            presentFromToRead(Storyboard.SearchOnline.instantiateRoot())
         }
     }
     
