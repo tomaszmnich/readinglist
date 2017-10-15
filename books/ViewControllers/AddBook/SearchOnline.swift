@@ -30,17 +30,21 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
     let disposeBag = DisposeBag()
     
     let emptyDatasetView = UINib(nibName: "SearchBooksEmptyDataset", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! SearchBooksEmptyDataset
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Fixes issue at https://stackoverflow.com/q/46228862/5513562
-        self.definesPresentationContext = true
-        
-        // Set DZN source and delegate
+        definesPresentationContext = true // Fixes issue at https://stackoverflow.com/q/46228862/5513562
         tableView.emptyDataSetSource = self
         tableView.emptyDataSetDelegate = self
+        tableView.keyboardDismissMode = .onDrag
+        tableView.tableFooterView = UIView() // Remove cell separators between blank cells
 
+        setupSearchBar()
+        setupReactive()
+    }
+    
+    private func setupSearchBar() {
         if #available(iOS 11.0, *) {
             let searchController = NoCancelButtonSearchController(searchResultsController: nil)
             searchController.obscuresBackgroundDuringPresentation = false
@@ -69,13 +73,26 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
         searchBar.returnKeyType = .search
         searchBar.text = initialSearchString
         searchBar.delegate = self
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         
-        // Hide the keyboard when scrolling
-        tableView.keyboardDismissMode = .onDrag
+        // Deselect any selected row
+        if let selectedIndexPath = tableView.indexPathForSelectedRow {
+            tableView.deselectRow(at: selectedIndexPath, animated: true)
+        }
         
-        // Remove cell separators between blank cells
-        tableView.tableFooterView = UIView()
-        
+        // Becoming active in viewDidLoad doesn't seem to work in iOS 11
+        // Do it here instead
+        if #available(iOS 11.0, *) {
+            DispatchQueue.main.async { [weak self] in
+                self?.searchBar.becomeFirstResponder()
+            }
+        }
+    }
+    
+    private func setupReactive() {
         let autoSearch = Observable<String>.create { [unowned self] observer in
             // If we arrived with a search string, we want to fire off the search
             if let initialSearchString = self.initialSearchString {
@@ -87,23 +104,23 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
         let searchTriggered = searchBar.rx.searchButtonClicked
             .map{ [unowned self] in
                 self.searchBar.text!
-            }
+        }
         
         let searchText = Observable.merge([autoSearch, searchTriggered])
-
+        
         if #available(iOS 10.0, *) {
             searchText.subscribe(onNext: { [unowned self] _ in
                 self.feedbackGeneratorWrapper.generator.prepare()
             }).disposed(by: disposeBag)
         }
-
+        
         let searchResults = searchText
             .observeOn(ConcurrentDispatchQueueScheduler(qos: .userInitiated))
             .flatMapLatest { searchText -> Observable<GoogleBooks.SearchResultsPage> in
                 SVProgressHUD.show(withStatus: "Searching...")
-
-                if searchText.isEmptyOrWhitespace == false {
                 
+                if searchText.isEmptyOrWhitespace == false {
+                    
                     // Search on the Google API
                     return GoogleBooks.searchTextObservable(searchText)
                         .observeOn(MainScheduler.instance)
@@ -182,7 +199,7 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
                 }
             })
             .disposed(by: disposeBag)
-
+        
         // On cell selection, go to the next page (or enable the Add button)
         tableView.rx.itemSelected
             .subscribe(onNext: { [unowned self] indexPath in
@@ -191,32 +208,14 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
             .disposed(by: disposeBag)
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        // Deselect any selected row
-        if let selectedIndexPath = tableView.indexPathForSelectedRow {
-            tableView.deselectRow(at: selectedIndexPath, animated: true)
-        }
-        
-        // Becoming active in viewDidLoad doesn't seem to work in iOS 11
-        // Do it here instead
-        if #available(iOS 11.0, *) {
-            DispatchQueue.main.async { [weak self] in
-                self?.searchBar.becomeFirstResponder()
-            }
-        }
-    }
-    
     func onBookSelection(_ indexPath: IndexPath) {
         let model = (tableView.cellForRow(at: indexPath) as! SearchResultCell).viewModel!
         
         // Duplicate check
-        let existingBook = appDelegate.booksStore.getIfExists(googleBooksId: model.googleBooksId, isbn: model.isbn13)
-        guard existingBook == nil else {
+        if let existingBook = appDelegate.booksStore.getIfExists(googleBooksId: model.googleBooksId, isbn: model.isbn13) {
             let alert = duplicateBookAlertController(goToExistingBook: { [unowned self] in
                 self.presentingViewController!.dismiss(animated: true) {
-                    appDelegate.tabBarController.simulateBookSelection(existingBook!, allowTableObscuring: true)
+                    appDelegate.tabBarController.simulateBookSelection(existingBook, allowTableObscuring: true)
                 }
             }, cancel: { [unowned self] in
                 self.tableView.deselectRow(at: indexPath, animated: true)
