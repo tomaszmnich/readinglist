@@ -107,12 +107,9 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
         }
         
         let searchText = Observable.merge([autoSearch, searchTriggered])
-        
-        if #available(iOS 10.0, *) {
-            searchText.subscribe(onNext: { [unowned self] _ in
-                self.feedbackGeneratorWrapper.generator.prepare()
-            }).disposed(by: disposeBag)
-        }
+        searchText.subscribe(onNext: { [unowned self] _ in
+            self.feedbackGeneratorWrapper.prepare()
+        }).disposed(by: disposeBag)
         
         let searchResults = searchText
             .observeOn(ConcurrentDispatchQueueScheduler(qos: .userInitiated))
@@ -120,10 +117,7 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
                 SVProgressHUD.show(withStatus: "Searching...")
                 
                 if searchText.isEmptyOrWhitespace == false {
-                    
-                    // Search on the Google API
-                    return GoogleBooks.searchTextObservable(searchText)
-                        .observeOn(MainScheduler.instance)
+                    return GoogleBooks.searchTextObservable(searchText).observeOn(MainScheduler.instance)
                 }
                 return Observable.just(GoogleBooks.SearchResultsPage.empty())
             }
@@ -148,24 +142,18 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
                     self.setEmptyDatasetReason(.noSearch)
                 }
                 else if !resultPage.searchResults.isSuccess {
-                    if #available(iOS 10.0, *) {
-                        self.feedbackGeneratorWrapper.generator.notificationOccurred(.error)
-                    }
+                    self.feedbackGeneratorWrapper.notificationOccurred(.error)
                     if let googleError = resultPage.searchResults.error as? GoogleBooks.GoogleError {
                         Crashlytics.sharedInstance().recordError(googleError, withAdditionalUserInfo: ["GoogleErrorMessage": googleError.message])
                     }
                     self.setEmptyDatasetReason(.error)
                 }
                 else if resultPage.searchResults.value!.count == 0 {
-                    if #available(iOS 10.0, *) {
-                        self.feedbackGeneratorWrapper.generator.notificationOccurred(.warning)
-                    }
+                    self.feedbackGeneratorWrapper.notificationOccurred(.warning)
                     self.setEmptyDatasetReason(.noResults)
                 }
                 else {
-                    if #available(iOS 10.0, *) {
-                        self.feedbackGeneratorWrapper.generator.notificationOccurred(.success)
-                    }
+                    self.feedbackGeneratorWrapper.notificationOccurred(.success)
                 }
             })
             .disposed(by: disposeBag)

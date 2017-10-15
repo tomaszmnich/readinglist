@@ -138,10 +138,8 @@ class UIFeedbackGeneratorWrapper {
     private let _notificationGenerator: NSObject?
 
     @available(iOS 10.0, *)
-    var generator: UINotificationFeedbackGenerator {
-        get {
-            return _notificationGenerator as! UINotificationFeedbackGenerator
-        }
+    private var generator: UINotificationFeedbackGenerator {
+        get { return _notificationGenerator as! UINotificationFeedbackGenerator }
     }
 
     init() {
@@ -151,5 +149,33 @@ class UIFeedbackGeneratorWrapper {
         else {
             _notificationGenerator = nil
         }
+    }
+    
+    func prepare() {
+        if #available(iOS 10.0, *) {
+            generator.prepare()
+        }
+    }
+    
+    func notificationOccurred(_ type: UINotificationFeedbackTypeWrapper) {
+        if #available(iOS 10.0, *) {
+            generator.notificationOccurred(type.unwrapped)
+        }
+        
+    }
+}
+
+enum UINotificationFeedbackTypeWrapper: Int {
+    case success
+    case warning
+    case error
+    
+    @available(iOS 10.0, *)
+    fileprivate var unwrapped: UINotificationFeedbackType {
+        get { switch self {
+            case .success: return .success
+            case .warning: return .warning
+            case .error: return .error
+        } }
     }
 }

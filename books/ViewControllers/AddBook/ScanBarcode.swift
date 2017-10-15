@@ -22,11 +22,7 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // Prepare for feedback
-        if #available(iOS 10.0, *) {
-            feedbackGeneratorWrapper.generator.prepare()
-        }
+        feedbackGeneratorWrapper.prepare()
         
         // Setup the camera preview asynchronously
         DispatchQueue.main.async {
@@ -102,9 +98,7 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         // Check that we can add the input and output to the session
         guard session!.canAddInput(input) && session!.canAddOutput(output) else {
             presentInfoAlert(title: "Error ⚠️", message: "The camera could not be used. Sorry about that.")
-            if #available(iOS 10.0, *) {
-                feedbackGeneratorWrapper.generator.notificationOccurred(.error)
-            }
+            feedbackGeneratorWrapper.notificationOccurred(.error)
             return
         }
         
@@ -151,24 +145,18 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     }
     
     func respondToCapturedIsbn(_ isbn: String) {
-        if #available(iOS 10.0, *) {
-            feedbackGeneratorWrapper.generator.prepare()
-        }
+        feedbackGeneratorWrapper.prepare()
         
         // Since we have a result, stop the session and hide the preview
         session?.stopRunning()
         
         // Check that the book hasn't already been added
         if let existingBook = appDelegate.booksStore.getIfExists(isbn: isbn) {
-            if #available(iOS 10.0, *) {
-                feedbackGeneratorWrapper.generator.notificationOccurred(.warning)
-            }
+            feedbackGeneratorWrapper.notificationOccurred(.warning)
             presentDuplicateAlert(existingBook)
         }
         else {
-            if #available(iOS 10.0, *) {
-                feedbackGeneratorWrapper.generator.notificationOccurred(.success)
-            }
+            feedbackGeneratorWrapper.notificationOccurred(.success)
             searchForFoundIsbn(isbn: isbn)
         }
     }
@@ -195,25 +183,18 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         GoogleBooks.fetchIsbn(isbn) { [weak self] resultPage in
             DispatchQueue.main.async {
                 SVProgressHUD.dismiss()
-                guard self != nil else { return }
+                guard let vc = self else { return }
                 
-                if #available(iOS 10.0, *) {
-                    self!.feedbackGeneratorWrapper.generator.prepare()
-                }
-                
+                vc.feedbackGeneratorWrapper.prepare()
                 guard resultPage.result.isSuccess else {
                     let error = resultPage.result.error!
                     if (error as? GoogleBooks.GoogleErrorType) == .noResult {
-                        if #available(iOS 10.0, *) {
-                            self!.feedbackGeneratorWrapper.generator.notificationOccurred(.error)
-                        }
-                        self!.presentNoExactMatchAlert(forIsbn: isbn)
+                        vc.feedbackGeneratorWrapper.notificationOccurred(.error)
+                        vc.presentNoExactMatchAlert(forIsbn: isbn)
                     }
                     else {
-                        if #available(iOS 10.0, *) {
-                            self!.feedbackGeneratorWrapper.generator.notificationOccurred(.error)
-                        }
-                        self!.onSearchError(error)
+                        vc.feedbackGeneratorWrapper.notificationOccurred(.error)
+                        vc.onSearchError(error)
                     }
                     return
                 }
@@ -221,22 +202,18 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
                 let fetchResult = resultPage.result.value!
                 // We may now have a book which matches the Google Books ID (but didn't match the ISBN), so check again
                 if let existingBook = appDelegate.booksStore.getIfExists(googleBooksId: fetchResult.id) {
-                    if #available(iOS 10.0, *) {
-                        self!.feedbackGeneratorWrapper.generator.notificationOccurred(.warning)
-                    }
-                    self!.presentDuplicateAlert(existingBook)
+                    vc.feedbackGeneratorWrapper.notificationOccurred(.warning)
+                    vc.presentDuplicateAlert(existingBook)
                 }
                 else {
-                    if #available(iOS 10.0, *) {
-                        self!.feedbackGeneratorWrapper.generator.notificationOccurred(.success)
-                    }
+                    vc.feedbackGeneratorWrapper.notificationOccurred(.success)
                     
                     // Event logging
                     UserEngagement.logEvent(.scanBarcode)
 
                     // If there is no duplicate, we can safely go to the next page
-                    self!.foundMetadata = fetchResult.toBookMetadata()
-                    self!.performSegue(withIdentifier: "barcodeScanResult", sender: self)
+                    vc.foundMetadata = fetchResult.toBookMetadata()
+                    vc.performSegue(withIdentifier: "barcodeScanResult", sender: self)
                 }
             }
         }
@@ -279,7 +256,7 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     
     func presentCameraPermissionsAlert() {
         let alert = UIAlertController(title: "Permission Required", message: "You'll need to change your settings to allow Reading List to use your device's camera.", preferredStyle: UIAlertControllerStyle.alert)
-        alert.addAction(UIAlertAction(title: "Settings", style: UIAlertActionStyle.default, handler: { _ in
+        alert.addAction(UIAlertAction(title: "Settings", style: UIAlertActionStyle.default, handler: { [unowned self] _ in
             if let appSettings = URL(string: UIApplicationOpenSettingsURLString), UIApplication.shared.canOpenURL(appSettings) {
                 UIApplication.shared.openUrlPlatformSpecific(url: appSettings)
                 self.dismiss(animated: false)
@@ -288,9 +265,7 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: { [unowned self] _ in
             self.dismiss(animated: true)
         }))
-        if #available(iOS 10.0, *) {
-            self.feedbackGeneratorWrapper.generator.notificationOccurred(.error)
-        }
+        self.feedbackGeneratorWrapper.notificationOccurred(.error)
         self.present(alert, animated: true, completion: nil)
     }
     
