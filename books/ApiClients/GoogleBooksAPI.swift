@@ -21,6 +21,7 @@ class GoogleBooks {
     /**
      Searches on Google Books for the given search string, and calls the callback when a result is received
     */
+    @discardableResult
     static func searchText(_ text: String, callback: @escaping (SearchResultsPage) -> Void) -> URLSessionDataTask {
         return requestJson(from: Request.searchText(text).url) { result in
             
