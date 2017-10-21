@@ -162,34 +162,30 @@ class GoogleBooks {
         }
         
         // The base URL for GoogleBooks API v1 requests
-        private static let apiBaseUrl = URL(string: "https://www.googleapis.com")!
-        private static let googleBooksBaseUrl = URL(string: "https://books.google.com")!
+        private static let apiBaseUrl = URL(string: "https://www.googleapis.com/")!
+        private static let googleBooksBaseUrl = URL(string: "https://books.google.com/")!
         
         private static let searchResultFields = "items(id,volumeInfo(title,authors,industryIdentifiers,categories,imageLinks/thumbnail))"
-        private static let apiKey = "AIzaSyAN64W_QrynoqZB3Sxdm1PudVOdjvU69Qo"
-        // The API Key is limited to 1000 requests per day. Removed the real-time search
-        // feature - hopefully searching without an API key is possible now.
-        private static let useApiKey = false
 
         var url: URL {
             switch self{
             case let .searchText(searchString):
                 let encodedQuery = searchString.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-                let relativeUrl = "/books/v1/volumes?q=\(encodedQuery)&maxResults=40&fields=\(Request.searchResultFields)\(Request.useApiKey ? "&key=\(Request.apiKey)" : "")"
+                let relativeUrl = "books/v1/volumes?q=\(encodedQuery)&maxResults=40&fields=\(Request.searchResultFields)"
                 return URL(string: relativeUrl, relativeTo: Request.apiBaseUrl)!
                 
             case let .searchIsbn(isbn):
-                let relativeUrl = "/books/v1/volumes?q=isbn:\(isbn)&maxResults=40&fields=\(Request.searchResultFields)\(Request.useApiKey ? "&key=\(Request.apiKey)" : "")"
+                let relativeUrl = "books/v1/volumes?q=isbn:\(isbn)&maxResults=40&fields=\(Request.searchResultFields)"
                 return URL(string: relativeUrl, relativeTo: Request.apiBaseUrl)!
                 
             case let .fetch(id):
-                return URL(string: "/books/v1/volumes/\(id)\(Request.useApiKey ? "?key=\(Request.apiKey)" : "")", relativeTo: Request.apiBaseUrl)!
+                return URL(string: "books/v1/volumes/\(id)", relativeTo: Request.apiBaseUrl)!
             
             case let .coverImage(googleBooksId, coverType):
-                return URL(string: "/books/content?id=\(googleBooksId)&printsec=frontcover&img=1&zoom=\(coverType.rawValue)", relativeTo: Request.googleBooksBaseUrl)!
+                return URL(string: "books/content?id=\(googleBooksId)&printsec=frontcover&img=1&zoom=\(coverType.rawValue)", relativeTo: Request.googleBooksBaseUrl)!
                 
             case let .webpage(googleBooksId):
-                return URL(string: "/books?id=\(googleBooksId)", relativeTo: Request.googleBooksBaseUrl)!
+                return URL(string: "books?id=\(googleBooksId)", relativeTo: Request.googleBooksBaseUrl)!
             }
         }
     }
@@ -376,6 +372,47 @@ class GoogleBooks {
         
         static func error(_ error: Error, fromRequest request: Request) -> FetchResultPage {
             return FetchResultPage(Result.failure(error), fromRequest: request)
+        }
+    }
+}
+
+enum Result<Value> {
+    case success(Value)
+    case failure(Error)
+    
+    var isSuccess: Bool {
+        switch self {
+        case .success:
+            return true
+        case .failure:
+            return false
+        }
+    }
+    
+    var value: Value? {
+        switch self {
+        case let .success(value):
+            return value
+        case .failure:
+            return nil
+        }
+    }
+    
+    var error: Error? {
+        switch self {
+        case let .failure(error):
+            return error
+        case .success:
+            return nil
+        }
+    }
+    
+    func toOptional() -> Result<Value?> {
+        switch self {
+        case let .success(value):
+            return Result<Value?>.success(value)
+        case let .failure(error):
+            return Result<Value?>.failure(error)
         }
     }
 }
