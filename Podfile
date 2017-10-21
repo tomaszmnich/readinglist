@@ -9,8 +9,6 @@ target 'books' do
   pod 'SwiftyJSON', '~> 3.1'
   pod 'Eureka', '~> 4.0'
   pod 'ImageRow', :git => 'https://github.com/EurekaCommunity/ImageRow.git'
-  pod 'RxSwift', '~> 4.0.0-beta'
-  pod 'RxCocoa', '~> 4.0.0-beta'
   pod 'SVProgressHUD', '~> 2.2'
   pod 'SimulatorStatusMagic', :configurations => ['Debug']
   pod 'Fabric'

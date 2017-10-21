@@ -8,8 +8,6 @@
 
 import Foundation
 import UIKit
-import RxSwift
-import RxCocoa
 import SVProgressHUD
 import DZNEmptyDataSet
 import Crashlytics
@@ -23,13 +21,12 @@ class SearchOnline: UITableViewController {
     
     private var searchController: UISearchController!
     private let feedbackGenerator = UIFeedbackGeneratorWrapper()
-    private var searchResults = [SearchResultViewModel]()
+    private var searchResults = [GoogleBooks.SearchResult]()
     private let emptyDatasetView = NibView.searchBooksEmptyDataset
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.keyboardDismissMode = .onDrag
         tableView.tableFooterView = UIView()
         tableView.backgroundView = emptyDatasetView
         
@@ -88,7 +85,7 @@ class SearchOnline: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "SearchResultCell") as! SearchResultCell
-        cell.viewModel = searchResults[indexPath.row]
+        cell.updateDisplay(from: searchResults[indexPath.row])
         return cell
     }
     
@@ -100,10 +97,10 @@ class SearchOnline: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let model = searchResults[indexPath.row]
+        let searchResult = searchResults[indexPath.row]
         
         // Duplicate check
-        if let existingBook = appDelegate.booksStore.getIfExists(googleBooksId: model.googleBooksId, isbn: model.isbn13) {
+        if let existingBook = appDelegate.booksStore.getIfExists(googleBooksId: searchResult.id, isbn: searchResult.isbn13) {
             presentDuplicateBookAlert(book: existingBook, fromSelectedIndex: indexPath); return
         }
         
@@ -112,7 +109,7 @@ class SearchOnline: UITableViewController {
            addAllButton.isEnabled = true
         }
         else {
-            fetchAndSegue(googleBooksId: model.googleBooksId)
+            fetchAndSegue(googleBooksId: searchResult.id)
         }
     }
     
@@ -155,7 +152,7 @@ class SearchOnline: UITableViewController {
             feedbackGenerator.notificationOccurred(.success)
         }
         
-        searchResults = resultPage.searchResults.value?.map{SearchResultViewModel(searchResult: $0)} ?? []
+        searchResults = resultPage.searchResults.value ?? []
         tableView.backgroundView = searchResults.isEmpty ? emptyDatasetView : nil
         tableView.reloadData()
         
@@ -212,7 +209,7 @@ class SearchOnline: UITableViewController {
         guard tableView.isEditing, let selectedRows = tableView.indexPathsForSelectedRows, selectedRows.count > 0 else { return }
         
         // If there is only 1 cell selected, we might as well proceed as we would in single selection mode
-        guard selectedRows.count > 1 else { fetchAndSegue(googleBooksId: searchResults[selectedRows.first!.row].googleBooksId); return }
+        guard selectedRows.count > 1 else { fetchAndSegue(googleBooksId: searchResults[selectedRows.first!.row].id); return }
         
         let alert = UIAlertController(title: "Add \(selectedRows.count) books", message: "Are you sure you want to add all \(selectedRows.count) selected books? They will be added to the 'To Read' section.", preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction(title: "Add All", style: .default, handler: {[unowned self] _ in
@@ -233,7 +230,7 @@ class SearchOnline: UITableViewController {
         // Queue up the fetches
         for selectedIndex in selectedRows {
             fetches.enter()
-            GoogleBooks.fetch(googleBooksId: searchResults[selectedIndex.row].googleBooksId) { resultPage in
+            GoogleBooks.fetch(googleBooksId: searchResults[selectedIndex.row].id) { resultPage in
                 DispatchQueue.main.async {
                     if let metadata = resultPage.result.value?.toBookMetadata() {
                         lastAddedBook = appDelegate.booksStore.create(from: metadata, readingInformation: BookReadingInformation.toRead())
@@ -299,7 +296,7 @@ class SearchBooksEmptyDataset: UIView {
     
     private var reason = EmptySetReason.noSearch
     
-    var title: String {
+    private var title: String {
         get {
             switch reason {
             case .noSearch:
@@ -312,7 +309,7 @@ class SearchBooksEmptyDataset: UIView {
         }
     }
     
-    var descriptionString: String {
+    private var descriptionString: String {
         get {
             switch reason {
             case .noSearch:
@@ -332,57 +329,39 @@ class SearchResultCell : UITableViewCell {
     @IBOutlet weak var authorOutlet: UILabel!
     @IBOutlet weak var imageOutlet: UIImageView!
     
-    var disposeBag: DisposeBag?
+    private var coverImageTask: URLSessionDataTask?
     
-    var viewModel: SearchResultViewModel? {
-        didSet {
-            guard let viewModel = viewModel else { return }
-            
-            titleOutlet.font = Fonts.gillSans(forTextStyle: .headline)
-            authorOutlet.font = Fonts.gillSans(forTextStyle: .subheadline)
-            
-            titleOutlet.text = viewModel.title
-            authorOutlet.text = viewModel.author
-            
-            disposeBag = DisposeBag()
-            viewModel.coverImage.drive(imageOutlet.rx.image).disposed(by: disposeBag!)
-        }
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        titleOutlet.font = Fonts.gillSans(forTextStyle: .headline)
+        authorOutlet.font = Fonts.gillSans(forTextStyle: .subheadline)
     }
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        viewModel = nil
-        disposeBag = nil
-    }
-}
+        
+        // Cancel any pending cover data request task
+        coverImageTask?.cancel()
 
-/// The ViewModel corresponding to the SearchResultCell view
-class SearchResultViewModel {
+        titleOutlet.text = nil
+        authorOutlet.text = nil
+        imageOutlet.image = nil
+    }
     
-    let googleBooksId: String
-    let isbn13: String?
-    let title: String
-    let author: String
-    let coverImage: Driver<UIImage?>
-    
-    init(searchResult: GoogleBooks.SearchResult) {
-        self.googleBooksId = searchResult.id
-        self.isbn13 = searchResult.isbn13
-        self.title = searchResult.title
-        self.author = searchResult.authors.joined(separator: ", ")
+    func updateDisplay(from searchResult: GoogleBooks.SearchResult) {
+        titleOutlet.text = searchResult.title
+        authorOutlet.text = searchResult.authors.joined(separator: ", ")
         
-        // If we have a cover URL, we should use that to drive the cell image
-        guard let coverURL = searchResult.thumbnailCoverUrl else { coverImage = Driver.just(#imageLiteral(resourceName: "CoverPlaceholder")); return }
-        
-        // Observe the the web request on a background thread
-        coverImage = URLSession.shared.rx.data(request: URLRequest(url: coverURL))
-            .observeOn(ConcurrentDispatchQueueScheduler(qos: .userInitiated))
-            .map(Optional.init)
-            .startWith(nil)
-            // Observe the results of web request on the main thread to update the search result cover image
-            .observeOn(MainScheduler.instance)
-            .map(UIImage.init)
-            .asDriver(onErrorJustReturn: #imageLiteral(resourceName: "CoverPlaceholder"))
+        guard let coverURL = searchResult.thumbnailCoverUrl else { imageOutlet.image = #imageLiteral(resourceName: "CoverPlaceholder"); return }
+        coverImageTask = URLSession.shared.dataTask(with: coverURL) { [weak self] (data, _, error) in
+            DispatchQueue.main.async {
+                // Cancellations appear to be reported as errors. Ideally we would detect non-cancellation
+                // errors (e.g. 404), and show the placeholder in those cases. For now, just make the image blank.
+                guard error == nil, let data = data else { self?.imageOutlet.image = nil; return }
+                self?.imageOutlet.image = UIImage(data: data)
+            }
+        }
+        coverImageTask!.resume()
     }
 }
 

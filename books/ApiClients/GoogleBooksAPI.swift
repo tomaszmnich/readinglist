@@ -8,15 +8,8 @@
 
 import Foundation
 import SwiftyJSON
-import RxSwift
 
 class GoogleBooks {
-    
-    static func searchTextObservable(_ text: String) -> Observable<SearchResultsPage> {
-        return Observable<SearchResultsPage>.createFrom { callback -> URLSessionDataTask in
-            return GoogleBooks.searchText(text, callback: callback)
-        }
-    }
     
     /**
      Searches on Google Books for the given search string, and calls the callback when a result is received

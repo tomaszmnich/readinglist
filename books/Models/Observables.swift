@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import RxSwift
 
 enum Result<Value> {
     case success(Value)
@@ -46,20 +45,6 @@ enum Result<Value> {
             return Result<Value?>.success(value)
         case let .failure(error):
             return Result<Value?>.failure(error)
-        }
-    }
-}
-
-extension Observable {
-    static func createFrom<E>(dataTaskCreator: @escaping (@escaping (E) -> Void) -> URLSessionDataTask) -> Observable<E> {
-        return Observable<E>.create { observer -> Disposable in
-            let dataTask = dataTaskCreator { result in
-                observer.onNext(result)
-                observer.onCompleted()
-            }
-            return Disposables.create {
-                dataTask.cancel()
-            }
         }
     }
 }
