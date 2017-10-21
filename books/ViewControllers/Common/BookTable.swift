@@ -269,8 +269,8 @@ class BookTable: AutoUpdatingTableViewController {
     }
     
     /**
-     selectBook determines whether the book details page should actually be shown, or whether
-     the book should just be scrolled to.
+     allowTableObscuring determines whether the book details page should actually be shown,
+     if showing it will obscure this table
     */
     func simulateBookSelection(_ book: Book, allowTableObscuring: Bool = true) {
         let indexPathOfSelectedBook = self.resultsController.indexPath(forObject: book)
@@ -332,7 +332,7 @@ class BookTable: AutoUpdatingTableViewController {
     
         func storyboardAction(title: String, storyboard: UIStoryboard) -> UIAlertAction {
             return UIAlertAction(title: title, style: .default){[unowned self] _ in
-                self.present(storyboard.instantiateRoot(), animated: true, completion: nil)
+                self.present(storyboard.rootAsFormSheet(), animated: true, completion: nil)
             }
         }
         

@@ -95,11 +95,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         if shortcutType == AppDelegate.barcodeScanActionName {
             UserEngagement.logEvent(.scanBarcodeQuickAction)
-            presentFromToRead(Storyboard.ScanBarcode.instantiateRoot())
+            presentFromToRead(Storyboard.ScanBarcode.rootAsFormSheet())
         }
         else if shortcutType == AppDelegate.searchOnlineActionName {
             UserEngagement.logEvent(.searchOnlineQuickAction)
-            presentFromToRead(Storyboard.SearchOnline.instantiateRoot())
+            presentFromToRead(Storyboard.SearchOnline.rootAsFormSheet())
         }
     }
     
