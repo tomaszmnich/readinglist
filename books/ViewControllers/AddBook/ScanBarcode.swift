@@ -80,16 +80,15 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
             }
         #endif
     
-        let camera = AVCaptureDevice.default(for: AVMediaType.video)
-        guard let input = try? AVCaptureDeviceInput(device: camera!) else {
+        guard let camera = AVCaptureDevice.default(for: AVMediaType.video), let input = try? AVCaptureDeviceInput(device: camera) else {
             presentCameraPermissionsAlert()
             return
         }
         
         // Try to focus the camera if possible
-        if camera?.isFocusPointOfInterestSupported == true {
-            try? camera!.lockForConfiguration()
-            camera!.focusPointOfInterest = cameraPreviewView.center
+        if camera.isFocusPointOfInterestSupported == true {
+            try? camera.lockForConfiguration()
+            camera.focusPointOfInterest = cameraPreviewView.center
         }
         
         let output = AVCaptureMetadataOutput()
@@ -225,10 +224,11 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
             self.session?.startRunning()
         }))
         alert.addAction(UIAlertAction(title: "Yes", style: UIAlertActionStyle.default, handler: { [unowned self] _ in
+            let presentingViewController = self.presentingViewController
             self.dismiss(animated: true) {
-                let searchOnlineNav = Storyboard.SearchOnline.instantiateRoot() as! UINavigationController
+                let searchOnlineNav = Storyboard.SearchOnline.rootAsFormSheet() as! UINavigationController
                 (searchOnlineNav.viewControllers.first as! SearchOnline).initialSearchString = isbn
-                self.present(searchOnlineNav, animated: true, completion: nil)
+                presentingViewController!.present(searchOnlineNav, animated: true, completion: nil)
             }
         }))
         self.present(alert, animated: true, completion: nil)

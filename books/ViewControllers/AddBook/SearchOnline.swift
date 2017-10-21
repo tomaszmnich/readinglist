@@ -14,65 +14,44 @@ import SVProgressHUD
 import DZNEmptyDataSet
 import Crashlytics
 
-class SearchOnline: UIViewController, UISearchBarDelegate {
-    
-    @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var stackView: UIStackView!
-    @IBOutlet weak var selectManyOrSingleToggle: UIBarButtonItem!
-    @IBOutlet weak var addAllButton: UIBarButtonItem!
-    @IBOutlet weak var toolbar: UIToolbar!
-
-    let feedbackGeneratorWrapper = UIFeedbackGeneratorWrapper()
-
-    var searchBar: UISearchBar!
+class SearchOnline: UITableViewController {
     
     var initialSearchString: String?
-    let disposeBag = DisposeBag()
     
-    let emptyDatasetView = UINib(nibName: "SearchBooksEmptyDataset", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! SearchBooksEmptyDataset
+    @IBOutlet weak var addAllButton: UIBarButtonItem!
+    @IBOutlet weak var selectModeButton: UIBarButtonItem!
     
+    private var searchController: UISearchController!
+    private let feedbackGenerator = UIFeedbackGeneratorWrapper()
+    private var searchResults = [SearchResultViewModel]()
+    private let emptyDatasetView = NibView.searchBooksEmptyDataset
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        definesPresentationContext = true // Fixes issue at https://stackoverflow.com/q/46228862/5513562
-        tableView.emptyDataSetSource = self
-        tableView.emptyDataSetDelegate = self
-        tableView.keyboardDismissMode = .onDrag
-        tableView.tableFooterView = UIView() // Remove cell separators between blank cells
 
-        setupSearchBar()
-        setupReactive()
-    }
-    
-    private func setupSearchBar() {
+        tableView.keyboardDismissMode = .onDrag
+        tableView.tableFooterView = UIView()
+        tableView.backgroundView = emptyDatasetView
+        
+        searchController = NoCancelButtonSearchController(searchResultsController: nil)
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.hidesNavigationBarDuringPresentation = false
+        searchController.searchBar.returnKeyType = .search
+        searchController.searchBar.text = initialSearchString
+        searchController.searchBar.delegate = self
+
         if #available(iOS 11.0, *) {
-            let searchController = NoCancelButtonSearchController(searchResultsController: nil)
-            searchController.obscuresBackgroundDuringPresentation = false
-            searchController.hidesNavigationBarDuringPresentation = false
-            
-            searchBar = searchController.searchBar
             navigationItem.searchController = searchController
             navigationItem.hidesSearchBarWhenScrolling = false
         }
         else {
-            searchBar = UISearchBar()
-            stackView.insertArrangedSubview(searchBar, at: 0)
-            // We need to make the navigation bar non-translucent to avoid a big blank space being scrollable to
-            navigationController!.navigationBar.isTranslucent = false
-            
-            // Pop up the keyboard, if not in a pre-populated search mode.
-            // Doing this here doesn't work in iOS 11 - instead it is done in viewDidAppear
-            if initialSearchString == nil {
-                DispatchQueue.main.async { [weak self] in
-                    self?.searchBar.becomeFirstResponder()
-                }
-            }
+            tableView.tableHeaderView = searchController.searchBar
         }
         
-        // The search bar delegate is used only to dismiss the keyboard when Done is pressed
-        searchBar.returnKeyType = .search
-        searchBar.text = initialSearchString
-        searchBar.delegate = self
+        // If we have an entry-point search, fire it off now
+        if let initialSearchString = initialSearchString  {
+            performSearch(searchText: initialSearchString)
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -83,158 +62,129 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
             tableView.deselectRow(at: selectedIndexPath, animated: true)
         }
         
-        // Becoming active in viewDidLoad doesn't seem to work in iOS 11
-        // Do it here instead
-        if #available(iOS 11.0, *) {
+        // Bring up the keyboard if not results, the toolbar if there are some results
+        if searchResults.isEmpty {
             DispatchQueue.main.async { [weak self] in
-                self?.searchBar.becomeFirstResponder()
+                self?.searchController.searchBar.becomeFirstResponder()
             }
+        }
+        else {
+            navigationController!.setToolbarHidden(false, animated: true)
+        }
+    }
+
+    @IBAction func cancelWasPressed(_ sender: Any) {
+        searchController.isActive = false
+        dismiss(animated: true, completion: nil)
+    }
+    
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return searchResults.isEmpty ? 0 : 1
+    }
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return section == 0 ? searchResults.count : 0
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "SearchResultCell") as! SearchResultCell
+        cell.viewModel = searchResults[indexPath.row]
+        return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        guard tableView.isEditing else { return }
+        if tableView.indexPathsForSelectedRows == nil || tableView.indexPathsForSelectedRows!.count == 0 {
+            addAllButton.isEnabled = false
         }
     }
     
-    private func setupReactive() {
-        let autoSearch = Observable<String>.create { [unowned self] observer in
-            // If we arrived with a search string, we want to fire off the search
-            if let initialSearchString = self.initialSearchString {
-                observer.onNext(initialSearchString)
-            }
-            return Disposables.create()
-        }
-        
-        let searchTriggered = searchBar.rx.searchButtonClicked
-            .map{ [unowned self] in
-                self.searchBar.text!
-        }
-        
-        let searchText = Observable.merge([autoSearch, searchTriggered])
-        searchText.subscribe(onNext: { [unowned self] _ in
-            self.feedbackGeneratorWrapper.prepare()
-        }).disposed(by: disposeBag)
-        
-        let searchResults = searchText
-            .observeOn(ConcurrentDispatchQueueScheduler(qos: .userInitiated))
-            .flatMapLatest { searchText -> Observable<GoogleBooks.SearchResultsPage> in
-                SVProgressHUD.show(withStatus: "Searching...")
-                
-                if searchText.isEmptyOrWhitespace == false {
-                    return GoogleBooks.searchTextObservable(searchText).observeOn(MainScheduler.instance)
-                }
-                return Observable.just(GoogleBooks.SearchResultsPage.empty())
-            }
-            .share(replay: 1)
-        
-        // The clear search button should map to an empty set of results. Hook into the text observable
-        // and filter to only include the events where the text box is empty
-        let clearResults = searchBar.rx.text.orEmpty.filter { return $0.isEmpty }
-            .observeOn(ConcurrentDispatchQueueScheduler(qos: .userInitiated))
-            .map { _ in GoogleBooks.SearchResultsPage.empty() }
-            .share(replay: 1)
-        
-        let aggregateResults = Observable.merge([searchResults, clearResults])
-        
-        // Map the sucess/failure state to the reason property on the empty data set
-        aggregateResults
-            .observeOn(MainScheduler.instance)
-            .subscribe(onNext: { [unowned self] resultPage in
-                SVProgressHUD.dismiss()
-                if resultPage.searchText?.isEmptyOrWhitespace != false {
-                    self.tableView.setContentOffset(CGPoint.zero, animated: false)
-                    self.setEmptyDatasetReason(.noSearch)
-                }
-                else if !resultPage.searchResults.isSuccess {
-                    self.feedbackGeneratorWrapper.notificationOccurred(.error)
-                    if let googleError = resultPage.searchResults.error as? GoogleBooks.GoogleError {
-                        Crashlytics.sharedInstance().recordError(googleError, withAdditionalUserInfo: ["GoogleErrorMessage": googleError.message])
-                    }
-                    self.setEmptyDatasetReason(.error)
-                }
-                else if resultPage.searchResults.value!.count == 0 {
-                    self.feedbackGeneratorWrapper.notificationOccurred(.warning)
-                    self.setEmptyDatasetReason(.noResults)
-                }
-                else {
-                    self.feedbackGeneratorWrapper.notificationOccurred(.success)
-                }
-            })
-            .disposed(by: disposeBag)
-        
-        // Set up the table footer; hide it until there are results
-        let poweredByGoogle = UIImageView(image: #imageLiteral(resourceName: "PoweredByGoogle"))
-        poweredByGoogle.contentMode = .scaleAspectFit
-        tableView.tableFooterView = poweredByGoogle
-        tableView.tableFooterView!.isHidden = true
-        
-        aggregateResults.map{ ($0.searchResults.value?.count ?? 0) == 0 }
-            .asDriver(onErrorJustReturn: true)
-            .drive(tableView.tableFooterView!.rx.isHidden)
-            .disposed(by: disposeBag)
-        
-        // Map the actual results to SearchResultViewModel items (or empty if failure)
-        // and use them to drive the table cells
-        aggregateResults.map { ($0.searchResults.value ?? []).map(SearchResultViewModel.init) }
-            .asDriver(onErrorJustReturn: [])
-            .drive(tableView.rx.items(cellIdentifier: "SearchResultCell", cellType: SearchResultCell.self)) { _, viewModel, cell in
-                cell.viewModel = viewModel
-            }
-            .disposed(by: disposeBag)
-        
-        // On cell deselection, disable the Add button if there are no selected rows
-        tableView.rx.modelDeselected(SearchResultViewModel.self)
-            .subscribe(onNext: { [unowned self] _ in
-                guard self.tableView.isEditing else { return }
-                if (self.tableView.indexPathsForSelectedRows?.count ?? 0) == 0 {
-                    self.addAllButton.isEnabled = false
-                }
-            })
-            .disposed(by: disposeBag)
-        
-        // On cell selection, go to the next page (or enable the Add button)
-        tableView.rx.itemSelected
-            .subscribe(onNext: { [unowned self] indexPath in
-                self.onBookSelection(indexPath)
-            })
-            .disposed(by: disposeBag)
-    }
-    
-    func onBookSelection(_ indexPath: IndexPath) {
-        let model = (tableView.cellForRow(at: indexPath) as! SearchResultCell).viewModel!
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let model = searchResults[indexPath.row]
         
         // Duplicate check
         if let existingBook = appDelegate.booksStore.getIfExists(googleBooksId: model.googleBooksId, isbn: model.isbn13) {
-            let alert = duplicateBookAlertController(goToExistingBook: { [unowned self] in
-                self.presentingViewController!.dismiss(animated: true) {
-                    appDelegate.tabBarController.simulateBookSelection(existingBook, allowTableObscuring: true)
-                }
-            }, cancel: { [unowned self] in
-                self.tableView.deselectRow(at: indexPath, animated: true)
-            })
-            if let presentedController = presentedViewController {
-                presentedController.present(alert, animated: true)
-            }
-            else {
-                present(alert, animated: true)
-            }
-            return
+            presentDuplicateBookAlert(book: existingBook, fromSelectedIndex: indexPath); return
         }
-
-        // If we are in multiple selection mode (i.e. Edit mode), switch the Add All button on
-        if self.tableView.isEditing {
-            self.addAllButton.isEnabled = true
+        
+        // If we are in multiple selection mode (i.e. Edit mode), switch the Add All button on; otherwise, fetch and segue
+        if tableView.isEditing {
+           addAllButton.isEnabled = true
         }
         else {
-            // Otherwise, fetch and segue
             fetchAndSegue(googleBooksId: model.googleBooksId)
         }
+    }
+    
+    func performSearch(searchText: String) {
+        // Don't bother searching for empty text
+        guard !searchText.isEmptyOrWhitespace else { displaySearchResults(GoogleBooks.SearchResultsPage.empty()); return }
+        
+        SVProgressHUD.show(withStatus: "Searching...")
+        feedbackGenerator.prepare()
+        GoogleBooks.searchText(searchController.searchBar.text!) { results in
+            DispatchQueue.main.async { [weak self] in
+                SVProgressHUD.dismiss()
+                guard let vc = self else { return }
+                if !results.searchResults.isSuccess {
+                    vc.emptyDatasetView.setEmptyDatasetReason(.error)
+                }
+                else {
+                    vc.displaySearchResults(results)
+                }
+            }
+        }
+    }
+    
+    func displaySearchResults(_ resultPage: GoogleBooks.SearchResultsPage) {
+        if resultPage.searchText?.isEmptyOrWhitespace != false {
+            emptyDatasetView.setEmptyDatasetReason(.noSearch)
+        }
+        else if !resultPage.searchResults.isSuccess {
+            feedbackGenerator.notificationOccurred(.error)
+            if let googleError = resultPage.searchResults.error as? GoogleBooks.GoogleError {
+                Crashlytics.sharedInstance().recordError(googleError, withAdditionalUserInfo: ["GoogleErrorMessage": googleError.message])
+            }
+            emptyDatasetView.setEmptyDatasetReason(.error)
+        }
+        else if resultPage.searchResults.value!.count == 0 {
+            feedbackGenerator.notificationOccurred(.warning)
+            emptyDatasetView.setEmptyDatasetReason(.noResults)
+        }
+        else {
+            feedbackGenerator.notificationOccurred(.success)
+        }
+        
+        searchResults = resultPage.searchResults.value?.map{SearchResultViewModel(searchResult: $0)} ?? []
+        tableView.backgroundView = searchResults.isEmpty ? emptyDatasetView : nil
+        tableView.reloadData()
+        
+        // No results should hide the toolbar. Unselecting previously selected results should disable the Add All button
+        navigationController!.setToolbarHidden(searchResults.isEmpty, animated: true)
+        if tableView.isEditing && tableView.indexPathsForSelectedRows?.count ?? 0 == 0 {
+            addAllButton.isEnabled = false
+        }
+    }
+    
+    func presentDuplicateBookAlert(book: Book, fromSelectedIndex indexPath: IndexPath) {
+        let alert = duplicateBookAlertController(goToExistingBook: { [unowned self] in
+            self.presentingViewController!.dismiss(animated: true) {
+                appDelegate.tabBarController.simulateBookSelection(book, allowTableObscuring: true)
+            }
+        }, cancel: { [unowned self] in
+            self.tableView.deselectRow(at: indexPath, animated: true)
+        })
+        searchController.present(alert, animated: true)
     }
     
     func fetchAndSegue(googleBooksId: String) {
         UserEngagement.logEvent(.searchOnline)
         SVProgressHUD.show(withStatus: "Loading...")
         GoogleBooks.fetch(googleBooksId: googleBooksId) { resultPage in
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [weak self] in
                 SVProgressHUD.dismiss()
-                if resultPage.result.isSuccess {
-                    self.performSegue(withIdentifier: "searchResultSelected", sender: resultPage.result.value!)
+                if let fetchResult = resultPage.result.value {
+                    self?.performSegue(withIdentifier: "createReadStateSegue", sender: fetchResult.toBookMetadata())
                 }
                 else {
                     SVProgressHUD.showError(withStatus: "An error occurred. Please try again later.")
@@ -244,44 +194,35 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let createReadState = segue.destination as? CreateReadState, let fetchResult = sender as? GoogleBooks.FetchResult {
-            createReadState.bookMetadata = fetchResult.toBookMetadata()
-        }
+        super.prepare(for: segue, sender: sender)
+        guard let createReadState = segue.destination as? CreateReadState, let bookMetadata = sender as? BookMetadata else { return }
+        createReadState.bookMetadata = bookMetadata
+        navigationController!.setToolbarHidden(true, animated: true)
     }
-    
-    @IBAction func cancelWasPressed(_ sender: AnyObject) {
-        if #available(iOS 11.0, *) {
-            self.navigationItem.searchController!.isActive = false
-        }
-        self.dismiss(animated: true, completion: nil)
-    }
-    
-    @IBAction func selectManyOrSingleTogglePressed(_ sender: Any) {
+
+    @IBAction func changeSelectMode(_ sender: UIBarButtonItem) {
         tableView.setEditing(!tableView.isEditing, animated: true)
-        selectManyOrSingleToggle.title = tableView.isEditing ? "Select Single" : "Select Many"
+        selectModeButton.title = tableView.isEditing ? "Select Single" : "Select Many"
         if !tableView.isEditing {
             addAllButton.isEnabled = false
         }
     }
     
-    @IBAction func addAllPressed(_ sender: Any) {
+    @IBAction func addAllPressed(_ sender: UIBarButtonItem) {
         guard tableView.isEditing, let selectedRows = tableView.indexPathsForSelectedRows, selectedRows.count > 0 else { return }
         
         // If there is only 1 cell selected, we might as well proceed as we would in single selection mode
-        guard selectedRows.count > 1 else {
-            let model: SearchResultViewModel = try! self.tableView.rx.model(at: selectedRows[0])
-            fetchAndSegue(googleBooksId: model.googleBooksId)
-            return
-        }
-
+        guard selectedRows.count > 1 else { fetchAndSegue(googleBooksId: searchResults[selectedRows.first!.row].googleBooksId); return }
+        
         let alert = UIAlertController(title: "Add \(selectedRows.count) books", message: "Are you sure you want to add all \(selectedRows.count) selected books? They will be added to the 'To Read' section.", preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction(title: "Add All", style: .default, handler: {[unowned self] _ in
             self.addMultiple(selectedRows: selectedRows)
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        present(alert, animated: true, completion: nil)
+        // TODO On ipad this hides behind the toolbar
+        searchController.present(alert, animated: true, completion: nil)
     }
-        
+
     func addMultiple(selectedRows: [IndexPath]) {
         UserEngagement.logEvent(.searchOnlineMultiple)
         SVProgressHUD.show(withStatus: "Adding...")
@@ -291,10 +232,8 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
         
         // Queue up the fetches
         for selectedIndex in selectedRows {
-            let model: SearchResultViewModel = try! self.tableView.rx.model(at: selectedIndex)
-            
             fetches.enter()
-            GoogleBooks.fetch(googleBooksId: model.googleBooksId) { resultPage in
+            GoogleBooks.fetch(googleBooksId: searchResults[selectedIndex.row].googleBooksId) { resultPage in
                 DispatchQueue.main.async {
                     if let metadata = resultPage.result.value?.toBookMetadata() {
                         lastAddedBook = appDelegate.booksStore.create(from: metadata, readingInformation: BookReadingInformation.toRead())
@@ -308,52 +247,37 @@ class SearchOnline: UIViewController, UISearchBarDelegate {
         }
         
         // On completion, dismiss this view (or show an error if they all failed)
-        fetches.notify(queue: .main) {
+        fetches.notify(queue: .main) { [weak self] in
             SVProgressHUD.dismiss()
-            if errorCount == selectedRows.count {
-                // If they all errored, don't dismiss and show an error
-                SVProgressHUD.showError(withStatus: "An error occurred. No books were added.")
+            guard errorCount != selectedRows.count else {
+                // If they all errored, don't dismiss - show an error
+                SVProgressHUD.showError(withStatus: "An error occurred. No books were added."); return
             }
-            else {
-                self.presentingViewController!.dismiss(animated: true) {
-                    if let lastAddedBook = lastAddedBook {
-                        // Scroll to the last added book. This is a bit random, but better than nothing probably
-                        appDelegate.tabBarController.simulateBookSelection(lastAddedBook, allowTableObscuring: false)
-                    }
-                    // Display an error if any books could not be added
-                    if errorCount != 0 {
-                        SVProgressHUD.showInfo(withStatus: "\(selectedRows.count - errorCount) book\(selectedRows.count - errorCount == 1 ? "" : "s") successfully added; \(errorCount) book\(errorCount == 1 ? "" : "s") could not be added due to an error.")
-                    }
+            
+            self?.presentingViewController!.dismiss(animated: true) {
+                if let lastAddedBook = lastAddedBook {
+                    // Scroll to the last added book. This is a bit random, but better than nothing probably
+                    appDelegate.tabBarController.simulateBookSelection(lastAddedBook, allowTableObscuring: false)
+                }
+                // Display an error if any books could not be added
+                if errorCount != 0 {
+                    SVProgressHUD.showInfo(withStatus: "\(selectedRows.count - errorCount) book\(selectedRows.count - errorCount == 1 ? "" : "s") successfully added; \(errorCount) book\(errorCount == 1 ? "" : "s") could not be added due to an error.")
                 }
             }
         }
     }
-    
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.resignFirstResponder()
-    }
-    
-    func setEmptyDatasetReason(_ reason: SearchBooksEmptyDataset.EmptySetReason) {
-        emptyDatasetView.setEmptyDatasetReason(reason)
-        tableView.reloadData()
-    }
 }
 
-extension SearchOnline: DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
-    func customView(forEmptyDataSet scrollView: UIScrollView!) -> UIView! {
-        return emptyDatasetView
+extension SearchOnline: UISearchBarDelegate {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+        performSearch(searchText: searchBar.text ?? "")
     }
     
-    func verticalOffset(forEmptyDataSet scrollView: UIScrollView!) -> CGFloat {
-        return -(tableView.frame.height - 250)/2
-    }
-    
-    func emptyDataSetDidAppear(_ scrollView: UIScrollView!) {
-        toolbar.isHidden = true
-    }
-    
-    func emptyDataSetDidDisappear(_ scrollView: UIScrollView!) {
-        toolbar.isHidden = false
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText.isEmpty {
+            displaySearchResults(GoogleBooks.SearchResultsPage.empty())
+        }
     }
 }
 
