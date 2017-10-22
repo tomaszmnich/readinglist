@@ -216,8 +216,7 @@ class SearchOnline: UITableViewController {
             self.addMultiple(selectedRows: selectedRows)
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        // TODO On ipad this hides behind the toolbar
-        searchController.present(alert, animated: true, completion: nil)
+        present(alert, animated: true, completion: nil)
     }
 
     func addMultiple(selectedRows: [IndexPath]) {
