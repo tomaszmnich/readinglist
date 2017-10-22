@@ -8,7 +8,7 @@ PODS:
   - ImageRow (3.0.0):
     - Eureka (~> 4.0)
   - SimulatorStatusMagic (2.0)
-  - SVProgressHUD (2.2.1)
+  - SVProgressHUD (2.2.2)
   - SwiftyJSON (3.1.4)
 
 DEPENDENCIES:
@@ -44,7 +44,7 @@ SPEC CHECKSUMS:
   Fabric: e6be012366472553807dada21243c5ab8d904151
   ImageRow: 2683a3b621210ea05c1f3a2fa294d8d14342d24c
   SimulatorStatusMagic: c8e958d70e0e0cd2d7cf33bb95014a222ddecf0a
-  SVProgressHUD: db27c54e6e18bc903341661fc9feb55e04905cc4
+  SVProgressHUD: 59b2d3dabacbd051576d21d32293ca7228dc18b0
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
 
 PODFILE CHECKSUM: 7c155d53fedfb0ff76f57af9dd62eba16188a102
