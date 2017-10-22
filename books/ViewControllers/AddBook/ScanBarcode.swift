@@ -15,14 +15,14 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     var session: AVCaptureSession?
     var previewLayer: AVCaptureVideoPreviewLayer?
     var foundMetadata: BookMetadata?
-    let feedbackGeneratorWrapper = UIFeedbackGeneratorWrapper()
+    let feedbackGenerator = UIFeedbackGeneratorWrapper()
     
     @IBOutlet weak var cameraPreviewView: UIView!
     @IBOutlet weak var previewOverlay: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        feedbackGeneratorWrapper.prepare()
+        feedbackGenerator.prepare()
         
         // Setup the camera preview asynchronously
         DispatchQueue.main.async {
@@ -34,7 +34,7 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     
     @IBAction func cancelWasPressed(_ sender: AnyObject) {
         SVProgressHUD.dismiss()
-        self.dismiss(animated: true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -81,8 +81,7 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         #endif
     
         guard let camera = AVCaptureDevice.default(for: AVMediaType.video), let input = try? AVCaptureDeviceInput(device: camera) else {
-            presentCameraPermissionsAlert()
-            return
+            presentCameraPermissionsAlert(); return
         }
         
         // Try to focus the camera if possible
@@ -97,8 +96,7 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         // Check that we can add the input and output to the session
         guard session!.canAddInput(input) && session!.canAddOutput(output) else {
             presentInfoAlert(title: "Error ⚠️", message: "The camera could not be used. Sorry about that.")
-            feedbackGeneratorWrapper.notificationOccurred(.error)
-            return
+            feedbackGenerator.notificationOccurred(.error); return
         }
         
         // Prepare the metadata output and add to the session
@@ -127,7 +125,7 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     }
     
     private func setVideoOrientation() {
-        guard let connection = self.previewLayer?.connection, connection.isVideoOrientationSupported else { return }
+        guard let connection = previewLayer?.connection, connection.isVideoOrientationSupported else { return }
         
         if let videoOrientation = UIDevice.current.orientation.videoOrientation {
             connection.videoOrientation = videoOrientation
@@ -144,18 +142,18 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     }
     
     func respondToCapturedIsbn(_ isbn: String) {
-        feedbackGeneratorWrapper.prepare()
+        feedbackGenerator.prepare()
         
         // Since we have a result, stop the session and hide the preview
         session?.stopRunning()
         
         // Check that the book hasn't already been added
         if let existingBook = appDelegate.booksStore.getIfExists(isbn: isbn) {
-            feedbackGeneratorWrapper.notificationOccurred(.warning)
+            feedbackGenerator.notificationOccurred(.warning)
             presentDuplicateAlert(existingBook)
         }
         else {
-            feedbackGeneratorWrapper.notificationOccurred(.success)
+            feedbackGenerator.notificationOccurred(.success)
             searchForFoundIsbn(isbn: isbn)
         }
     }
@@ -169,7 +167,7 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
             self.session?.startRunning()
         })
         
-        self.present(alert, animated: true)
+        present(alert, animated: true)
     }
     
     func searchForFoundIsbn(isbn: String) {
@@ -179,41 +177,39 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         
         // self is weak since the barcode callback is on another thread, and it is possible (with careful timing)
         // to get the view controller to dismiss after the barcode has been detected but before the callback runs.
-        GoogleBooks.fetchIsbn(isbn) { [weak self] resultPage in
-            DispatchQueue.main.async {
-                SVProgressHUD.dismiss()
-                guard let vc = self else { return }
-                
-                vc.feedbackGeneratorWrapper.prepare()
-                guard resultPage.result.isSuccess else {
-                    let error = resultPage.result.error!
-                    if (error as? GoogleBooks.GoogleErrorType) == .noResult {
-                        vc.feedbackGeneratorWrapper.notificationOccurred(.error)
-                        vc.presentNoExactMatchAlert(forIsbn: isbn)
-                    }
-                    else {
-                        vc.feedbackGeneratorWrapper.notificationOccurred(.error)
-                        vc.onSearchError(error)
-                    }
-                    return
-                }
-                
-                let fetchResult = resultPage.result.value!
-                // We may now have a book which matches the Google Books ID (but didn't match the ISBN), so check again
-                if let existingBook = appDelegate.booksStore.getIfExists(googleBooksId: fetchResult.id) {
-                    vc.feedbackGeneratorWrapper.notificationOccurred(.warning)
-                    vc.presentDuplicateAlert(existingBook)
+        GoogleBooks.fetch(isbn: isbn) { [weak self] resultPage in
+            SVProgressHUD.dismiss()
+            guard let vc = self else { return }
+            
+            vc.feedbackGenerator.prepare()
+            guard resultPage.result.isSuccess else {
+                let error = resultPage.result.error!
+                if (error as? GoogleBooks.GoogleErrorType) == .noResult {
+                    vc.feedbackGenerator.notificationOccurred(.error)
+                    vc.presentNoExactMatchAlert(forIsbn: isbn)
                 }
                 else {
-                    vc.feedbackGeneratorWrapper.notificationOccurred(.success)
-                    
-                    // Event logging
-                    UserEngagement.logEvent(.scanBarcode)
-
-                    // If there is no duplicate, we can safely go to the next page
-                    vc.foundMetadata = fetchResult.toBookMetadata()
-                    vc.performSegue(withIdentifier: "barcodeScanResult", sender: self)
+                    vc.feedbackGenerator.notificationOccurred(.error)
+                    vc.onSearchError(error)
                 }
+                return
+            }
+            
+            let fetchResult = resultPage.result.value!
+            // We may now have a book which matches the Google Books ID (but didn't match the ISBN), so check again
+            if let existingBook = appDelegate.booksStore.getIfExists(googleBooksId: fetchResult.id) {
+                vc.feedbackGenerator.notificationOccurred(.warning)
+                vc.presentDuplicateAlert(existingBook)
+            }
+            else {
+                vc.feedbackGenerator.notificationOccurred(.success)
+                
+                // Event logging
+                UserEngagement.logEvent(.scanBarcode)
+
+                // If there is no duplicate, we can safely go to the next page
+                vc.foundMetadata = fetchResult.toBookMetadata()
+                vc.performSegue(withIdentifier: "barcodeScanResult", sender: self)
             }
         }
     }
@@ -231,7 +227,7 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
                 presentingViewController!.present(searchOnlineNav, animated: true, completion: nil)
             }
         }))
-        self.present(alert, animated: true, completion: nil)
+        present(alert, animated: true, completion: nil)
     }
     
     func onSearchError(_ error: Error) {
@@ -251,7 +247,7 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: { [unowned self] _ in
             self.dismiss(animated: true, completion: nil)
         }))
-        self.present(alert, animated: true, completion: nil)
+        present(alert, animated: true, completion: nil)
     }
     
     func presentCameraPermissionsAlert() {
@@ -265,8 +261,8 @@ class ScanBarcode: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: { [unowned self] _ in
             self.dismiss(animated: true)
         }))
-        self.feedbackGeneratorWrapper.notificationOccurred(.error)
-        self.present(alert, animated: true, completion: nil)
+        feedbackGenerator.notificationOccurred(.error)
+        present(alert, animated: true, completion: nil)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

@@ -15,21 +15,15 @@ class GoogleBooks {
      Searches on Google Books for the given search string, and calls the callback when a result is received
     */
     @discardableResult
-    static func searchText(_ text: String, callback: @escaping (SearchResultsPage) -> Void) -> URLSessionDataTask {
-        return requestJson(from: Request.searchText(text).url) { result in
+    static func search(_ text: String, callback: @escaping (SearchResultsPage) -> Void) -> HTTP.Request {
+        return HTTP.Request.get(url: Request.searchText(text).url).json { result in
             
             // Check for HTTP error
-            guard result.isSuccess else {
-                callback(SearchResultsPage.error(result.error!, fromSearchText: text))
-                return
-            }
+            guard result.isSuccess else { callback(SearchResultsPage.error(result.error!, fromSearchText: text)); return }
             
             // Check for errors reported by Google
             let googleError = Parser.parseError(json: result.value!)
-            guard googleError == nil else {
-                callback(SearchResultsPage.error(googleError!, fromSearchText: text))
-                return
-            }
+            guard googleError == nil else { callback(SearchResultsPage.error(googleError!, fromSearchText: text)); return }
             
             let results = Parser.parseSearchResults(result.value!)
             callback(SearchResultsPage(results, fromSearchText: text))
@@ -39,28 +33,19 @@ class GoogleBooks {
     /**
      Searches on Google Books for the given search string, and calls the callback when a result is received.
      */
-    static func fetchIsbn(_ isbn: String, callback: @escaping (FetchResultPage) -> Void) {
-        #if DEBUG
-            print("Fetching ISBN \(isbn)")
-        #endif
-        let request = Request.searchIsbn(isbn)
-        requestJson(from: request.url) { result in
+    static func fetch(isbn: String, callback: @escaping (FetchResultPage) -> Void) {
+        let googleRequest = Request.searchIsbn(isbn)
+        HTTP.Request.get(url: googleRequest.url).json { result in
             
             // Check for HTTP errors
-            guard result.isSuccess else {
-                callback(FetchResultPage.error(result.error!, fromRequest: request))
-                return
-            }
+            guard result.isSuccess else { callback(FetchResultPage.error(result.error!, fromRequest: googleRequest)); return }
             
             // Check for errors reported by Google
             let googleError = Parser.parseError(json: result.value!)
-            guard googleError == nil else {
-                callback(FetchResultPage.error(googleError!, fromRequest: request))
-                return
-            }
+            guard googleError == nil else { callback(FetchResultPage.error(googleError!, fromRequest: googleRequest)); return }
             
             let results = Parser.parseSearchResults(result.value!)
-            guard let id = results.first?.id else { callback(FetchResultPage.empty(fromRequest: request)); return }
+            guard let id = results.first?.id else { callback(FetchResultPage.empty(fromRequest: googleRequest)); return }
             GoogleBooks.fetch(googleBooksId: id, callback: callback)
         }
     }
@@ -69,28 +54,16 @@ class GoogleBooks {
      Fetches the specified book from Google Books.
      */
     static func fetch(googleBooksId: String, callback: @escaping (FetchResultPage) -> Void) {
-        #if DEBUG
-            print("Fetching GBID \(googleBooksId)")
-        #endif
         let request = Request.fetch(googleBooksId)
-        requestJson(from: request.url) { result in
+        HTTP.Request.get(url: request.url).json { result in
             // Check for HTTP errors
-            guard result.isSuccess else {
-                callback(FetchResultPage.error(result.error!, fromRequest: request))
-                return
-            }
+            guard result.isSuccess else { callback(FetchResultPage.error(result.error!, fromRequest: request)); return }
             
             // Check for errors reported by Google
             let googleError = Parser.parseError(json: result.value!)
-            guard googleError == nil else {
-                callback(FetchResultPage.error(googleError!, fromRequest: request))
-                return
-            }
+            guard googleError == nil else { callback(FetchResultPage.error(googleError!, fromRequest: request)); return }
             
-            guard let result = Parser.parseFetchResults(result.value!) else {
-                callback(FetchResultPage.empty(fromRequest: request))
-                return
-            }
+            guard let result = Parser.parseFetchResults(result.value!) else { callback(FetchResultPage.empty(fromRequest: request)); return }
             
             getCover(googleBooksId: result.id) { coverResult in
                 if coverResult.isSuccess {
@@ -107,45 +80,19 @@ class GoogleBooks {
     static func getCover(googleBooksId: String, callback: @escaping (Result<Data>) -> Void) {
         // Just use the thumbnail cover images for now
         let coverRequest = Request.coverImage(googleBooksId, .thumbnail)
-        requestData(from: coverRequest.url, callback: callback)
+        HTTP.Request.get(url: coverRequest.url).data(callback: callback)
     }
     
     static func getCover(isbn: String, callback: @escaping (Result<Data>) -> Void) {
         // If we are going by the ISBN, fetch the result first
         // This could become redundant if we supplement ISBN -> GBID first.
-        GoogleBooks.fetchIsbn(isbn) { fetchResult in
+        GoogleBooks.fetch(isbn: isbn) { fetchResult in
             guard fetchResult.result.isSuccess else { callback(Result.failure(fetchResult.result.error!)); return }
             
             getCover(googleBooksId: fetchResult.result.value!.id) { coverResult in
                 callback(coverResult)
             }
         }
-    }
-    
-    @discardableResult private static func requestJson(from url: URL, callback: @escaping (Result<JSON>) -> Void) -> URLSessionDataTask {
-        #if DEBUG
-            print("Requesting \(url.absoluteString)")
-        #endif
-        let webRequest = URLSession.shared.dataTask(with: url) { (data, _, error) in
-            guard error == nil else { callback(Result.failure(error!)); return }
-            guard let json = JSON(optionalData: data) else { callback(Result.failure(GoogleErrorType.noJsonData)); return }
-            callback(Result<JSON>.success(json))
-        }
-        webRequest.resume()
-        return webRequest
-    }
-    
-    @discardableResult static func requestData(from url: URL, callback: @escaping (Result<Data>) -> Void) -> URLSessionDataTask {
-        #if DEBUG
-            print("Requesting \(url.absoluteString)")
-        #endif
-        let webRequest = URLSession.shared.dataTask(with: url) { (data, _, error) in
-            guard error == nil else { callback(Result.failure(error!)); return }
-            guard let data = data else { callback(Result.failure(GoogleErrorType.noData)); return }
-            callback(Result<Data>.success(data))
-        }
-        webRequest.resume()
-        return webRequest
     }
     
     enum Request {
@@ -257,8 +204,6 @@ class GoogleBooks {
     
     enum GoogleErrorType: Error {
         case noResult
-        case noJsonData
-        case noData
     }
     
     class GoogleError: Error {

@@ -119,16 +119,14 @@ class SearchOnline: UITableViewController {
         
         SVProgressHUD.show(withStatus: "Searching...")
         feedbackGenerator.prepare()
-        GoogleBooks.searchText(searchController.searchBar.text!) { results in
-            DispatchQueue.main.async { [weak self] in
-                SVProgressHUD.dismiss()
-                guard let vc = self else { return }
-                if !results.searchResults.isSuccess {
-                    vc.emptyDatasetView.setEmptyDatasetReason(.error)
-                }
-                else {
-                    vc.displaySearchResults(results)
-                }
+        GoogleBooks.search(searchController.searchBar.text!) { [weak self] results in
+            SVProgressHUD.dismiss()
+            guard let vc = self else { return }
+            if !results.searchResults.isSuccess {
+                vc.emptyDatasetView.setEmptyDatasetReason(.error)
+            }
+            else {
+                vc.displaySearchResults(results)
             }
         }
     }
@@ -328,7 +326,7 @@ class SearchResultCell : UITableViewCell {
     @IBOutlet weak var authorOutlet: UILabel!
     @IBOutlet weak var imageOutlet: UIImageView!
     
-    private var coverImageTask: URLSessionDataTask?
+    private var coverImageRequest: HTTP.Request?
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -340,7 +338,7 @@ class SearchResultCell : UITableViewCell {
         super.prepareForReuse()
         
         // Cancel any pending cover data request task
-        coverImageTask?.cancel()
+        coverImageRequest?.cancel()
 
         titleOutlet.text = nil
         authorOutlet.text = nil
@@ -352,15 +350,12 @@ class SearchResultCell : UITableViewCell {
         authorOutlet.text = searchResult.authors.joined(separator: ", ")
         
         guard let coverURL = searchResult.thumbnailCoverUrl else { imageOutlet.image = #imageLiteral(resourceName: "CoverPlaceholder"); return }
-        coverImageTask = URLSession.shared.dataTask(with: coverURL) { [weak self] (data, _, error) in
-            DispatchQueue.main.async {
-                // Cancellations appear to be reported as errors. Ideally we would detect non-cancellation
-                // errors (e.g. 404), and show the placeholder in those cases. For now, just make the image blank.
-                guard error == nil, let data = data else { self?.imageOutlet.image = nil; return }
-                self?.imageOutlet.image = UIImage(data: data)
-            }
+        coverImageRequest = HTTP.Request.get(url: coverURL).data { [weak self] result in
+            // Cancellations appear to be reported as errors. Ideally we would detect non-cancellation
+            // errors (e.g. 404), and show the placeholder in those cases. For now, just make the image blank.
+            guard result.isSuccess, let data = result.value else { self?.imageOutlet.image = nil; return }
+            self?.imageOutlet.image = UIImage(data: data)
         }
-        coverImageTask!.resume()
     }
 }
 
