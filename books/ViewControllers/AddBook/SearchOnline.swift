@@ -12,7 +12,7 @@ import SVProgressHUD
 import DZNEmptyDataSet
 import Crashlytics
 
-class SearchOnline: UITableViewController {
+class SearchOnline: ArrayBackedTableController<GoogleBooks.SearchResult>, UISearchBarDelegate {
     
     var initialSearchString: String?
     
@@ -21,15 +21,16 @@ class SearchOnline: UITableViewController {
     
     private var searchController: UISearchController!
     private let feedbackGenerator = UIFeedbackGeneratorWrapper()
-    private var searchResults = [GoogleBooks.SearchResult]()
     private let emptyDatasetView = NibView.searchBooksEmptyDataset
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        cellIdentifier = "SearchResultCell"
+        
         tableView.tableFooterView = UIView()
         tableView.backgroundView = emptyDatasetView
-        
+
         searchController = NoCancelButtonSearchController(searchResultsController: nil)
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.hidesNavigationBarDuringPresentation = false
@@ -54,13 +55,13 @@ class SearchOnline: UITableViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        // Deselect any selected row
-        if let selectedIndexPath = tableView.indexPathForSelectedRow {
+        // Deselect any highlighted row (i.e. selected row if not in edit mode)
+        if !tableView.isEditing, let selectedIndexPath = tableView.indexPathForSelectedRow {
             tableView.deselectRow(at: selectedIndexPath, animated: true)
         }
         
         // Bring up the keyboard if not results, the toolbar if there are some results
-        if searchResults.isEmpty {
+        if tableItems.isEmpty {
             DispatchQueue.main.async { [weak self] in
                 self?.searchController.searchBar.becomeFirstResponder()
             }
@@ -75,20 +76,6 @@ class SearchOnline: UITableViewController {
         dismiss(animated: true, completion: nil)
     }
     
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return searchResults.isEmpty ? 0 : 1
-    }
-    
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return section == 0 ? searchResults.count : 0
-    }
-    
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "SearchResultCell") as! SearchResultCell
-        cell.updateDisplay(from: searchResults[indexPath.row])
-        return cell
-    }
-    
     override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         guard tableView.isEditing else { return }
         if tableView.indexPathsForSelectedRows == nil || tableView.indexPathsForSelectedRows!.count == 0 {
@@ -97,7 +84,7 @@ class SearchOnline: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let searchResult = searchResults[indexPath.row]
+        let searchResult = tableItems[indexPath.row]
         
         // Duplicate check
         if let existingBook = appDelegate.booksStore.getIfExists(googleBooksId: searchResult.id, isbn: searchResult.isbn13) {
@@ -150,12 +137,12 @@ class SearchOnline: UITableViewController {
             feedbackGenerator.notificationOccurred(.success)
         }
         
-        searchResults = resultPage.searchResults.value ?? []
-        tableView.backgroundView = searchResults.isEmpty ? emptyDatasetView : nil
+        tableItems = resultPage.searchResults.value ?? []
+        tableView.backgroundView = tableItems.isEmpty ? emptyDatasetView : nil
         tableView.reloadData()
         
         // No results should hide the toolbar. Unselecting previously selected results should disable the Add All button
-        navigationController!.setToolbarHidden(searchResults.isEmpty, animated: true)
+        navigationController!.setToolbarHidden(tableItems.isEmpty, animated: true)
         if tableView.isEditing && tableView.indexPathsForSelectedRows?.count ?? 0 == 0 {
             addAllButton.isEnabled = false
         }
@@ -207,7 +194,7 @@ class SearchOnline: UITableViewController {
         guard tableView.isEditing, let selectedRows = tableView.indexPathsForSelectedRows, selectedRows.count > 0 else { return }
         
         // If there is only 1 cell selected, we might as well proceed as we would in single selection mode
-        guard selectedRows.count > 1 else { fetchAndSegue(googleBooksId: searchResults[selectedRows.first!.row].id); return }
+        guard selectedRows.count > 1 else { fetchAndSegue(googleBooksId: tableItems[selectedRows.first!.row].id); return }
         
         let alert = UIAlertController(title: "Add \(selectedRows.count) books", message: "Are you sure you want to add all \(selectedRows.count) selected books? They will be added to the 'To Read' section.", preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction(title: "Add All", style: .default, handler: {[unowned self] _ in
@@ -227,7 +214,7 @@ class SearchOnline: UITableViewController {
         // Queue up the fetches
         for selectedIndex in selectedRows {
             fetches.enter()
-            GoogleBooks.fetch(googleBooksId: searchResults[selectedIndex.row].id) { resultPage in
+            GoogleBooks.fetch(googleBooksId: tableItems[selectedIndex.row].id) { resultPage in
                 DispatchQueue.main.async {
                     if let metadata = resultPage.result.value?.toBookMetadata() {
                         lastAddedBook = appDelegate.booksStore.create(from: metadata, readingInformation: BookReadingInformation.toRead())
@@ -260,9 +247,7 @@ class SearchOnline: UITableViewController {
             }
         }
     }
-}
 
-extension SearchOnline: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
         performSearch(searchText: searchBar.text ?? "")
@@ -320,8 +305,34 @@ class SearchBooksEmptyDataset: UIView {
     }
 }
 
+/**
+ A single sectioned (at most) table view controller, backed by an array.
+*/
+class ArrayBackedTableController<ArrayItemType>: UITableViewController {
+    var tableItems = [ArrayItemType]()
+    var cellIdentifier = "cellIdentifier"
+    
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return tableItems.isEmpty ? 0 : 1
+    }
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return section == 0 ? tableItems.count : 0
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as! ArrayBackedTableCell<ArrayItemType>
+        cell.updateDisplay(from: tableItems[indexPath.row])
+        return cell
+    }
+}
+
+class ArrayBackedTableCell<ArrayItemType>: UITableViewCell {
+    func updateDisplay(from arrayItem: ArrayItemType) { }
+}
+
 /// A table cell used in the Search Online table
-class SearchResultCell : UITableViewCell {
+class SearchResultCell: ArrayBackedTableCell<GoogleBooks.SearchResult> {
     @IBOutlet weak var titleOutlet: UILabel!
     @IBOutlet weak var authorOutlet: UILabel!
     @IBOutlet weak var imageOutlet: UIImageView!
@@ -345,11 +356,13 @@ class SearchResultCell : UITableViewCell {
         imageOutlet.image = nil
     }
     
-    func updateDisplay(from searchResult: GoogleBooks.SearchResult) {
-        titleOutlet.text = searchResult.title
-        authorOutlet.text = searchResult.authors.joined(separator: ", ")
+    override func updateDisplay(from arrayItem: GoogleBooks.SearchResult) {
+        super.updateDisplay(from: arrayItem)
+
+        titleOutlet.text = arrayItem.title
+        authorOutlet.text = arrayItem.authors.joined(separator: ", ")
         
-        guard let coverURL = searchResult.thumbnailCoverUrl else { imageOutlet.image = #imageLiteral(resourceName: "CoverPlaceholder"); return }
+        guard let coverURL = arrayItem.thumbnailCoverUrl else { imageOutlet.image = #imageLiteral(resourceName: "CoverPlaceholder"); return }
         coverImageRequest = HTTP.Request.get(url: coverURL).data { [weak self] result in
             // Cancellations appear to be reported as errors. Ideally we would detect non-cancellation
             // errors (e.g. 404), and show the placeholder in those cases. For now, just make the image blank.
