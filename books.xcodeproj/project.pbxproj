@@ -344,7 +344,6 @@
 				241740D919B869177546F852 /* Frameworks */,
 				14655047BD58646296558121 /* Pods */,
 				495C5D0D1BF1404D00E00C07 /* Products */,
-				1C8D137A1F88F316004A7F18 /* books-Bridging-Header.h */,
 			);
 			sourceTree = "<group>";
 		};
@@ -373,6 +372,7 @@
 				49EEF6861E943691003FF31E /* Reading List.entitlements */,
 				495C5D161BF1404D00E00C07 /* Assets.xcassets */,
 				495C5D1B1BF1404D00E00C07 /* Info.plist */,
+				1C8D137A1F88F316004A7F18 /* books-Bridging-Header.h */,
 			);
 			path = books;
 			sourceTree = "<group>";
@@ -1045,7 +1045,7 @@
 				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\" \"-D\" \"DEBUG\"";
 				PRODUCT_BUNDLE_IDENTIFIER = com.andrewbennet.books;
 				PRODUCT_NAME = "Reading List";
-				SWIFT_OBJC_BRIDGING_HEADER = "books-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "books/books-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
@@ -1067,7 +1067,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.andrewbennet.books;
 				PRODUCT_NAME = "Reading List";
-				SWIFT_OBJC_BRIDGING_HEADER = "books-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "books/books-Bridging-Header.h";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
