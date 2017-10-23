@@ -151,33 +151,32 @@ class BookTable: AutoUpdatingTableViewController {
     
     @objc func editActionButtonPressed(_ sender: UIBarButtonItem) {
         guard let selectedRows = tableView.indexPathsForSelectedRows, selectedRows.count > 0 else { return }
+        let selectedReadStates = selectedRows.map{$0.section}.distinct().map{readStateForSection($0)}
         
         let optionsAlert = UIAlertController(title: "Edit \(selectedRows.count) book\(selectedRows.count == 1 ? "" : "s")", message: nil, preferredStyle: .actionSheet)
         
-        let sectionIndexes = selectedRows.map{$0.section}.distinct()
-        if sectionIndexes.count == 1 {
-            let readState = readStateForSection(sectionIndexes[0])
-            if readState == .toRead || readState == .reading {
-                var title = readState == .toRead ? "Start" : "Finish"
-                if selectedRows.count > 1 {
-                    title += " All"
-                }
-                optionsAlert.addAction(UIAlertAction(title: title, style: .default) { [unowned self] _ in
-                    let books = selectedRows.map{ [unowned self] in
-                        self.resultsController.object(at: $0)
-                    }
-                    for book in books {
-                        if readState == .toRead {
-                            book.transistionToReading(log: false)
-                        }
-                        else {
-                            book.transistionToFinished(log: false)
-                        }
-                    }
-                    UserEngagement.logEvent(.bulkEditReadState)
-                    UserEngagement.onReviewTrigger()
-                })
+        if selectedReadStates.count == 1 && selectedReadStates.first! != .finished {
+            let readState = selectedReadStates.first!
+            var title = readState == .toRead ? "Start" : "Finish"
+            if selectedRows.count > 1 {
+                title += " All"
             }
+            optionsAlert.addAction(UIAlertAction(title: title, style: .default) { [unowned self] _ in
+                let books = selectedRows.map{ [unowned self] in
+                    self.resultsController.object(at: $0)
+                }
+                for book in books {
+                    if readState == .toRead {
+                        book.transistionToReading(log: false)
+                    }
+                    else {
+                        book.transistionToFinished(log: false)
+                    }
+                }
+                self.setEditing(false, animated: true)
+                UserEngagement.logEvent(.bulkEditReadState)
+                UserEngagement.onReviewTrigger()
+            })
         }
         
         optionsAlert.addAction(UIAlertAction(title: "Delete\(selectedRows.count > 1 ? " All" : "")", style: .destructive) { [unowned self] _ in
@@ -195,6 +194,7 @@ class BookTable: AutoUpdatingTableViewController {
                 for book in books {
                     book.delete(log: false)
                 }
+                self.setEditing(false, animated: true)
                 UserEngagement.logEvent(.bulkDeleteBook)
                 UserEngagement.onReviewTrigger()
             })
