@@ -45,8 +45,8 @@
 	<key>UIApplicationShortcutItems</key>
 	<array>
 		<dict>
-			<key>UIApplicationShortcutItemIconType</key>
-			<string>UIApplicationShortcutIconTypeAdd</string>
+			<key>UIApplicationShortcutItemIconFile</key>
+			<string>Barcode</string>
 			<key>UIApplicationShortcutItemTitle</key>
 			<string>Scan Barcode</string>
 			<key>UIApplicationShortcutItemType</key>
