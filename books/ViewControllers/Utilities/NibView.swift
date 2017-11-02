@@ -11,7 +11,7 @@ import UIKit
 
 class NibView {
     static func withName(_ name: String) -> UIView {
-        return UINib(nibName: "SearchBooksEmptyDataset", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! UIView
+        return UINib(nibName: name, bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! UIView
     }
     
     static var searchBooksEmptyDataset: SearchBooksEmptyDataset {
