@@ -12,6 +12,38 @@ import Crashlytics
 import MessageUI
 import Eureka
 
+class SettingsNew: UITableViewController {
+    let appStoreAddress = "itunes.apple.com/gb/app/reading-list-book-tracker/id1217139955"
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        tableView.tableHeaderView = NibView.withName("SettingsHeader")
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        switch (indexPath.section, indexPath.row) {
+        case (0, 1):
+            UIApplication.shared.openUrlPlatformSpecific(url: URL(string: "itms-apps://\(appStoreAddress)?action=write-review")!)
+        case (0, 2):
+            share()
+        default:
+            break
+        }
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    func share() {
+        let activityViewController = UIActivityViewController(activityItems: [URL(string: "https://\(appStoreAddress)")!], applicationActivities: nil)
+        if let popPresenter = activityViewController.popoverPresentationController {
+            let cell = self.tableView.cellForRow(at: IndexPath(row: 2, section: 0))!
+            popPresenter.sourceRect = cell.frame
+            popPresenter.sourceView = self.tableView
+            popPresenter.permittedArrowDirections = .any
+        }
+        present(activityViewController, animated: true)
+    }
+}
+
 class Settings: FormViewController, MFMailComposeViewControllerDelegate {
     
     let appStoreAddress = "itunes.apple.com/gb/app/reading-list-book-tracker/id1217139955"

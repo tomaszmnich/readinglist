@@ -13,7 +13,10 @@
 		1CA61FF61F861AAB00DD88F1 /* EditReadState.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CA61FF51F861AAB00DD88F1 /* EditReadState.storyboard */; };
 		1CA61FF81F861ABC00DD88F1 /* EditBook.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CA61FF71F861ABC00DD88F1 /* EditBook.storyboard */; };
 		1CAD7E971F8EA11B00A2E178 /* PrivacyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CAD7E961F8EA11B00A2E178 /* PrivacyViewController.swift */; };
+		1CC18FA51FA4AC02000FB7E5 /* SettingsHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1CC18FA41FA4AC02000FB7E5 /* SettingsHeader.xib */; };
 		1CD83C3E1F9BC0BA00E88E31 /* NibView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CD83C3D1F9BC0BA00E88E31 /* NibView.swift */; };
+		1CDD535E1FA6609600A5ED66 /* SettingsHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CDD535D1FA6609600A5ED66 /* SettingsHeader.swift */; };
+		1CDD53601FA7B38000A5ED66 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1CDD535F1FA7B38000A5ED66 /* Assets.xcassets */; };
 		1CF5C9D61F9D37B300F389CE /* HTTP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CF5C9D51F9D37B300F389CE /* HTTP.swift */; };
 		49043DB71EBF1E0B00E74370 /* SearchBooksEmptyDataset.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49043DB61EBF1E0B00E74370 /* SearchBooksEmptyDataset.xib */; };
 		49097BA81CFB102B001AF1F9 /* FetchedResultsFilterer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49097BA71CFB102B001AF1F9 /* FetchedResultsFilterer.swift */; };
@@ -44,7 +47,6 @@
 		494D96E41E759D8900299752 /* AttributionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494D96E31E759D8900299752 /* AttributionsViewController.swift */; };
 		495879651BF7E76200000131 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 495879641BF7E76200000131 /* CoreDataStack.swift */; };
 		495C5D101BF1404D00E00C07 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 495C5D0F1BF1404D00E00C07 /* AppDelegate.swift */; };
-		495C5D171BF1404D00E00C07 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 495C5D161BF1404D00E00C07 /* Assets.xcassets */; };
 		495C5D3F1BF1412600E00C07 /* BookTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 495C5D3E1BF1412600E00C07 /* BookTable.swift */; };
 		495C5D411BF1423900E00C07 /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = 495C5D401BF1423900E00C07 /* Book.swift */; };
 		495C5D431BF14BEB00E00C07 /* BookDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 495C5D421BF14BEB00E00C07 /* BookDetails.swift */; };
@@ -108,7 +110,10 @@
 		1CA61FF51F861AAB00DD88F1 /* EditReadState.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = EditReadState.storyboard; sourceTree = "<group>"; };
 		1CA61FF71F861ABC00DD88F1 /* EditBook.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = EditBook.storyboard; sourceTree = "<group>"; };
 		1CAD7E961F8EA11B00A2E178 /* PrivacyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyViewController.swift; sourceTree = "<group>"; };
+		1CC18FA41FA4AC02000FB7E5 /* SettingsHeader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SettingsHeader.xib; sourceTree = "<group>"; };
 		1CD83C3D1F9BC0BA00E88E31 /* NibView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NibView.swift; sourceTree = "<group>"; };
+		1CDD535D1FA6609600A5ED66 /* SettingsHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsHeader.swift; sourceTree = "<group>"; };
+		1CDD535F1FA7B38000A5ED66 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1CF5C9D51F9D37B300F389CE /* HTTP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTP.swift; sourceTree = "<group>"; };
 		297D92A68CB2906FDBD31ED9 /* Pods_books_UnitTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_books_UnitTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3AC962F935D7BE333849CA18 /* Pods-books_UnitTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-books_UnitTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-books_UnitTests/Pods-books_UnitTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -144,7 +149,6 @@
 		495879641BF7E76200000131 /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		495C5D0C1BF1404D00E00C07 /* Reading List.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Reading List.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		495C5D0F1BF1404D00E00C07 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		495C5D161BF1404D00E00C07 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		495C5D1B1BF1404D00E00C07 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		495C5D3E1BF1412600E00C07 /* BookTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookTable.swift; sourceTree = "<group>"; };
 		495C5D401BF1423900E00C07 /* Book.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Book.swift; sourceTree = "<group>"; };
@@ -234,6 +238,16 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		1CC18FA61FA6276A000FB7E5 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				49043DB61EBF1E0B00E74370 /* SearchBooksEmptyDataset.xib */,
+				1CC18FA41FA4AC02000FB7E5 /* SettingsHeader.xib */,
+				1CDD535D1FA6609600A5ED66 /* SettingsHeader.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		241740D919B869177546F852 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -305,7 +319,6 @@
 				492710551F362E7E00286352 /* Settings.storyboard */,
 				4942348B1E70AFA100CEEB4C /* ScanBarcode.storyboard */,
 				4942348A1E70AFA100CEEB4C /* SearchOnline.storyboard */,
-				49043DB61EBF1E0B00E74370 /* SearchBooksEmptyDataset.xib */,
 			);
 			path = Storyboards;
 			sourceTree = "<group>";
@@ -364,13 +377,14 @@
 				4925007A1C0B1CFC00C149B5 /* Data */,
 				495879601BF7E6BC00000131 /* Models */,
 				494234911E70B00900CEEB4C /* Storyboards */,
+				1CC18FA61FA6276A000FB7E5 /* Views */,
 				495C5D441BF14C4B00E00C07 /* ViewControllers */,
 				49F386341E869F78001F5D75 /* TestData */,
 				495C5D0F1BF1404D00E00C07 /* AppDelegate.swift */,
 				498CD1E41F2A8369007E98B5 /* books.xcdatamodeld */,
+				1CDD535F1FA7B38000A5ED66 /* Assets.xcassets */,
 				49B8D8EA1F4CC85E00D4C4EF /* BookMapping_6_7.xcmappingmodel */,
 				49EEF6861E943691003FF31E /* Reading List.entitlements */,
-				495C5D161BF1404D00E00C07 /* Assets.xcassets */,
 				495C5D1B1BF1404D00E00C07 /* Info.plist */,
 				1C8D137A1F88F316004A7F18 /* books-Bridging-Header.h */,
 			);
@@ -597,10 +611,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				492710561F362E7E00286352 /* Settings.storyboard in Resources */,
-				495C5D171BF1404D00E00C07 /* Assets.xcassets in Resources */,
 				4942348E1E70AFA100CEEB4C /* SearchOnline.storyboard in Resources */,
 				4942348F1E70AFA100CEEB4C /* ScanBarcode.storyboard in Resources */,
 				494234931E70B24400CEEB4C /* BookDetails.storyboard in Resources */,
+				1CDD53601FA7B38000A5ED66 /* Assets.xcassets in Resources */,
 				1CA61FF81F861ABC00DD88F1 /* EditBook.storyboard in Resources */,
 				49409EFC1F6535D40047C2B2 /* yourfirstswiftapp.png in Resources */,
 				4942348D1E70AFA100CEEB4C /* Main.storyboard in Resources */,
@@ -609,6 +623,7 @@
 				4936B5841D2C3A2C00600562 /* AddManually.storyboard in Resources */,
 				1CA61FF61F861AAB00DD88F1 /* EditReadState.storyboard in Resources */,
 				49043DB71EBF1E0B00E74370 /* SearchBooksEmptyDataset.xib in Resources */,
+				1CC18FA51FA4AC02000FB7E5 /* SettingsHeader.xib in Resources */,
 				4968A2B21CB3E0BF00CBF3F0 /* LaunchScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -829,6 +844,7 @@
 				491C84331CF630B600894313 /* CreateBook.swift in Sources */,
 				1CD83C3E1F9BC0BA00E88E31 /* NibView.swift in Sources */,
 				49160F5F1E809DFE00168FD0 /* BookImport.swift in Sources */,
+				1CDD535E1FA6609600A5ED66 /* SettingsHeader.swift in Sources */,
 				49BDCC631CD2A00F00F20AAE /* BookMetadataForm.swift in Sources */,
 				495C5D431BF14BEB00E00C07 /* BookDetails.swift in Sources */,
 				498CD1E61F2A8369007E98B5 /* books.xcdatamodeld in Sources */,
