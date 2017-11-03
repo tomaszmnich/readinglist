@@ -1,10 +1,10 @@
 PODS:
   - CHCSVParser (2.1.0)
-  - Crashlytics (3.9.0):
-    - Fabric (~> 1.7.0)
+  - Crashlytics (3.9.3):
+    - Fabric (~> 1.7.2)
   - DZNEmptyDataSet (1.8.1)
   - Eureka (4.0.1)
-  - Fabric (1.7.0)
+  - Fabric (1.7.2)
   - ImageRow (3.0.0):
     - Eureka (~> 4.0)
   - SimulatorStatusMagic (2.0)
@@ -38,10 +38,10 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   CHCSVParser: 64da26e2b4ddbf7527f7f03120bf91d83d28f354
-  Crashlytics: 64aad5dd97249dd3ff94b979fea140144590cdd3
+  Crashlytics: dbb07d01876c171c5ccbdf7826410380189e452c
   DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
   Eureka: c8bd5cc07143b6f66268c208d28a246c99b41955
-  Fabric: e6be012366472553807dada21243c5ab8d904151
+  Fabric: 9cd6a848efcf1b8b07497e0b6a2e7d336353ba15
   ImageRow: 2683a3b621210ea05c1f3a2fa294d8d14342d24c
   SimulatorStatusMagic: c8e958d70e0e0cd2d7cf33bb95014a222ddecf0a
   SVProgressHUD: 59b2d3dabacbd051576d21d32293ca7228dc18b0
