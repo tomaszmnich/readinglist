@@ -14,7 +14,7 @@ class Isbn13 {
         guard let inputString = inputString else { return nil }
         
         let sanitisedInput = inputString.replacingOccurrences(of: "-", with: "")
-        guard sanitisedInput.characters.count == 13, sanitisedInput.hasPrefix("978") || sanitisedInput.hasPrefix("979"),
+        guard sanitisedInput.count == 13, sanitisedInput.hasPrefix("978") || sanitisedInput.hasPrefix("979"),
             let _ = Int64.init(sanitisedInput) else {
             return nil
         }
@@ -27,7 +27,7 @@ class Isbn13 {
         // Subtracted from 10, that leaves a result from 1 to 10. A zero (0) replaces a
         // ten (10), so, in all cases, a single check digit results.
         var sum = 0
-        for (index, character) in sanitisedInput.characters.enumerated() {
+        for (index, character) in sanitisedInput.enumerated() {
             guard let thisDigit = Int(string: String(character)) else {
                 return nil
             }
