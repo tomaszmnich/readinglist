@@ -94,7 +94,7 @@ class BookTable: AutoUpdatingTableViewController {
         // Some search bar styles are slightly different on iOS 11
         if #available(iOS 11.0, *) {
             navigationItem.searchController = searchController
-            navigationController!.navigationBar.prefersLargeTitles = true
+            navigationController!.navigationBar.prefersLargeTitles = UserSettings.useLargeTitles.value
         }
         else {
             searchController.searchBar.backgroundColor = tableView.backgroundColor!

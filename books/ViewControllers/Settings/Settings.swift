@@ -12,13 +12,8 @@ import Crashlytics
 import MessageUI
 import Eureka
 
-class SettingsNew: UITableViewController {
+class Settings: UITableViewController {
     let appStoreAddress = "itunes.apple.com/gb/app/reading-list-book-tracker/id1217139955"
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        tableView.tableHeaderView = NibView.withName("SettingsHeader")
-    }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch (indexPath.section, indexPath.row) {
@@ -44,7 +39,7 @@ class SettingsNew: UITableViewController {
     }
 }
 
-class Settings: FormViewController, MFMailComposeViewControllerDelegate {
+class SettingsOld: FormViewController, MFMailComposeViewControllerDelegate {
     
     let appStoreAddress = "itunes.apple.com/gb/app/reading-list-book-tracker/id1217139955"
     private let bookSortOrderKey = "sortOrder"
@@ -76,7 +71,7 @@ class Settings: FormViewController, MFMailComposeViewControllerDelegate {
         +++ Section(header: "Other", footer: "Reading List v\(appDelegate.appVersion)\nDeveloped by Andrew Bennet")
             <<< ActionButton(title: "Source Code", url: URL(string: "https://github.com/AndrewBennet/readinglist")!)
             <<< NavigationRow(title: "Attributions", segueName: "attributions")
-            <<< NavRow<PrivacyViewController>(title: "Privacy")
+            <<< NavRow<Privacy>(title: "Privacy")
         
         #if DEBUG
             form.allSections.last! <<< NavRow<DebugSettingsViewController>(title: "Debug Settings")
