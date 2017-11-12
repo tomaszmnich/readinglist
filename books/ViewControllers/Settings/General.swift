@@ -27,9 +27,5 @@ class General: UITableViewController {
     
     @IBAction func useLargeTitlesChanged(_ sender: UISwitch) {
         UserSettings.useLargeTitles.value = sender.isOn
-        if #available(iOS 11.0, *) {
-            navigationController!.navigationBar.prefersLargeTitles = sender.isOn
-            navigationItem.largeTitleDisplayMode = sender.isOn ? .automatic : .never
-        }
     }
 }
