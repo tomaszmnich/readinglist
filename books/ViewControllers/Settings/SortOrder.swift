@@ -9,7 +9,7 @@
 import Foundation
 import Eureka
 
-class SortOrderViewController: FormViewController {
+class SortOrder: FormViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()

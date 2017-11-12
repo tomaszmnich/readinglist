@@ -36,6 +36,7 @@ class Privacy: UITableViewController {
         alert.addAction(UIAlertAction(title: "Leave On", style: .default) { _ in
             // Switch it back on
             uiSwitch.setOn(true, animated: true)
+            UserSettings.sendAnalytics.value = true
         })
         present(alert, animated: true)
     }

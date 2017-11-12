@@ -15,14 +15,16 @@ import Eureka
 
 class DataVC: UITableViewController, UIDocumentPickerDelegate, UIDocumentMenuDelegate {
     
-    static let importIndexPath = IndexPath(row: 0, section: 0)
+    static let importIndexPath = IndexPath(row: 0, section: 1)
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch (indexPath.section, indexPath.row) {
+        case (0, 0):
+            exportData()
         case (DataVC.importIndexPath.section, DataVC.importIndexPath.row):
             requestImport()
-        case (0, 1):
-            exportData()
+        case (2, 0):
+            deleteAllData()
         default:
             break
         }
@@ -120,5 +122,24 @@ class DataVC: UITableViewController, UIDocumentPickerDelegate, UIDocumentMenuDel
                 self.present(activityViewController, animated: true, completion: nil)
             }
         }
+    }
+    
+    func deleteAllData() {
+        
+        // The CONFIRM DELETE action:
+        let confirmDelete = UIAlertController(title: "Final Warning", message: "This action is irreversible. Are you sure you want to continue?", preferredStyle: .alert)
+        confirmDelete.addAction(UIAlertAction(title: "Delete", style: .destructive) { _ in
+            appDelegate.booksStore.deleteAll()
+        })
+        confirmDelete.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        
+        // The initial WARNING action
+        let areYouSure = UIAlertController(title: "Warning", message: "This will delete all books saved in the application. Are you sure you want to continue?", preferredStyle: .alert)
+        areYouSure.addAction(UIAlertAction(title: "Delete", style: .destructive) { [unowned self] _ in
+            self.present(confirmDelete, animated: true)
+        })
+        areYouSure.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        
+        present(areYouSure, animated: true)
     }
 }

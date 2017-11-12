@@ -11,15 +11,17 @@ import UIKit
 import MessageUI
 
 class About: UITableViewController, MFMailComposeViewControllerDelegate {
+
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch (indexPath.section, indexPath.row) {
-            
         case (0, 0):
             UIApplication.shared.openUrlPlatformSpecific(url: URL(string: "https://www.readinglistapp.xyz")!)
         case (0, 1):
             contact()
         case (0, 3):
             UIApplication.shared.openUrlPlatformSpecific(url: URL(string: "https://github.com/AndrewBennet/readinglist")!)
+        case (0, 4):
+            share()
         default:
             break
         }
@@ -51,6 +53,18 @@ class About: UITableViewController, MFMailComposeViewControllerDelegate {
             alert.addAction(UIAlertAction(title: "OK", style: .default))
             self.present(alert, animated: true)
         }
+    }
+    
+    
+    func share() {
+        let activityViewController = UIActivityViewController(activityItems: [URL(string: "https://\(Settings.appStoreAddress)")!], applicationActivities: nil)
+        if let popPresenter = activityViewController.popoverPresentationController {
+            let cell = self.tableView.cellForRow(at: IndexPath(row: 2, section: 0))!
+            popPresenter.sourceRect = cell.frame
+            popPresenter.sourceView = self.tableView
+            popPresenter.permittedArrowDirections = .any
+        }
+        present(activityViewController, animated: true)
     }
 }
 

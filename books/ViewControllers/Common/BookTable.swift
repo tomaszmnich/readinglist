@@ -94,7 +94,6 @@ class BookTable: AutoUpdatingTableViewController {
         // Some search bar styles are slightly different on iOS 11
         if #available(iOS 11.0, *) {
             navigationItem.searchController = searchController
-            navigationController!.navigationBar.prefersLargeTitles = UserSettings.useLargeTitles.value
         }
         else {
             searchController.searchBar.backgroundColor = tableView.backgroundColor!
@@ -118,6 +117,13 @@ class BookTable: AutoUpdatingTableViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(bookSortChanged), name: NSNotification.Name.onBookSortOrderChanged, object: nil)
         
         super.viewDidLoad()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        if #available(iOS 11.0, *) {
+            navigationController!.navigationBar.prefersLargeTitles = UserSettings.useLargeTitles.value
+        }
+        super.viewWillAppear(animated)
     }
     
     override func setEditing(_ editing: Bool, animated: Bool) {

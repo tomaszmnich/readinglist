@@ -13,7 +13,7 @@ import Eureka
 import SVProgressHUD
 import SimulatorStatusMagic
 
-class DebugSettingsViewController: FormViewController {
+class Debug: FormViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
