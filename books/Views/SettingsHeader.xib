@@ -17,7 +17,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fmK-4u-5xR">
-                    <rect key="frame" x="23" y="0.0" width="252.5" height="148"/>
+                    <rect key="frame" x="25" y="0.0" width="248.5" height="148"/>
                     <subviews>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="AppIconRounded" translatesAutoresizingMaskIntoConstraints="NO" id="aaK-CP-7w3">
                             <rect key="frame" x="0.0" y="34" width="80" height="80"/>
@@ -27,22 +27,22 @@
                             </constraints>
                         </imageView>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QBr-gF-Sep">
-                            <rect key="frame" x="96" y="42.5" width="156.5" height="63"/>
+                            <rect key="frame" x="96" y="45.5" width="152.5" height="57"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Reading List" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eMI-zZ-hAK">
-                                    <rect key="frame" x="8" y="8" width="98.5" height="20.5"/>
+                                    <rect key="frame" x="4" y="8" width="98.5" height="20.5"/>
                                     <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="by Andrew Bennet" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tie-pe-bo6">
-                                    <rect key="frame" x="8" y="36.5" width="125.5" height="18"/>
+                                    <rect key="frame" x="4" y="30.5" width="125.5" height="18"/>
                                     <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="v1.7" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HSb-Hx-2qE">
-                                    <rect key="frame" x="114.5" y="12.5" width="24" height="16"/>
+                                    <rect key="frame" x="110.5" y="12.5" width="24" height="16"/>
                                     <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
@@ -51,11 +51,11 @@
                             <constraints>
                                 <constraint firstItem="HSb-Hx-2qE" firstAttribute="leading" secondItem="eMI-zZ-hAK" secondAttribute="trailing" constant="8" id="Bab-z7-qXu"/>
                                 <constraint firstItem="eMI-zZ-hAK" firstAttribute="top" secondItem="QBr-gF-Sep" secondAttribute="top" constant="8" id="LsR-gG-lzm"/>
-                                <constraint firstItem="HSb-Hx-2qE" firstAttribute="bottom" secondItem="eMI-zZ-hAK" secondAttribute="bottom" id="OlF-Pi-dXR"/>
+                                <constraint firstItem="eMI-zZ-hAK" firstAttribute="bottom" secondItem="HSb-Hx-2qE" secondAttribute="bottom" id="OlF-Pi-dXR"/>
                                 <constraint firstAttribute="trailing" secondItem="HSb-Hx-2qE" secondAttribute="trailing" constant="18" id="Rq8-gB-a9w"/>
                                 <constraint firstAttribute="bottom" secondItem="tie-pe-bo6" secondAttribute="bottom" constant="8" id="Vh0-XT-SmQ"/>
-                                <constraint firstItem="tie-pe-bo6" firstAttribute="top" secondItem="eMI-zZ-hAK" secondAttribute="bottom" constant="8" symbolic="YES" id="WDC-Gw-aVR"/>
-                                <constraint firstItem="eMI-zZ-hAK" firstAttribute="leading" secondItem="QBr-gF-Sep" secondAttribute="leading" constant="8" id="udm-aL-BlC"/>
+                                <constraint firstItem="tie-pe-bo6" firstAttribute="top" secondItem="eMI-zZ-hAK" secondAttribute="bottom" constant="2" id="WDC-Gw-aVR"/>
+                                <constraint firstItem="eMI-zZ-hAK" firstAttribute="leading" secondItem="QBr-gF-Sep" secondAttribute="leading" constant="4" id="udm-aL-BlC"/>
                                 <constraint firstItem="tie-pe-bo6" firstAttribute="leading" secondItem="eMI-zZ-hAK" secondAttribute="leading" id="wxV-50-gCs"/>
                             </constraints>
                         </view>
