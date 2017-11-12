@@ -44,7 +44,7 @@ class Settings: UITableViewController, MFMailComposeViewControllerDelegate {
         guard MFMailComposeViewController.canSendMail() else {
             let alert = UIAlertController(title: "Can't send email", message: "Couldn't find any email accounts. If you want to give feedback, email \(toEmail)", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default))
-            self.present(alert, animated: true)
+            present(alert, animated: true)
             return
         }
         
@@ -63,7 +63,11 @@ class Settings: UITableViewController, MFMailComposeViewControllerDelegate {
         Device: \(UIDevice.current.modelIdentifier)
         """
         mailComposer.setMessageBody(messageBody, isHTML: false)
-        self.present(mailComposer, animated: true)
+        present(mailComposer, animated: true)
+    }
+    
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        dismiss(animated: true)
     }
 }
 
