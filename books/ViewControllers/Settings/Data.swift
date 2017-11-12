@@ -11,7 +11,6 @@ import UIKit
 import SVProgressHUD
 import Fabric
 import Crashlytics
-import Eureka
 
 class DataVC: UITableViewController, UIDocumentPickerDelegate, UIDocumentMenuDelegate {
     

@@ -10,7 +10,6 @@ import UIKit
 import SVProgressHUD
 import Crashlytics
 import MessageUI
-import Eureka
 
 class Settings: UITableViewController, MFMailComposeViewControllerDelegate {
 
