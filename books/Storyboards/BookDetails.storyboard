@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="svF-c1-e4g">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="svF-c1-e4g">
     <device id="retina5_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
         <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -20,10 +21,6 @@
         <scene sceneID="bgM-Uc-nwx">
             <objects>
                 <viewController id="svF-c1-e4g" customClass="BookDetails" customModule="Reading_List" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="atZ-hB-IGg"/>
-                        <viewControllerLayoutGuide type="bottom" id="yel-qD-x6K"/>
-                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="EZk-RK-IhE">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="672"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -35,7 +32,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="518"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Keep the Aspidistra Flying" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bmm-uv-eym">
-                                                <rect key="frame" x="14" y="12" width="386" height="28.666666666666671"/>
+                                                <rect key="frame" x="14" y="12.000000000000002" width="386" height="28.666666666666671"/>
                                                 <fontDescription key="fontDescription" name="GillSans-SemiBold" family="Gill Sans" pointSize="24"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -47,7 +44,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="YTX-8q-xHR">
-                                                <rect key="frame" x="14" y="84.666666666666671" width="100" height="150"/>
+                                                <rect key="frame" x="14" y="84.666666666666657" width="100" height="150"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="100" id="3Q2-3B-6zf"/>
                                                     <constraint firstAttribute="height" constant="150" id="apa-Op-VGz"/>
@@ -88,28 +85,28 @@
                                                         </constraints>
                                                     </view>
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="FdT-t6-WNr">
-                                                        <rect key="frame" x="14" y="9" width="386" height="74.666666666666686"/>
+                                                        <rect key="frame" x="14" y="9" width="386" height="74.666666666666671"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Information" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qMm-e5-ftM">
-                                                                <rect key="frame" x="0.0" y="0.0" width="386" height="19.666666666666686"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="386" height="19.666666666666668"/>
                                                                 <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="17"/>
                                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Pages: 302" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hgv-IS-QFG">
-                                                                <rect key="frame" x="0.0" y="21.666666666666686" width="386" height="16.333333333333314"/>
+                                                                <rect key="frame" x="0.0" y="21.666666666666686" width="386" height="16.333333333333329"/>
                                                                 <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="14"/>
                                                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Published: 12 June 1938" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BBH-Bz-CnC">
-                                                                <rect key="frame" x="0.0" y="40" width="386" height="16.333333333333314"/>
+                                                                <rect key="frame" x="0.0" y="40" width="386" height="16.333333333333329"/>
                                                                 <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="14"/>
                                                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Subjects: Fiction; Historical; Dystopia" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oBf-8E-wfa">
-                                                                <rect key="frame" x="0.0" y="58.333333333333314" width="386" height="16.333333333333371"/>
+                                                                <rect key="frame" x="0.0" y="58.333333333333321" width="386" height="16.333333333333336"/>
                                                                 <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="14"/>
                                                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                                 <nil key="highlightedColor"/>
@@ -127,13 +124,13 @@
                                                         <rect key="frame" x="14" y="100.66666666666669" width="386" height="102.33333333333331"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Description" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3sM-fZ-EBZ">
-                                                                <rect key="frame" x="0.0" y="0.0" width="386" height="19.666666666666629"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="386" height="19.666666666666668"/>
                                                                 <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="17"/>
                                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HLi-FL-4vx">
-                                                                <rect key="frame" x="0.0" y="21.666666666666629" width="386" height="80.666666666666686"/>
+                                                                <rect key="frame" x="0.0" y="21.666666666666629" width="386" height="80.666666666666671"/>
                                                                 <string key="text">Gordon Comstock has 'declared war' on what he sees as an 'overarching dependence' on money by leaving a promising job as a copywriter for an advertising company called 'New Albion'—at which he shows great dexterity—and taking a low-paying job instead, ostensibly so he can write poetry. Coming from a respectable family background in which the inherited wealth has now become dissipated, Gordon resents having to work for a living. The 'war' (and the poetry), however, aren't going particularly well and, under the stress of his 'self-imposed exile' from affluence, Gordon has become absurd, petty and deeply neurotic.</string>
                                                                 <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="14"/>
                                                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
@@ -152,13 +149,13 @@
                                                         <rect key="frame" x="14" y="220" width="386" height="38"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Reading Log" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PPC-ji-WGD">
-                                                                <rect key="frame" x="0.0" y="0.0" width="386" height="19.666666666666629"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="386" height="19.666666666666668"/>
                                                                 <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="17"/>
                                                                 <nil key="textColor"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Personal book notes here..." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DIU-fB-bFG">
-                                                                <rect key="frame" x="0.0" y="21.666666666666629" width="386" height="16.333333333333371"/>
+                                                                <rect key="frame" x="0.0" y="21.666666666666629" width="386" height="16.333333333333329"/>
                                                                 <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="14"/>
                                                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                                 <nil key="highlightedColor"/>
@@ -191,13 +188,13 @@
                                                 </constraints>
                                             </stackView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="📖 Currently Reading" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uOW-Me-7IQ">
-                                                <rect key="frame" x="126" y="88.666666666666657" width="274" height="19.666666666666686"/>
+                                                <rect key="frame" x="126" y="88.666666666666657" width="274" height="19.666666666666671"/>
                                                 <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Started: 14 April" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1h1-rT-5zk">
-                                                <rect key="frame" x="129" y="112.33333333333334" width="271" height="16.333333333333314"/>
+                                                <rect key="frame" x="129" y="112.33333333333334" width="271" height="16.333333333333343"/>
                                                 <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="14"/>
                                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                 <nil key="highlightedColor"/>
@@ -243,12 +240,13 @@
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="yel-qD-x6K" firstAttribute="top" secondItem="WOs-nU-bp0" secondAttribute="bottom" id="31b-w3-6Ph"/>
-                            <constraint firstAttribute="trailing" secondItem="WOs-nU-bp0" secondAttribute="trailing" id="AHc-aQ-ahK"/>
-                            <constraint firstItem="WOs-nU-bp0" firstAttribute="top" secondItem="EZk-RK-IhE" secondAttribute="top" id="Bdy-2F-5Z7"/>
-                            <constraint firstItem="WOs-nU-bp0" firstAttribute="leading" secondItem="EZk-RK-IhE" secondAttribute="leading" id="S96-eb-ie8"/>
-                            <constraint firstAttribute="width" secondItem="Qxc-PW-YFe" secondAttribute="width" id="Ule-jN-VH1"/>
+                            <constraint firstItem="1jO-Uv-G2z" firstAttribute="bottom" secondItem="WOs-nU-bp0" secondAttribute="bottom" id="31b-w3-6Ph"/>
+                            <constraint firstItem="1jO-Uv-G2z" firstAttribute="trailing" secondItem="WOs-nU-bp0" secondAttribute="trailing" id="AHc-aQ-ahK"/>
+                            <constraint firstItem="WOs-nU-bp0" firstAttribute="top" secondItem="1jO-Uv-G2z" secondAttribute="top" id="Bdy-2F-5Z7"/>
+                            <constraint firstItem="WOs-nU-bp0" firstAttribute="leading" secondItem="1jO-Uv-G2z" secondAttribute="leading" id="S96-eb-ie8"/>
+                            <constraint firstItem="WOs-nU-bp0" firstAttribute="width" secondItem="Qxc-PW-YFe" secondAttribute="width" id="Ule-jN-VH1"/>
                         </constraints>
+                        <viewLayoutGuide key="safeArea" id="1jO-Uv-G2z"/>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
                     <navigationItem key="navigationItem" largeTitleDisplayMode="never" id="YRx-69-dRa">
