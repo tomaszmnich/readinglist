@@ -10,51 +10,21 @@ import Foundation
 import UIKit
 import MessageUI
 
-class About: UITableViewController, MFMailComposeViewControllerDelegate {
+class About: UITableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch (indexPath.section, indexPath.row) {
         case (0, 0):
             UIApplication.shared.openUrlPlatformSpecific(url: URL(string: "https://www.readinglistapp.xyz")!)
-        case (0, 1):
-            contact()
-        case (0, 3):
+        case (0, 2):
             UIApplication.shared.openUrlPlatformSpecific(url: URL(string: "https://github.com/AndrewBennet/readinglist")!)
-        case (0, 4):
+        case (0, 3):
             share()
         default:
             break
         }
         tableView.deselectRow(at: indexPath, animated: true)
     }
-    
-    func contact() {
-        let toEmail = "feedback@readinglistapp.xyz"
-        if MFMailComposeViewController.canSendMail() {
-            let mailComposer = MFMailComposeViewController()
-            mailComposer.mailComposeDelegate = self
-            mailComposer.setToRecipients(["Reading List Developer <\(toEmail)>"])
-            mailComposer.setSubject("Reading List Feedback")
-            let messageBody = """
-            
-            
-            
-            Reading List
-            App Version: \(appDelegate.appVersion)
-            Build Number: \(appDelegate.appBuildNumber)
-            iOS Version: \(UIDevice.current.systemVersion)
-            Device: \(UIDevice.current.modelIdentifier)
-            """
-            mailComposer.setMessageBody(messageBody, isHTML: false)
-            self.present(mailComposer, animated: true)
-        }
-        else {
-            let alert = UIAlertController(title: "Can't send email", message: "Couldn't find any email accounts. If you want to give feedback, email \(toEmail)", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .default))
-            self.present(alert, animated: true)
-        }
-    }
-    
     
     func share() {
         let activityViewController = UIActivityViewController(activityItems: [URL(string: "https://\(Settings.appStoreAddress)")!], applicationActivities: nil)

@@ -12,13 +12,15 @@ import Crashlytics
 import MessageUI
 import Eureka
 
-class Settings: UITableViewController {
+class Settings: UITableViewController, MFMailComposeViewControllerDelegate {
 
     static let appStoreAddress = "itunes.apple.com/gb/app/reading-list-book-tracker/id1217139955"
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch (indexPath.section, indexPath.row) {
         case (0, 1):
+            contact()
+        case (0, 2):
             UIApplication.shared.openUrlPlatformSpecific(url: URL(string: "itms-apps://\(Settings.appStoreAddress)?action=write-review")!)
         default:
             break
@@ -35,6 +37,33 @@ class Settings: UITableViewController {
                 return super.tableView(tableView, numberOfRowsInSection: section) - 1
             }
         #endif
+    }
+    
+    func contact() {
+        let toEmail = "feedback@readinglistapp.xyz"
+        guard MFMailComposeViewController.canSendMail() else {
+            let alert = UIAlertController(title: "Can't send email", message: "Couldn't find any email accounts. If you want to give feedback, email \(toEmail)", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default))
+            self.present(alert, animated: true)
+            return
+        }
+        
+        let mailComposer = MFMailComposeViewController()
+        mailComposer.mailComposeDelegate = self
+        mailComposer.setToRecipients(["Reading List Developer <\(toEmail)>"])
+        mailComposer.setSubject("Reading List Feedback")
+        let messageBody = """
+        
+        
+        
+        Reading List
+        App Version: \(appDelegate.appVersion)
+        Build Number: \(appDelegate.appBuildNumber)
+        iOS Version: \(UIDevice.current.systemVersion)
+        Device: \(UIDevice.current.modelIdentifier)
+        """
+        mailComposer.setMessageBody(messageBody, isHTML: false)
+        self.present(mailComposer, animated: true)
     }
 }
 
