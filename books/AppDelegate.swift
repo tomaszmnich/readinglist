@@ -10,6 +10,7 @@ import UIKit
 import CoreSpotlight
 import Fabric
 import Crashlytics
+import Firebase
 import SVProgressHUD
 
 let productBundleIdentifier = "com.andrewbennet.books"
@@ -36,6 +37,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         #if !DEBUG
             if UserSettings.sendAnalytics.value {
+                FirebaseApp.configure()
+            }
+            if UserSettings.sendCrashReports.value {
                 Fabric.with([Crashlytics.self])
             }
         #endif

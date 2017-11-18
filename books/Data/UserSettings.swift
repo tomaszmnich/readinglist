@@ -56,7 +56,7 @@ class UserSettings {
                                                                BookPredicate.authorSort]]
 
     static var sendAnalytics = UserSetting<Bool>(key: "sendAnalytics", defaultValue: true)
-    
+    static var sendCrashReports = UserSetting<Bool>(key: "sendCrashReports", defaultValue: true)
     static var useLargeTitles = UserSetting<Bool>(key: "useLargeTitles", defaultValue: true)
 }
 

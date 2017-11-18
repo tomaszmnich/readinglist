@@ -5,8 +5,28 @@ PODS:
   - DZNEmptyDataSet (1.8.1)
   - Eureka (4.0.1)
   - Fabric (1.7.2)
+  - Firebase/Core (4.5.0):
+    - FirebaseAnalytics (= 4.0.4)
+    - FirebaseCore (= 4.0.10)
+  - FirebaseAnalytics (4.0.4):
+    - FirebaseCore (~> 4.0)
+    - FirebaseInstanceID (~> 2.0)
+    - GoogleToolboxForMac/NSData+zlib (~> 2.1)
+    - nanopb (~> 0.3)
+  - FirebaseCore (4.0.10):
+    - GoogleToolboxForMac/NSData+zlib (~> 2.1)
+    - nanopb (~> 0.3)
+  - FirebaseInstanceID (2.0.5)
+  - GoogleToolboxForMac/Defines (2.1.3)
+  - GoogleToolboxForMac/NSData+zlib (2.1.3):
+    - GoogleToolboxForMac/Defines (= 2.1.3)
   - ImageRow (3.0.0):
     - Eureka (~> 4.0)
+  - nanopb (0.3.8):
+    - nanopb/decode (= 0.3.8)
+    - nanopb/encode (= 0.3.8)
+  - nanopb/decode (0.3.8)
+  - nanopb/encode (0.3.8)
   - SimulatorStatusMagic (2.0)
   - SVProgressHUD (2.2.2)
   - SwiftyJSON (3.1.4)
@@ -17,6 +37,7 @@ DEPENDENCIES:
   - DZNEmptyDataSet (~> 1.8)
   - Eureka (~> 4.0)
   - Fabric
+  - Firebase/Core
   - ImageRow (from `https://github.com/EurekaCommunity/ImageRow.git`)
   - SimulatorStatusMagic
   - SVProgressHUD (~> 2.2)
@@ -42,11 +63,17 @@ SPEC CHECKSUMS:
   DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
   Eureka: c8bd5cc07143b6f66268c208d28a246c99b41955
   Fabric: 9cd6a848efcf1b8b07497e0b6a2e7d336353ba15
+  Firebase: d83d287bdb6b1c78320561482706d1fcfc8ddfc1
+  FirebaseAnalytics: 722b53c7b32bfc7806b06e0093a2f5180d4f2c5a
+  FirebaseCore: da5e8e372cb6046212739a4d81e42d32c22907cc
+  FirebaseInstanceID: f2b688c66b972f30d7fa9f5f9f91455454a03b47
+  GoogleToolboxForMac: 2501e2ad72a52eb3dfe7bd9aee7dad11b858bd20
   ImageRow: 2683a3b621210ea05c1f3a2fa294d8d14342d24c
+  nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
   SimulatorStatusMagic: c8e958d70e0e0cd2d7cf33bb95014a222ddecf0a
   SVProgressHUD: 59b2d3dabacbd051576d21d32293ca7228dc18b0
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
 
-PODFILE CHECKSUM: 7c155d53fedfb0ff76f57af9dd62eba16188a102
+PODFILE CHECKSUM: 6d7a21917a5b09b60618b1be8dcbbd755b81ac03
 
 COCOAPODS: 1.3.1

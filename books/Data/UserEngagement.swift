@@ -9,6 +9,7 @@
 import Foundation
 import StoreKit
 import Crashlytics
+import Firebase
 
 class UserEngagement {
     static let appStartupCountKey = "appStartupCount"
@@ -26,27 +27,29 @@ class UserEngagement {
     }
     
     enum Event: String {
-        case searchOnline = "Search Online"
-        case scanBarcode = "Scan Barcode"
-        case addManualBook = "Add Manual Book"
-        case csvImport = "CSV Import"
-        case csvExport = "CSV Export"
-        case transitionReadState = "Transition Read State"
-        case bulkEditReadState = "Bulk Edit Read State"
-        case deleteBook = "Delete Book"
-        case bulkDeleteBook = "Bulk Delete Book"
-        case editBook = "Edit Book"
-        case editReadState = "Edit Read State"
-        case searchOnlineQuickAction = "Quick Action Search Online"
-        case scanBarcodeQuickAction = "Quick Action Scan Barcode"
-        case spotlightSearch = "Spotlight Search"
-        case searchOnlineMultiple = "Search Online Multiple"
-        case disableAnalytics = "Disable Analytics"
-        case enableAnalytics = "Enable Analytics"
+        case searchOnline = "Search_Online"
+        case scanBarcode = "Scan_Barcode"
+        case addManualBook = "Add_Manual_Book"
+        case csvImport = "CSV_Import"
+        case csvExport = "CSV_Export"
+        case transitionReadState = "Transition_Read_State"
+        case bulkEditReadState = "Bulk_Edit_Read_State"
+        case deleteBook = "Delete_Book"
+        case bulkDeleteBook = "Bulk_Delete_Book"
+        case editBook = "Edit_Book"
+        case editReadState = "Edit_Read_State"
+        case searchOnlineQuickAction = "Quick_Action_Search_Online"
+        case scanBarcodeQuickAction = "Quick_Action_Scan_Barcode"
+        case spotlightSearch = "Spotlight_Search"
+        case searchOnlineMultiple = "Search_Online_Multiple"
+        case disableAnalytics = "Disable_Analytics"
+        case enableAnalytics = "Enable_Analytics"
+        case disableCrashReports = "Disable_Crash_Reports"
+        case enableCrashReports = "Enable_Crash_Reports"
     }
     
     static func logEvent(_ event: Event) {
-        Answers.logCustomEvent(withName: event.rawValue, customAttributes: [:])
+        Analytics.logEvent(event.rawValue, parameters: nil)
     }
     
     private static func shouldTryRequestReview() -> Bool {

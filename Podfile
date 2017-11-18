@@ -14,7 +14,8 @@ target 'books' do
   pod 'Fabric'
   pod 'Crashlytics'
   pod 'CHCSVParser', :git => 'https://github.com/davedelong/CHCSVParser.git'
-
+  pod 'Firebase/Core'
+  
   target 'books_UITests' do
     inherit! :search_paths
     # Pods for testing

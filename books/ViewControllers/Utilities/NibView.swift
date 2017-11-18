@@ -20,8 +20,7 @@ class NibView {
 }
 
 // From https://medium.com/zenchef-tech-and-product/how-to-visualize-reusable-xibs-in-storyboards-using-ibdesignable-c0488c7f525d
-
-@IBDesignable
+//@IBDesignable
 class XibView: UIView {
     
     var contentView: UIView?
