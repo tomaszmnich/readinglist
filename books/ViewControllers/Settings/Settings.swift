@@ -39,9 +39,8 @@ class Settings: UITableViewController, MFMailComposeViewControllerDelegate {
             return super.tableView(tableView, numberOfRowsInSection: section)
         #else
             // Hide the Debug cell
-            if section == 0 {
-                return super.tableView(tableView, numberOfRowsInSection: section) - 1
-            }
+            let realCount = super.tableView(tableView, numberOfRowsInSection: section)
+            return section == 1 ? realCount - 1 : realCount
         #endif
     }
     
