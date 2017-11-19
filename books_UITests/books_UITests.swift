@@ -43,7 +43,7 @@ class books_UITests: XCTestCase {
         app.tables.textFields["Last Name"].tap()
         app.typeText("Salinger")
         
-        app.topNavBar.buttons["Back"].tap()
+        app.topNavBar.buttons["Add Manually"].tap()
         app.topNavBar.buttons["Next"].tap()
         app.topNavBar.buttons["Done"].tap()
         
@@ -85,13 +85,15 @@ class books_UITests: XCTestCase {
         let app = ReadingListApplication()
         
         app.clickTab(.settings)
+        app.tables.staticTexts["Data"].tap()
         app.tables.staticTexts["Export"].tap()
-        app.tables.element(boundBy: app.tables.count - 1).staticTexts["Export"].tap()
         
-        if #available(iOS 10, *){
-            sleep(2)
-            app.collectionViews.collectionViews.buttons["Add To iCloud Drive"].tap()
-            app.navigationBars["iCloud Drive"].buttons["Cancel"].tap()
+        if #available(iOS 10, *) {
+            if #available(iOS 11, *) {} else {
+                sleep(2)
+                app.collectionViews.collectionViews.buttons["Add To iCloud Drive"].tap()
+                app.navigationBars["iCloud Drive"].buttons["Cancel"].tap()
+            }
         }
     }
     

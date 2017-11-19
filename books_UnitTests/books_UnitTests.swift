@@ -10,6 +10,7 @@ import XCTest
 import Foundation
 import SwiftyJSON
 import CoreData
+import Firebase
 @testable import Reading_List
 
 class books_UnitTests: XCTestCase {

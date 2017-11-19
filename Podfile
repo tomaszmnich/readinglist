@@ -17,12 +17,12 @@ target 'books' do
   pod 'Firebase/Core'
   
   target 'books_UITests' do
-    inherit! :search_paths
+    inherit! :complete
     # Pods for testing
   end
 
   target 'books_UnitTests' do
-    inherit! :search_paths
+    inherit! :complete
     # Pods for testing
   end
 

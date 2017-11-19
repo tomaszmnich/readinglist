@@ -43,7 +43,7 @@ class ReadingListApplication : XCUIApplication {
     
     func addTestData() {
         clickTab(.settings)
-        tables.cells.staticTexts["Debug Settings"].tap()
+        tables.cells.staticTexts["Debug"].tap()
         
         let isIpad = navigationBars.count == 2
         tables.cells.staticTexts["Import Test Data"].tap()
@@ -60,7 +60,7 @@ class ReadingListApplication : XCUIApplication {
     
     func setBarcodeSimulation(_ mode: BarcodeScanSimulation) {
         clickTab(.settings)
-        tables.cells.staticTexts["Debug Settings"].tap()
+        tables.cells.staticTexts["Debug"].tap()
         
         tables.cells.staticTexts[mode.titleText].tap()
         if navigationBars.count == 1 {
@@ -70,7 +70,7 @@ class ReadingListApplication : XCUIApplication {
     
     func togglePrettyStatusBar() {
         clickTab(.settings)
-        tables.cells.staticTexts["Debug Settings"].tap()
+        tables.cells.staticTexts["Debug"].tap()
         
         tables.cells.switches["Pretty Status Bar"].tap()
         if navigationBars.count == 1 {
@@ -80,7 +80,7 @@ class ReadingListApplication : XCUIApplication {
     
     func toggleBarcodeScanFixedImage() {
         clickTab(.settings)
-        tables.cells.staticTexts["Debug Settings"].tap()
+        tables.cells.staticTexts["Debug"].tap()
         
         tables.cells.switches["Show Fixed Image"].tap()
         if navigationBars.count == 1 {
