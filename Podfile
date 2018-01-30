@@ -15,7 +15,7 @@ target 'books' do
   pod 'Crashlytics'
   pod 'CHCSVParser', :git => 'https://github.com/davedelong/CHCSVParser.git'
   pod 'Firebase/Core'
-  
+
   target 'books_UITests' do
     inherit! :complete
     # Pods for testing
@@ -24,6 +24,11 @@ target 'books' do
   target 'books_UnitTests' do
     inherit! :complete
     # Pods for testing
+  end
+
+  target 'ReadingListEarlGrey' do
+    inherit! :complete
+    pod 'EarlGrey'
   end
 
 end
